@@ -1,4 +1,4 @@
-package com.example.proyecto_eduardo_andres.componentes.componenteLogin
+package com.example.proyecto_eduardo_andres.myComponents.componenteLogin
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
@@ -18,48 +18,39 @@ fun LoginButtons(
     onRecuperarPasswordClick: () -> Unit
 ) {
     Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 32.dp, vertical = 40.dp),
+        modifier = Modifier.fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        // Botón principal: ACCEDER
+        // ACCEDER
         Button(
             onClick = onAccederClick,
             colors = ButtonDefaults.buttonColors(
-                containerColor = Color(0xFF4CAF50), // Verde brillante
+                containerColor = Color(0xFF4CAF50),
                 contentColor = Color.White
             ),
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(vertical = 8.dp)
-                .height(55.dp),
-            shape = MaterialTheme.shapes.medium
+                .height(55.dp)
         ) {
-            Text(
-                text = "ACCEDER",
-                fontSize = 18.sp
-            )
+            Text("ACCEDER", fontSize = 18.sp)
         }
 
-        // Fila inferior: CREAR USUARIO y RECUPERAR PASSWORD
+        Spacer(modifier = Modifier.height(16.dp))
+
+        // Fila inferior
         Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 8.dp),
-            horizontalArrangement = Arrangement.SpaceBetween
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            // CREAR USUARIO
             Button(
                 onClick = onCrearUsuarioClick,
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = Color(0xFF2196F3), // Azul fuerte
+                    containerColor = Color(0xFF2196F3),
                     contentColor = Color.White
                 ),
                 modifier = Modifier
                     .weight(1f)
-                    .height(50.dp),
-                shape = MaterialTheme.shapes.medium
+                    .height(50.dp)
             ) {
                 Text(
                     text = "CREAR USUARIO",
@@ -68,25 +59,20 @@ fun LoginButtons(
                 )
             }
 
-            Spacer(modifier = Modifier.width(16.dp))
-
-            // RECUPERAR PASSWORD (ajustado)
             Button(
                 onClick = onRecuperarPasswordClick,
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = Color(0xFFFF9800), // Naranja llamativo
+                    containerColor = Color(0xFFFF9800),
                     contentColor = Color.White
                 ),
                 modifier = Modifier
                     .weight(1f)
-                    .height(50.dp),
-                shape = MaterialTheme.shapes.medium
+                    .height(50.dp)
             ) {
                 Text(
-                    text = "RECUPERAR PASSWORD",
-                    fontSize = 12.sp, // más pequeño
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier.fillMaxWidth()
+                    text = "RECUPERAR CONTRASEÑA",
+                    fontSize = 13.sp,
+                    textAlign = TextAlign.Center
                 )
             }
         }

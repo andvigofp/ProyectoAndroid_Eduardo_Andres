@@ -1,4 +1,4 @@
-package com.example.proyecto_eduardo_andres.componentes.componteLoging
+package com.example.proyecto_eduardo_andres.myComponents.componenteLogin
 
 data class LoginData(
     val email: String = "",
