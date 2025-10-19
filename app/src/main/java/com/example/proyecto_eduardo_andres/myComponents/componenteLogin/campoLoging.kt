@@ -1,15 +1,13 @@
-package com.example.proyecto_eduardo_andres.componentes.componteLoging
+package com.example.proyecto_eduardo_andres.myComponents.componenteLogin
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
-import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -28,53 +26,43 @@ fun CamposLogin(
     onLoginDataChange: (LoginData) -> Unit
 ) {
     Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(20.dp),
+        modifier = Modifier.fillMaxWidth(),
         verticalArrangement = Arrangement.spacedBy(20.dp)
     ) {
         // EMAIL
         Row(
             modifier = Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween
+            verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
                 text = "Email",
-                color = Color(0xFF0D47A1), // azul oscuro (coherente con toolbar)
-                modifier = Modifier.weight(1f),
-                style = MaterialTheme.typography.bodyLarge
+                color = Color(0xFF0D47A1),
+                modifier = Modifier.weight(1f)
             )
             TextField(
                 value = loginData.email,
                 onValueChange = { onLoginDataChange(loginData.copy(email = it)) },
                 singleLine = true,
-                modifier = Modifier
-                    .weight(2f)
-                    .padding(start = 8.dp)
+                modifier = Modifier.weight(2f)
             )
         }
 
         // PASSWORD
         Row(
             modifier = Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween
+            verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
                 text = "Password",
-                color = Color(0xFF512DA8), // violeta suave
-                modifier = Modifier.weight(1f),
-                style = MaterialTheme.typography.bodyLarge
+                color = Color(0xFF512DA8),
+                modifier = Modifier.weight(1f)
             )
             TextField(
                 value = loginData.password,
                 onValueChange = { onLoginDataChange(loginData.copy(password = it)) },
                 singleLine = true,
                 visualTransformation = PasswordVisualTransformation(),
-                modifier = Modifier
-                    .weight(2f)
-                    .padding(start = 8.dp)
+                modifier = Modifier.weight(2f)
             )
         }
     }
