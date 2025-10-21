@@ -13,6 +13,7 @@ import androidx.compose.ui.unit.sp
 
 @Composable
 fun LoginButtons(
+    loginButtonTexts: loginButtonTexts,
     onAccederClick: () -> Unit,
     onCrearUsuarioClick: () -> Unit,
     onRecuperarPasswordClick: () -> Unit
@@ -32,7 +33,7 @@ fun LoginButtons(
                 .fillMaxWidth()
                 .height(55.dp)
         ) {
-            Text("ACCEDER", fontSize = 18.sp)
+            Text(text = loginButtonTexts.acceder, fontSize = 18.sp)
         }
 
         Spacer(modifier = Modifier.height(16.dp))
@@ -53,7 +54,7 @@ fun LoginButtons(
                     .height(50.dp)
             ) {
                 Text(
-                    text = "CREAR USUARIO",
+                    text = loginButtonTexts.crearUsuario,
                     fontSize = 14.sp,
                     textAlign = TextAlign.Center
                 )
@@ -70,7 +71,7 @@ fun LoginButtons(
                     .height(50.dp)
             ) {
                 Text(
-                    text = "RECUPERAR CONTRASEÑA",
+                    text = loginButtonTexts.recuperarPassword,
                     fontSize = 13.sp,
                     textAlign = TextAlign.Center
                 )
@@ -89,6 +90,7 @@ fun LoginButtonsPreview() {
                 contentAlignment = Alignment.Center
             ) {
                 LoginButtons(
+                    loginButtonTexts= loginButtonTexts(),
                     onAccederClick = {},
                     onCrearUsuarioClick = {},
                     onRecuperarPasswordClick = {}
