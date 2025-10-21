@@ -13,7 +13,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
@@ -24,7 +23,8 @@ import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.example.proyecto_eduardo_andres.myComponents.componenteLogin.LoginButtons
 import com.example.proyecto_eduardo_andres.myComponents.componenteLogin.CamposLogin
-import com.example.proyecto_eduardo_andres.myComponents.componenteLogin.LoginData
+import com.example.proyecto_eduardo_andres.myComponents.componenteLogin.loginButtonTexts
+import com.example.proyecto_eduardo_andres.myComponents.componenteLogin.loginData
 
 
 @Composable
@@ -34,7 +34,7 @@ fun LoginScreen(
     onCrearUsuarioClick: () -> Unit,
     onRecuperarPasswordClick: () -> Unit
 ) {
-    var loginData by remember { mutableStateOf(LoginData()) }
+    var loginData by remember { mutableStateOf(loginData()) }
 
     Box(
         modifier = Modifier
@@ -131,6 +131,7 @@ fun LoginScreen(
 
                 // Botones
                 LoginButtons(
+                    loginButtonTexts= loginButtonTexts(),
                     onAccederClick = onAccederClick,
                     onCrearUsuarioClick = onCrearUsuarioClick,
                     onRecuperarPasswordClick = onRecuperarPasswordClick
