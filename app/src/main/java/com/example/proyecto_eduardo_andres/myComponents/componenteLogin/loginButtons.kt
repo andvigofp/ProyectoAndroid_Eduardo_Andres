@@ -18,6 +18,11 @@ fun LoginButtons(
     onCrearUsuarioClick: () -> Unit,
     onRecuperarPasswordClick: () -> Unit
 ) {
+    // Si el data class viene vacío, damos los textos por defecto aquí
+    val accederText = if (loginButtonTexts.acceder.isNotEmpty()) loginButtonTexts.acceder else "ACCEDER"
+    val crearUsuarioText = if (loginButtonTexts.crearUsuario.isNotEmpty()) loginButtonTexts.crearUsuario else "CREAR USUARIO"
+    val recuperarText = if (loginButtonTexts.recuperarPassword.isNotEmpty()) loginButtonTexts.recuperarPassword else "RECUPERAR CONTRASEÑA"
+
     Column(
         modifier = Modifier.fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally
@@ -33,7 +38,7 @@ fun LoginButtons(
                 .fillMaxWidth()
                 .height(55.dp)
         ) {
-            Text(text = loginButtonTexts.acceder, fontSize = 18.sp)
+            Text(text = accederText, fontSize = 18.sp)
         }
 
         Spacer(modifier = Modifier.height(16.dp))
@@ -54,7 +59,7 @@ fun LoginButtons(
                     .height(50.dp)
             ) {
                 Text(
-                    text = loginButtonTexts.crearUsuario,
+                    text = crearUsuarioText,
                     fontSize = 14.sp,
                     textAlign = TextAlign.Center
                 )
@@ -71,7 +76,7 @@ fun LoginButtons(
                     .height(50.dp)
             ) {
                 Text(
-                    text = loginButtonTexts.recuperarPassword,
+                    text = recuperarText,
                     fontSize = 13.sp,
                     textAlign = TextAlign.Center
                 )
@@ -90,7 +95,7 @@ fun LoginButtonsPreview() {
                 contentAlignment = Alignment.Center
             ) {
                 LoginButtons(
-                    loginButtonTexts= loginButtonTexts(),
+                    loginButtonTexts = loginButtonTexts(),
                     onAccederClick = {},
                     onCrearUsuarioClick = {},
                     onRecuperarPasswordClick = {}
