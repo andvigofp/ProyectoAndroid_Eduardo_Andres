@@ -18,7 +18,7 @@ fun LoginButtons(
     onCrearUsuarioClick: () -> Unit,
     onRecuperarPasswordClick: () -> Unit
 ) {
-    // ✅ Si el data class viene vacío, damos los textos por defecto aquí
+    // Si el data class viene vacío, damos los textos por defecto aquí
     val accederText = if (loginButtonTexts.acceder.isNotEmpty()) loginButtonTexts.acceder else "ACCEDER"
     val crearUsuarioText = if (loginButtonTexts.crearUsuario.isNotEmpty()) loginButtonTexts.crearUsuario else "CREAR USUARIO"
     val recuperarText = if (loginButtonTexts.recuperarPassword.isNotEmpty()) loginButtonTexts.recuperarPassword else "RECUPERAR CONTRASEÑA"
