@@ -1,8 +1,7 @@
-package com.example.proyecto_eduardo_andres.myComponents.componenteCrearUsuario
+package com.example.proyecto_eduardo_andres.myComponents.componeneteCrearUsuario
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -22,6 +21,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.proyecto_eduardo_andres.myComponents.componeneteCrearUsuario.crearUsuarioButtonText
 
 @Composable
 fun crearUsuarioButton(
@@ -29,6 +29,11 @@ fun crearUsuarioButton(
     onCrearUsuarioClick: () -> Unit,
     onCancelarClick: () -> Unit
 ){
+
+    // Si el data class viene vacío, damos los textos por defecto aquí
+    val crearUsarioText = if (crearUsuarioButtonText.crearUsuario.isNotEmpty()) crearUsuarioButtonText.crearUsuario else "CREAR USUARIO"
+    val cancelarText = if (crearUsuarioButtonText.crearUsuario.isNotEmpty()) crearUsuarioButtonText.cancelar else "CANCELAR"
+
     Row(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.Center,
@@ -44,7 +49,7 @@ fun crearUsuarioButton(
                 .weight(1f)
                 .height(55.dp)
         ) {
-            Text(text = crearUsuarioButtonText.crearUsuario, fontSize = 18.sp)
+            Text(text = crearUsarioText, fontSize = 18.sp)
         }
 
         Spacer(modifier = Modifier.width(16.dp))
@@ -60,7 +65,7 @@ fun crearUsuarioButton(
                 .height(55.dp)
         ) {
             Text(
-                text = crearUsuarioButtonText.cancelar,
+                text = cancelarText,
                 fontSize = 18.sp,
                 textAlign = TextAlign.Center
             )
