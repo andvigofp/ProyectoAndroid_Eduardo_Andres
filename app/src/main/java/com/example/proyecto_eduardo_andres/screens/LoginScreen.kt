@@ -1,5 +1,6 @@
 package com.example.proyecto_eduardo_andres.screens
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
@@ -15,11 +16,13 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
+import com.example.proyecto_eduardo_andres.R
 import com.example.proyecto_eduardo_andres.myComponents.componenteLogin.LoginButtons
 import com.example.proyecto_eduardo_andres.myComponents.componenteLogin.CamposLogin
 import com.example.proyecto_eduardo_andres.myComponents.componenteLogin.LoginButtonTexts
@@ -97,23 +100,22 @@ fun LoginScreen(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.spacedBy(40.dp)
             ) {
-                // Imagen de perfil
-                if (userImageUrl != null) {
-                    AsyncImage(
-                        model = userImageUrl,
-                        contentDescription = "Imagen de perfil",
+                // --- Imagen redonda del logotipo ---
+                Box(
+                    modifier = Modifier
+                        .size(120.dp)
+                        .shadow(8.dp, CircleShape)
+                        .background(Color(0xFFE3F2FD), CircleShape) // azul pastel
+                        .clip(CircleShape),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Image(
+                        painter = painterResource(id = R.drawable.ic_logotipo_team),
+                        contentDescription = "Logo",
+                        contentScale = ContentScale.Crop,
                         modifier = Modifier
-                            .size(120.dp)
+                            .size(80.dp)
                             .clip(CircleShape)
-                            .background(Color.LightGray, CircleShape),
-                        contentScale = ContentScale.Crop
-                    )
-                } else {
-                    Icon(
-                        imageVector = Icons.Default.AccountCircle,
-                        contentDescription = "Usuario sin imagen",
-                        modifier = Modifier.size(120.dp),
-                        tint = Color(0xFF9E9E9E)
                     )
                 }
 

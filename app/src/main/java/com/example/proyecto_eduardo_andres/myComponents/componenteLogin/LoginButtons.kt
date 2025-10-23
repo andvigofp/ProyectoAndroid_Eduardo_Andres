@@ -31,7 +31,7 @@ fun LoginButtons(
         Button(
             onClick = onAccederClick,
             colors = ButtonDefaults.buttonColors(
-                containerColor = Color(0xFF4CAF50),
+                containerColor = MaterialTheme.colorScheme.primary,
                 contentColor = Color.White
             ),
             modifier = Modifier
