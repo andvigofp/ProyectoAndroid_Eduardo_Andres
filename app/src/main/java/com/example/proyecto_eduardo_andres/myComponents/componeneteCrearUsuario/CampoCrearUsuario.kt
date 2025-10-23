@@ -128,7 +128,7 @@ fun CampoCrearUsuario(
 @Preview(showBackground = true)
 @Composable
 fun CampoCrearUsuarioPreview() {
-    var crearUsuarioData by remember { mutableStateOf(value = CrearUsuarioData()) }
+    var crearUsuarioData by remember { mutableStateOf(CrearUsuarioData()) }
 
     CampoCrearUsuario(
         crearUsuarioData = crearUsuarioData,

@@ -39,6 +39,7 @@ import androidx.compose.ui.unit.sp
 import com.example.proyecto_eduardo_andres.R
 import com.example.proyecto_eduardo_andres.myComponents.componeneteCrearUsuario.CampoCrearUsuario
 import com.example.proyecto_eduardo_andres.myComponents.componeneteCrearUsuario.CrearUsuarioData
+import com.example.proyecto_eduardo_andres.screens.CrearUsuarioScreen
 
 @Composable
 fun CrearUsuarioScreen(
