@@ -20,9 +20,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun campoCrearUsuario(
-    crearUsuarioData: crearUsuarioData,
-    onCrearUsuarioData: (crearUsuarioData) -> Unit
+fun CampoCrearUsuario(
+    crearUsuarioData: CrearUsuarioData,
+    onCrearUsuarioData: (CrearUsuarioData) -> Unit
 ) {
     Column(
         modifier = Modifier
@@ -127,10 +127,10 @@ fun campoCrearUsuario(
 
 @Preview(showBackground = true)
 @Composable
-fun CamposCrearUsuarioPreview() {
-    var crearUsuarioData by remember { mutableStateOf(value = crearUsuarioData()) }
+fun CampoCrearUsuarioPreview() {
+    var crearUsuarioData by remember { mutableStateOf(value = CrearUsuarioData()) }
 
-    campoCrearUsuario (
+    CampoCrearUsuario(
         crearUsuarioData = crearUsuarioData,
         onCrearUsuarioData = { crearUsuarioData = it }
     )
