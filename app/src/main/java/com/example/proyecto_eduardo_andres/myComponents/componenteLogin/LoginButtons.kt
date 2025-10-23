@@ -13,7 +13,7 @@ import androidx.compose.ui.unit.sp
 
 @Composable
 fun LoginButtons(
-    loginButtonTexts: loginButtonTexts,
+    loginButtonTexts: LoginButtonTexts,
     onAccederClick: () -> Unit,
     onCrearUsuarioClick: () -> Unit,
     onRecuperarPasswordClick: () -> Unit
@@ -87,7 +87,7 @@ fun LoginButtons(
 
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
-fun LoginButtonsPreview() {
+fun LoginButtonPreview() {
     MaterialTheme {
         Surface(color = Color(0xFFF5F5F5)) {
             Box(
@@ -95,7 +95,7 @@ fun LoginButtonsPreview() {
                 contentAlignment = Alignment.Center
             ) {
                 LoginButtons(
-                    loginButtonTexts = loginButtonTexts(),
+                    loginButtonTexts = LoginButtonTexts(),
                     onAccederClick = {},
                     onCrearUsuarioClick = {},
                     onRecuperarPasswordClick = {}

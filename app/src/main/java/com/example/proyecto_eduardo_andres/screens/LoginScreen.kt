@@ -22,9 +22,8 @@ import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.example.proyecto_eduardo_andres.myComponents.componenteLogin.LoginButtons
 import com.example.proyecto_eduardo_andres.myComponents.componenteLogin.CamposLogin
-import com.example.proyecto_eduardo_andres.myComponents.componenteLogin.loginButtonTexts
-import com.example.proyecto_eduardo_andres.myComponents.componenteLogin.loginData
-
+import com.example.proyecto_eduardo_andres.myComponents.componenteLogin.LoginButtonTexts
+import com.example.proyecto_eduardo_andres.myComponents.componenteLogin.LoginData
 
 @Composable
 fun LoginScreen(
@@ -33,7 +32,7 @@ fun LoginScreen(
     onCrearUsuarioClick: () -> Unit,
     onRecuperarPasswordClick: () -> Unit
 ) {
-    var loginData by remember { mutableStateOf(loginData()) }
+    var loginData by remember { mutableStateOf(LoginData()) }
 
     Box(
         modifier = Modifier
@@ -130,7 +129,7 @@ fun LoginScreen(
 
                 // Botones
                 LoginButtons(
-                    loginButtonTexts = loginButtonTexts(),
+                    loginButtonTexts = LoginButtonTexts(),
                     onAccederClick = onAccederClick,
                     onCrearUsuarioClick = onCrearUsuarioClick,
                     onRecuperarPasswordClick = onRecuperarPasswordClick

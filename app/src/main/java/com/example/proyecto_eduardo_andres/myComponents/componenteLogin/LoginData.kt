@@ -1,6 +1,6 @@
 package com.example.proyecto_eduardo_andres.myComponents.componenteLogin
 
-data class loginData(
+data class LoginData(
     val email: String = "",
     val password: String = ""
 )

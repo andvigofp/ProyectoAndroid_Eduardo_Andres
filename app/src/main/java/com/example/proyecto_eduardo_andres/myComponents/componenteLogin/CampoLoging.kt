@@ -21,8 +21,8 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 fun CamposLogin(
-    loginData: loginData,
-    onLoginDataChange: (loginData) -> Unit
+    loginData: LoginData,
+    onLoginDataChange: (LoginData) -> Unit
 ) {
     Column(
         modifier = Modifier
@@ -81,8 +81,8 @@ fun CamposLogin(
 
 @Preview(showBackground = true)
 @Composable
-fun CamposLoginPreview() {
-    var loginData by remember { mutableStateOf(loginData()) }
+fun CamposLoginsPreview() {
+    var loginData by remember { mutableStateOf(LoginData()) }
 
     CamposLogin(
         loginData = loginData,

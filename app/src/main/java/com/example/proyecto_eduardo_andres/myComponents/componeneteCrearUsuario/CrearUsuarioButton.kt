@@ -21,11 +21,10 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.proyecto_eduardo_andres.myComponents.componeneteCrearUsuario.crearUsuarioButtonText
 
 @Composable
-fun crearUsuarioButton(
-    crearUsuarioButtonText: crearUsuarioButtonText,
+fun CrearUsuarioButton(
+    crearUsuarioButtonText: CrearUsuarioButtonText,
     onCrearUsuarioClick: () -> Unit,
     onCancelarClick: () -> Unit
 ){
@@ -75,15 +74,15 @@ fun crearUsuarioButton(
 
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
-fun crearUsurioButtonsPreview() {
+fun CrearUsuarioButtonPreview() {
     MaterialTheme {
         Surface(color = Color(0xFFF5F5F5)) {
             Box(
                 modifier = Modifier.fillMaxSize(),
                 contentAlignment = Alignment.Center
             ) {
-                crearUsuarioButton(
-                    crearUsuarioButtonText = crearUsuarioButtonText(),
+                CrearUsuarioButton(
+                    crearUsuarioButtonText = CrearUsuarioButtonText(),
                     onCrearUsuarioClick = {},
                     onCancelarClick = {}
                 )
