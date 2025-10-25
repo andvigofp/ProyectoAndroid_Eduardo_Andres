@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CameraAlt
@@ -36,13 +37,13 @@ fun toolBar(
         start = Offset(0f, 0f),
         end = Offset(1000f, 1000f)
     )
-
     Box(
         modifier = Modifier
-            .fillMaxWidth()
+            .fillMaxWidth()               // asegura que ocupe TODO el ancho
+            .height(56.dp)                // altura fija tipo toolbar
             .background(toolbarBackGround)
-            .padding(horizontal = 8.dp, vertical = 6.dp)
-            .shadow(4.dp)
+            .shadow(4.dp),
+        contentAlignment = Alignment.CenterStart
     ) {
         // Fila principal con los íconos alineados a la derecha
         Row(

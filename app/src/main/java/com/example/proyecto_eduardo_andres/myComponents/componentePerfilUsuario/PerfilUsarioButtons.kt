@@ -20,8 +20,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.proyecto_eduardo_andres.myComponents.componeneteCrearUsuario.CrearUsuarioButton
-import com.example.proyecto_eduardo_andres.myComponents.componeneteCrearUsuario.CrearUsuarioButtonText
 
 @Composable
 fun PerfilUsuarioButtons(
