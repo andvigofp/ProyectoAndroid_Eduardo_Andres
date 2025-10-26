@@ -1,4 +1,4 @@
-package com.example.proyecto_eduardo_andres.myComponents.componenteVideoClubOnline
+package com.example.proyecto_eduardo_andres.myComponents.componenteVideoClubListaPeliculas
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background

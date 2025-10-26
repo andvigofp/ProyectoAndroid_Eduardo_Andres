@@ -1,11 +1,11 @@
-package com.example.proyecto_eduardo_andres.myComponents.componenteVideoClubOnline
+package com.example.proyecto_eduardo_andres.myComponents.componenteVideoClubListaPeliculas
 
 import com.example.proyecto_eduardo_andres.R
 
 data class PeliculasDataClass(
     val nombrePeliculas: List<VideoClubOnlineDataClass> = listOf(
         //DRAMA
-        VideoClubOnlineDataClass("DRAMA", R.drawable.ic_cadena_perpetua, "Cadena perpetua"),
+        VideoClubOnlineDataClass("DRAMA",  R.drawable.ic_cadena_perpetua, "Cadena perpetua"),
         VideoClubOnlineDataClass("DRAMA", R.drawable.ic_big_fish, "Big Fish"),
         VideoClubOnlineDataClass("DRAMA", R.drawable.ic_padrino, "El Padrino"),
         VideoClubOnlineDataClass("DRAMA", R.drawable.ic_lista_scindler, "La lista de Scindler"),
