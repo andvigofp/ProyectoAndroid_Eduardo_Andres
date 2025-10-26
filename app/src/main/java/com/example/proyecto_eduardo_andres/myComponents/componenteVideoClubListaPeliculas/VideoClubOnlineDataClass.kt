@@ -1,4 +1,4 @@
-package com.example.proyecto_eduardo_andres.myComponents.componenteVideoClubOnline
+package com.example.proyecto_eduardo_andres.myComponents.componenteVideoClubListaPeliculas
 
 data class VideoClubOnlineDataClass(
     val nombreCategoria: String = "",
