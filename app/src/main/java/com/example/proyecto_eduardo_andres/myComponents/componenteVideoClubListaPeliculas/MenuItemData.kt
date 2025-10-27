@@ -1,4 +1,4 @@
-package com.example.proyecto_eduardo_andres.myComponents.componenteMenu
+package com.example.proyecto_eduardo_andres.myComponents.componenteVideoClubListaPeliculas
 
 import androidx.compose.ui.graphics.vector.ImageVector
 

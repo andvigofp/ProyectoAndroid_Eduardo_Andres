@@ -1,4 +1,4 @@
-package com.example.proyecto_eduardo_andres.myComponents.componenteVideoClubListaPeliculas
+package com.example.proyecto_eduardo_andres.screens
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -43,6 +43,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.proyecto_eduardo_andres.myComponents.componenteVideoClubListaPeliculas.PeliculasDataClass
+import com.example.proyecto_eduardo_andres.myComponents.componenteVideoClubListaPeliculas.VideoClubCategoriasBotones
+import com.example.proyecto_eduardo_andres.myComponents.componenteVideoClubListaPeliculas.VideoClubMenuDrawer
 import com.example.proyecto_eduardo_andres.myComponents.toolBar
 import kotlinx.coroutines.launch
 
@@ -65,7 +68,7 @@ fun VideoClubOnlineScreen() {
     ) {
         Scaffold(
             topBar = {
-                // --- Icono de menú con espacio superior real ---
+                // --- Icono de menú con degradado superior ---
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -74,7 +77,7 @@ fun VideoClubOnlineScreen() {
                                 colors = listOf(Color(0xFF0D47A1), Color(0xFF1976D2))
                             )
                         )
-                        .statusBarsPadding() // respeta la barra de estado
+                        .statusBarsPadding()
                         .padding(top = 8.dp, start = 12.dp, bottom = 8.dp)
                 ) {
                     IconButton(
@@ -91,23 +94,35 @@ fun VideoClubOnlineScreen() {
                 }
             },
             bottomBar = {
-                // --- Toolbar con degradado azul ---
-                toolBar(
-                    onHomeClick = {},
-                    onCameraClick = {},
-                    onProfileClick = {},
-                    onLogoutClick = {}
-                )
+                // --- Toolbar con degradado azul y espacio arriba ---
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .background(
+                            Brush.verticalGradient(
+                                colors = listOf(Color(0xFF0D47A1), Color(0xFF1976D2))
+                            )
+                        )
+                        .padding(top = 8.dp, bottom = 16.dp) // <- aquí ajustas el espacio arriba y abajo
+                ) {
+                    toolBar(
+                        onHomeClick = {},
+                        onCameraClick = {},
+                        onProfileClick = {},
+                        onLogoutClick = {}
+                    )
+                }
             },
-            containerColor = MaterialTheme.colorScheme.background
+
+                    containerColor = MaterialTheme.colorScheme.background
         ) { padding ->
-            // --- CONTENIDO PRINCIPAL con espacios ---
+            // --- CONTENIDO PRINCIPAL ---
             LazyColumn(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(padding)
                     .background(MaterialTheme.colorScheme.background),
-                verticalArrangement = Arrangement.spacedBy(24.dp) // separación entre secciones
+                verticalArrangement = Arrangement.spacedBy(24.dp)
             ) {
                 // Espacio superior antes de categorías
                 item { Spacer(modifier = Modifier.height(12.dp)) }
@@ -188,6 +203,23 @@ fun VideoClubOnlineScreen() {
                     }
                 }
 
+                // --- Degradado inferior azul oscuro detrás del BottomBar ---
+                item {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(300.dp)
+                            .background(
+                                Brush.verticalGradient(
+                                    colors = listOf(
+                                        Color(0xFF0D47A1), // azul oscuro
+                                        Color(0xFF1976D2)  // azul más claro
+                                    )
+                                )
+                            )
+                    )
+                }
+
                 // Espacio inferior para BottomBar
                 item { Spacer(modifier = Modifier.height(32.dp)) }
             }
@@ -202,3 +234,4 @@ fun VideoClubOnlineScreenPreview() {
         VideoClubOnlineScreen()
     }
 }
+
