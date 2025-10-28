@@ -1,5 +1,6 @@
 package com.example.proyecto_eduardo_andres.myComponents.componenteVideoClubListaPeliculas
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
@@ -9,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Movie
@@ -30,6 +32,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -49,47 +54,69 @@ fun VideoClubMenuDrawer(
         MenuItemData("Series", Icons.Default.Tv, onSeriesClick)
     )
 
+    // Fondo azul degradado o de color temático
     ModalDrawerSheet(
-        modifier = Modifier.width(260.dp),
-        drawerContainerColor = MaterialTheme.colorScheme.surface,
-        drawerContentColor = MaterialTheme.colorScheme.onSurface
+        modifier = Modifier
+            .width(260.dp)
+            .background(
+                brush = Brush.verticalGradient(
+                    colors = listOf(
+                        MaterialTheme.colorScheme.primaryContainer,
+                        MaterialTheme.colorScheme.secondaryContainer
+                    )
+                )
+            ), // Fondo degradado
+        drawerContainerColor = Color.Transparent, // deja visible el degradado
+        drawerContentColor = MaterialTheme.colorScheme.onPrimaryFixedVariant
     ) {
-        Spacer(modifier = Modifier.height(24.dp))
+        Spacer(modifier = Modifier.height(36.dp))
+
+        // --- Título del Drawer ---
         Text(
-            text = "VIDEOCLUB ONLINE",
-            color = MaterialTheme.colorScheme.primary,
+            text = "🎬 VIDEOCLUB ONLINE",
+            color = MaterialTheme.colorScheme.onPrimaryContainer,
             fontSize = 20.sp,
             fontWeight = FontWeight.Bold,
             modifier = Modifier.padding(horizontal = 16.dp)
         )
-        Spacer(modifier = Modifier.height(16.dp))
 
+        Spacer(modifier = Modifier.height(24.dp))
+
+        // --- Items del menú ---
         menuItems.forEach { item ->
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
+                    .clip(RoundedCornerShape(12.dp))
                     .clickable {
                         scope.launch { drawerState.close() }
                         item.onClick()
                     }
+                    .background(
+                        MaterialTheme.colorScheme.surface.copy(alpha = 0.2f)
+                    ) // fondo suave para cada item
                     .padding(horizontal = 16.dp, vertical = 12.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Icon(
                     imageVector = item.icon,
                     contentDescription = item.title,
-                    tint = MaterialTheme.colorScheme.primary
+                    tint = MaterialTheme.colorScheme.onPrimaryContainer
                 )
                 Spacer(modifier = Modifier.width(12.dp))
                 Text(
                     text = item.title,
                     fontSize = 18.sp,
-                    color = MaterialTheme.colorScheme.onSurface
+                    fontWeight = FontWeight.Medium,
+                    color = MaterialTheme.colorScheme.onPrimaryContainer
                 )
             }
+            Spacer(modifier = Modifier.height(12.dp))
         }
     }
 }
+
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Preview(showBackground = true, showSystemUi = true)

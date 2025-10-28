@@ -46,6 +46,7 @@ import androidx.compose.ui.unit.sp
 import com.example.proyecto_eduardo_andres.myComponents.componenteVideoClubListaPeliculas.PeliculasDataClass
 import com.example.proyecto_eduardo_andres.myComponents.componenteVideoClubListaPeliculas.VideoClubCategoriasBotones
 import com.example.proyecto_eduardo_andres.myComponents.componenteVideoClubListaPeliculas.VideoClubMenuDrawer
+import com.example.proyecto_eduardo_andres.myComponents.componenteVideoClubListaPeliculas.toolBarVideoClubOnline
 import com.example.proyecto_eduardo_andres.myComponents.toolBar
 import kotlinx.coroutines.launch
 
@@ -100,12 +101,12 @@ fun VideoClubOnlineScreen() {
                         .fillMaxWidth()
                         .background(
                             Brush.verticalGradient(
-                                colors = listOf(Color(0xFF0D47A1), Color(0xFF1976D2))
+                                colors = listOf(MaterialTheme.colorScheme.onPrimaryContainer, MaterialTheme.colorScheme.onPrimaryContainer)
                             )
                         )
                         .padding(top = 8.dp, bottom = 16.dp) // <- aquí ajustas el espacio arriba y abajo
                 ) {
-                    toolBar(
+                    toolBarVideoClubOnline(
                         onHomeClick = {},
                         onCameraClick = {},
                         onProfileClick = {},
@@ -169,7 +170,7 @@ fun VideoClubOnlineScreen() {
                                             modifier = Modifier
                                                 .size(130.dp)
                                                 .clip(RoundedCornerShape(12.dp))
-                                                .background(Color(0xFFE3F2FD))
+                                                .background(MaterialTheme.colorScheme.inversePrimary)
                                                 .clickable { /* onPeliculaClick(pelicula) */ },
                                             contentAlignment = Alignment.Center
                                         ) {
@@ -203,25 +204,8 @@ fun VideoClubOnlineScreen() {
                     }
                 }
 
-                // --- Degradado inferior azul oscuro detrás del BottomBar ---
-                item {
-                    Box(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(300.dp)
-                            .background(
-                                Brush.verticalGradient(
-                                    colors = listOf(
-                                        Color(0xFF0D47A1), // azul oscuro
-                                        Color(0xFF1976D2)  // azul más claro
-                                    )
-                                )
-                            )
-                    )
-                }
-
                 // Espacio inferior para BottomBar
-                item { Spacer(modifier = Modifier.height(32.dp)) }
+                item { Spacer(modifier = Modifier.height(16.dp)) }
             }
         }
     }
