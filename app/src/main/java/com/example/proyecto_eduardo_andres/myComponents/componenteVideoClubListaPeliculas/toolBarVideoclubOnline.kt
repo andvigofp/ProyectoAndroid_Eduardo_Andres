@@ -1,4 +1,4 @@
-package com.example.proyecto_eduardo_andres.myComponents
+package com.example.proyecto_eduardo_andres.myComponents.componenteVideoClubListaPeliculas
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CameraAlt
 import androidx.compose.material.icons.filled.ExitToApp
@@ -14,10 +13,10 @@ import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
@@ -25,7 +24,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun toolBar(
+fun toolBarVideoClubOnline(
     onHomeClick: () -> Unit,
     onCameraClick: () -> Unit,
     onProfileClick: () -> Unit,
@@ -33,7 +32,7 @@ fun toolBar(
 ) {
     // Degradado de fondo (de azul oscuro a violeta suave)
     val toolbarBackGround = Brush.linearGradient(
-        colors = listOf(Color(0xFF0D47A1), Color(0xFF512DA8)),
+        colors = listOf(MaterialTheme.colorScheme.onPrimaryContainer, MaterialTheme.colorScheme.onPrimaryContainer),
         start = Offset(0f, 0f),
         end = Offset(1000f, 1000f)
     )
@@ -42,7 +41,6 @@ fun toolBar(
             .fillMaxWidth()               // asegura que ocupe TODO el ancho
             .height(56.dp)                // altura fija tipo toolbar
             .background(toolbarBackGround),
-            //.shadow(4.dp),
         contentAlignment = Alignment.CenterStart
     ) {
         // Fila principal con los íconos alineados a la derecha
@@ -78,7 +76,7 @@ fun toolBar(
 @Preview(showBackground = true)
 @Composable
 fun ToolBarPreview() {
-    toolBar(
+    toolBarVideoClubOnline(
         onHomeClick = {},
         onCameraClick = {},
         onProfileClick = {},
