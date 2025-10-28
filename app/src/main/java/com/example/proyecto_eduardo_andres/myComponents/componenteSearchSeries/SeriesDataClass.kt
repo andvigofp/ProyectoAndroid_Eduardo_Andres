@@ -1,4 +1,6 @@
-package com.example.proyecto_eduardo_andres.myComponents.componenteVideoClubOnlieSeries
+package com.example.proyecto_eduardo_andres.myComponents.componenteSearchSeries
+
+import com.example.proyecto_eduardo_andres.R
 
 data class SeriesDataClass(
     val nombreSeries: List<VideoClubOnlineDataClass> = listOf(

@@ -121,9 +121,9 @@ fun VideoClubOnlineScreen() {
 
                 // Lista de películas agrupadas por categoría
                 val peliculasData = SeriesDataClass()
-                val categoriasAgrupadas = peliculasData.nombrePeliculas.groupBy { it.nombreCategoria }
+                val categoriasAgrupadas = peliculasData.nombreSeries.groupBy { it.nombreCategoria }
 
-                categoriasAgrupadas.forEach { (categoria, peliculas) ->
+                categoriasAgrupadas.forEach { (categoria, series) ->
                     item(key = categoria) {
                         Column(
                             verticalArrangement = Arrangement.spacedBy(16.dp),
@@ -143,8 +143,8 @@ fun VideoClubOnlineScreen() {
                                 horizontalArrangement = Arrangement.spacedBy(16.dp),
                                 modifier = Modifier.fillMaxWidth()
                             ) {
-                                items(peliculas.size) { index ->
-                                    val pelicula = peliculas[index]
+                                items(series.size) { index ->
+                                    val pelicula = series[index]
 
                                     Column(
                                         horizontalAlignment = Alignment.CenterHorizontally,
