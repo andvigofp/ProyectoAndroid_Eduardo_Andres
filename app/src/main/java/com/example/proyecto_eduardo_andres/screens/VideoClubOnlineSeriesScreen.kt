@@ -136,7 +136,7 @@ fun VideoClubOnlineSeries() {
 
                 // Lista de películas agrupadas por categoría
                 val seriesData = SeriesDataClass()
-                val categoriasAgrupadas = seriesData.nombrePeliculas.groupBy { it.nombreCategoria }
+                val categoriasAgrupadas = seriesData.nombreSeries.groupBy { it.nombreCategoria }
 
                 categoriasAgrupadas.forEach { (categoria, series) ->
                     item(key = categoria) {
