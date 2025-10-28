@@ -1,4 +1,4 @@
-package com.example.proyecto_eduardo_andres.myComponents.componenteVideoClubListaPeliculas
+package com.example.proyecto_eduardo_andres.myComponents.componenteVideoClubOnlieSeries
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -6,7 +6,9 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.CameraAlt
 import androidx.compose.material.icons.filled.ExitToApp
 import androidx.compose.material.icons.filled.Home
@@ -25,60 +27,70 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 fun toolBarVideoClubOnline(
+    onBackClick: () -> Unit,
     onHomeClick: () -> Unit,
     onCameraClick: () -> Unit,
     onProfileClick: () -> Unit,
     onLogoutClick: () -> Unit
 ) {
-    // Degradado de fondo (de azul oscuro a violeta suave)
-    val toolbarBackGround = Brush.linearGradient(
+// Fondo con degradado
+    val toolbarBackground = Brush.linearGradient(
         colors = listOf(
             MaterialTheme.colorScheme.onPrimaryContainer,
             MaterialTheme.colorScheme.onPrimaryContainer),
         start = Offset(0f, 0f),
         end = Offset(1000f, 1000f)
     )
+
     Box(
         modifier = Modifier
-            .fillMaxWidth()               // asegura que ocupe TODO el ancho
-            .height(56.dp)                // altura fija tipo toolbar
-            .background(toolbarBackGround),
+            .fillMaxWidth()
+            .height(56.dp)
+            .background(toolbarBackground),
         contentAlignment = Alignment.CenterStart
     ) {
-        // Fila principal con los íconos alineados a la derecha
+        // Fila principal que ocupa todo el ancho
         Row(
             modifier = Modifier
-                .fillMaxWidth(),
-            horizontalArrangement = Arrangement.End, // Esto los alinea a la derecha
+                .fillMaxWidth()
+                .padding(horizontal = 8.dp),
+            horizontalArrangement = Arrangement.SpaceBetween, // izquierda y derecha
             verticalAlignment = Alignment.CenterVertically
         ) {
+            // Flecha a la izquierda
+            IconButton(onClick = onBackClick) {
+                Icon(
+                    imageVector = Icons.Default.ArrowBack,
+                    contentDescription = "Volver",
+                    tint = Color(0xFFFFC107)
+                )
+            }
+
+            // 📱 Íconos a la derecha
             Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 IconButton(onClick = onHomeClick) {
-                    Icon(Icons.Default.Home, contentDescription = "Inicio", tint = Color(0xFFFFC107)
-                    )
+                    Icon(Icons.Default.Home, contentDescription = "Inicio", tint = Color(0xFFFFC107))
                 }
                 IconButton(onClick = onCameraClick) {
-                    Icon(Icons.Default.CameraAlt, contentDescription = "Cámara", tint = Color(0xFFFFC107)
-                    )
+                    Icon(Icons.Default.CameraAlt, contentDescription = "Cámara", tint = Color(0xFFFFC107))
                 }
                 IconButton(onClick = onProfileClick) {
-                    Icon(
-                        Icons.Default.Person, contentDescription = "Perfil", tint = Color(0xFFFFC107)
-                    )
+                    Icon(Icons.Default.Person, contentDescription = "Perfil", tint = Color(0xFFFFC107))
                 }
                 IconButton(onClick = onLogoutClick) {
-                    Icon(Icons.Default.ExitToApp, contentDescription = "Salir", tint = Color(0xFFFFC107)
-                    )
+                    Icon(Icons.Default.ExitToApp, contentDescription = "Salir", tint = Color(0xFFFFC107))
                 }
             }
         }
     }
+
 }
 
 @Preview(showBackground = true)
 @Composable
 fun ToolBarPreview() {
     toolBarVideoClubOnline(
+        onBackClick = {},
         onHomeClick = {},
         onCameraClick = {},
         onProfileClick = {},
