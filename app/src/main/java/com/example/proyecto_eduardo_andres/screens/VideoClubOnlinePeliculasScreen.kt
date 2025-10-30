@@ -18,12 +18,10 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Movie
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.Scaffold
@@ -43,18 +41,16 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.proyecto_eduardo_andres.myComponents.componenteMenu.VideoClubMenuDrawer
 import com.example.proyecto_eduardo_andres.myComponents.componenteVideoClubListaPeliculas.PeliculasDataClass
 import com.example.proyecto_eduardo_andres.myComponents.componenteVideoClubListaPeliculas.VideoClubCategoriasBotones
-import com.example.proyecto_eduardo_andres.myComponents.componenteMenu.VideoClubMenuDrawer
 import com.example.proyecto_eduardo_andres.myComponents.componenteVideoClubListaPeliculas.toolBarVideoClubOnline
-import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun VideoClubOnlineScreen() {
     val drawerState = rememberDrawerState(DrawerValue.Closed)
     val scope = rememberCoroutineScope()
-
     ModalNavigationDrawer(
         drawerState = drawerState,
         drawerContent = {
@@ -68,44 +64,22 @@ fun VideoClubOnlineScreen() {
     ) {
         Scaffold(
             topBar = {
-                // --- Icono de menú con degradado superior ---
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .background(
-                            brush = Brush.verticalGradient(
-                                colors = listOf(Color(0xFF0D47A1), Color(0xFF1976D2))
-                            )
-                        )
-                        .statusBarsPadding()
-                        .padding(top = 8.dp, start = 12.dp, bottom = 8.dp)
-                ) {
-                    IconButton(
-                        onClick = { scope.launch { drawerState.open() } },
-                        modifier = Modifier.align(Alignment.CenterStart)
-                    ) {
-                        Icon(
-                            Icons.Default.Menu,
-                            contentDescription = "Menú",
-                            tint = Color(0xFFFFC107),
-                            modifier = Modifier.size(32.dp)
-                        )
-                    }
-                }
-            },
-            bottomBar = {
-                // --- Toolbar con degradado azul y espacio arriba ---
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
                         .background(
                             Brush.verticalGradient(
-                                colors = listOf(MaterialTheme.colorScheme.onPrimaryContainer, MaterialTheme.colorScheme.onPrimaryContainer)
+                                colors = listOf(
+                                    MaterialTheme.colorScheme.primary,
+                                    MaterialTheme.colorScheme.primary
+                                )
                             )
                         )
-                        .padding(top = 8.dp, bottom = 16.dp) // <- aquí ajustas el espacio arriba y abajo
+                        .statusBarsPadding()
                 ) {
                     toolBarVideoClubOnline(
+                        drawerState = drawerState,
+                        scope = scope,
                         onHomeClick = {},
                         onCameraClick = {},
                         onProfileClick = {},
@@ -113,10 +87,8 @@ fun VideoClubOnlineScreen() {
                     )
                 }
             },
-
-                    containerColor = MaterialTheme.colorScheme.background
+            containerColor = MaterialTheme.colorScheme.background
         ) { padding ->
-            // --- CONTENIDO PRINCIPAL ---
             LazyColumn(
                 modifier = Modifier
                     .fillMaxSize()
@@ -124,26 +96,17 @@ fun VideoClubOnlineScreen() {
                     .background(MaterialTheme.colorScheme.background),
                 verticalArrangement = Arrangement.spacedBy(24.dp)
             ) {
-                // Espacio superior antes de categorías
                 item { Spacer(modifier = Modifier.height(12.dp)) }
-
-                // Botones de categorías
                 item { VideoClubCategoriasBotones() }
-
-                // Espacio entre categorías y películas
                 item { Spacer(modifier = Modifier.height(8.dp)) }
-
-                // Lista de películas agrupadas por categoría
                 val peliculasData = PeliculasDataClass()
                 val categoriasAgrupadas = peliculasData.nombrePeliculas.groupBy { it.nombreCategoria }
-
                 categoriasAgrupadas.forEach { (categoria, peliculas) ->
                     item(key = categoria) {
                         Column(
                             verticalArrangement = Arrangement.spacedBy(16.dp),
                             modifier = Modifier.fillMaxWidth()
                         ) {
-                            // Título de la categoría
                             Text(
                                 text = categoria,
                                 fontSize = 22.sp,
@@ -151,15 +114,12 @@ fun VideoClubOnlineScreen() {
                                 color = MaterialTheme.colorScheme.primary,
                                 modifier = Modifier.padding(start = 4.dp, bottom = 8.dp)
                             )
-
-                            // Scroll horizontal de películas
                             LazyRow(
                                 horizontalArrangement = Arrangement.spacedBy(16.dp),
                                 modifier = Modifier.fillMaxWidth()
                             ) {
                                 items(peliculas.size) { index ->
                                     val pelicula = peliculas[index]
-
                                     Column(
                                         horizontalAlignment = Alignment.CenterHorizontally,
                                         verticalArrangement = Arrangement.spacedBy(6.dp),
@@ -187,7 +147,6 @@ fun VideoClubOnlineScreen() {
                                                 modifier = Modifier.size(48.dp)
                                             )
                                         }
-
                                         Text(
                                             text = pelicula.nombrePelicula,
                                             color = MaterialTheme.colorScheme.onBackground,
@@ -202,8 +161,6 @@ fun VideoClubOnlineScreen() {
                         }
                     }
                 }
-
-                // Espacio inferior para BottomBar
                 item { Spacer(modifier = Modifier.height(16.dp)) }
             }
         }
@@ -217,4 +174,3 @@ fun VideoClubOnlineScreenPreview() {
         VideoClubOnlineScreen()
     }
 }
-
