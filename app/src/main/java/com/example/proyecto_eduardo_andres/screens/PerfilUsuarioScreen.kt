@@ -159,6 +159,7 @@ fun PerfilUsuarioScreen() {
             ) {
                 // toolbar (fondo ya full-width)
                 toolBar(
+                    onBackClick = {},
                     onHomeClick = {},
                     onCameraClick = {},
                     onProfileClick = {},
