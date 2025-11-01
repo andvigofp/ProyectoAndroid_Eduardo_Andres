@@ -1,7 +1,7 @@
-package com.example.proyecto_eduardo_andres.myComponents.componenteAlquilarDevolver
+package com.example.proyecto_eduardo_andres.myComponents.componenteAlquilarDevolverPeliculas
 
 // Clase que contiene la lista de películas
-data class PeliculasDataClass(
+data class PeliculasData(
     val nombrePeliculas: List<VideoClubOnlineDataClass> = listOf(
         // DRAMA
         VideoClubOnlineDataClass(null, "Cadena perpetua", "Un banquero inocente es condenado a cadena perpetua y forja una amistad inolvidable."),
