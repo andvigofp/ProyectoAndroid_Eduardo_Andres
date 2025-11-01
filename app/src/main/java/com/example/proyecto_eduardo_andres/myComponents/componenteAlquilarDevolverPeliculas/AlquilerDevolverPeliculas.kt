@@ -26,64 +26,52 @@ import androidx.compose.ui.unit.dp
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AlquilerDevolverPeliculas(
-    peliculas: AlquilarDevolverPeliculaData
+    peliculas: AlquilarDevolverPeliculasData
 ) {
     val colors = MaterialTheme.colorScheme
     val typography = MaterialTheme.typography
 
-    Scaffold { innerPadding ->
-        Column(
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(16.dp)
+            .padding(8.dp)
+    ) {
+        // Contenedor principal
+        Row(
             modifier = Modifier
-                .fillMaxSize()
-                .padding(innerPadding)
-                .padding(8.dp),
-            verticalArrangement = Arrangement.SpaceBetween
+                .fillMaxWidth()
+                .padding(16.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-
-            // Contenedor principal
-            Box(
+            // Imagen / icono a la izquierda
+            Icon(
+                imageVector = Icons.Default.Movie,
+                contentDescription = "Icono película",
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .weight(0.9f)
-                    .padding(8.dp)
-            ) {
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(16.dp),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(16.dp)
-                ) {
-                    // Imagen / icono a la izquierda
-                    Icon(
-                        imageVector = Icons.Default.Movie,
-                        contentDescription = "Icono película",
-                        modifier = Modifier
-                            .size(150.dp)
-                            .padding(8.dp),
-                        tint = colors.onBackground
-                    )
+                    .size(150.dp)
+                    .padding(8.dp),
+                tint = colors.onBackground
+            )
 
-                    // Nombre y descripción a la derecha
-                    Column(
-                        modifier = Modifier
-                            .weight(1f)
-                            .fillMaxHeight(),
-                        verticalArrangement = Arrangement.Center
-                    ) {
-                        Text(
-                            text = peliculas.nombrePelicula,
-                            style = typography.headlineMedium.copy(color = colors.primary),
-                            textAlign = TextAlign.Start,
-                            modifier = Modifier.padding(bottom = 8.dp)
-                        )
-                        Text(
-                            text = peliculas.descripcion,
-                            style = typography.bodyLarge.copy(color = colors.primary),
-                            textAlign = TextAlign.Start
-                        )
-                    }
-                }
+            // Nombre y descripción a la derecha
+            Column(
+                modifier = Modifier
+                    .weight(1f),
+                verticalArrangement = Arrangement.Center
+            ) {
+                Text(
+                    text = peliculas.nombrePelicula,
+                    style = typography.headlineMedium.copy(color = colors.primary),
+                    textAlign = TextAlign.Start,
+                    modifier = Modifier.padding(bottom = 8.dp)
+                )
+                Text(
+                    text = peliculas.descripcion,
+                    style = typography.bodyLarge.copy(color = colors.primary),
+                    textAlign = TextAlign.Start
+                )
             }
         }
     }
@@ -91,16 +79,18 @@ fun AlquilerDevolverPeliculas(
 
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
-fun AlquilarDevolverSeriePreview() {
+fun AlquilarDevolverPeliculasPreview() {
     val listaPeliculas = PeliculasData().nombrePeliculas
-    val peliculasSeleccionada = listaPeliculas.firstOrNull { it.nombrePelicula == "La Vida es Bella" }
+    val peliculaSeleccionada = listaPeliculas.firstOrNull { it.nombrePelicula == "La Vida es Bella" }
         ?: listaPeliculas.first()
 
-    val peliculaDemo = AlquilarDevolverPeliculaData(
-        nombrePelicula = peliculasSeleccionada.nombrePelicula,
-        descripcion = peliculasSeleccionada.descripcion
+    // Se crea correctamente el objeto del tipo de data class
+    val peliculaDemo = AlquilarDevolverPeliculasData(
+        nombrePelicula = peliculaSeleccionada.nombrePelicula,
+        descripcion = peliculaSeleccionada.descripcion
     )
 
+    // Se llama al composable correcto
     MaterialTheme {
         AlquilerDevolverPeliculas(peliculas = peliculaDemo)
     }

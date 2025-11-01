@@ -18,16 +18,16 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.proyecto_eduardo_andres.myComponents.componenteVideoClubOnlieSeries.VideoClubOnlineCategorias
+import com.example.proyecto_eduardo_andres.myComponents.componenteVideoClubOnlieSeries.VideoClubOnlineCategoriasData
 
 @Composable
 fun VideoClubCategoriasBotones() {
     // Lista de categorías usando el data class
     val categorias = listOf(
-        VideoClubOnlineCategorias("DRAMA", MaterialTheme.colorScheme.primary),
-        VideoClubOnlineCategorias("ACCIÓN", MaterialTheme.colorScheme.secondary),
-        VideoClubOnlineCategorias("TERROR", MaterialTheme.colorScheme.error),
-        VideoClubOnlineCategorias("DIBUJOS", MaterialTheme.colorScheme.tertiary)
+        VideoClubOnlineCategoriasData("DRAMA", MaterialTheme.colorScheme.primary),
+        VideoClubOnlineCategoriasData("ACCIÓN", MaterialTheme.colorScheme.secondary),
+        VideoClubOnlineCategoriasData("TERROR", MaterialTheme.colorScheme.error),
+        VideoClubOnlineCategoriasData("DIBUJOS", MaterialTheme.colorScheme.tertiary)
     )
 
     // Solo el LazyRow con los botones de categorías

@@ -1,8 +1,8 @@
 package com.example.proyecto_eduardo_andres.myComponents.componenteSearchPeliculas
 
 fun buscarPeliculas(
-    peliculas: List<VideoClubOnlineDataClass>,
+    peliculas: List<VideoClubOnlineSearchPeliculasData>,
     query: String
-): List<VideoClubOnlineDataClass> {
+): List<VideoClubOnlineSearchPeliculasData> {
     return peliculas.filter { it.nombrePelicula.contains(query, ignoreCase = true) }
 }

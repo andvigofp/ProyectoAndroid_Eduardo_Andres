@@ -30,7 +30,7 @@ fun BotonAlquilarSeries(
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier
             .fillMaxWidth()
-            .padding(16.dp)
+            .padding(start = 16.dp, end = 16.dp, top = 8.dp)
     ) {
         // Botón Alquilar
         Button(

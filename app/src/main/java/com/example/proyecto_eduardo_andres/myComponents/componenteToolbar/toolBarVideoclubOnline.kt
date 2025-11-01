@@ -1,4 +1,4 @@
-package com.example.proyecto_eduardo_andres.myComponents.componenteVideoClubListaPeliculas
+package com.example.proyecto_eduardo_andres.myComponents.componenteToolbar
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -39,7 +39,7 @@ fun toolBarVideoClubOnline(
     drawerState: DrawerState,
     scope: CoroutineScope,
     onHomeClick: () -> Unit,
-    onSearchClicK:() -> Unit,
+    onSearchClick: () -> Unit,
     onCameraClick: () -> Unit,
     onProfileClick: () -> Unit,
     onLogoutClick: () -> Unit
@@ -85,7 +85,7 @@ fun toolBarVideoClubOnline(
                         tint = iconColor
                     )
                 }
-                IconButton(onClick = onSearchClicK) {
+                IconButton(onClick = onSearchClick) {
                     Icon(
                         Icons.Default.Search,
                         contentDescription = "Buscar",
@@ -129,7 +129,7 @@ fun ToolBarVideoClubOnlinePreview() {
             drawerState = drawerState,
             scope = scope,
             onHomeClick = {},
-            onSearchClicK = {},
+            onSearchClick = {},
             onCameraClick = {},
             onProfileClick = {},
             onLogoutClick = {}

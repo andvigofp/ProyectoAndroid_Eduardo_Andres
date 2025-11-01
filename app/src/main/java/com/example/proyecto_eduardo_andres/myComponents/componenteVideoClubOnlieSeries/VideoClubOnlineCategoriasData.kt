@@ -2,7 +2,7 @@ package com.example.proyecto_eduardo_andres.myComponents.componenteVideoClubOnli
 
 import androidx.compose.ui.graphics.Color
 
-data class VideoClubOnlineCategorias(
+data class VideoClubOnlineCategoriasData(
     val nombreCategoria: String,
     val color: Color
 )

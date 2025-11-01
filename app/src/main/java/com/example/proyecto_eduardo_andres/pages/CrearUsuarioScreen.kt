@@ -1,4 +1,4 @@
-package com.example.proyecto_eduardo_andres.screens
+package com.example.proyecto_eduardo_andres.pages
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -12,8 +12,11 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -25,7 +28,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
@@ -35,40 +37,38 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.proyecto_eduardo_andres.R
-import com.example.proyecto_eduardo_andres.myComponents.componentePerfilUsuario.CampoPerfilUsuario
-import com.example.proyecto_eduardo_andres.myComponents.componentePerfilUsuario.PerfilUsuarioButtonTextsData
-import com.example.proyecto_eduardo_andres.myComponents.componentePerfilUsuario.PerfilUsuarioButtons
-import com.example.proyecto_eduardo_andres.myComponents.componentePerfilUsuario.PerfilUsuarioData
-import com.example.proyecto_eduardo_andres.myComponents.toolBar
+import com.example.proyecto_eduardo_andres.myComponents.componeneteCrearUsuario.CampoCrearUsuario
+import com.example.proyecto_eduardo_andres.myComponents.componeneteCrearUsuario.CrearUsuarioData
 
 @Composable
-fun PerfilUsuarioScreen() {
-    var perfilUsuarioData by remember { mutableStateOf(PerfilUsuarioData()) }
+fun CrearUsuarioScreen(
+    onCrearUsuarioClick: () -> Unit = {},
+    onCancelarClick: () -> Unit = {}
+) {
+    var crearUsuarioData by remember { mutableStateOf(CrearUsuarioData()) }
 
     Box(
         modifier = Modifier
             .fillMaxSize()
             .background(Color.White)
     ) {
-
-        // --- Fondo degradado superior igual al ToolBar ---
+        // --- Degradado superior (toolbar visual) ---
         Box(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(220.dp)
                 .background(
-                    Brush.linearGradient(
-                        colors = listOf(
-                            Color(0xFF0D47A1),
-                            Color(0xFF512DA8)
-                        ),
-                        start = Offset(0f, 0f),
-                        end = Offset(1000f, 1000f)
+                    Brush.verticalGradient(
+                        listOf(
+                            Color(0xFF3F51B5), // azul
+                            Color(0xFF9C27B0), // violeta
+                            Color(0xFFE91E63)  // rosa
+                        )
                     )
                 )
         )
 
-        // --- Degradado inferior (fondo detrás del botón) ---
+        // --- Degradado inferior (fondo detrás de botones) ---
         Box(
             modifier = Modifier
                 .fillMaxWidth()
@@ -77,21 +77,32 @@ fun PerfilUsuarioScreen() {
                 .background(
                     Brush.verticalGradient(
                         listOf(
-                            Color(0xFFFF9800),
-                            Color(0xFFFF7043)
+                            Color(0xFFFF9800), // naranja
+                            Color(0xFFFF7043)  // coral
                         )
                     )
                 )
         )
+
         // --- Contenido principal ---
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(top = 160.dp, bottom = 32.dp),
+                .padding(top = 95.dp, bottom = 32.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Top
         ) {
-            // --- Tarjeta blanca central ---
+            // Título principal
+            Text(
+                text = "CREAR USUARIO",
+                fontSize = 28.sp,
+                fontWeight = FontWeight.Bold,
+                color = Color.White
+            )
+
+            Spacer(modifier = Modifier.height(24.dp))
+
+            // --- Tarjeta blanca del formulario ---
             Column(
                 modifier = Modifier
                     .fillMaxWidth(0.9f)
@@ -101,12 +112,12 @@ fun PerfilUsuarioScreen() {
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.spacedBy(20.dp)
             ) {
-                // Imagen circular
+                // --- Imagen redonda del logotipo ---
                 Box(
                     modifier = Modifier
                         .size(120.dp)
                         .shadow(8.dp, CircleShape)
-                        .background(Color(0xFFE3F2FD), CircleShape)
+                        .background(Color(0xFFE3F2FD), CircleShape) // azul pastel
                         .clip(CircleShape),
                     contentAlignment = Alignment.Center
                 ) {
@@ -119,71 +130,53 @@ fun PerfilUsuarioScreen() {
                             .clip(CircleShape)
                     )
                 }
-                Spacer(modifier = Modifier.height(16.dp))
 
-                // Campos de perfil
-                CampoPerfilUsuario(
-                    perfilUsarioData = perfilUsuarioData,
-                    onPerfilUsuarioData = { perfilUsuarioData = it }
-                )
-                Spacer(modifier = Modifier.height(16.dp))
 
-                // Texto adicional
-                Text(
-                    text = "Películas alquiladas: ",
-                    color = MaterialTheme.colorScheme.primary,
-                    fontWeight = FontWeight.Medium,
-                    fontSize = 16.sp
+                // Campos del formulario
+                CampoCrearUsuario(
+                    crearUsuarioData = crearUsuarioData,
+                    onCrearUsuarioData = { crearUsuarioData = it }
                 )
 
                 Spacer(modifier = Modifier.height(24.dp))
 
-                // Botón principal
-                PerfilUsuarioButtons(
-                    perfilUsuarioButtonTextsData = PerfilUsuarioButtonTextsData(modificar = "MODIFICAR USUARIO"),
-                    onModificarUsuario = { /* Acción modificar */ }
-                )
-            }
-        }
+                // Botones
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    Button(
+                        onClick = onCancelarClick,
+                        colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFF44336)),
+                        modifier = Modifier
+                            .weight(1f)
+                            .height(50.dp)
+                    ) {
+                        Text("CANCELAR", color = Color.White)
+                    }
 
-        // --- TOOLBAR + TITULO debajo ---
-        Box(
-            modifier = Modifier
-                .align(Alignment.TopCenter)
-                .fillMaxWidth()
-                .padding(top = 20.dp) // separacion del borde superior
-        ) {
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                // toolbar (fondo ya full-width)
-                toolBar(
-                    onBackClick = {},
-                    onHomeClick = {},
-                    onCameraClick = {},
-                    onProfileClick = {},
-                    onLogoutClick = {}
-                )
+                    Spacer(modifier = Modifier.width(16.dp))
 
-                // texto justo debajo del toolbar, centrado y en blanco
-                Text(
-                    text = "DATOS USUARIO",
-                    color = Color.White,
-                    fontSize = 20.sp,
-                    fontWeight = FontWeight.Bold,
-                    modifier = Modifier
-                        .padding(top = 30.dp) // separación entre toolbar y texto
-                )
+                    Button(
+                        onClick = onCrearUsuarioClick,
+                        colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF4CAF50)),
+                        modifier = Modifier
+                            .weight(1f)
+                            .height(50.dp)
+                    ) {
+                        Text("CREAR", color = Color.White)
+                    }
+                }
             }
         }
     }
 }
 
+
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
-fun PerfilUsuarioScreenPreview() {
+fun CrearUsuarioScreenPreview() {
     MaterialTheme {
-        PerfilUsuarioScreen()
+        CrearUsuarioScreen()
     }
 }

@@ -1,4 +1,4 @@
-package com.example.proyecto_eduardo_andres.screens
+package com.example.proyecto_eduardo_andres.pages
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -20,7 +20,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Movie
 import androidx.compose.material3.DrawerValue
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalNavigationDrawer
@@ -42,13 +41,16 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.proyecto_eduardo_andres.myComponents.componenteMenu.VideoClubMenuDrawer
-import com.example.proyecto_eduardo_andres.myComponents.componenteVideoClubListaPeliculas.PeliculasDataClass
 import com.example.proyecto_eduardo_andres.myComponents.componenteVideoClubListaPeliculas.VideoClubCategoriasBotones
-import com.example.proyecto_eduardo_andres.myComponents.componenteVideoClubListaPeliculas.toolBarVideoClubOnline
+import com.example.proyecto_eduardo_andres.myComponents.componenteVideoClubOnlieSeries.SeriesData
+import com.example.proyecto_eduardo_andres.myComponents.componenteToolbar.toolBarVideoClubOnline
+import kotlin.collections.component1
+import kotlin.collections.component2
+import androidx.compose.material3.ExperimentalMaterial3Api
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun VideoClubOnlineScreen() {
+fun VideoClubOnlineSeriesScreen() {
     val drawerState = rememberDrawerState(DrawerValue.Closed)
     val scope = rememberCoroutineScope()
     ModalNavigationDrawer(
@@ -81,7 +83,7 @@ fun VideoClubOnlineScreen() {
                         drawerState = drawerState,
                         scope = scope,
                         onHomeClick = {},
-                        onSearchClicK = {},
+                        onSearchClick = {},
                         onCameraClick = {},
                         onProfileClick = {},
                         onLogoutClick = {}
@@ -100,9 +102,9 @@ fun VideoClubOnlineScreen() {
                 item { Spacer(modifier = Modifier.height(12.dp)) }
                 item { VideoClubCategoriasBotones() }
                 item { Spacer(modifier = Modifier.height(8.dp)) }
-                val peliculasData = PeliculasDataClass()
-                val categoriasAgrupadas = peliculasData.nombrePeliculas.groupBy { it.nombreCategoria }
-                categoriasAgrupadas.forEach { (categoria, peliculas) ->
+                val seriesData = SeriesData()
+                val categoriasAgrupadas = seriesData.nombreSeries.groupBy { it.nombreCategoria }
+                categoriasAgrupadas.forEach { (categoria, series) ->
                     item(key = categoria) {
                         Column(
                             verticalArrangement = Arrangement.spacedBy(16.dp),
@@ -119,8 +121,8 @@ fun VideoClubOnlineScreen() {
                                 horizontalArrangement = Arrangement.spacedBy(16.dp),
                                 modifier = Modifier.fillMaxWidth()
                             ) {
-                                items(peliculas.size) { index ->
-                                    val pelicula = peliculas[index]
+                                items(series.size) { index ->
+                                    val serie = series[index]
                                     Column(
                                         horizontalAlignment = Alignment.CenterHorizontally,
                                         verticalArrangement = Arrangement.spacedBy(6.dp),
@@ -131,13 +133,13 @@ fun VideoClubOnlineScreen() {
                                                 .size(130.dp)
                                                 .clip(RoundedCornerShape(12.dp))
                                                 .background(MaterialTheme.colorScheme.inversePrimary)
-                                                .clickable { /* onPeliculaClick(pelicula) */ },
+                                                .clickable { /* onSerieClick(serie) */ },
                                             contentAlignment = Alignment.Center
                                         ) {
-                                            pelicula.imagen?.let {
+                                            serie.imagen?.let {
                                                 Image(
                                                     painter = painterResource(id = it),
-                                                    contentDescription = pelicula.nombrePelicula,
+                                                    contentDescription = serie.nombreSerie,
                                                     contentScale = ContentScale.Crop,
                                                     modifier = Modifier.fillMaxSize()
                                                 )
@@ -149,7 +151,7 @@ fun VideoClubOnlineScreen() {
                                             )
                                         }
                                         Text(
-                                            text = pelicula.nombrePelicula,
+                                            text = serie.nombreSerie,
                                             color = MaterialTheme.colorScheme.onBackground,
                                             fontSize = 14.sp,
                                             fontWeight = FontWeight.Medium,
@@ -170,8 +172,8 @@ fun VideoClubOnlineScreen() {
 
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
-fun VideoClubOnlineScreenPreview() {
+fun VideoClubOnlineSeriesScreenPreview() {
     MaterialTheme {
-        VideoClubOnlineScreen()
+        VideoClubOnlineSeriesScreen()
     }
 }

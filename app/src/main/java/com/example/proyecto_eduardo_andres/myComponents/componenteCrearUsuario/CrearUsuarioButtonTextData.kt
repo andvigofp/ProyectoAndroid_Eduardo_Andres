@@ -1,6 +1,6 @@
 package com.example.proyecto_eduardo_andres.myComponents.componeneteCrearUsuario
 
-data class CrearUsuarioButtonText(
+data class CrearUsuarioButtonTextData(
     val crearUsuario:String ="",
     val cancelar:String=""
 )

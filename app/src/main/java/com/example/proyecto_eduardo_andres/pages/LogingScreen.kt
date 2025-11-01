@@ -1,12 +1,10 @@
-package com.example.proyecto_eduardo_andres.screens
+package com.example.proyecto_eduardo_andres.pages
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -21,15 +19,14 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import coil.compose.AsyncImage
 import com.example.proyecto_eduardo_andres.R
 import com.example.proyecto_eduardo_andres.myComponents.componenteLogin.LoginButtons
 import com.example.proyecto_eduardo_andres.myComponents.componenteLogin.CamposLogin
-import com.example.proyecto_eduardo_andres.myComponents.componenteLogin.LoginButtonTexts
+import com.example.proyecto_eduardo_andres.myComponents.componenteLogin.LoginButtonTextsData
 import com.example.proyecto_eduardo_andres.myComponents.componenteLogin.LoginData
 
 @Composable
-fun LoginScreen(
+fun LogingScreen(
     userImageUrl: String?, // null si no hay imagen
     onAccederClick: () -> Unit,
     onCrearUsuarioClick: () -> Unit,
@@ -131,7 +128,7 @@ fun LoginScreen(
 
                 // Botones
                 LoginButtons(
-                    loginButtonTexts = LoginButtonTexts(),
+                    loginButtonTexts = LoginButtonTextsData(),
                     onAccederClick = onAccederClick,
                     onCrearUsuarioClick = onCrearUsuarioClick,
                     onRecuperarPasswordClick = onRecuperarPasswordClick
@@ -145,7 +142,7 @@ fun LoginScreen(
 @Composable
 fun LoginScreenPreview() {
     MaterialTheme {
-        LoginScreen(
+        LogingScreen(
             userImageUrl = null,
             onAccederClick = {},
             onCrearUsuarioClick = {},
