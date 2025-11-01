@@ -8,6 +8,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.CameraAlt
 import androidx.compose.material.icons.filled.ExitToApp
 import androidx.compose.material.icons.filled.Home
@@ -26,6 +28,7 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 fun toolBar(
+    onBackClick: () -> Unit, // nuevo callback para el botón de volver
     onHomeClick: () -> Unit,
     onCameraClick: () -> Unit,
     onProfileClick: () -> Unit,
@@ -37,38 +40,43 @@ fun toolBar(
         start = Offset(0f, 0f),
         end = Offset(1000f, 1000f)
     )
+
     Box(
         modifier = Modifier
-            .fillMaxWidth()               // asegura que ocupe TODO el ancho
-            .height(56.dp)                // altura fija tipo toolbar
+            .fillMaxWidth()
+            .height(56.dp)
             .background(toolbarBackGround),
-            //.shadow(4.dp),
         contentAlignment = Alignment.CenterStart
     ) {
-        // Fila principal con los íconos alineados a la derecha
         Row(
             modifier = Modifier
-                .fillMaxWidth(),
-            horizontalArrangement = Arrangement.End, // Esto los alinea a la derecha
-            verticalAlignment = Alignment.CenterVertically
+                .fillMaxWidth()
+                .padding(horizontal = 8.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween // espacio entre izquierda y derecha
         ) {
+            // Icono de volver a la izquierda
+            IconButton(onClick = onBackClick) {
+                Icon(
+                    imageVector = Icons.Default.ArrowBack,
+                    contentDescription = "Volver",
+                    tint = Color(0xFFFFC107)
+                )
+            }
+
+            // Íconos alineados a la derecha
             Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 IconButton(onClick = onHomeClick) {
-                    Icon(Icons.Default.Home, contentDescription = "Inicio", tint = Color(0xFFFFC107)
-                    )
+                    Icon(Icons.Default.Home, contentDescription = "Inicio", tint = Color(0xFFFFC107))
                 }
                 IconButton(onClick = onCameraClick) {
-                    Icon(Icons.Default.CameraAlt, contentDescription = "Cámara", tint = Color(0xFFFFC107)
-                    )
+                    Icon(Icons.Default.CameraAlt, contentDescription = "Cámara", tint = Color(0xFFFFC107))
                 }
                 IconButton(onClick = onProfileClick) {
-                    Icon(
-                        Icons.Default.Person, contentDescription = "Perfil", tint = Color(0xFFFFC107)
-                    )
+                    Icon(Icons.Default.Person, contentDescription = "Perfil", tint = Color(0xFFFFC107))
                 }
                 IconButton(onClick = onLogoutClick) {
-                    Icon(Icons.Default.ExitToApp, contentDescription = "Salir", tint = Color(0xFFFFC107)
-                    )
+                    Icon(Icons.Default.ExitToApp, contentDescription = "Salir", tint = Color(0xFFFFC107))
                 }
             }
         }
@@ -79,6 +87,7 @@ fun toolBar(
 @Composable
 fun ToolBarPreview() {
     toolBar(
+        onBackClick = {},
         onHomeClick = {},
         onCameraClick = {},
         onProfileClick = {},

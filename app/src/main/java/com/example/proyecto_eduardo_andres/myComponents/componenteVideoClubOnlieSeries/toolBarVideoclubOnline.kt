@@ -15,6 +15,7 @@ import androidx.compose.material.icons.filled.ExitToApp
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.DrawerState
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -38,6 +39,7 @@ fun toolBarVideoClubOnline(
     drawerState: DrawerState,
     scope: CoroutineScope,
     onHomeClick: () -> Unit,
+    onSearchClick: () -> Unit,
     onCameraClick: () -> Unit,
     onProfileClick: () -> Unit,
     onLogoutClick: () -> Unit
@@ -75,11 +77,18 @@ fun toolBarVideoClubOnline(
             }
 
             // --- Íconos del lado derecho ---
-            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+            Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
                 IconButton(onClick = onHomeClick) {
                     Icon(
                         Icons.Default.Home,
                         contentDescription = "Inicio",
+                        tint = iconColor
+                    )
+                }
+                IconButton(onClick = onSearchClick) {
+                    Icon(
+                        Icons.Default.Search,
+                        contentDescription = "Buscar",
                         tint = iconColor
                     )
                 }
@@ -120,6 +129,7 @@ fun ToolBarVideoClubOnlinePreview() {
             drawerState = drawerState,
             scope = scope,
             onHomeClick = {},
+            onSearchClick = {},
             onCameraClick = {},
             onProfileClick = {},
             onLogoutClick = {}

@@ -81,6 +81,7 @@ fun VideoClubOnlineScreen() {
                         drawerState = drawerState,
                         scope = scope,
                         onHomeClick = {},
+                        onSearchClicK = {},
                         onCameraClick = {},
                         onProfileClick = {},
                         onLogoutClick = {}

@@ -67,10 +67,11 @@ fun VideoClubSearchSeriesScreen() {
                 .padding(top = 12.dp, start = 12.dp, bottom = 12.dp)
         ) {
             toolBar(
-                onHomeClick = { /* acción home */ },
-                onCameraClick = { /* acción cámara */ },
-                onProfileClick = { /* acción perfil */ },
-                onLogoutClick = { /* acción logout */ }
+                onBackClick = {},
+                onHomeClick = {},
+                onCameraClick = {},
+                onProfileClick = {},
+                onLogoutClick = {}
             )
         }
 
