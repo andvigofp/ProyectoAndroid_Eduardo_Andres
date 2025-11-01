@@ -2,6 +2,6 @@ package com.example.proyecto_eduardo_andres.myComponents.componenteAquilarDevolv
 
 data class VideoClubOnlineData(
     val imagen: Int? = null,
-    val nombreSerie: String,
+    val nombreSerie: String = "",
     val descripcion: String = ""
 )
