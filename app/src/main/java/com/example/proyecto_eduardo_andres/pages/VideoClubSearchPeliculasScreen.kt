@@ -1,4 +1,4 @@
-package com.example.proyecto_eduardo_andres.screens
+package com.example.proyecto_eduardo_andres.pages
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -36,18 +36,18 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.proyecto_eduardo_andres.myComponents.componenteSearchSeries.SearchBar
-import com.example.proyecto_eduardo_andres.myComponents.componenteSearchSeries.SeriesDataClass
-import com.example.proyecto_eduardo_andres.myComponents.componenteSearchSeries.buscarPeliculas
-import com.example.proyecto_eduardo_andres.myComponents.toolBar
+import com.example.proyecto_eduardo_andres.myComponents.componenteSearchPeliculas.PeliculasData
+import com.example.proyecto_eduardo_andres.myComponents.componenteSearchPeliculas.SearchBar
+import com.example.proyecto_eduardo_andres.myComponents.componenteSearchPeliculas.buscarPeliculas
+import com.example.proyecto_eduardo_andres.myComponents.componenteToolbar.toolBar
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun VideoClubSearchSeriesScreen() {
-    val seriesData = SeriesDataClass()
+fun VideoClubSearchPeliculasScreen() {
+    val peliculasData = PeliculasData()
     var searchQuery by remember { mutableStateOf(TextFieldValue("")) }
 
-    val seriesFiltrada = buscarPeliculas(seriesData.nombreSeries, searchQuery.text)
+    val peliculasFiltradas = buscarPeliculas(peliculasData.nombrePeliculas, searchQuery.text)
 
     Column(
         modifier = Modifier
@@ -93,7 +93,7 @@ fun VideoClubSearchSeriesScreen() {
                 verticalArrangement = Arrangement.spacedBy(12.dp),
                 modifier = Modifier.fillMaxSize()
             ) {
-                items(seriesFiltrada) { serie ->
+                items(peliculasFiltradas) { movie ->
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
                         modifier = Modifier
@@ -101,10 +101,10 @@ fun VideoClubSearchSeriesScreen() {
                             .background(Color(0xFFBBDEFB), RoundedCornerShape(12.dp)) // tarjeta azul suave
                             .padding(8.dp)
                     ) {
-                        if (serie.imagen != null) {
+                        if (movie.imagen != null) {
                             Image(
-                                painter = painterResource(id = serie.imagen),
-                                contentDescription = serie.nombreSerie,
+                                painter = painterResource(id = movie.imagen),
+                                contentDescription = movie.nombrePelicula,
                                 modifier = Modifier
                                     .size(64.dp)
                                     .clip(RoundedCornerShape(8.dp)),
@@ -124,13 +124,13 @@ fun VideoClubSearchSeriesScreen() {
                         Spacer(modifier = Modifier.width(16.dp))
                         Column {
                             Text(
-                                text = serie.nombreSerie,
+                                text = movie.nombrePelicula,
                                 fontSize = 16.sp,
                                 fontWeight = FontWeight.Medium,
                                 color = Color.Black
                             )
                             Text(
-                                text = serie.nombreCategoria,
+                                text = movie.nombreCategoria,
                                 fontSize = 12.sp,
                                 color = Color.DarkGray
                             )
@@ -144,6 +144,6 @@ fun VideoClubSearchSeriesScreen() {
 
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
-fun VideoClubSearchScreenSeriePreview() {
-    VideoClubSearchSeriesScreen()
+fun VideoClubSearchScreenPeliculasPreview() {
+    VideoClubSearchPeliculasScreen()
 }

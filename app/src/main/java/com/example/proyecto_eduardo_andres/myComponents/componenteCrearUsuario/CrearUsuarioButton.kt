@@ -21,11 +21,10 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.proyecto_eduardo_andres.myComponents.componeneteCrearUsuario.CrearUsuarioButton
 
 @Composable
 fun CrearUsuarioButton(
-    crearUsuarioButtonText: CrearUsuarioButtonText,
+    crearUsuarioButtonText: CrearUsuarioButtonTextData,
     onCrearUsuarioClick: () -> Unit,
     onCancelarClick: () -> Unit
 ){
@@ -83,7 +82,7 @@ fun CrearUsuarioButtonPreview() {
                 contentAlignment = Alignment.Center
             ) {
                 CrearUsuarioButton(
-                    crearUsuarioButtonText = CrearUsuarioButtonText(),
+                    crearUsuarioButtonText = CrearUsuarioButtonTextData(),
                     onCrearUsuarioClick = {},
                     onCancelarClick = {}
                 )

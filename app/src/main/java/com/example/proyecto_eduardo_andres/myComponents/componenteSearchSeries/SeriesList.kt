@@ -35,7 +35,7 @@ import androidx.compose.ui.unit.sp
 
 @Composable
 fun MovieList(
-    series: List<VideoClubOnlineDataClass>
+    series: List<VideoClubOnlineSearchSeriesData>
 ) {
     LazyColumn(
         modifier = Modifier.fillMaxSize(),
@@ -82,7 +82,7 @@ fun MovieList(
 @Preview(showBackground = true)
 @Composable
 fun VideoClubScreenPreview() {
-    val seriesData = SeriesDataClass()
+    val seriesData = SeriesData()
     var searchQuery by remember { mutableStateOf(TextFieldValue("")) }
 
     val seriesFiltrada = buscarPeliculas(seriesData.nombreSeries, searchQuery.text)
