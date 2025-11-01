@@ -14,6 +14,7 @@ import com.example.compose.Proyecto_Eduardo_AndresTheme
 import com.example.proyecto_eduardo_andres.myComponents.componenteQR.QRData
 import com.example.proyecto_eduardo_andres.pages.AlquilarDevolverPeliculasScreen
 import com.example.proyecto_eduardo_andres.pages.AlquilerDevolverSeriesScreen
+import com.example.proyecto_eduardo_andres.pages.CamaraScreen
 import com.example.proyecto_eduardo_andres.pages.CrearUsuarioScreen
 import com.example.proyecto_eduardo_andres.pages.LogingScreen
 import com.example.proyecto_eduardo_andres.pages.QRScreen
@@ -57,6 +58,8 @@ class MainActivity : ComponentActivity() {
                         onProfileClick = {},
                         onLogoutClick = {}
                         )**/
+
+                        //CamaraScreen()
                     }
                 }
 
@@ -96,6 +99,7 @@ class MainActivity : ComponentActivity() {
                 onLogoutClick = {}
             )**/
 
+            //CamaraScreen()
         }
     }
 }
