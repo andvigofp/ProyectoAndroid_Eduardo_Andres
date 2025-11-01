@@ -2,6 +2,17 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <!-- 🔹 Permiso para usar la cámara -->
+    <uses-permission android:name="android.permission.CAMERA" />
+
+    <!-- 🔹 Declarar que la app usa hardware de cámara -->
+    <uses-feature
+        android:name="android.hardware.camera.any"
+        android:required="false" />
+
+    <!-- 🔹 (Opcional) Si solo usas la cámara trasera -->
+    <!-- <uses-feature android:name="android.hardware.camera.autofocus" /> -->
+
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -11,6 +22,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Proyecto_Eduardo_Andres">
+
         <activity
             android:name=".MainActivity"
             android:exported="true"
