@@ -48,7 +48,7 @@ import com.example.proyecto_eduardo_andres.myComponents.componenteVideoClubLista
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun VideoClubOnlineScreen() {
+fun VideoClubOnlinePeliculasScreen() {
     val drawerState = rememberDrawerState(DrawerValue.Closed)
     val scope = rememberCoroutineScope()
     ModalNavigationDrawer(
@@ -172,6 +172,6 @@ fun VideoClubOnlineScreen() {
 @Composable
 fun VideoClubOnlineScreenPreview() {
     MaterialTheme {
-        VideoClubOnlineScreen()
+        VideoClubOnlinePeliculasScreen()
     }
 }

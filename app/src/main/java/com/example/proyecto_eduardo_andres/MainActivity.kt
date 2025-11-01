@@ -4,14 +4,20 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.compose.Proyecto_Eduardo_AndresTheme
+import com.example.proyecto_eduardo_andres.pages.AlquilerDevolverSeriesScreen
+import com.example.proyecto_eduardo_andres.pages.CrearUsuarioScreen
+import com.example.proyecto_eduardo_andres.pages.LogingScreen
+import com.example.proyecto_eduardo_andres.pages.RecuperarPasswordScreen
+import com.example.proyecto_eduardo_andres.pages.VideoClubOnlinePeliculasScreen
+import com.example.proyecto_eduardo_andres.pages.VideoClubOnlineSeriesScreen
+import com.example.proyecto_eduardo_andres.pages.VideoClubSearchPeliculasScreen
 
 
 class MainActivity : ComponentActivity() {
@@ -20,29 +26,50 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             Proyecto_Eduardo_AndresTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
-                    )
+                Scaffold { innerPadding ->
+                    Box(Modifier.padding(innerPadding)) {
+                        /**LogingScreen(
+                        userImageUrl = null,
+                        onAccederClick = {},
+                        onCrearUsuarioClick = {},
+                        onRecuperarPasswordClick = {})
+                         **/
+
+                        //CrearUsuarioScreen()
+                        //RecuperarPasswordScreen()
+                        //PerfilUsuarioScreen()
+                        //RecuperarPasswordScreen()
+                        //VideoClubOnlinePeliculasScreen()
+                        //VideoClubOnlineSeriesScreen()
+                        //VideoClubSearchPeliculasScreen()
+                        //AlquilerDevolverSeriesScreen()
+                    }
                 }
+
             }
         }
     }
-}
 
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
 
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    Proyecto_Eduardo_AndresTheme {
-        Greeting("Android")
+    @Preview(showBackground = true)
+    @Composable
+    fun GreetingPreview() {
+        Proyecto_Eduardo_AndresTheme {
+            /**LogingScreen(
+            userImageUrl = null,
+            onAccederClick = {},
+            onCrearUsuarioClick = {},
+            onRecuperarPasswordClick = {})
+             **/
+
+            //CrearUsuarioScreen()
+            //RecuperarPasswordScreen()
+            //PerfilUsuarioScreen()
+            //RecuperarPasswordScreen()
+            //VideoClubOnlinePeliculasScreen()
+            //VideoClubOnlineSeriesScreen()
+            //VideoClubSearchPeliculasScreen()
+            //AlquilerDevolverSeriesScreen()
+        }
     }
 }

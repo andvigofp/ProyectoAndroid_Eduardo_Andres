@@ -42,7 +42,7 @@ import com.example.proyecto_eduardo_andres.myComponents.componenteRecuperarPassw
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun RecuperarPasswordScreenStyled(
+fun RecuperarPasswordScreen(
     onRecuperarClick: () -> Unit = {},
     onCancelarClick: () -> Unit = {}
 ) {
@@ -154,8 +154,8 @@ fun RecuperarPasswordScreenStyled(
 
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
-fun RecuperarPasswordScreenStyledPreview() {
+fun RecuperarPasswordScreendPreview() {
     MaterialTheme {
-        RecuperarPasswordScreenStyled()
+        RecuperarPasswordScreen()
     }
 }
