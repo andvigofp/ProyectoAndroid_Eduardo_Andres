@@ -11,6 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.compose.Proyecto_Eduardo_AndresTheme
+import com.example.proyecto_eduardo_andres.pages.AlquilarDevolverPeliculasScreen
 import com.example.proyecto_eduardo_andres.pages.AlquilerDevolverSeriesScreen
 import com.example.proyecto_eduardo_andres.pages.CrearUsuarioScreen
 import com.example.proyecto_eduardo_andres.pages.LogingScreen
@@ -43,6 +44,7 @@ class MainActivity : ComponentActivity() {
                         //VideoClubOnlineSeriesScreen()
                         //VideoClubSearchPeliculasScreen()
                         //AlquilerDevolverSeriesScreen()
+                        //AlquilarDevolverPeliculasScreen()
                     }
                 }
 
@@ -70,6 +72,7 @@ class MainActivity : ComponentActivity() {
             //VideoClubOnlineSeriesScreen()
             //VideoClubSearchPeliculasScreen()
             //AlquilerDevolverSeriesScreen()
+            //AlquilarDevolverPeliculasScreen()
         }
     }
 }
