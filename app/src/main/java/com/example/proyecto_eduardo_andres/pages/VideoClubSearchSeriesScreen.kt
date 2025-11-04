@@ -37,9 +37,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.proyecto_eduardo_andres.myComponents.componenteSearchSeries.SearchBar
-import com.example.proyecto_eduardo_andres.myComponents.componenteSearchSeries.SeriesData
 import com.example.proyecto_eduardo_andres.myComponents.componenteSearchSeries.buscarPeliculas
 import com.example.proyecto_eduardo_andres.myComponents.componenteToolbar.toolBar
+import com.example.proyecto_eduardo_andres.myComponents.componenteVideoClubOnlieSeries.SeriesData
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

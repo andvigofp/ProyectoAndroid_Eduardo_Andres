@@ -43,7 +43,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.proyecto_eduardo_andres.myComponents.componenteMenu.VideoClubMenuDrawer
 import com.example.proyecto_eduardo_andres.myComponents.componenteToolbar.toolBarVideoClubOnline
-import com.example.proyecto_eduardo_andres.myComponents.componenteVideoClubListaPeliculas.PeliculasDataClass
+import com.example.proyecto_eduardo_andres.myComponents.componenteVideoClubListaPeliculas.PeliculasData
 import com.example.proyecto_eduardo_andres.myComponents.componenteVideoClubListaPeliculas.VideoClubCategoriasBotones
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -100,7 +100,7 @@ fun VideoClubOnlinePeliculasScreen() {
                 item { Spacer(modifier = Modifier.height(12.dp)) }
                 item { VideoClubCategoriasBotones() }
                 item { Spacer(modifier = Modifier.height(8.dp)) }
-                val peliculasData = PeliculasDataClass()
+                val peliculasData = PeliculasData()
                 val categoriasAgrupadas = peliculasData.nombrePeliculas.groupBy { it.nombreCategoria }
                 categoriasAgrupadas.forEach { (categoria, peliculas) ->
                     item(key = categoria) {

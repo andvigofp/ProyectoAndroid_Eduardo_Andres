@@ -32,10 +32,12 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.proyecto_eduardo_andres.myComponents.componenteVideoClubListaPeliculas.PeliculasData
+import com.example.proyecto_eduardo_andres.myComponents.componenteVideoClubListaPeliculas.VideoClubOnlinePeliculasData
 
 @Composable
 fun MovieList(
-    peliculas: List<VideoClubOnlineSearchPeliculasData>
+    peliculas: List<VideoClubOnlinePeliculasData>
 ) {
     LazyColumn(
         modifier = Modifier.fillMaxSize(),

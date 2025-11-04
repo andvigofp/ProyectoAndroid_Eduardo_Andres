@@ -18,8 +18,10 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.proyecto_eduardo_andres.R
 import com.example.proyecto_eduardo_andres.myComponents.componenteAquilarDevolverSeries.AlquilarDevolverSerie
 import com.example.proyecto_eduardo_andres.myComponents.componenteAquilarDevolverSeries.AlquilarDevolverSerieData
 import com.example.proyecto_eduardo_andres.myComponents.componenteAquilarDevolverSeries.BotonAlquilarDevolverData
@@ -34,15 +36,21 @@ fun AlquilerDevolverSeriesScreen() {
 
     // Degradado del toolbar para el status bar
     val toolbarBackGround = Brush.linearGradient(
-        colors = listOf(androidx.compose.ui.graphics.Color(0xFF0D47A1), androidx.compose.ui.graphics.Color(0xFF512DA8)),
+        colors = listOf(Color(0xFF0D47A1), Color(0xFF512DA8)),
         start = Offset(0f, 0f),
         end = Offset(1000f, 1000f)
     )
 
+    // Datos de ejemplo (serie con imagen real)
+    val serieDemo = AlquilarDevolverSerieData(
+        imagen = R.drawable.ic_mad_men,
+        nombreSerie = "Mad Men",
+        descripcion = "Ambientada en los años 60, sigue la vida de Don Draper, un brillante publicista con un pasado misterioso."
+    )
+
     Scaffold(
-        // Status bar y toolbar con el mismo color
+        // Toolbar superior (degradado + espacio del reloj)
         topBar = {
-            // Box que envuelve status bar y toolbar con el mismo color
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -50,9 +58,7 @@ fun AlquilerDevolverSeriesScreen() {
                     .statusBarsPadding()
             ) {
                 Column {
-                    // Espacio para el status bar
-                    Spacer(modifier = Modifier.height(8.dp))
-                    // Toolbar
+                    Spacer(modifier = Modifier.height(8.dp)) // espacio bajo el reloj
                     toolBar(
                         onBackClick = {},
                         onHomeClick = {},
@@ -63,57 +69,41 @@ fun AlquilerDevolverSeriesScreen() {
                 }
             }
         },
-        // BottomBar vacío (solo para reservar el espacio visual)
+
+        // BottomBar con color bonito y botones
         bottomBar = {
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(56.dp)
-                    .background(colors.primaryContainer)
-            )
-        }
-    ) { innerPadding ->
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(innerPadding)
-        ) {
-            // Contenido principal (serie con imagen y descripción) - Arriba
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp)
-                    .padding(top = 32.dp) // Margen superior para separar del toolbar
-                    .align(Alignment.TopStart),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                // Título "ALQUILAR SERIES" en mayúsculas y centrado
-                Text(
-                    text = "ALQUILAR SERIES",
-                    style = typography.headlineLarge,
-                    color = colors.primary,
-                    modifier = Modifier.padding(bottom = 24.dp)
-                )
-                
-                AlquilarDevolverSerie(
-                    series = AlquilarDevolverSerieData(
-                        nombreSerie = "Mad Men",
-                        descripcion = "Ambientada en los años 60, esta serie sigue la vida de Don Draper, un brillante publicista con una vida personal turbulenta."
-                    )
-                )
-            }
-
-            // Botones de Alquilar / Devolver - Abajo, pegados al BottomBar
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .align(Alignment.BottomStart)
+                    .background(toolbarBackGround)
+                    .padding(vertical = 8.dp)
             ) {
                 BotonAlquilarSeries(
                     botonAlquilar = BotonAlquilarDevolverData("Alquilar"),
                     botonDevolver = BotonAlquilarDevolverData("Devolver")
                 )
             }
+        }
+    ) { innerPadding ->
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(innerPadding)
+                .background(colors.background)
+                .padding(horizontal = 16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Spacer(modifier = Modifier.height(24.dp))
+
+            // Título centrado
+            Text(
+                text = "ALQUILAR SERIES",
+                style = typography.headlineLarge.copy(color = colors.primary),
+                modifier = Modifier.padding(bottom = 24.dp)
+            )
+
+            // Contenido principal con imagen y descripción
+            AlquilarDevolverSerie(series = serieDemo)
         }
     }
 }
