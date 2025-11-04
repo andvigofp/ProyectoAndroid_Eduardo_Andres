@@ -54,7 +54,7 @@ fun VideoClubOnlinePeliculas() {
             item { Spacer(modifier = Modifier.height(12.dp)) }
 
             // Lista de películas agrupadas por categoría
-            val peliculasData = PeliculasDataClass()
+            val peliculasData = PeliculasData()
             val categoriasAgrupadas = peliculasData.nombrePeliculas.groupBy { it.nombreCategoria }
 
             categoriasAgrupadas.forEach { (categoria, peliculas) ->

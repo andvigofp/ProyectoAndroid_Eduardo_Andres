@@ -36,10 +36,10 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.proyecto_eduardo_andres.myComponents.componenteSearchPeliculas.PeliculasData
 import com.example.proyecto_eduardo_andres.myComponents.componenteSearchPeliculas.SearchBar
 import com.example.proyecto_eduardo_andres.myComponents.componenteSearchPeliculas.buscarPeliculas
 import com.example.proyecto_eduardo_andres.myComponents.componenteToolbar.toolBar
+import com.example.proyecto_eduardo_andres.myComponents.componenteVideoClubListaPeliculas.PeliculasData
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
