@@ -27,6 +27,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
@@ -49,33 +50,41 @@ fun VideoClubSearchPeliculasScreen() {
 
     val peliculasFiltradas = buscarPeliculas(peliculasData.nombrePeliculas, searchQuery.text)
 
+    //Mismo degradado que en el toolbar de todas las pantallas
+    val toolbarBackGround = Brush.linearGradient(
+        colors = listOf(Color(0xFF0D47A1), Color(0xFF512DA8)),
+        start = Offset(0f, 0f),
+        end = Offset(1000f, 1000f)
+    )
+
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color(0xFFE3F2FD)) // color de fondo bonito
+            .background(Color(0xFFE3F2FD)) // color de fondo suave general
     ) {
-        // --- TOOLBAR SUPERIOR con espacio superior ---
+        //TOOLBAR SUPERIOR con zona del reloj del mismo color ---
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .statusBarsPadding() // respeta la barra de estado
-                .background(
-                    Brush.horizontalGradient(
-                        colors = listOf(Color(0xFF0D47A1), Color(0xFF512DA8))
-                    )
-                )
-                .padding(top = 12.dp, start = 12.dp, bottom = 12.dp)
+                .background(toolbarBackGround) // mismo degradado para status bar + toolbar
+                .statusBarsPadding() // deja espacio para la barra de estado
         ) {
-            toolBar(
-                onBackClick = {},
-                onHomeClick = {},
-                onCameraClick = {},
-                onProfileClick = {},
-                onLogoutClick = {}
-            )
+            Column {
+                // Espacio para la barra del reloj
+                Spacer(modifier = Modifier.height(24.dp))
+
+                // Toolbar principal
+                toolBar(
+                    onBackClick = {},
+                    onHomeClick = {},
+                    onCameraClick = {},
+                    onProfileClick = {},
+                    onLogoutClick = {}
+                )
+            }
         }
 
-        // --- CONTENIDO: Búsqueda y Lista ---
+        //CONTENIDO: Búsqueda y Lista ---
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -88,7 +97,7 @@ fun VideoClubSearchPeliculasScreen() {
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            // --- Lista de películas con scroll vertical ---
+            //Lista de películas con scroll vertical ---
             LazyColumn(
                 verticalArrangement = Arrangement.spacedBy(12.dp),
                 modifier = Modifier.fillMaxSize()
@@ -98,7 +107,7 @@ fun VideoClubSearchPeliculasScreen() {
                         verticalAlignment = Alignment.CenterVertically,
                         modifier = Modifier
                             .fillMaxWidth()
-                            .background(Color(0xFFBBDEFB), RoundedCornerShape(12.dp)) // tarjeta azul suave
+                            .background(Color(0xFFBBDEFB), RoundedCornerShape(12.dp)) // tarjeta azul clara
                             .padding(8.dp)
                     ) {
                         if (movie.imagen != null) {

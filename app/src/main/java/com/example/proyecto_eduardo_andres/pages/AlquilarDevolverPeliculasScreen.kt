@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -27,25 +28,25 @@ import com.example.proyecto_eduardo_andres.myComponents.componenteAquilarDevolve
 import com.example.proyecto_eduardo_andres.myComponents.componenteAquilarDevolverSeries.BotonAlquilarSeries
 import com.example.proyecto_eduardo_andres.myComponents.componenteToolbar.toolBar
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AlquilarDevolverPeliculasScreen() {
     val colors = MaterialTheme.colorScheme
     val typography = MaterialTheme.typography
 
-    // Degradado del toolbar y fondo del reloj
+    //Degradado del toolbar y fondo del reloj
     val toolbarBackGround = Brush.linearGradient(
         colors = listOf(Color(0xFF0D47A1), Color(0xFF512DA8)),
         start = Offset(0f, 0f),
         end = Offset(1000f, 1000f)
     )
 
-
-    // Recuperar los datos reales desde la lista
+    //Recuperar los datos reales desde la lista
     val listaPeliculas = PeliculasAlquilarDevolverData().nombrePeliculas
     val peliculaSeleccionada = listaPeliculas.firstOrNull { it.nombrePelicula == "La Vida es Bella" }
         ?: listaPeliculas.first()
 
-    // Crear objeto de tipo AlquilarDevolverPeliculasData
+    //Crear objeto de tipo AlquilarDevolverPeliculasData
     val peliculaDemo = AlquilarDevolverPeliculasData(
         imagen = peliculaSeleccionada.imagen,
         nombrePelicula = peliculaSeleccionada.nombrePelicula,
@@ -53,7 +54,7 @@ fun AlquilarDevolverPeliculasScreen() {
     )
 
     Scaffold(
-        // Toolbar superior (degradado + espacio del reloj)
+        //Toolbar superior (degradado + espacio del reloj)
         topBar = {
             Box(
                 modifier = Modifier
@@ -73,13 +74,49 @@ fun AlquilarDevolverPeliculasScreen() {
                 }
             }
         },
-        // BottomBar con mismo color que el toolbar
+        //BottomBar solo decorativa
         bottomBar = {
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
+                    .height(56.dp)
                     .background(toolbarBackGround)
-                    .padding(vertical = 8.dp)
+            )
+        }
+    ) { innerPadding ->
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(innerPadding)
+                .background(colors.background)
+        ) {
+            //Contenido principal
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp)
+                    .align(Alignment.TopCenter),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Spacer(modifier = Modifier.height(24.dp))
+
+                //Título
+                Text(
+                    text = "ALQUILAR PELÍCULAS",
+                    style = typography.headlineLarge.copy(color = colors.primary),
+                    modifier = Modifier.padding(bottom = 24.dp)
+                )
+
+                //Componente principal (usa la imagen y descripción del data class)
+                AlquilerDevolverPeliculas(peliculas = peliculaDemo)
+            }
+
+            //Botones de Alquilar / Devolver — encima del BottomBar
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp, vertical = 8.dp)
+                    .align(Alignment.BottomCenter)
             ) {
                 BotonAlquilarSeries(
                     botonAlquilar = BotonAlquilarDevolverData("Alquilar"),
@@ -87,33 +124,12 @@ fun AlquilarDevolverPeliculasScreen() {
                 )
             }
         }
-    ) { innerPadding ->
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(innerPadding)
-                .background(colors.background)
-                .padding(horizontal = 16.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Spacer(modifier = Modifier.height(24.dp))
-
-            // Título
-            Text(
-                text = "ALQUILAR PELÍCULAS",
-                style = typography.headlineLarge.copy(color = colors.primary),
-                modifier = Modifier.padding(bottom = 24.dp)
-            )
-
-            // Componente principal (usa la imagen y descripción del data class)
-            AlquilerDevolverPeliculas(peliculas = peliculaDemo)
-        }
     }
 }
 
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
-fun AlquilerDevolverPeliculasScreenPreview() {
+fun AlquilarDevolverPeliculasScreenPreview() {
     MaterialTheme {
         AlquilarDevolverPeliculasScreen()
     }
