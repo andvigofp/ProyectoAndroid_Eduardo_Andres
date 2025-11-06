@@ -22,10 +22,13 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.proyecto_eduardo_andres.R
+import com.example.proyecto_eduardo_andres.myComponents.componenteAlquilarDevolverPeliculas.AlquilarDevolverPeliculasData
+import com.example.proyecto_eduardo_andres.myComponents.componenteAlquilarDevolverPeliculas.PeliculasAlquilarDevolverData
 import com.example.proyecto_eduardo_andres.myComponents.componenteAquilarDevolverSeries.AlquilarDevolverSerie
 import com.example.proyecto_eduardo_andres.myComponents.componenteAquilarDevolverSeries.AlquilarDevolverSerieData
 import com.example.proyecto_eduardo_andres.myComponents.componenteAquilarDevolverSeries.BotonAlquilarDevolverData
 import com.example.proyecto_eduardo_andres.myComponents.componenteAquilarDevolverSeries.BotonAlquilarSeries
+import com.example.proyecto_eduardo_andres.myComponents.componenteAquilarDevolverSeries.SeriesAlquilerDevolverData
 import com.example.proyecto_eduardo_andres.myComponents.componenteToolbar.toolBar
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -34,22 +37,27 @@ fun AlquilerDevolverSeriesScreen() {
     val colors = MaterialTheme.colorScheme
     val typography = MaterialTheme.typography
 
-    // Degradado del toolbar para el status bar
+    //Degradado del toolbar y fondo del reloj
     val toolbarBackGround = Brush.linearGradient(
         colors = listOf(Color(0xFF0D47A1), Color(0xFF512DA8)),
         start = Offset(0f, 0f),
         end = Offset(1000f, 1000f)
     )
 
-    // Datos de ejemplo (serie con imagen real)
+    //Recuperar los datos reales desde la lista
+    val listaSeries = SeriesAlquilerDevolverData().nombreSeries
+    val serieSeleccionada = listaSeries.firstOrNull { it.nombreSerie == "Mad Men" }
+        ?: listaSeries.first()
+
+    //Crear objeto de tipo AlquilarDevolverPeliculasData
     val serieDemo = AlquilarDevolverSerieData(
-        imagen = R.drawable.ic_mad_men,
-        nombreSerie = "Mad Men",
-        descripcion = "Ambientada en los años 60, sigue la vida de Don Draper, un brillante publicista con un pasado misterioso."
+        imagen = serieSeleccionada.imagen,
+        nombreSerie = serieSeleccionada.nombreSerie,
+        descripcion = serieSeleccionada.descripcion
     )
 
     Scaffold(
-        // Toolbar superior (degradado + espacio del reloj)
+        //Toolbar superior (degradado + espacio del reloj)
         topBar = {
             Box(
                 modifier = Modifier
@@ -70,40 +78,55 @@ fun AlquilerDevolverSeriesScreen() {
             }
         },
 
-        // BottomBar con color bonito y botones
+        //BottomBar solo decorativa (sin botones)
         bottomBar = {
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
+                    .height(56.dp)
                     .background(toolbarBackGround)
-                    .padding(vertical = 8.dp)
+            )
+        }
+    ) { innerPadding ->
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(innerPadding)
+                .background(colors.background)
+        ) {
+            //Contenido principal
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp)
+                    .align(Alignment.TopCenter),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Spacer(modifier = Modifier.height(24.dp))
+
+                //Título centrado
+                Text(
+                    text = "ALQUILAR SERIES",
+                    style = typography.headlineLarge.copy(color = colors.primary),
+                    modifier = Modifier.padding(bottom = 24.dp)
+                )
+
+                //Contenido principal con imagen y descripción
+                AlquilarDevolverSerie(series = serieDemo)
+            }
+
+            //Botones de Alquilar / Devolver (justo encima del BottomBar)
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp, vertical = 8.dp)
+                    .align(Alignment.BottomCenter)
             ) {
                 BotonAlquilarSeries(
                     botonAlquilar = BotonAlquilarDevolverData("Alquilar"),
                     botonDevolver = BotonAlquilarDevolverData("Devolver")
                 )
             }
-        }
-    ) { innerPadding ->
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(innerPadding)
-                .background(colors.background)
-                .padding(horizontal = 16.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Spacer(modifier = Modifier.height(24.dp))
-
-            // Título centrado
-            Text(
-                text = "ALQUILAR SERIES",
-                style = typography.headlineLarge.copy(color = colors.primary),
-                modifier = Modifier.padding(bottom = 24.dp)
-            )
-
-            // Contenido principal con imagen y descripción
-            AlquilarDevolverSerie(series = serieDemo)
         }
     }
 }
