@@ -21,6 +21,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.proyecto_eduardo_andres.myComponents.componenteLogin.CamposLogin
 
+/**
+ * @author Andrés
+ * @see Componenente Campo Loging
+ * @param  loginData: Campos para inciar sesión
+ */
 @Composable
 fun CamposLogin(
     loginData: LoginData,

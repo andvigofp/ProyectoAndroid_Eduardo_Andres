@@ -19,6 +19,11 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 
+/**
+ * @author Andrés
+ * @see Componenente Campo usuario
+ * @param crearUsuarioData: Datos para crear un nuevo usuario
+ */
 @Composable
 fun CampoCrearUsuario(
     crearUsuarioData: CrearUsuarioData,

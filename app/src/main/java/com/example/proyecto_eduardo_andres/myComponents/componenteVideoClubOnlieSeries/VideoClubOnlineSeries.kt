@@ -34,6 +34,11 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 
+/**
+ * @author Eduardo
+ * @see Componenente Lista de series
+ * @param categorias: Lista de series correspondiente por su categoría
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun VideoClubOnlineSeries() {

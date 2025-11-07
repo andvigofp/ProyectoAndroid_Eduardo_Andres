@@ -20,6 +20,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.proyecto_eduardo_andres.myComponents.componenteVideoClubOnlieSeries.VideoClubOnlineCategoriasData
 
+/**
+ * @author Andres
+ * @see Componenente Botones
+ * @param categorias: Al pulsar cualquier botón de llevará a lista de peliculas de esa categoría correspondiente
+ */
 @Composable
 fun VideoClubCategoriasBotones() {
     // Lista de categorías usando el data class

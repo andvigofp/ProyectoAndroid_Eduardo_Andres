@@ -36,6 +36,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
+/**
+ * @author Andres
+ * @see Componenente Lista de peliculas
+ * @param categorias: Lista de peliculas correspondiente por su categoría
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun VideoClubOnlinePeliculas() {

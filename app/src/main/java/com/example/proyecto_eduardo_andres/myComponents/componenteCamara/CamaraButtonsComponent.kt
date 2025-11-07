@@ -17,6 +17,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 
+/**
+ * @author Andrés
+ * @see Componenente Buttón Canara
+ * @param camaraButtonData: Al clicar el botón te hace una foto, guarda la foto
+ * @param camaraButtonData: Al clicar el botón QR te lleva a la pagína de QR
+ */
 @Composable
 fun CamaraButtonsComponent(camaraButtonData: CamaraButtonData) {
     val colors = MaterialTheme.colorScheme

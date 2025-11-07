@@ -11,6 +11,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
+/**
+ * @author Andres
+ * @see Componenente Campo Texto
+ * @param recuperarPasswordData: Campos de texto que tiene que introducir el usuario
+ */
 @Composable
 fun RecuperarPasswordFields(
    recuperarPasswordData: RecuperarPasswordData,

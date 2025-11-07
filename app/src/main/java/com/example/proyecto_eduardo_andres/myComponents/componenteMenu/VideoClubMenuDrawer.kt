@@ -42,6 +42,12 @@ import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
+/**
+ * @author Andrés
+ * @see Componenente Campo Menu
+ * @param  drawerState: Este componente va tener dos Menus Items uno para peliculas que al clicar te lleva a página de peliculas
+ * La de al clicar te lleva a página de series
+ */
 @Composable
 fun VideoClubMenuDrawer(
     drawerState: DrawerState,

@@ -16,7 +16,11 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.qrcode.QRCodeWriter
-
+/**
+ * @author Eduardo
+ * @see Componenente Campo QR
+ * @param writer: Con el movíl escanea el código QR
+ */
 // Función para generar Bitmap de QR
 fun generateQRCode(text: String, size: Int): Bitmap {
     val writer = QRCodeWriter()

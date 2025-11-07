@@ -33,6 +33,16 @@ import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
+/**
+ * @author Andrés
+ * @see Componenente Toolbar
+ * @param drawerState: () -> Unit, // El icono Menú(burger), que tiene dos Menus Items
+ * @param scope: es el Ambito de la corrutina, Es decir, determina el ciclo de vida
+ * @param onHomeClick: () -> Unit, // Te llevará página de inicio
+ * @param onCameraClick: () -> Unit, // Te llevará a la pantalla de la camara
+ * @param onProfileClick: () -> Unit, Te llevara a la pantalla del perfil
+ * @param onLogoutClick: () -> Unit: El toolbar tiene iconos, al clicar los iconos llevara al respetivo pantalla
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun toolBarVideoClubOnline(

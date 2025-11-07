@@ -19,6 +19,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
+/**
+ * @author Eduardo
+ * @see Componenente Botones
+ * @param categorias: Al pulsar cualquier botón de llevará a lista de series de esa categoría correspondiente
+ */
 @Composable
 fun VideoClubCategoriasBotones() {
     // Lista de categorías usando el data class

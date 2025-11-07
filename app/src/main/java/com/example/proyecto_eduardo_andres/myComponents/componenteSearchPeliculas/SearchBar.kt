@@ -9,6 +9,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 
+/**
+ * @author Eduardo
+ * @see Componenente Barra de busqueda
+ * @param peliculas: Introduce el nombre de la pelicula
+ */
 @Composable
 fun SearchBar(
     searchQuery: TextFieldValue,

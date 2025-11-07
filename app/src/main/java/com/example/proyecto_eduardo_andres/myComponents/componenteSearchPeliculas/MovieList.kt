@@ -35,6 +35,11 @@ import androidx.compose.ui.unit.sp
 import com.example.proyecto_eduardo_andres.myComponents.componenteVideoClubListaPeliculas.PeliculasData
 import com.example.proyecto_eduardo_andres.myComponents.componenteVideoClubListaPeliculas.VideoClubOnlinePeliculasData
 
+/**
+ * @author Eduardo
+ * @see Componenente Lista Peliculas
+ * @param peliculas: Llama a lista de peliculas
+ */
 @Composable
 fun MovieList(
     peliculas: List<VideoClubOnlinePeliculasData>

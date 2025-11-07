@@ -24,6 +24,11 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 
+/**
+ * @author Andrés
+ * @see Componenente Camara
+ * @param camaraData: Una simulación de camara
+ */
 @Composable
 fun CamaraComponent(camaraData: CamaraData) {
     val colors = MaterialTheme.colorScheme

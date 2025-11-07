@@ -25,6 +25,11 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 
+/**
+ * @author Andrés
+ * @see Componenente imagen descripción
+ * @param series: Listado de peliculas a mostrar
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AlquilarDevolverSerie(
@@ -90,6 +95,11 @@ fun AlquilarDevolverSerie(
     }
 }
 
+/**
+ * @author Andrés
+ * Componenente imagen descripción
+ * @param series: AlquilarDevolverSerieData
+ */
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun AlquilarDevolverSeriePreview() {

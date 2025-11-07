@@ -1,13 +1,11 @@
 package com.example.proyecto_eduardo_andres.myComponents.componentePerfilUsuario
 
-import android.view.Surface
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
@@ -21,6 +19,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
+/**
+ * @author Eduardo
+ * @see Componenente Campo Botones
+ * @param perfilUsuarioButtonTextsData: Al clicar botón Modicar, modificará los datos del usuario
+ */
 @Composable
 fun PerfilUsuarioButtons(
     perfilUsuarioButtonTextsData: PerfilUsuarioButtonTextsData,

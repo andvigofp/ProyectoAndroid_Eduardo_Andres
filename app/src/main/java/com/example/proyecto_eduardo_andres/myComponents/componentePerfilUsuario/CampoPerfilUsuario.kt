@@ -19,6 +19,11 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 
+/**
+ * @author Andrés
+ * @see Componenente Campo textos
+ * @param   perfilUsarioData: Campos de textos para introducir datos del usuario
+ */
 @Composable
 fun CampoPerfilUsuario(
     perfilUsarioData: PerfilUsuarioData,

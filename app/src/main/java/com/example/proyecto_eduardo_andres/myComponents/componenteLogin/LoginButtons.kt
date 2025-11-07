@@ -11,6 +11,14 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
+/**
+ * @author Eduardo
+ * @see Componenente Button Loging
+ * @param loginButtonTexts: El botón Acceder si los datos son correctos, inicia la sesión, te llevara a la pantalla de VideclubOnlinePeliculas
+ * @param loginButtonTexts: El botón Crear Usuario te lleva a la pantalla de Crear Usuario
+ * @param loginButtonTexts: El botón Recuperar contraseña te lleva a la pantalla Recuperar contraseña
+ *
+ */
 @Composable
 fun LoginButtons(
     loginButtonTexts: LoginButtonTextsData,
