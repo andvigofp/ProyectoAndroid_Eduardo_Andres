@@ -35,6 +35,11 @@ import androidx.compose.ui.unit.sp
 import com.example.proyecto_eduardo_andres.myComponents.componenteVideoClubOnlieSeries.SeriesData
 import com.example.proyecto_eduardo_andres.myComponents.componenteVideoClubOnlieSeries.VideoClubOnlineData
 
+/**
+ * @author Eduardo
+ * @see Componenente Barra de busqueda
+ * @param peliculas: Introduce el nombre de las series
+ */
 @Composable
 fun MovieList(
     series: List<VideoClubOnlineData>

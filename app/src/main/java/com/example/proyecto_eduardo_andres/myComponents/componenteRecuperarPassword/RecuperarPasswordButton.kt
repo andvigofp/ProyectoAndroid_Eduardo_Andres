@@ -10,6 +10,12 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
+/**
+ * @author Eduardo
+ * @see Componenente Campo Botones
+ * @param buttonText: Al clicar el botón Recuperar password, si todo va bien se cambiará la contraseña del usuario
+ * @param buttonText: Al clicar el Cancelar, te llevará a la pantalla de Loging
+ */
 @Composable
 fun RecuperarPasswordButton(
     buttonText: RecuperarPasswordButtonText,

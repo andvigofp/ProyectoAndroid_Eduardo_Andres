@@ -26,7 +26,7 @@ import androidx.compose.ui.unit.sp
  * @author Eduardo
  * @see Componenente Botones Crear usuario
  * @param  crearUsuarioButtonText: Al clicar el botón crear Usuario, te saldra una pantalla emergente te pondra el usuario que se a creado
- * @param  crearUsuarioButtonText: El botón Cancelar, se canlela crear el usuarío y te lleva de vuelva a pantalla de Logíng
+ * @param  crearUsuarioButtonText: El botón Cancelar, se canlela crear el usuario y te lleva de vuelta a pantalla de Logíng
  */
 @Composable
 fun CrearUsuarioButton(

@@ -24,6 +24,15 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 
+/**
+ * @author Andrés
+ * @see Componenente Toolbar
+ * @param onBackClick: () -> Unit, // nuevo callback para el botón de volver
+ * @param onHomeClick: () -> Unit, // Te llevará página de inicio
+ * @param onCameraClick: () -> Unit, // Te llevará a la pantalla de la camara
+ * @param onProfileClick: () -> Unit, Te llevara a la pantalla del perfil
+ * @param onLogoutClick: () -> Unit: El toolbar tiene iconos, al clicar los iconos llevara al respetivo pantalla
+ */
 @Composable
 fun toolBar(
     onBackClick: () -> Unit, // nuevo callback para el botón de volver

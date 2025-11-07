@@ -22,7 +22,7 @@ import androidx.compose.ui.unit.dp
 /**
  * @author Andrés
  * @see Componenente Campo usuario
- * @param crearUsuarioData: Datos par crear un nuevo usuario
+ * @param crearUsuarioData: Datos para crear un nuevo usuario
  */
 @Composable
 fun CampoCrearUsuario(
