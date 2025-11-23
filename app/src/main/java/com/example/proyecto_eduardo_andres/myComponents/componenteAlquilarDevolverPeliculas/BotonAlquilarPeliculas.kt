@@ -18,10 +18,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.proyecto_eduardo_andres.myComponents.componenteAquilarDevolverSeries.BotonAlquilarDevolverData
-import com.example.proyecto_eduardo_andres.myComponents.componenteAquilarDevolverSeries.BotonAlquilarSeries
+import com.example.proyecto_eduardo_andres.R
+import com.example.proyecto_eduardo_andres.viewData.AlquilerDevolverSeriesData.BotonAlquilarDevolverData
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -42,12 +43,11 @@ fun BotonAlquilarPeliculas(
     val colors = MaterialTheme.colorScheme
     val typography = MaterialTheme.typography
 
-    // 🔹 Estado para mostrar el diálogo
     var showDialog by remember { mutableStateOf(false) }
 
-    // 🔹 Obtener la fecha actual
+    // Obtener la fecha actual (esto está correcto como tú quieres)
     val fechaActual = remember {
-        val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
+        val dateFormat = SimpleDateFormat(R.string.fecha.toString(), Locale.getDefault())
         dateFormat.format(Date())
     }
 
@@ -58,7 +58,8 @@ fun BotonAlquilarPeliculas(
             .fillMaxWidth()
             .padding(16.dp)
     ) {
-        //Botón Alquilar
+
+        // Botón Alquilar
         Button(
             onClick = onAlquilarClick,
             colors = ButtonDefaults.buttonColors(containerColor = colors.primary),
@@ -66,37 +67,39 @@ fun BotonAlquilarPeliculas(
             modifier = Modifier.weight(1f)
         ) {
             Text(
-                text = botonAlquilar.nombreBoton,
+                text = stringResource(botonAlquilar.nombreBoton),
                 style = typography.labelLarge.copy(color = colors.onPrimary)
             )
         }
 
-        //Botón Devolver
+        // Botón Devolver
         Button(
             onClick = {
                 onDevolverClick()
-                showDialog = true  //Mostrar el diálogo al hacer clic
+                showDialog = true
             },
             colors = ButtonDefaults.buttonColors(containerColor = colors.tertiary),
             shape = RoundedCornerShape(10.dp),
             modifier = Modifier.weight(1f)
         ) {
             Text(
-                text = botonDevolver.nombreBoton,
+                text = stringResource(botonDevolver.nombreBoton),
                 style = typography.labelLarge.copy(color = colors.onPrimary)
             )
         }
     }
 
-    //Diálogo emergente con la fecha
+    // Diálogo emergente
     if (showDialog) {
         AlertDialog(
             onDismissRequest = { showDialog = false },
-            title = { Text("Devolución completada") },
-            text = { Text("Se ha devuelto la película el $fechaActual") },
+            title = { Text(stringResource(R.string.devolucion_completada)) },
+            text = {
+                Text("${stringResource(R.string.devolver_pelicula)} $fechaActual")
+            },
             confirmButton = {
                 TextButton(onClick = { showDialog = false }) {
-                    Text("Aceptar")
+                    Text(stringResource(R.string.aceptar))
                 }
             }
         )
@@ -108,8 +111,8 @@ fun BotonAlquilarPeliculas(
 fun BotonAlquilarPeliculasPreview() {
     MaterialTheme {
         BotonAlquilarPeliculas(
-            botonAlquilar = BotonAlquilarDevolverData("Alquilar"),
-            botonDevolver = BotonAlquilarDevolverData("Devolver")
+            botonAlquilar = BotonAlquilarDevolverData(nombreBoton = R.string.alquilar),
+            botonDevolver = BotonAlquilarDevolverData(nombreBoton = R.string.devolver)
         )
     }
 }

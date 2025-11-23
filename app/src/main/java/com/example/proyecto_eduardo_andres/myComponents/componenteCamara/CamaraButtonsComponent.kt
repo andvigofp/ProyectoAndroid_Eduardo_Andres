@@ -14,8 +14,11 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.proyecto_eduardo_andres.viewData.CamaraData.CamaraButtonData
+import com.example.proyecto_eduardo_andres.R
 
 /**
  * @author Andrés
@@ -42,7 +45,7 @@ fun CamaraButtonsComponent(camaraButtonData: CamaraButtonData) {
             modifier = Modifier.weight(1f)
         ) {
             Text(
-                text = camaraButtonData.hacerFoto,
+                text = stringResource(camaraButtonData.hacerFoto),
                 style = typography.labelLarge.copy(color = Color.White)
             )
         }
@@ -57,7 +60,7 @@ fun CamaraButtonsComponent(camaraButtonData: CamaraButtonData) {
             modifier = Modifier.weight(1f)
         ) {
             Text(
-                text = camaraButtonData.qr,
+                text = stringResource( camaraButtonData.qr),
                 style = typography.labelLarge.copy(color = Color.White)
             )
         }
@@ -68,8 +71,8 @@ fun CamaraButtonsComponent(camaraButtonData: CamaraButtonData) {
 @Composable
 fun CamaraButtonsComponentPreview() {
     val botonesDemo = CamaraButtonData(
-        hacerFoto = "Hacer Foto",
-        qr = "QR"
+        hacerFoto = R.string.hacer_foto,
+        qr = R.string.qr
     )
 
     MaterialTheme {

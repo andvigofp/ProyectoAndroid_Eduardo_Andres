@@ -29,15 +29,16 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.proyecto_eduardo_andres.R
 import com.example.proyecto_eduardo_andres.myComponents.componentePerfilUsuario.CampoPerfilUsuario
-import com.example.proyecto_eduardo_andres.myComponents.componentePerfilUsuario.PerfilUsuarioButtonTextsData
+import com.example.proyecto_eduardo_andres.viewData.PerfilUsuarioData.PerfilUsuarioButtonTextsData
 import com.example.proyecto_eduardo_andres.myComponents.componentePerfilUsuario.PerfilUsuarioButtons
-import com.example.proyecto_eduardo_andres.myComponents.componentePerfilUsuario.PerfilUsuarioData
+import com.example.proyecto_eduardo_andres.viewData.PerfilUsuarioData.PerfilUsuarioData
 import com.example.proyecto_eduardo_andres.myComponents.componenteToolbar.toolBar
 
 @Composable
@@ -111,7 +112,7 @@ fun PerfilUsuarioScreen() {
                 ) {
                     Image(
                         painter = painterResource(id = R.drawable.ic_logotipo_team),
-                        contentDescription = "Logo",
+                        contentDescription = stringResource(R.string.logo),
                         contentScale = ContentScale.Crop,
                         modifier = Modifier
                             .size(80.dp)
@@ -129,7 +130,7 @@ fun PerfilUsuarioScreen() {
 
                 // Texto adicional
                 Text(
-                    text = "Películas alquiladas: ",
+                    text = stringResource(R.string.peliculas_alquiladas),
                     color = MaterialTheme.colorScheme.primary,
                     fontWeight = FontWeight.Medium,
                     fontSize = 16.sp
@@ -139,7 +140,7 @@ fun PerfilUsuarioScreen() {
 
                 // Botón principal
                 PerfilUsuarioButtons(
-                    perfilUsuarioButtonTextsData = PerfilUsuarioButtonTextsData(modificar = "MODIFICAR USUARIO"),
+                    perfilUsuarioButtonTextsData = PerfilUsuarioButtonTextsData(modificar = stringResource(R.string.modificar_usuario)),
                     onModificarUsuario = { /* Acción modificar */ }
                 )
             }
@@ -167,7 +168,7 @@ fun PerfilUsuarioScreen() {
 
                 // texto justo debajo del toolbar, centrado y en blanco
                 Text(
-                    text = "DATOS USUARIO",
+                    text = stringResource(R.string.datos_usuario),
                     color = Color.White,
                     fontSize = 20.sp,
                     fontWeight = FontWeight.Bold,

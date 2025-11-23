@@ -1,4 +1,4 @@
-package com.example.proyecto_eduardo_andres.myComponents.componenteLogin
+package com.example.proyecto_eduardo_andres.viewData.LogingData
 
 data class LoginButtonTextsData(
     val acceder: String = "",

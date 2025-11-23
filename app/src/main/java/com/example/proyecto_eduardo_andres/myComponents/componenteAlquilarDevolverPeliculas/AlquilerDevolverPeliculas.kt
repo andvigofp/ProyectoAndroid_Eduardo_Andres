@@ -21,9 +21,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.proyecto_eduardo_andres.R
+import com.example.proyecto_eduardo_andres.viewData.AlquilerDevolverPeliculasData.AlquilarDevolverPeliculasData
+import com.example.proyecto_eduardo_andres.viewData.AlquilerDevolverPeliculasData.PeliculasAlquilarDevolverData
 
 /**
  * @author Eduardo
@@ -44,7 +48,6 @@ fun AlquilerDevolverPeliculas(
             .padding(16.dp)
             .padding(8.dp)
     ) {
-        // Contenedor principal
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -52,11 +55,12 @@ fun AlquilerDevolverPeliculas(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            // Imagen o icono a la izquierda
+
+            // Imagen
             if (peliculas.imagen != null) {
                 Image(
                     painter = painterResource(id = peliculas.imagen),
-                    contentDescription = peliculas.nombrePelicula,
+                    contentDescription = stringResource(peliculas.nombrePelicula),
                     modifier = Modifier
                         .size(150.dp)
                         .clip(RoundedCornerShape(12.dp))
@@ -66,7 +70,7 @@ fun AlquilerDevolverPeliculas(
             } else {
                 Icon(
                     imageVector = Icons.Default.Movie,
-                    contentDescription = "Icono película",
+                    contentDescription = stringResource(R.string.icono_película),
                     modifier = Modifier
                         .size(150.dp)
                         .padding(8.dp),
@@ -74,20 +78,19 @@ fun AlquilerDevolverPeliculas(
                 )
             }
 
-            // Nombre y descripción a la derecha
+            // Nombre y descripción
             Column(
-                modifier = Modifier
-                    .weight(1f),
+                modifier = Modifier.weight(1f),
                 verticalArrangement = Arrangement.Center
             ) {
                 Text(
-                    text = peliculas.nombrePelicula,
+                    text = stringResource(peliculas.nombrePelicula),
                     style = typography.headlineMedium.copy(color = colors.primary),
                     textAlign = TextAlign.Start,
                     modifier = Modifier.padding(bottom = 8.dp)
                 )
                 Text(
-                    text = peliculas.descripcion,
+                    text = stringResource(peliculas.descripcion),
                     style = typography.bodyLarge.copy(color = colors.primary),
                     textAlign = TextAlign.Start
                 )
@@ -97,21 +100,21 @@ fun AlquilerDevolverPeliculas(
 }
 
 
+
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun AlquilarDevolverPeliculasPreview() {
     val listaPeliculas = PeliculasAlquilarDevolverData().nombrePeliculas
-    val peliculaSeleccionada = listaPeliculas.firstOrNull { it.nombrePelicula == "La Vida es Bella" }
-        ?: listaPeliculas.first()
 
-    // Se crea correctamente el objeto del tipo de data class
+    // No uses R.string en previews — causa IDs incorrectos
+    val peliculaSeleccionada = listaPeliculas[5]
+
     val peliculaDemo = AlquilarDevolverPeliculasData(
-        imagen = peliculaSeleccionada.imagen, // se pasa la imagen
+        imagen = peliculaSeleccionada.imagen,
         nombrePelicula = peliculaSeleccionada.nombrePelicula,
         descripcion = peliculaSeleccionada.descripcion
     )
 
-    // Se llama al composable correcto
     MaterialTheme {
         AlquilerDevolverPeliculas(peliculas = peliculaDemo)
     }

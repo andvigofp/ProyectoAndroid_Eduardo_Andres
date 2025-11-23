@@ -35,12 +35,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import com.example.proyecto_eduardo_andres.R
+import com.example.proyecto_eduardo_andres.viewData.MenuData.MenuItemData
 
 /**
  * @author Andrés
@@ -56,8 +59,8 @@ fun VideoClubMenuDrawer(
     onSeriesClick: () -> Unit
 ) {
     val menuItems = listOf(
-        MenuItemData("Películas", Icons.Default.Movie, onPeliculasClick),
-        MenuItemData("Series", Icons.Default.Tv, onSeriesClick)
+        MenuItemData(stringResource(R.string.peliculas), Icons.Default.Movie, onPeliculasClick),
+        MenuItemData(stringResource(R.string.series), Icons.Default.Tv, onSeriesClick)
     )
 
     // Fondo azul degradado o de color temático
@@ -79,7 +82,7 @@ fun VideoClubMenuDrawer(
 
         // --- Título del Drawer ---
         Text(
-            text = "🎬 VIDEOCLUB ONLINE",
+            text = stringResource(R.string.videoclub_online),
             color = MaterialTheme.colorScheme.onPrimaryContainer,
             fontSize = 20.sp,
             fontWeight = FontWeight.Bold,
@@ -146,14 +149,14 @@ fun VideoClubMenuDrawerPreview() {
             Scaffold(
                 topBar = {
                     TopAppBar(
-                        title = { Text("VideoClub") },
+                        title = { Text(stringResource(R.string.videoClub)) },
                         navigationIcon = {
                             IconButton(onClick = {
                                 scope.launch { drawerState.open() }
                             }) {
                                 Icon(
                                     Icons.Default.Menu,
-                                    contentDescription = "Menú",
+                                    contentDescription = stringResource(R.string.menu),
                                     tint = MaterialTheme.colorScheme.onPrimary
                                 )
                             }
@@ -172,7 +175,7 @@ fun VideoClubMenuDrawerPreview() {
                     contentAlignment = Alignment.Center
                 ) {
                     Text(
-                        "Pulsa el icono del menú para abrir el drawer",
+                        stringResource(R.string.pulsa_icono_del_menu),
                         color = MaterialTheme.colorScheme.onBackground
                     )
                 }

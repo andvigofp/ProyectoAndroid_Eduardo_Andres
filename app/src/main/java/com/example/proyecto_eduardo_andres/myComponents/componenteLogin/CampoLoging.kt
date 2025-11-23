@@ -15,11 +15,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.proyecto_eduardo_andres.myComponents.componenteLogin.CamposLogin
+import com.example.proyecto_eduardo_andres.R
+import com.example.proyecto_eduardo_andres.viewData.LogingData.LoginData
 
 /**
  * @author Andrés
@@ -44,7 +45,7 @@ fun CamposLogin(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
-                text = "Email",
+                text = stringResource(R.string.email),
                 color = MaterialTheme.colorScheme.outline,
                 modifier = Modifier
                     .weight(1f)
@@ -67,7 +68,7 @@ fun CamposLogin(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
-                text = "Password",
+                text = stringResource(R.string.password),
                 color = MaterialTheme.colorScheme.outline,
                 modifier = Modifier
                     .weight(1f)

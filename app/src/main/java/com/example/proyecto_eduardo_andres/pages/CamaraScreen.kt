@@ -19,11 +19,12 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.proyecto_eduardo_andres.myComponents.componenteCamara.CamaraButtonData
+import com.example.proyecto_eduardo_andres.viewData.CamaraData.CamaraButtonData
 import com.example.proyecto_eduardo_andres.myComponents.componenteCamara.CamaraButtonsComponent
 import com.example.proyecto_eduardo_andres.myComponents.componenteCamara.CamaraComponent
-import com.example.proyecto_eduardo_andres.myComponents.componenteCamara.CamaraData
+import com.example.proyecto_eduardo_andres.viewData.CamaraData.CamaraData
 import com.example.proyecto_eduardo_andres.myComponents.componenteToolbar.toolBar
+import com.example.proyecto_eduardo_andres.R
 
 @Composable
 fun CamaraScreen() {
@@ -67,8 +68,8 @@ fun CamaraScreen() {
             ) {
                 CamaraButtonsComponent(
                     camaraButtonData = CamaraButtonData(
-                        hacerFoto = "Hacer Foto",
-                        qr = "QR"
+                        hacerFoto = R.string.hacer_foto,
+                        qr = R.string.qr
                     )
                 )
             }
@@ -85,7 +86,7 @@ fun CamaraScreen() {
         ) {
             CamaraComponent(
                 camaraData = CamaraData(
-                    descripcion = "Vista previa de la cámara"
+                    descripcion = R.string.vista_previa_camara
                 )
             )
         }
