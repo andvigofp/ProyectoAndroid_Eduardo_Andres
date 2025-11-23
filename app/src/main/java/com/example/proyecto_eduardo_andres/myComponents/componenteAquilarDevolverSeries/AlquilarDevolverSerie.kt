@@ -21,9 +21,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.proyecto_eduardo_andres.R
+import com.example.proyecto_eduardo_andres.viewData.AlquilerDevolverSeriesData.AlquilarDevolverSerieData
+import com.example.proyecto_eduardo_andres.viewData.AlquilerDevolverSeriesData.SeriesAlquilerDevolverData
 
 /**
  * @author Andrés
@@ -56,7 +60,7 @@ fun AlquilarDevolverSerie(
             if (series.imagen != null) {
                 Image(
                     painter = painterResource(id = series.imagen),
-                    contentDescription = series.nombreSerie,
+                    contentDescription = stringResource( series.nombreSerie),
                     modifier = Modifier
                         .size(150.dp)
                         .clip(RoundedCornerShape(12.dp))
@@ -66,7 +70,7 @@ fun AlquilarDevolverSerie(
             } else {
                 Icon(
                     imageVector = Icons.Default.Movie,
-                    contentDescription = "Icono serie",
+                    contentDescription = R.string.icono_serie.toString(),
                     modifier = Modifier
                         .size(150.dp)
                         .padding(8.dp),
@@ -80,13 +84,13 @@ fun AlquilarDevolverSerie(
                 verticalArrangement = Arrangement.Center
             ) {
                 Text(
-                    text = series.nombreSerie,
+                    text = stringResource(series.nombreSerie),
                     style = typography.headlineMedium.copy(color = colors.primary),
                     textAlign = TextAlign.Start,
                     modifier = Modifier.padding(bottom = 8.dp)
                 )
                 Text(
-                    text = series.descripcion,
+                    text = stringResource(series.descripcion),
                     style = typography.bodyLarge.copy(color = colors.primary),
                     textAlign = TextAlign.Start
                 )
@@ -104,7 +108,7 @@ fun AlquilarDevolverSerie(
 @Composable
 fun AlquilarDevolverSeriePreview() {
     val listaSeries = SeriesAlquilerDevolverData().nombreSeries
-    val serieSeleccionada = listaSeries.firstOrNull { it.nombreSerie == "Mad Men" }
+    val serieSeleccionada = listaSeries.firstOrNull { it.nombreSerie == R.string.mad_men }
         ?: listaSeries.first()
 
     val serieDemo = AlquilarDevolverSerieData(

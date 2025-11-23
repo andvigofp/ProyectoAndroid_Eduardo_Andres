@@ -18,17 +18,15 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.proyecto_eduardo_andres.R
-import com.example.proyecto_eduardo_andres.myComponents.componenteAlquilarDevolverPeliculas.AlquilarDevolverPeliculasData
-import com.example.proyecto_eduardo_andres.myComponents.componenteAlquilarDevolverPeliculas.PeliculasAlquilarDevolverData
 import com.example.proyecto_eduardo_andres.myComponents.componenteAquilarDevolverSeries.AlquilarDevolverSerie
-import com.example.proyecto_eduardo_andres.myComponents.componenteAquilarDevolverSeries.AlquilarDevolverSerieData
-import com.example.proyecto_eduardo_andres.myComponents.componenteAquilarDevolverSeries.BotonAlquilarDevolverData
+import com.example.proyecto_eduardo_andres.viewData.AlquilerDevolverSeriesData.AlquilarDevolverSerieData
+import com.example.proyecto_eduardo_andres.viewData.AlquilerDevolverSeriesData.BotonAlquilarDevolverData
 import com.example.proyecto_eduardo_andres.myComponents.componenteAquilarDevolverSeries.BotonAlquilarSeries
-import com.example.proyecto_eduardo_andres.myComponents.componenteAquilarDevolverSeries.SeriesAlquilerDevolverData
+import com.example.proyecto_eduardo_andres.viewData.AlquilerDevolverSeriesData.SeriesAlquilerDevolverData
 import com.example.proyecto_eduardo_andres.myComponents.componenteToolbar.toolBar
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -39,14 +37,17 @@ fun AlquilerDevolverSeriesScreen() {
 
     //Degradado del toolbar y fondo del reloj
     val toolbarBackGround = Brush.linearGradient(
-        colors = listOf(Color(0xFF0D47A1), Color(0xFF512DA8)),
+        colors = listOf(
+            MaterialTheme.colorScheme.surfaceContainerHigh,
+            MaterialTheme.colorScheme.surfaceContainerHighest
+        ),
         start = Offset(0f, 0f),
         end = Offset(1000f, 1000f)
     )
 
     //Recuperar los datos reales desde la lista
     val listaSeries = SeriesAlquilerDevolverData().nombreSeries
-    val serieSeleccionada = listaSeries.firstOrNull { it.nombreSerie == "Mad Men" }
+    val serieSeleccionada = listaSeries.firstOrNull { it.nombreSerie == R.string.mad_men }
         ?: listaSeries.first()
 
     //Crear objeto de tipo AlquilarDevolverPeliculasData
@@ -106,7 +107,7 @@ fun AlquilerDevolverSeriesScreen() {
 
                 //Título centrado
                 Text(
-                    text = "ALQUILAR SERIES",
+                    text = stringResource(R.string.aqlqilar_serie),
                     style = typography.headlineLarge.copy(color = colors.primary),
                     modifier = Modifier.padding(bottom = 24.dp)
                 )
@@ -123,8 +124,8 @@ fun AlquilerDevolverSeriesScreen() {
                     .align(Alignment.BottomCenter)
             ) {
                 BotonAlquilarSeries(
-                    botonAlquilar = BotonAlquilarDevolverData("Alquilar"),
-                    botonDevolver = BotonAlquilarDevolverData("Devolver")
+                    botonAlquilar = BotonAlquilarDevolverData(R.string.alquilar),
+                    botonDevolver = BotonAlquilarDevolverData(R.string.devolver)
                 )
             }
         }

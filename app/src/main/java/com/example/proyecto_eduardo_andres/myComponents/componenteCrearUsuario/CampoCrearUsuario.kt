@@ -15,9 +15,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.proyecto_eduardo_andres.R
 
 /**
  * @author Andrés
@@ -41,7 +43,7 @@ fun CampoCrearUsuario(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
-                text = "Nombre Usuario",
+                text = stringResource(R.string.nombre_usuario),
                 color = Color(0xFF0D47A1),
                 modifier = Modifier.weight(1f)
             )
@@ -59,7 +61,7 @@ fun CampoCrearUsuario(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
-                text = "Password",
+                text = stringResource(R.string.password),
                 color = Color(0xFF512DA8),
                 modifier = Modifier.weight(1f)
             )
@@ -78,7 +80,7 @@ fun CampoCrearUsuario(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
-                text = "Repetir Password",
+                text = stringResource(R.string.repetir_password),
                 color = Color(0xFF512DA8),
                 modifier = Modifier.weight(1f)
             )
@@ -97,7 +99,7 @@ fun CampoCrearUsuario(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
-                text = "Email",
+                text = stringResource(R.string.email),
                 color = Color(0xFF0D47A1),
                 modifier = Modifier.weight(1f)
             )
@@ -115,7 +117,7 @@ fun CampoCrearUsuario(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
-                text = "Repetir Email",
+                text = stringResource(R.string.repetir_email),
                 color = Color(0xFF0D47A1),
                 modifier = Modifier.weight(1f)
             )

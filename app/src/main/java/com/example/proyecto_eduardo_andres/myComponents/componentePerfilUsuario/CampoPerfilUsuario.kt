@@ -15,9 +15,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.proyecto_eduardo_andres.R
+import com.example.proyecto_eduardo_andres.viewData.PerfilUsuarioData.PerfilUsuarioData
 
 /**
  * @author Andrés
@@ -44,7 +47,7 @@ fun CampoPerfilUsuario(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
-                text = "Nombre Usuario",
+                text = stringResource(R.string.nombre_usuario),
                 color = primaryColor,
                 modifier = Modifier.weight(1f)
             )

@@ -17,10 +17,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.proyecto_eduardo_andres.R
 
 /**
  * @author Eduardo
@@ -36,8 +38,8 @@ fun CrearUsuarioButton(
 ){
 
     // Si el data class viene vacío, damos los textos por defecto aquí
-    val crearUsarioText = if (crearUsuarioButtonText.crearUsuario.isNotEmpty()) crearUsuarioButtonText.crearUsuario else "CREAR USUARIO"
-    val cancelarText = if (crearUsuarioButtonText.crearUsuario.isNotEmpty()) crearUsuarioButtonText.cancelar else "CANCELAR"
+    val crearUsarioText = if (crearUsuarioButtonText.crearUsuario.isNotEmpty()) crearUsuarioButtonText.crearUsuario else stringResource(R.string.crear_usuario)
+    val cancelarText = if (crearUsuarioButtonText.crearUsuario.isNotEmpty()) crearUsuarioButtonText.cancelar else stringResource(R.string.cancelar)
 
     Row(
         modifier = Modifier.fillMaxWidth(),
