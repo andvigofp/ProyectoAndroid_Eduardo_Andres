@@ -1,3 +1,4 @@
+@file:Suppress("ALL")
 package com.example.proyecto_eduardo_andres.myComponents.componenteSearchSeries
 
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -6,8 +7,10 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
+import com.example.proyecto_eduardo_andres.R
 
 /**
  * @author Andrés
@@ -22,7 +25,7 @@ fun SearchBar(
     OutlinedTextField(
         value = searchQuery,
         onValueChange = onQueryChange,
-        placeholder = { Text("Buscar serie...") },
+        placeholder = { Text(stringResource(R.string.buscar_series))},
         modifier = Modifier
             .fillMaxWidth()
             .padding(vertical = 8.dp)

@@ -1,3 +1,4 @@
+@file:Suppress("ALL")
 package com.example.proyecto_eduardo_andres.myComponents.componenteToolbar
 
 import androidx.compose.foundation.background
@@ -21,8 +22,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.proyecto_eduardo_andres.R
 
 /**
  * @author Andrés
@@ -66,7 +69,7 @@ fun toolBar(
             IconButton(onClick = onBackClick) {
                 Icon(
                     imageVector = Icons.Default.ArrowBack,
-                    contentDescription = "Volver",
+                    contentDescription = stringResource(R.string.volver),
                     tint = Color(0xFFFFC107)
                 )
             }
@@ -74,16 +77,16 @@ fun toolBar(
             // Íconos alineados a la derecha
             Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 IconButton(onClick = onHomeClick) {
-                    Icon(Icons.Default.Home, contentDescription = "Inicio", tint = Color(0xFFFFC107))
+                    Icon(Icons.Default.Home, contentDescription = stringResource(R.string.inicio), tint = Color(0xFFFFC107))
                 }
                 IconButton(onClick = onCameraClick) {
-                    Icon(Icons.Default.CameraAlt, contentDescription = "Cámara", tint = Color(0xFFFFC107))
+                    Icon(Icons.Default.CameraAlt, contentDescription = stringResource(R.string.camara), tint = Color(0xFFFFC107))
                 }
                 IconButton(onClick = onProfileClick) {
-                    Icon(Icons.Default.Person, contentDescription = "Perfil", tint = Color(0xFFFFC107))
+                    Icon(Icons.Default.Person, contentDescription = stringResource(R.string.perfil), tint = Color(0xFFFFC107))
                 }
                 IconButton(onClick = onLogoutClick) {
-                    Icon(Icons.Default.ExitToApp, contentDescription = "Salir", tint = Color(0xFFFFC107))
+                    Icon(Icons.Default.ExitToApp, contentDescription = stringResource(R.string.salir), tint = Color(0xFFFFC107))
                 }
             }
         }

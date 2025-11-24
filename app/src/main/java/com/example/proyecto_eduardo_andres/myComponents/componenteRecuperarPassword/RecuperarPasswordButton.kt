@@ -1,3 +1,4 @@
+@file:Suppress("ALL")
 package com.example.proyecto_eduardo_andres.myComponents.componenteRecuperarPassword
 
 import androidx.compose.foundation.layout.*
@@ -5,10 +6,12 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.proyecto_eduardo_andres.viewData.RecuperarPasswordData.RecuperarPasswordButtonText
+import com.example.proyecto_eduardo_andres.R
 
 /**
  * @author Eduardo
@@ -65,8 +68,8 @@ fun RecuperarPasswordButton(
 fun RecuperarPasswordButtonPreview() {
     RecuperarPasswordButton(
         buttonText = RecuperarPasswordButtonText(
-            cancelar = "CANCELAR",
-            recuperarPassword = "RECUPERAR PASSWORD"
+            cancelar = stringResource(R.string.cancelar),
+            recuperarPassword = stringResource(R.string.repetir_password)
         ),
         onRecuperarClick = {},
         onCancelarClick = {}

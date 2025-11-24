@@ -1,3 +1,4 @@
+@file:Suppress("ALL")
 package com.example.proyecto_eduardo_andres.pages
 
 import androidx.compose.foundation.Image
@@ -29,6 +30,7 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -36,8 +38,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.proyecto_eduardo_andres.R
 import com.example.proyecto_eduardo_andres.myComponents.componenteRecuperarPassword.RecuperarPasswordButton
-import com.example.proyecto_eduardo_andres.myComponents.componenteRecuperarPassword.RecuperarPasswordButtonText
-import com.example.proyecto_eduardo_andres.myComponents.componenteRecuperarPassword.RecuperarPasswordData
+import com.example.proyecto_eduardo_andres.viewData.RecuperarPasswordData.RecuperarPasswordButtonText
+import com.example.proyecto_eduardo_andres.viewData.RecuperarPasswordData.RecuperarPasswordData
 import com.example.proyecto_eduardo_andres.myComponents.componenteRecuperarPassword.RecuperarPasswordFields
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -94,7 +96,7 @@ fun RecuperarPasswordScreen(
         ) {
             // Título
             Text(
-                text = "RECUPERAR CONTRASEÑA",
+                text = stringResource(R.string.repetir_password),
                 fontSize = 28.sp,
                 fontWeight = FontWeight.Bold,
                 color = Color.White,
@@ -141,8 +143,8 @@ fun RecuperarPasswordScreen(
                 // Botones
                 RecuperarPasswordButton(
                     buttonText = RecuperarPasswordButtonText(
-                        cancelar = "CANCELAR",
-                        recuperarPassword = "RECUPERAR"
+                        cancelar = stringResource(R.string.cancelar),
+                        recuperarPassword = stringResource(R.string.recuperar)
                     ),
                     onRecuperarClick = onRecuperarClick,
                     onCancelarClick = onCancelarClick

@@ -29,10 +29,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.proyecto_eduardo_andres.R
+import com.example.proyecto_eduardo_andres.viewData.ListaSeriesData.SeriesData
 
 /**
  * @author Eduardo
@@ -68,7 +71,7 @@ fun VideoClubOnlineSeries() {
                     ) {
                         // Título de la categoría
                         Text(
-                            text = categoria,
+                            text = stringResource(categoria),
                             style = MaterialTheme.typography.titleLarge.copy(
                                 color = MaterialTheme.colorScheme.primary,
                                 fontWeight = FontWeight.Bold
@@ -100,20 +103,20 @@ fun VideoClubOnlineSeries() {
                                         serie.imagen?.let {
                                             Image(
                                                 painter = painterResource(id = it),
-                                                contentDescription = serie.nombreSerie,
+                                                contentDescription = stringResource(serie.nombreSerie),
                                                 contentScale = ContentScale.Crop,
                                                 modifier = Modifier.fillMaxSize()
                                             )
                                         } ?: Icon(
                                             imageVector = Icons.Default.Movie,
-                                            contentDescription = "Sin imagen",
+                                            contentDescription = stringResource(R.string.sin_imagen),
                                             tint = MaterialTheme.colorScheme.onSurfaceVariant,
                                             modifier = Modifier.size(48.dp)
                                         )
                                     }
 
                                     Text(
-                                        text = serie.nombreSerie,
+                                        text = stringResource(serie.nombreSerie),
                                         style = MaterialTheme.typography.bodyMedium.copy(
                                             color = MaterialTheme.colorScheme.onBackground,
                                             fontWeight = FontWeight.Medium,

@@ -1,4 +1,4 @@
-package com.example.proyecto_eduardo_andres.myComponents.componenteRecuperarPassword
+package com.example.proyecto_eduardo_andres.viewData.RecuperarPasswordData
 
 data class RecuperarPasswordData(
     val email : String = "",

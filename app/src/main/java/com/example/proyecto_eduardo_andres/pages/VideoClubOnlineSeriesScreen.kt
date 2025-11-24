@@ -1,3 +1,4 @@
+@file:Suppress("ALL")
 package com.example.proyecto_eduardo_andres.pages
 
 import androidx.compose.foundation.Image
@@ -42,11 +43,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.proyecto_eduardo_andres.myComponents.componenteMenu.VideoClubMenuDrawer
 import com.example.proyecto_eduardo_andres.myComponents.componenteVideoClubListaPeliculas.VideoClubCategoriasBotones
-import com.example.proyecto_eduardo_andres.myComponents.componenteVideoClubOnlieSeries.SeriesData
+import com.example.proyecto_eduardo_andres.viewData.ListaSeriesData.SeriesData
 import com.example.proyecto_eduardo_andres.myComponents.componenteToolbar.toolBarVideoClubOnline
 import kotlin.collections.component1
 import kotlin.collections.component2
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.ui.res.stringResource
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -111,7 +113,7 @@ fun VideoClubOnlineSeriesScreen() {
                             modifier = Modifier.fillMaxWidth()
                         ) {
                             Text(
-                                text = categoria,
+                                text = stringResource( categoria),
                                 fontSize = 22.sp,
                                 fontWeight = FontWeight.Bold,
                                 color = MaterialTheme.colorScheme.primary,
@@ -139,7 +141,7 @@ fun VideoClubOnlineSeriesScreen() {
                                             serie.imagen?.let {
                                                 Image(
                                                     painter = painterResource(id = it),
-                                                    contentDescription = serie.nombreSerie,
+                                                    contentDescription = stringResource(serie.nombreSerie),
                                                     contentScale = ContentScale.Crop,
                                                     modifier = Modifier.fillMaxSize()
                                                 )
@@ -151,7 +153,7 @@ fun VideoClubOnlineSeriesScreen() {
                                             )
                                         }
                                         Text(
-                                            text = serie.nombreSerie,
+                                            text = stringResource(serie.nombreSerie),
                                             color = MaterialTheme.colorScheme.onBackground,
                                             fontSize = 14.sp,
                                             fontWeight = FontWeight.Medium,

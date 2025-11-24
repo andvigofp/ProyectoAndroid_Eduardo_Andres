@@ -1,3 +1,4 @@
+@file:Suppress("ALL")
 package com.example.proyecto_eduardo_andres.myComponents.componenteSearchSeries
 
 import androidx.compose.foundation.Image
@@ -28,12 +29,14 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.proyecto_eduardo_andres.myComponents.componenteVideoClubOnlieSeries.SeriesData
-import com.example.proyecto_eduardo_andres.myComponents.componenteVideoClubOnlieSeries.VideoClubOnlineData
+import com.example.proyecto_eduardo_andres.viewData.ListaSeriesData.SeriesData
+import com.example.proyecto_eduardo_andres.viewData.ListaSeriesData.VideoClubOnlineData
+import com.example.proyecto_eduardo_andres.R
 
 /**
  * @author Eduardo
@@ -59,7 +62,7 @@ fun MovieList(
                 if (movie.imagen != null) {
                     Image(
                         painter = painterResource(id = movie.imagen),
-                        contentDescription = movie.nombreSerie,
+                        contentDescription = stringResource(movie.nombreSerie),
                         modifier = Modifier
                             .size(64.dp)
                             .clip(RoundedCornerShape(8.dp)),
@@ -72,14 +75,14 @@ fun MovieList(
                             .background(Color.Gray, RoundedCornerShape(8.dp)),
                         contentAlignment = Alignment.Center
                     ) {
-                        Text("Img", color = Color.White, fontSize = 12.sp)
+                        Text(stringResource(R.string.img), color = Color.White, fontSize = 12.sp)
                     }
                 }
 
                 Spacer(modifier = Modifier.width(16.dp))
                 Column {
-                    Text(text = movie.nombreSerie, fontSize = 20.sp, color = Color.Black)
-                    Text(text = movie.nombreCategoria, fontSize = 12.sp, color = Color.DarkGray)
+                    Text(text = stringResource(movie.nombreSerie), fontSize = 20.sp, color = Color.Black)
+                    Text(text = stringResource(movie.nombreCategoria), fontSize = 12.sp, color = Color.DarkGray)
                 }
             }
         }
@@ -92,12 +95,14 @@ fun VideoClubScreenPreview() {
     val seriesData = SeriesData()
     var searchQuery by remember { mutableStateOf(TextFieldValue("")) }
 
-    val seriesFiltrada = buscarPeliculas(seriesData.nombreSeries, searchQuery.text)
+    //Llamada a buscarSeries dentro del composable
+    val seriesFiltrada = buscarSeries(seriesData.nombreSeries, searchQuery.text)
 
-    Column(modifier = Modifier
-        .fillMaxSize()
-        .padding(16.dp)) {
-
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp)
+    ) {
         SearchBar(searchQuery = searchQuery, onQueryChange = { searchQuery = it })
         Spacer(modifier = Modifier.height(16.dp))
         MovieList(series = seriesFiltrada)

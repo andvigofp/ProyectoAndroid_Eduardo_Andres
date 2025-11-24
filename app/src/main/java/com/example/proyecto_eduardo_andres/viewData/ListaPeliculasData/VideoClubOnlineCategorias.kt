@@ -1,4 +1,4 @@
-package com.example.proyecto_eduardo_andres.myComponents.componenteVideoClubListaPeliculas
+package com.example.proyecto_eduardo_andres.viewData.ListaPeliculasData
 
 import androidx.compose.ui.graphics.Color
 
