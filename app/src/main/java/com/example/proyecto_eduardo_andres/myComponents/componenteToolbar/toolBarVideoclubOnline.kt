@@ -1,3 +1,4 @@
+@file:Suppress("ALL")
 package com.example.proyecto_eduardo_andres.myComponents.componenteToolbar
 
 import androidx.compose.foundation.background
@@ -28,10 +29,12 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import com.example.proyecto_eduardo_andres.R
 
 /**
  * @author Andrés
@@ -80,7 +83,7 @@ fun toolBarVideoClubOnline(
             ) {
                 Icon(
                     imageVector = Icons.Default.Menu,
-                    contentDescription = "Menú",
+                    contentDescription = stringResource(R.string.menu_option),
                     tint = iconColor,
                     modifier = Modifier.size(28.dp)
                 )
@@ -91,35 +94,35 @@ fun toolBarVideoClubOnline(
                 IconButton(onClick = onHomeClick) {
                     Icon(
                         Icons.Default.Home,
-                        contentDescription = "Inicio",
+                        contentDescription = stringResource(R.string.inicio),
                         tint = iconColor
                     )
                 }
                 IconButton(onClick = onSearchClick) {
                     Icon(
                         Icons.Default.Search,
-                        contentDescription = "Buscar",
+                        contentDescription = stringResource(R.string.buscar),
                         tint = iconColor
                     )
                 }
                 IconButton(onClick = onCameraClick) {
                     Icon(
                         Icons.Default.CameraAlt,
-                        contentDescription = "Cámara",
+                        contentDescription = stringResource(R.string.camara),
                         tint = iconColor
                     )
                 }
                 IconButton(onClick = onProfileClick) {
                     Icon(
                         Icons.Default.Person,
-                        contentDescription = "Perfil",
+                        contentDescription = stringResource(R.string.perfil),
                         tint = iconColor
                     )
                 }
                 IconButton(onClick = onLogoutClick) {
                     Icon(
                         Icons.Default.ExitToApp,
-                        contentDescription = "Salir",
+                        contentDescription = stringResource(R.string.salir),
                         tint = iconColor
                     )
                 }

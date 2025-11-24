@@ -1,3 +1,4 @@
+@file:Suppress("ALL")
 package com.example.proyecto_eduardo_andres.myComponents.componenteVideoClubListaPeliculas
 
 import androidx.compose.foundation.layout.Arrangement
@@ -14,11 +15,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.proyecto_eduardo_andres.myComponents.componenteVideoClubOnlieSeries.VideoClubOnlineCategoriasData
+import com.example.proyecto_eduardo_andres.viewData.ListaSeriesData.VideoClubOnlineCategoriasData
+import com.example.proyecto_eduardo_andres.R
 
 /**
  * @author Andres
@@ -29,10 +32,10 @@ import com.example.proyecto_eduardo_andres.myComponents.componenteVideoClubOnlie
 fun VideoClubCategoriasBotones() {
     // Lista de categorías usando el data class
     val categorias = listOf(
-        VideoClubOnlineCategoriasData("DRAMA", MaterialTheme.colorScheme.primary),
-        VideoClubOnlineCategoriasData("ACCIÓN", MaterialTheme.colorScheme.secondary),
-        VideoClubOnlineCategoriasData("TERROR", MaterialTheme.colorScheme.error),
-        VideoClubOnlineCategoriasData("DIBUJOS", MaterialTheme.colorScheme.tertiary)
+        VideoClubOnlineCategoriasData(R.string.drama, MaterialTheme.colorScheme.primary),
+        VideoClubOnlineCategoriasData(R.string.accion, MaterialTheme.colorScheme.secondary),
+        VideoClubOnlineCategoriasData(R.string.terror, MaterialTheme.colorScheme.error),
+        VideoClubOnlineCategoriasData(R.string.dibujos, MaterialTheme.colorScheme.tertiary)
     )
 
     // Solo el LazyRow con los botones de categorías
@@ -56,7 +59,7 @@ fun VideoClubCategoriasBotones() {
                     .shadow(4.dp)
             ) {
                 Text(
-                    text = nombre,
+                    text = stringResource(nombre),
                     fontSize = 18.sp,
                     fontWeight = FontWeight.Bold
                 )

@@ -1,4 +1,4 @@
-package com.example.proyecto_eduardo_andres.myComponents.componenteSearchSeries
+package com.example.proyecto_eduardo_andres.viewData.SearchSeriesData
 
 data class VideoClubOnlineSearchSeriesData(
     val nombreCategoria: String = "",

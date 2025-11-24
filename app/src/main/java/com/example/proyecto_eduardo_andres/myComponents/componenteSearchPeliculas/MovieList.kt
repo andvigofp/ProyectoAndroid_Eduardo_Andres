@@ -1,3 +1,4 @@
+@file:Suppress("ALL")
 package com.example.proyecto_eduardo_andres.myComponents.componenteSearchPeliculas
 
 import androidx.compose.foundation.Image
@@ -28,12 +29,14 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.proyecto_eduardo_andres.myComponents.componenteVideoClubListaPeliculas.PeliculasData
-import com.example.proyecto_eduardo_andres.myComponents.componenteVideoClubListaPeliculas.VideoClubOnlinePeliculasData
+import com.example.proyecto_eduardo_andres.viewData.ListaPeliculasData.PeliculasData
+import com.example.proyecto_eduardo_andres.viewData.ListaPeliculasData.VideoClubOnlinePeliculasData
+import com.example.proyecto_eduardo_andres.R
 
 /**
  * @author Eduardo
@@ -59,7 +62,7 @@ fun MovieList(
                 if (movie.imagen != null) {
                     Image(
                         painter = painterResource(id = movie.imagen),
-                        contentDescription = movie.nombrePelicula,
+                        contentDescription = stringResource(movie.nombrePelicula),
                         modifier = Modifier
                             .size(64.dp)
                             .clip(RoundedCornerShape(8.dp)),
@@ -72,14 +75,14 @@ fun MovieList(
                             .background(Color.Gray, RoundedCornerShape(8.dp)),
                         contentAlignment = Alignment.Center
                     ) {
-                        Text("Img", color = Color.White, fontSize = 12.sp)
+                        Text(stringResource(R.string.img), color = Color.White, fontSize = 12.sp)
                     }
                 }
 
                 Spacer(modifier = Modifier.width(16.dp))
                 Column {
-                    Text(text = movie.nombrePelicula, fontSize = 20.sp, color = Color.Black)
-                    Text(text = movie.nombreCategoria, fontSize = 12.sp, color = Color.DarkGray)
+                    Text(text = stringResource(movie.nombrePelicula), fontSize = 20.sp, color = Color.Black)
+                    Text(text = stringResource(movie.nombreCategoria), fontSize = 12.sp, color = Color.DarkGray)
                 }
             }
         }

@@ -1,3 +1,4 @@
+@file:Suppress("ALL")
 package com.example.proyecto_eduardo_andres.pages
 
 import androidx.compose.foundation.Image
@@ -36,6 +37,7 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -43,7 +45,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.proyecto_eduardo_andres.myComponents.componenteMenu.VideoClubMenuDrawer
 import com.example.proyecto_eduardo_andres.myComponents.componenteToolbar.toolBarVideoClubOnline
-import com.example.proyecto_eduardo_andres.myComponents.componenteVideoClubListaPeliculas.PeliculasData
+import com.example.proyecto_eduardo_andres.viewData.ListaPeliculasData.PeliculasData
 import com.example.proyecto_eduardo_andres.myComponents.componenteVideoClubListaPeliculas.VideoClubCategoriasBotones
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -109,7 +111,7 @@ fun VideoClubOnlinePeliculasScreen() {
                             modifier = Modifier.fillMaxWidth()
                         ) {
                             Text(
-                                text = categoria,
+                                text = stringResource( categoria),
                                 fontSize = 22.sp,
                                 fontWeight = FontWeight.Bold,
                                 color = MaterialTheme.colorScheme.primary,
@@ -137,7 +139,7 @@ fun VideoClubOnlinePeliculasScreen() {
                                             pelicula.imagen?.let {
                                                 Image(
                                                     painter = painterResource(id = it),
-                                                    contentDescription = pelicula.nombrePelicula,
+                                                    contentDescription = stringResource(pelicula.nombrePelicula),
                                                     contentScale = ContentScale.Crop,
                                                     modifier = Modifier.fillMaxSize()
                                                 )
@@ -149,7 +151,7 @@ fun VideoClubOnlinePeliculasScreen() {
                                             )
                                         }
                                         Text(
-                                            text = pelicula.nombrePelicula,
+                                            text = stringResource(pelicula.nombrePelicula),
                                             color = MaterialTheme.colorScheme.onBackground,
                                             fontSize = 14.sp,
                                             fontWeight = FontWeight.Medium,

@@ -1,3 +1,4 @@
+@file:Suppress("ALL")
 package com.example.proyecto_eduardo_andres.myComponents.componenteAlquilarDevolverPeliculas
 
 import androidx.compose.foundation.Image
@@ -98,8 +99,6 @@ fun AlquilerDevolverPeliculas(
         }
     }
 }
-
-
 
 @Preview(showBackground = true, showSystemUi = true)
 @Composable

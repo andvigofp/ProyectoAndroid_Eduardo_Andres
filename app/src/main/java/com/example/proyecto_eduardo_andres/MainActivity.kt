@@ -11,7 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.compose.Proyecto_Eduardo_AndresTheme
-import com.example.proyecto_eduardo_andres.myComponents.componenteQR.QRData
+import com.example.proyecto_eduardo_andres.viewData.QRData.QRData
 import com.example.proyecto_eduardo_andres.pages.AlquilarDevolverPeliculasScreen
 import com.example.proyecto_eduardo_andres.pages.AlquilerDevolverSeriesScreen
 import com.example.proyecto_eduardo_andres.pages.CamaraScreen

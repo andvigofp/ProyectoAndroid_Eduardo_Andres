@@ -1,3 +1,4 @@
+@file:Suppress("ALL")
 package com.example.proyecto_eduardo_andres.pages
 
 import androidx.compose.foundation.background
@@ -12,11 +13,13 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.proyecto_eduardo_andres.myComponents.componenteQR.QRData
+import com.example.proyecto_eduardo_andres.viewData.QRData.QRData
 import com.example.proyecto_eduardo_andres.myComponents.componenteQR.QRView
 import com.example.proyecto_eduardo_andres.myComponents.componenteToolbar.toolBar
+import com.example.proyecto_eduardo_andres.R
 
 @Composable
 fun QRScreen(
@@ -71,7 +74,7 @@ fun QRScreen(
 @Composable
 fun QRScreenPreview() {
     QRScreen(
-        qrData = QRData("https://ejemplo.com"),
+        qrData = QRData(stringResource( R.string.qrData)),
         onBackClick = {},
         onHomeClick = {},
         onCameraClick = {},

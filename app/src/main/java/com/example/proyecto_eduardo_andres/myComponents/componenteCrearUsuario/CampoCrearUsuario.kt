@@ -1,3 +1,4 @@
+@file:Suppress("ALL")
 package com.example.proyecto_eduardo_andres.myComponents.componeneteCrearUsuario
 
 import androidx.compose.foundation.layout.Arrangement

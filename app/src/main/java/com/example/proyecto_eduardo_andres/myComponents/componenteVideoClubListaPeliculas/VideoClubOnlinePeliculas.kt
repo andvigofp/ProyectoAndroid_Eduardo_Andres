@@ -30,11 +30,14 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.proyecto_eduardo_andres.R
+import com.example.proyecto_eduardo_andres.viewData.ListaPeliculasData.PeliculasData
 
 /**
  * @author Andres
@@ -70,7 +73,7 @@ fun VideoClubOnlinePeliculas() {
                     ) {
                         // Título de la categoría
                         Text(
-                            text = categoria,
+                            text = stringResource(categoria),
                             fontSize = 22.sp,
                             fontWeight = FontWeight.Bold,
                             color = MaterialTheme.colorScheme.primary,
@@ -101,20 +104,20 @@ fun VideoClubOnlinePeliculas() {
                                         pelicula.imagen?.let {
                                             Image(
                                                 painter = painterResource(id = it),
-                                                contentDescription = pelicula.nombrePelicula,
+                                                contentDescription = stringResource(pelicula.nombrePelicula),
                                                 contentScale = ContentScale.Crop,
                                                 modifier = Modifier.fillMaxSize()
                                             )
                                         } ?: Icon(
                                             imageVector = Icons.Default.Movie,
-                                            contentDescription = "Sin imagen",
+                                            contentDescription = stringResource(R.string.sin_imagen),
                                             tint = Color.Gray,
                                             modifier = Modifier.size(48.dp)
                                         )
                                     }
 
                                     Text(
-                                        text = pelicula.nombrePelicula,
+                                        text = stringResource(pelicula.nombrePelicula),
                                         color = MaterialTheme.colorScheme.onBackground,
                                         fontSize = 14.sp,
                                         fontWeight = FontWeight.Medium,

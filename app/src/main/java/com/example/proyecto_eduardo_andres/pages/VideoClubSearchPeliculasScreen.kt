@@ -1,3 +1,4 @@
+@file:Suppress("ALL")
 package com.example.proyecto_eduardo_andres.pages
 
 import androidx.compose.foundation.Image
@@ -32,6 +33,7 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
@@ -40,7 +42,8 @@ import androidx.compose.ui.unit.sp
 import com.example.proyecto_eduardo_andres.myComponents.componenteSearchPeliculas.SearchBar
 import com.example.proyecto_eduardo_andres.myComponents.componenteSearchPeliculas.buscarPeliculas
 import com.example.proyecto_eduardo_andres.myComponents.componenteToolbar.toolBar
-import com.example.proyecto_eduardo_andres.myComponents.componenteVideoClubListaPeliculas.PeliculasData
+import com.example.proyecto_eduardo_andres.viewData.ListaPeliculasData.PeliculasData
+import com.example.proyecto_eduardo_andres.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -113,7 +116,7 @@ fun VideoClubSearchPeliculasScreen() {
                         if (movie.imagen != null) {
                             Image(
                                 painter = painterResource(id = movie.imagen),
-                                contentDescription = movie.nombrePelicula,
+                                contentDescription = stringResource(movie.nombrePelicula),
                                 modifier = Modifier
                                     .size(64.dp)
                                     .clip(RoundedCornerShape(8.dp)),
@@ -126,20 +129,20 @@ fun VideoClubSearchPeliculasScreen() {
                                     .background(Color.Gray, RoundedCornerShape(8.dp)),
                                 contentAlignment = Alignment.Center
                             ) {
-                                Text("Img", color = Color.White, fontSize = 12.sp)
+                                Text(stringResource(R.string.img), color = Color.White, fontSize = 12.sp)
                             }
                         }
 
                         Spacer(modifier = Modifier.width(16.dp))
                         Column {
                             Text(
-                                text = movie.nombrePelicula,
+                                text = stringResource(movie.nombrePelicula),
                                 fontSize = 16.sp,
                                 fontWeight = FontWeight.Medium,
                                 color = Color.Black
                             )
                             Text(
-                                text = movie.nombreCategoria,
+                                text = stringResource(movie.nombreCategoria),
                                 fontSize = 12.sp,
                                 color = Color.DarkGray
                             )

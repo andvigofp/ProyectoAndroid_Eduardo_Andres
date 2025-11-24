@@ -1,3 +1,4 @@
+@file:Suppress("ALL")
 package com.example.proyecto_eduardo_andres.pages
 
 import androidx.compose.foundation.Image
@@ -32,15 +33,17 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.proyecto_eduardo_andres.R
 import com.example.proyecto_eduardo_andres.myComponents.componenteSearchSeries.SearchBar
-import com.example.proyecto_eduardo_andres.myComponents.componenteSearchSeries.buscarPeliculas
+import com.example.proyecto_eduardo_andres.myComponents.componenteSearchSeries.buscarSeries
 import com.example.proyecto_eduardo_andres.myComponents.componenteToolbar.toolBar
-import com.example.proyecto_eduardo_andres.myComponents.componenteVideoClubOnlieSeries.SeriesData
+import com.example.proyecto_eduardo_andres.viewData.ListaSeriesData.SeriesData
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -48,7 +51,7 @@ fun VideoClubSearchSeriesScreen() {
     val seriesData = SeriesData()
     var searchQuery by remember { mutableStateOf(TextFieldValue("")) }
 
-    val seriesFiltrada = buscarPeliculas(seriesData.nombreSeries, searchQuery.text)
+    val seriesFiltrada = buscarSeries(seriesData.nombreSeries, searchQuery.text)
 
     //Mismo degradado que en el toolbar (status bar + toolbar)
     val toolbarBackGround = Brush.linearGradient(
@@ -112,7 +115,7 @@ fun VideoClubSearchSeriesScreen() {
                         if (serie.imagen != null) {
                             Image(
                                 painter = painterResource(id = serie.imagen),
-                                contentDescription = serie.nombreSerie,
+                                contentDescription = stringResource(serie.nombreSerie),
                                 modifier = Modifier
                                     .size(64.dp)
                                     .clip(RoundedCornerShape(8.dp)),
@@ -125,20 +128,20 @@ fun VideoClubSearchSeriesScreen() {
                                     .background(Color.Gray, RoundedCornerShape(8.dp)),
                                 contentAlignment = Alignment.Center
                             ) {
-                                Text("Img", color = Color.White, fontSize = 12.sp)
+                                Text(stringResource(R.string.img), color = Color.White, fontSize = 12.sp)
                             }
                         }
 
                         Spacer(modifier = Modifier.width(16.dp))
                         Column {
                             Text(
-                                text = serie.nombreSerie,
+                                text = stringResource(serie.nombreSerie),
                                 fontSize = 16.sp,
                                 fontWeight = FontWeight.Medium,
                                 color = Color.Black
                             )
                             Text(
-                                text = serie.nombreCategoria,
+                                text = stringResource(serie.nombreCategoria),
                                 fontSize = 12.sp,
                                 color = Color.DarkGray
                             )

@@ -1,3 +1,4 @@
+@file:Suppress("ALL")
 package com.example.proyecto_eduardo_andres.myComponents.componenteLogin
 
 import androidx.compose.foundation.layout.Arrangement
