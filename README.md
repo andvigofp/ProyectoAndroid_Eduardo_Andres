@@ -157,6 +157,3 @@ _Aquí puedes añadir tus imágenes cuando las exportes desde Android Studio:_
    └── perfil_usuario.png
 
 
-Ejemplo de inserción en Markdown:
-
-![Pantalla principal](screenshots/catalogo_peliculas.png)
