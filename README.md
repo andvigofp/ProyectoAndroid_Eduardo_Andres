@@ -1,310 +1,162 @@
-# \# 🎬 VideoClub Online
+# VideoClub Online
 
-# \### Proyecto del equipo: \*\*Andrés Fernández Pereira y Eduardo Pérez García\*\*
+### Proyecto del equipo: Andrés Fernández Pereira y Eduardo Pérez García
 
-# \*\*Equipo\_ANDROIDE\*\*
+Equipo_ANDROIDE
 
-# 
+---
 
-# ---
+## 1. Toolbar
 
-# 
+La Toolbar es el componente superior de la aplicación VideoClub Online, desarrollada con Jetpack Compose.  
+Cumple la función de ofrecer una navegación rápida entre las principales secciones de la app.
 
-# \## 🧩 1 - Toolbar
+### Características
 
-# 
+- Diseñada con Jetpack Compose utilizando `Box` y `Row` para la disposición de los elementos.  
+- Presenta un degradado de color (de azul oscuro a violeta) que da un aspecto moderno y visualmente atractivo.  
+- Incluye cinco funciones principales:
+  - Inicio: lleva al usuario a la pantalla principal.  
+  - Cámara: permite acceder a la sección de cámara y QR.  
+  - Perfil: abre la información del usuario.  
+  - Salir: cierra sesión o retorna a la pantalla de inicio.  
+  - Volver: retrocede a la pantalla anterior.  
+- Cada función usa un color azul oscuro, violeta oscuro (colorAzulOscuro, colorVioletaOscuro) que contrasta con el fondo degradado.  
+- Se fusiona visualmente con la zona del reloj (ambas comparten el mismo fondo degradado).  
+- Optimizada para usarse dentro de un `Scaffold`, permaneciendo fija en la parte superior de la interfaz.
 
-# La \*\*Toolbar\*\* es el componente superior de la aplicación \*\*VideoClub Online\*\*, desarrollada con \*\*Jetpack Compose\*\*.  
+---
 
-# Cumple la función de ofrecer una navegación rápida entre las principales secciones de la app.
+## 2. Funciones principales
 
-# 
+### Catálogo de películas
 
-# \### 🔧 Características:
+- Películas agrupadas por categoría (Drama, Comedia, Acción, etc.).  
+- Cada grupo tiene un título visible.  
+- Visualización de todas las películas disponibles para alquilar.  
+- Filtros por género, año, popularidad y novedades.  
+- Búsqueda rápida por título o actor.  
 
-# \- Diseñada con \*Jetpack Compose\* utilizando \*\*Box\*\* y \*\*Row\*\* para la disposición de los elementos.  
+### Alquiler de películas
 
-# \- Presenta un \*\*degradado de color (de azul oscuro a violeta)\*\* que da un aspecto moderno y visualmente atractivo.  
+- Selección de una película para alquilar.  
+- Confirmación del alquiler con duración predeterminada (por ejemplo, 48 horas).  
+- Visualización del estado del alquiler (activo, vencido).  
 
-# \- Incluye cinco iconos interactivos:
+### Devolución de películas
 
-# &nbsp; - 🏠 \*\*Inicio:\*\* lleva al usuario a la pantalla principal.  
+- Opción para marcar una película como devuelta.  
+- Registro automático de la devolución para liberar la película.  
+- Permite nuevos alquileres tras la devolución.  
 
-# &nbsp; - 🎥 \*\*Cámara:\*\* permite acceder a la sección de cámara y QR.  
+### Gestión de usuario
 
-# &nbsp; - 👤 \*\*Perfil:\*\* abre la información del usuario.  
+- Registro e inicio de sesión.  
+- Historial de alquileres (actuales y pasados).  
+- Información personal y configuración de preferencias.  
+- Perfil del usuario con opción de modificar datos.
 
-# &nbsp; - 🚪 \*\*Salir:\*\* cierra sesión o retorna a la pantalla de inicio.  
+---
 
-# &nbsp; - 🔙 \*\*Volver:\*\* retrocede a la pantalla anterior.  
+## 3. Navegación y uso de la app
 
-# \- Cada icono usa un color \*\*amarillo dorado (#FFC107)\*\* que contrasta con el fondo degradado.  
+### Inicio
 
-# \- Se fusiona visualmente con la zona del reloj (ambas comparten el mismo fondo degradado).  
+- Al abrir la app, se muestra el catálogo principal de películas.  
+- El usuario puede usar buscador o filtros para encontrar películas.  
 
-# \- Optimizada para usarse dentro de un \*\*Scaffold\*\*, permaneciendo fija en la parte superior de la interfaz.
+### Alquilar una película
 
-# 
+1. Selecciona una película.  
+2. Pulsa el botón "Alquilar".  
+3. Se muestra un resumen y la duración del alquiler.  
+4. Confirma la operación.  
+5. La película se agrega a la lista de alquileres activos.
 
-# ---
+### Ver películas alquiladas
 
-# 
+- Desde el menú principal, accede a "Mis alquileres".  
+- Muestra todas las películas activas con la fecha de vencimiento.  
+- Desde aquí se puede reproducir o devolver la película.
 
-# \## 🎞️ 2 - Funciones principales
+### Devolver una película
 
-# 
+1. Selecciona la película en “Mis alquileres”.  
+2. Pulsa "Devolver película".  
+3. El sistema actualiza el estado y libera la película.  
+4. La devolución queda registrada en el historial.
 
-# \### 🎥 Catálogo de películas
+---
 
-# \- Películas agrupadas por categoría (Drama, Comedia, Acción, etc.).  
+## 4. Cámara y QR
 
-# \- Cada grupo tiene un título visible.  
+- La app incluye acceso rápido a la cámara desde la Toolbar.  
+- Permite realizar fotos o escanear códigos QR.  
+- Dispone de un diseño limpio con botones grandes y colores del tema Material 3.  
+- Los botones principales:
+  - Hacer foto
+  - QR
 
-# \- Visualización de todas las películas disponibles para alquilar.  
+---
 
-# \- Filtros por \*\*género, año, popularidad y novedades\*\*.  
+## 5. Diseño general
 
-# \- Búsqueda rápida por título o actor.  
+- Uso de colores temáticos de MaterialTheme.colorScheme.  
+- Scroll vertical y horizontal adaptado a cada pantalla.  
+- Diferentes paletas de color por pantalla para mantener variedad visual.  
+- Compatible con Material Design 3, usando tipografía y esquemas dinámicos.  
 
-# 
+---
 
-# \### 📽️ Alquiler de películas
+## 6. Pantallas incluidas
 
-# \- Selección de una película para alquilar.  
+- Pantalla Login  
+- Pantalla Crear Usuario  
+- Pantalla Recuperar Contraseña  
+- Pantalla Home (Catálogo principal)  
+- Pantalla Descripción de película  
+- Pantalla Devolver película  
+- Pantalla Perfil Usuario  
+- Pantalla Modificar Usuario  
+- Pantalla Cámara de fotos  
+- Pantalla QR  
 
-# \- Confirmación del alquiler con duración predeterminada (por ejemplo, 48 horas).  
+---
 
-# \- Visualización del estado del alquiler (\*activo, vencido\*).  
+## 7. Resumen
 
-# 
+La app VideoClub Online moderniza la experiencia tradicional del videoclub: permite buscar, alquilar y devolver películas fácilmente desde un dispositivo Android.  
+Su diseño visual con Jetpack Compose, colores dinámicos y navegación fluida ofrece una experiencia intuitiva, atractiva y moderna para el usuario.
 
-# \### 🔁 Devolución de películas
+---
 
-# \- Opción para \*\*marcar una película como devuelta\*\*.  
+## 8. Tecnologías utilizadas
 
-# \- Registro automático de la devolución para liberar la película.  
+| Tecnología | Descripción |
+|-------------|-------------|
+| Kotlin | Lenguaje principal de desarrollo. |
+| Jetpack Compose | Framework declarativo de UI para Android. |
+| Material Design 3 | Sistema de diseño moderno y adaptable usado para tipografía, colores y componentes. |
+| JSON / XML | Almacenamiento y manejo de datos locales. |
+| Scaffold | Estructura base para la disposición de pantallas (TopBar, BottomBar, contenido). |
+| Componentes personalizados | Toolbar, botones, formularios, vistas de cámara, etc. |
+| Android Studio Giraffe / Koala | Entorno de desarrollo integrado (IDE). |
 
-# \- Permite nuevos alquileres tras la devolución.  
+---
 
-# 
+## 9. Capturas de pantalla
 
-# \### 👤 Gestión de usuario
+_Aquí puedes añadir tus imágenes cuando las exportes desde Android Studio:_
 
-# \- Registro e inicio de sesión.  
 
-# \- Historial de alquileres (actuales y pasados).  
+/screenshots
+   ├── toolbar.png
+   ├── catalogo_peliculas.png
+   ├── camara.png
+   ├── alquiler_pelicula.png
+   └── perfil_usuario.png
 
-# \- Información personal y configuración de preferencias.  
 
-# \- Perfil del usuario con opción de modificar datos.
+Ejemplo de inserción en Markdown:
 
-# 
-
-# ---
-
-# 
-
-# \## 🧭 3 - Navegación y uso de la app
-
-# 
-
-# \### 🚀 Inicio
-
-# \- Al abrir la app, se muestra el \*\*catálogo principal\*\* de películas.  
-
-# \- El usuario puede usar \*\*buscador o filtros\*\* para encontrar películas.  
-
-# 
-
-# \### 🎬 Alquilar una película
-
-# 1\. Selecciona una película.  
-
-# 2\. Pulsa el botón \*\*“Alquilar”\*\*.  
-
-# 3\. Se muestra un resumen y la duración del alquiler.  
-
-# 4\. Confirma la operación.  
-
-# 5\. La película se agrega a la lista de alquileres activos.
-
-# 
-
-# \### 🎞️ Ver películas alquiladas
-
-# \- Desde el menú principal, accede a \*\*“Mis alquileres”\*\*.  
-
-# \- Muestra todas las películas activas con la fecha de vencimiento.  
-
-# \- Desde aquí se puede \*\*reproducir o devolver\*\* la película.
-
-# 
-
-# \### 🔄 Devolver una película
-
-# 1\. Selecciona la película en “Mis alquileres”.  
-
-# 2\. Pulsa \*\*“Devolver película”\*\*.  
-
-# 3\. El sistema actualiza el estado y libera la película.  
-
-# 4\. La devolución queda registrada en el historial.
-
-# 
-
-# ---
-
-# 
-
-# \## 📸 4 - Cámara y QR
-
-# 
-
-# \- La app incluye acceso rápido a la \*\*cámara\*\* desde la Toolbar.  
-
-# \- Permite realizar fotos o escanear \*\*códigos QR\*\*.  
-
-# \- Dispone de un diseño limpio con botones grandes y colores del tema Material 3.  
-
-# \- Los botones principales:
-
-# &nbsp; - 📷 \*\*Hacer foto\*\*
-
-# &nbsp; - 🔲 \*\*QR\*\*
-
-# 
-
-# ---
-
-# 
-
-# \## 🌈 5 - Diseño general
-
-# 
-
-# \- Uso de \*\*colores temáticos de MaterialTheme.colorScheme\*\*.  
-
-# \- \*\*Scroll vertical y horizontal\*\* adaptado a cada pantalla.  
-
-# \- Diferentes \*\*paletas de color por pantalla\*\* para mantener variedad visual.  
-
-# \- Compatible con \*\*Material Design 3\*\*, usando tipografía y esquemas dinámicos.  
-
-# 
-
-# ---
-
-# 
-
-# \## 🖼️ 6 - Pantallas incluidas
-
-# 
-
-# \- 🏠 \*\*Pantalla Login\*\*  
-
-# \- ➕ \*\*Pantalla Crear Usuario\*\*  
-
-# \- 🔑 \*\*Pantalla Recuperar Contraseña\*\*  
-
-# \- 🎬 \*\*Pantalla Home (Catálogo principal)\*\*  
-
-# \- 📄 \*\*Pantalla Descripción de película\*\*  
-
-# \- 🔁 \*\*Pantalla Devolver película\*\*  
-
-# \- 👤 \*\*Pantalla Perfil Usuario\*\*  
-
-# \- ✏️ \*\*Pantalla Modificar Usuario\*\*  
-
-# \- 📸 \*\*Pantalla Cámara de fotos\*\*  
-
-# \- 🔳 \*\*Pantalla QR\*\*  
-
-# 
-
-# ---
-
-# 
-
-# \## 🧩 7 - Resumen
-
-# 
-
-# La app \*\*VideoClub Online\*\* moderniza la experiencia tradicional del videoclub:  
-
-# permite buscar, alquilar y devolver películas fácilmente desde un dispositivo Android.  
-
-# Su diseño visual con \*\*Jetpack Compose\*\*, colores dinámicos y navegación fluida ofrece una experiencia intuitiva, atractiva y moderna para el usuario.
-
-# 
-
-# ---
-
-# 
-
-# \## 🧰 8 - Tecnologías utilizadas
-
-# 
-
-# | Tecnología | Descripción |
-
-# |-------------|-------------|
-
-# | 🧠 \*\*Kotlin\*\* | Lenguaje principal de desarrollo. |
-
-# | 🎨 \*\*Jetpack Compose\*\* | Framework declarativo de UI para Android. |
-
-# | 🧱 \*\*Material Design 3\*\* | Sistema de diseño moderno y adaptable usado para tipografía, colores y componentes. |
-
-# | 💾 \*\*JSON / XML\*\* | Almacenamiento y manejo de datos locales. |
-
-# | 📂 \*\*Scaffold\*\* | Estructura base para la disposición de pantallas (TopBar, BottomBar, contenido). |
-
-# | 🧩 \*\*Componentes personalizados\*\* | Toolbar, botones, formularios, vistas de cámara, etc. |
-
-# | 📱 \*\*Android Studio Giraffe / Koala\*\* | Entorno de desarrollo integrado (IDE). |
-
-# 
-
-# ---
-
-# 
-
-# \## 📸 9 - Capturas de pantalla
-
-# 
-
-# \_Aquí puedes añadir tus imágenes cuando las exportes desde Android Studio:\_
-
-# 
-
-# ```
-
-# 📁 /screenshots
-
-# &nbsp;  ├── toolbar.png
-
-# &nbsp;  ├── catalogo\_peliculas.png
-
-# &nbsp;  ├── camara.png
-
-# &nbsp;  ├── alquiler\_pelicula.png
-
-# &nbsp;  └── perfil\_usuario.png
-
-# ```
-
-# 
-
-# Ejemplo de inserción en Markdown:
-
-# 
-
-# ```markdown
-
-# !\[Pantalla principal](screenshots/catalogo\_peliculas.png)
-
-# ```
-
-
-
+![Pantalla principal](screenshots/catalogo_peliculas.png)
