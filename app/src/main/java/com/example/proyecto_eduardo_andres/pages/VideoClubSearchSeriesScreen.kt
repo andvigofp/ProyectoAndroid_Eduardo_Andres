@@ -39,6 +39,10 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.compose.coloAuzlClaro
+import com.example.compose.colorAzulOscurso
+import com.example.compose.colorAzulSuave
+import com.example.compose.colorVioleta
 import com.example.proyecto_eduardo_andres.R
 import com.example.proyecto_eduardo_andres.myComponents.componenteSearchSeries.SearchBar
 import com.example.proyecto_eduardo_andres.myComponents.componenteSearchSeries.buscarSeries
@@ -53,9 +57,12 @@ fun VideoClubSearchSeriesScreen() {
 
     val seriesFiltrada = buscarSeries(seriesData.nombreSeries, searchQuery.text)
 
-    //Mismo degradado que en el toolbar (status bar + toolbar)
+    // Degradado del toolbar
     val toolbarBackGround = Brush.linearGradient(
-        colors = listOf(Color(0xFF0D47A1), Color(0xFF512DA8)),
+        colors = listOf(
+            colorVioleta,
+            colorAzulOscurso
+        ),
         start = Offset(0f, 0f),
         end = Offset(1000f, 1000f)
     )
@@ -63,19 +70,17 @@ fun VideoClubSearchSeriesScreen() {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color(0xFFE3F2FD)) // color de fondo general
+            .background(colorAzulSuave) // fondo general
     ) {
-        //TOOLBAR SUPERIOR con área del reloj teñida del mismo degradado ---
+        // --- TOOLBAR SUPERIOR ---
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .background(toolbarBackGround) // mismo degradado para todo el bloque
-                .statusBarsPadding() // respeta la barra de estado
+                .background(toolbarBackGround)
+                .statusBarsPadding()
         ) {
             Column {
-                // espacio de la barra de estado (reloj)
                 Spacer(modifier = Modifier.height(24.dp))
-                // toolbar (tu componente)
                 toolBar(
                     onBackClick = {},
                     onHomeClick = {},
@@ -86,7 +91,7 @@ fun VideoClubSearchSeriesScreen() {
             }
         }
 
-        //CONTENIDO: Búsqueda y Lista ---
+        // --- CONTENIDO PRINCIPAL: búsqueda y lista ---
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -99,7 +104,6 @@ fun VideoClubSearchSeriesScreen() {
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            //Lista de series con scroll vertical ---
             LazyColumn(
                 verticalArrangement = Arrangement.spacedBy(12.dp),
                 modifier = Modifier.fillMaxSize()
@@ -109,7 +113,7 @@ fun VideoClubSearchSeriesScreen() {
                         verticalAlignment = Alignment.CenterVertically,
                         modifier = Modifier
                             .fillMaxWidth()
-                            .background(Color(0xFFBBDEFB), RoundedCornerShape(12.dp)) // tarjeta azul suave
+                            .background(coloAuzlClaro, RoundedCornerShape(12.dp)) // ← aquí cambias el color
                             .padding(8.dp)
                     ) {
                         if (serie.imagen != null) {
@@ -133,6 +137,7 @@ fun VideoClubSearchSeriesScreen() {
                         }
 
                         Spacer(modifier = Modifier.width(16.dp))
+
                         Column {
                             Text(
                                 text = stringResource(serie.nombreSerie),

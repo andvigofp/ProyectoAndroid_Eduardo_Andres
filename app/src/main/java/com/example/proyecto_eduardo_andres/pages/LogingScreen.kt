@@ -4,8 +4,10 @@ package com.example.proyecto_eduardo_andres.pages
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -21,6 +23,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.compose.colorAzulOscurso
+import com.example.compose.colorVioleta
 import com.example.proyecto_eduardo_andres.R
 import com.example.proyecto_eduardo_andres.myComponents.componenteLogin.LoginButtons
 import com.example.proyecto_eduardo_andres.myComponents.componenteLogin.CamposLogin
@@ -35,61 +39,57 @@ fun LogingScreen(
     onRecuperarPasswordClick: () -> Unit
 ) {
     var loginData by remember { mutableStateOf(LoginData()) }
+    val scrollState = rememberScrollState()
 
     Box(
         modifier = Modifier
             .fillMaxSize()
             .background(Color.White)
     ) {
-        // Degradado superior (toolbar)
+        // --- Degradado superior (toolbar) ---
         Box(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(220.dp)
                 .background(
                     Brush.verticalGradient(
-                        listOf(
-                            Color(0xFF3F51B5),
-                            Color(0xFF512DA8)
-                        )
+                        listOf(colorVioleta, colorAzulOscurso)
                     )
                 )
-        )
+            )
 
-        // Degradado inferior (background detrás de los botones)
+        // --- Degradado inferior (detrás de botones / bottom bar) ---
         Box(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(180.dp)
-                .align(Alignment.BottomCenter) // Pegado al fondo
+                .align(Alignment.BottomCenter)
                 .background(
                     Brush.verticalGradient(
-                        listOf(
-                            Color(0xFF512DA8),
-                            Color(0xFF3F51B5)
-                        )
+                        listOf(colorVioleta, colorAzulOscurso)
                     )
                 )
-        )
+            )
 
-        // Contenido principal
+        // --- Contenido principal con scroll ---
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(top = 95.dp, bottom = 32.dp), // padding inferior para no chocar con bottom
+                .padding(top = 95.dp, bottom = 32.dp)
+                .verticalScroll(scrollState),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Top
         ) {
             // Título LOGIN
             Text(
-                text = "LOGIN",
+                text = stringResource(R.string.loging),
                 fontSize = 32.sp,
                 fontWeight = FontWeight.Bold,
                 color = Color.White,
                 modifier = Modifier.padding(bottom = 16.dp)
             )
 
-            // Tarjeta del formulario
+            // Tarjeta blanca del formulario
             Column(
                 modifier = Modifier
                     .fillMaxWidth(0.9f)
@@ -99,12 +99,12 @@ fun LogingScreen(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.spacedBy(40.dp)
             ) {
-                // --- Imagen redonda del logotipo ---
+                // Imagen redonda del logotipo
                 Box(
                     modifier = Modifier
                         .size(120.dp)
                         .shadow(8.dp, CircleShape)
-                        .background(Color(0xFFE3F2FD), CircleShape) // azul pastel
+                        .background(colorAzulOscurso, CircleShape) // ← aquí pones tu color
                         .clip(CircleShape),
                     contentAlignment = Alignment.Center
                 ) {
@@ -139,6 +139,7 @@ fun LogingScreen(
         }
     }
 }
+
 
 @Preview(showBackground = true, showSystemUi = true)
 @Composable

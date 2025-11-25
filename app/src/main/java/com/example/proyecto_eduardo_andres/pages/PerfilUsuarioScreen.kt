@@ -35,6 +35,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.compose.colorAzulOscurso
+import com.example.compose.colorVioleta
 import com.example.proyecto_eduardo_andres.R
 import com.example.proyecto_eduardo_andres.myComponents.componentePerfilUsuario.CampoPerfilUsuario
 import com.example.proyecto_eduardo_andres.viewData.PerfilUsuarioData.PerfilUsuarioButtonTextsData
@@ -60,8 +62,7 @@ fun PerfilUsuarioScreen() {
                 .background(
                     Brush.linearGradient(
                         colors = listOf(
-                            Color(0xFF0D47A1),
-                            Color(0xFF512DA8)
+                            colorVioleta, colorAzulOscurso
                         ),
                         start = Offset(0f, 0f),
                         end = Offset(1000f, 1000f)
@@ -78,8 +79,7 @@ fun PerfilUsuarioScreen() {
                 .background(
                     Brush.verticalGradient(
                         listOf(
-                            Color(0xFFFF9800),
-                            Color(0xFFFF7043)
+                            colorVioleta, colorAzulOscurso
                         )
                     )
                 )
@@ -107,7 +107,7 @@ fun PerfilUsuarioScreen() {
                     modifier = Modifier
                         .size(120.dp)
                         .shadow(8.dp, CircleShape)
-                        .background(Color(0xFFE3F2FD), CircleShape)
+                        .background(colorAzulOscurso, CircleShape) // ← aquí pones tu color
                         .clip(CircleShape),
                     contentAlignment = Alignment.Center
                 ) {

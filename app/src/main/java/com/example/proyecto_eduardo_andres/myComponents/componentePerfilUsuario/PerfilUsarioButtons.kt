@@ -20,6 +20,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.compose.colorVioleta
 import com.example.proyecto_eduardo_andres.R
 import com.example.proyecto_eduardo_andres.viewData.PerfilUsuarioData.PerfilUsuarioButtonTextsData
 
@@ -45,7 +46,7 @@ fun PerfilUsuarioButtons(
         Button(
             onClick = onModificarUsuario,
             colors = ButtonDefaults.buttonColors(
-                containerColor = Color(0xFF4CAF50),
+                containerColor = colorVioleta,
                 contentColor = Color.White
             ),
             modifier = Modifier

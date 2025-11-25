@@ -36,6 +36,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.compose.colorAzulOscurso
+import com.example.compose.colorVioleta
 import com.example.proyecto_eduardo_andres.R
 import com.example.proyecto_eduardo_andres.myComponents.componenteRecuperarPassword.RecuperarPasswordButton
 import com.example.proyecto_eduardo_andres.viewData.RecuperarPasswordData.RecuperarPasswordButtonText
@@ -63,12 +65,11 @@ fun RecuperarPasswordScreen(
                 .background(
                     Brush.verticalGradient(
                         listOf(
-                            Color(0xFF3F51B5),
-                            Color(0xFF512DA8)
+                            colorVioleta, colorAzulOscurso
                         )
                     )
                 )
-        )
+            )
 
         // Degradado inferior
         Box(
@@ -79,8 +80,7 @@ fun RecuperarPasswordScreen(
                 .background(
                     Brush.verticalGradient(
                         listOf(
-                            Color(0xFF512DA8),
-                            Color(0xFF3F51B5)
+                            colorVioleta, colorAzulOscurso
                         )
                     )
                 )
@@ -120,7 +120,7 @@ fun RecuperarPasswordScreen(
                     modifier = Modifier
                         .size(120.dp)
                         .shadow(8.dp, CircleShape)
-                        .background(Color(0xFFE3F2FD), CircleShape)
+                        .background(colorAzulOscurso, CircleShape) // ← aquí pones tu color
                         .clip(CircleShape),
                     contentAlignment = Alignment.Center
                 ) {

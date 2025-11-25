@@ -12,6 +12,10 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.compose.colorAmarillo
+import com.example.compose.colorAmarilloOscuro
+import com.example.compose.colorAzulOscurso
+import com.example.compose.colorVioleta
 import com.example.proyecto_eduardo_andres.R
 import com.example.proyecto_eduardo_andres.viewData.LogingData.LoginButtonTextsData
 
@@ -63,7 +67,7 @@ fun LoginButtons(
             Button(
                 onClick = onCrearUsuarioClick,
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = Color(0xFF2196F3),
+                    containerColor = colorAmarilloOscuro,
                     contentColor = Color.White
                 ),
                 modifier = Modifier
@@ -80,7 +84,7 @@ fun LoginButtons(
             Button(
                 onClick = onRecuperarPasswordClick,
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = Color(0xFFFF9800),
+                    containerColor = colorVioleta,
                     contentColor = Color.White
                 ),
                 modifier = Modifier
