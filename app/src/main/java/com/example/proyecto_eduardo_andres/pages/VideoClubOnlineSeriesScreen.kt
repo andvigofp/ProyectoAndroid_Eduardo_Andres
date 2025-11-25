@@ -49,6 +49,8 @@ import kotlin.collections.component1
 import kotlin.collections.component2
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.ui.res.stringResource
+import com.example.compose.colorAzulOscurso
+import com.example.compose.colorVioleta
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -74,8 +76,7 @@ fun VideoClubOnlineSeriesScreen() {
                         .background(
                             Brush.verticalGradient(
                                 colors = listOf(
-                                    MaterialTheme.colorScheme.primary,
-                                    MaterialTheme.colorScheme.primary
+                                    colorVioleta, colorAzulOscurso
                                 )
                             )
                         )
