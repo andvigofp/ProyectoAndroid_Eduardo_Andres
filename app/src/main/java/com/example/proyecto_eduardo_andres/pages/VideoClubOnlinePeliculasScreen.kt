@@ -8,11 +8,14 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
@@ -25,7 +28,6 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalNavigationDrawer
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
@@ -43,16 +45,20 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.proyecto_eduardo_andres.R
 import com.example.proyecto_eduardo_andres.myComponents.componenteMenu.VideoClubMenuDrawer
 import com.example.proyecto_eduardo_andres.myComponents.componenteToolbar.toolBarVideoClubOnline
-import com.example.proyecto_eduardo_andres.viewData.ListaPeliculasData.PeliculasData
 import com.example.proyecto_eduardo_andres.myComponents.componenteVideoClubListaPeliculas.VideoClubCategoriasBotones
+import com.example.proyecto_eduardo_andres.viewData.ListaSeriesData.SeriesData
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun VideoClubOnlinePeliculasScreen() {
     val drawerState = rememberDrawerState(DrawerValue.Closed)
     val scope = rememberCoroutineScope()
+
+    val toolbarHeight = 56.dp + WindowInsets.statusBars.asPaddingValues().calculateTopPadding()
+
     ModalNavigationDrawer(
         drawerState = drawerState,
         drawerContent = {
@@ -64,20 +70,28 @@ fun VideoClubOnlinePeliculasScreen() {
             )
         }
     ) {
-        Scaffold(
-            topBar = {
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .background(
-                            Brush.verticalGradient(
-                                colors = listOf(
-                                    MaterialTheme.colorScheme.primary,
-                                    MaterialTheme.colorScheme.primary
-                                )
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(MaterialTheme.colorScheme.background)
+        ) {
+
+            // ---------- TOOLBAR ----------
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(toolbarHeight)
+                    .background(
+                        Brush.verticalGradient(
+                            colors = listOf(
+                                MaterialTheme.colorScheme.primary,
+                                MaterialTheme.colorScheme.primary
                             )
                         )
-                        .statusBarsPadding()
+                    )
+            ) {
+                Column(
+                    modifier = Modifier.statusBarsPadding() // mueve solo el contenido del toolbar
                 ) {
                     toolBarVideoClubOnline(
                         drawerState = drawerState,
@@ -89,29 +103,31 @@ fun VideoClubOnlinePeliculasScreen() {
                         onLogoutClick = {}
                     )
                 }
-            },
-            containerColor = MaterialTheme.colorScheme.background
-        ) { padding ->
+            }
+
+            // ---------- CONTENIDO ----------
             LazyColumn(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(padding)
+                    .padding(top = toolbarHeight) // contenido debajo del toolbar
                     .background(MaterialTheme.colorScheme.background),
                 verticalArrangement = Arrangement.spacedBy(24.dp)
             ) {
                 item { Spacer(modifier = Modifier.height(12.dp)) }
                 item { VideoClubCategoriasBotones() }
                 item { Spacer(modifier = Modifier.height(8.dp)) }
-                val peliculasData = PeliculasData()
-                val categoriasAgrupadas = peliculasData.nombrePeliculas.groupBy { it.nombreCategoria }
-                categoriasAgrupadas.forEach { (categoria, peliculas) ->
+
+                val seriesData = SeriesData()
+                val categoriasAgrupadas = seriesData.nombreSeries.groupBy { it.nombreCategoria }
+
+                categoriasAgrupadas.forEach { (categoria, series) ->
                     item(key = categoria) {
                         Column(
                             verticalArrangement = Arrangement.spacedBy(16.dp),
                             modifier = Modifier.fillMaxWidth()
                         ) {
                             Text(
-                                text = stringResource( categoria),
+                                text = stringResource(categoria),
                                 fontSize = 22.sp,
                                 fontWeight = FontWeight.Bold,
                                 color = MaterialTheme.colorScheme.primary,
@@ -121,8 +137,8 @@ fun VideoClubOnlinePeliculasScreen() {
                                 horizontalArrangement = Arrangement.spacedBy(16.dp),
                                 modifier = Modifier.fillMaxWidth()
                             ) {
-                                items(peliculas.size) { index ->
-                                    val pelicula = peliculas[index]
+                                items(series.size) { index ->
+                                    val serie = series[index]
                                     Column(
                                         horizontalAlignment = Alignment.CenterHorizontally,
                                         verticalArrangement = Arrangement.spacedBy(6.dp),
@@ -133,25 +149,25 @@ fun VideoClubOnlinePeliculasScreen() {
                                                 .size(130.dp)
                                                 .clip(RoundedCornerShape(12.dp))
                                                 .background(MaterialTheme.colorScheme.inversePrimary)
-                                                .clickable { /* onPeliculaClick(pelicula) */ },
+                                                .clickable { /* onSerieClick(serie) */ },
                                             contentAlignment = Alignment.Center
                                         ) {
-                                            pelicula.imagen?.let {
+                                            serie.imagen?.let {
                                                 Image(
                                                     painter = painterResource(id = it),
-                                                    contentDescription = stringResource(pelicula.nombrePelicula),
+                                                    contentDescription = stringResource(serie.nombreSerie),
                                                     contentScale = ContentScale.Crop,
                                                     modifier = Modifier.fillMaxSize()
                                                 )
                                             } ?: Icon(
                                                 imageVector = Icons.Default.Movie,
-                                                contentDescription = "Sin imagen",
+                                                contentDescription = stringResource(R.string.sin_imagen),
                                                 tint = Color.Gray,
                                                 modifier = Modifier.size(48.dp)
                                             )
                                         }
                                         Text(
-                                            text = stringResource(pelicula.nombrePelicula),
+                                            text = stringResource(serie.nombreSerie),
                                             color = MaterialTheme.colorScheme.onBackground,
                                             fontSize = 14.sp,
                                             fontWeight = FontWeight.Medium,
@@ -164,11 +180,14 @@ fun VideoClubOnlinePeliculasScreen() {
                         }
                     }
                 }
+
                 item { Spacer(modifier = Modifier.height(16.dp)) }
             }
         }
     }
 }
+
+
 
 @Preview(showBackground = true, showSystemUi = true)
 @Composable

@@ -116,7 +116,7 @@
     <string name="repetir_password">Repetir Password</string>
     <string name="email">Email</string>
     <string name="repetir_email">Repetir Email</string>
-    <string name="crear_usuario">CREAR USUARIO></string>
+    <string name="crear_usuario">CREAR USUARIO</string>
     <string name="cancelar">"CANCELAR"</string>
     <string name="acceder">ACCEDER"</string>
     <string name="recuperar_contrasenha">RECUPERAR CONTRASEÑA</string>
@@ -134,8 +134,8 @@
     <string name="qrData">https://ejemplo.com</string>
     <string name="recuperar">RECUPERAR</string>
     <string name="img">"Img"</string>
-    <string name="buscar_peliculas">Buscar película\"...\"</string>
-    <string name="buscar_series">Buscar serie\"...\"</string>
+    <string name="buscar_peliculas">Buscar película...</string>
+    <string name="buscar_series">Buscar serie...</string>
     <string name="volver">"Volver"</string>
     <string name="inicio">Inicio</string>
     <string name="camara">Cámara</string>
@@ -148,4 +148,6 @@
     <string name="terror">TERROR</string>
     <string name="dibujos">DIBUJOS</string>
     <string name="sin_imagen">Sin imagen</string>
+    <string name="crear">CREAR</string>
+    <string name="loging">LOGIN</string>
 </resources>

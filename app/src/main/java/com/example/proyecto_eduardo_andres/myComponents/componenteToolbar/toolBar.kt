@@ -25,6 +25,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.compose.colorAzulOscurso
+import com.example.compose.colorVioleta
 import com.example.proyecto_eduardo_andres.R
 
 /**
@@ -46,7 +48,10 @@ fun toolBar(
 ) {
     // Degradado de fondo (de azul oscuro a violeta suave)
     val toolbarBackGround = Brush.linearGradient(
-        colors = listOf(Color(0xFF0D47A1), Color(0xFF512DA8)),
+        colors = listOf(
+            colorVioleta,
+            colorAzulOscurso
+        ),
         start = Offset(0f, 0f),
         end = Offset(1000f, 1000f)
     )

@@ -23,6 +23,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.compose.colorAzulOscurso
+import com.example.compose.colorVioleta
 import com.example.proyecto_eduardo_andres.R
 
 /**
@@ -50,7 +52,7 @@ fun CrearUsuarioButton(
         Button(
             onClick = onCrearUsuarioClick,
             colors = ButtonDefaults.buttonColors(
-                containerColor = Color(0xFF4CAF50),
+                containerColor = colorAzulOscurso,
                 contentColor = Color.White
             ),
             modifier = Modifier
@@ -65,7 +67,7 @@ fun CrearUsuarioButton(
         Button(
             onClick = onCancelarClick,
             colors = ButtonDefaults.buttonColors(
-                containerColor = Color(0xFF2196F3),
+                containerColor = colorAzulOscurso,
                 contentColor = Color.White
             ),
             modifier = Modifier

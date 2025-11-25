@@ -3,12 +3,12 @@ package com.example.proyecto_eduardo_andres.pages
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -30,8 +30,10 @@ fun QRScreen(
     onProfileClick: () -> Unit,
     onLogoutClick: () -> Unit
 ) {
-    Scaffold(
-        topBar = {
+    Box(modifier = Modifier.fillMaxSize()) {
+
+        // ---------- TOOLBAR ----------
+        Column {
             toolBar(
                 onBackClick = onBackClick,
                 onHomeClick = onHomeClick,
@@ -39,36 +41,36 @@ fun QRScreen(
                 onProfileClick = onProfileClick,
                 onLogoutClick = onLogoutClick
             )
-        },
-        bottomBar = {
-            // Bottom bar con color bonito del tema
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(56.dp)
-                    .background(MaterialTheme.colorScheme.primary),
-                contentAlignment = Alignment.Center
-            ) {
-                Text(
-                    text = "",
-                    color = MaterialTheme.colorScheme.onPrimary,
-                    style = MaterialTheme.typography.bodyMedium
-                )
-            }
-        },
-        content = { paddingValues ->
-            // Contenido del QR centrado debajo del Toolbar
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(paddingValues),
-                contentAlignment = Alignment.Center
-            ) {
-                QRView(qrData = qrData)
-            }
         }
-    )
+
+        // ---------- CONTENIDO PRINCIPAL ----------
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(top = 56.dp, bottom = 56.dp), // dejar espacio para top y bottom
+            contentAlignment = Alignment.Center
+        ) {
+            QRView(qrData = qrData)
+        }
+
+        // ---------- BOTTOM BAR ----------
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(56.dp)
+                .align(Alignment.BottomCenter)
+                .background(MaterialTheme.colorScheme.primary),
+            contentAlignment = Alignment.Center
+        ) {
+            Text(
+                text = "",
+                color = MaterialTheme.colorScheme.onPrimary,
+                style = MaterialTheme.typography.bodyMedium
+            )
+        }
+    }
 }
+
 
 @Preview(showBackground = true)
 @Composable

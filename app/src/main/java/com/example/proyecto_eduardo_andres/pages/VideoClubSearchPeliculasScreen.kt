@@ -39,6 +39,10 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.compose.coloAuzlClaro
+import com.example.compose.colorAzulOscurso
+import com.example.compose.colorAzulSuave
+import com.example.compose.colorVioleta
 import com.example.proyecto_eduardo_andres.myComponents.componenteSearchPeliculas.SearchBar
 import com.example.proyecto_eduardo_andres.myComponents.componenteSearchPeliculas.buscarPeliculas
 import com.example.proyecto_eduardo_andres.myComponents.componenteToolbar.toolBar
@@ -53,9 +57,12 @@ fun VideoClubSearchPeliculasScreen() {
 
     val peliculasFiltradas = buscarPeliculas(peliculasData.nombrePeliculas, searchQuery.text)
 
-    //Mismo degradado que en el toolbar de todas las pantallas
+    // Degradado del toolbar
     val toolbarBackGround = Brush.linearGradient(
-        colors = listOf(Color(0xFF0D47A1), Color(0xFF512DA8)),
+        colors = listOf(
+            colorVioleta,
+            colorAzulOscurso
+        ),
         start = Offset(0f, 0f),
         end = Offset(1000f, 1000f)
     )
@@ -63,20 +70,18 @@ fun VideoClubSearchPeliculasScreen() {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color(0xFFE3F2FD)) // color de fondo suave general
+            .background(colorAzulSuave) // fondo general
     ) {
-        //TOOLBAR SUPERIOR con zona del reloj del mismo color ---
+        // ---------- TOOLBAR ----------
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .background(toolbarBackGround) // mismo degradado para status bar + toolbar
-                .statusBarsPadding() // deja espacio para la barra de estado
+                .background(toolbarBackGround)
+                .statusBarsPadding() // espacio para la barra de estado
         ) {
             Column {
-                // Espacio para la barra del reloj
-                Spacer(modifier = Modifier.height(24.dp))
+                Spacer(modifier = Modifier.height(24.dp)) // espacio para reloj
 
-                // Toolbar principal
                 toolBar(
                     onBackClick = {},
                     onHomeClick = {},
@@ -87,12 +92,13 @@ fun VideoClubSearchPeliculasScreen() {
             }
         }
 
-        //CONTENIDO: Búsqueda y Lista ---
+        // ---------- CONTENIDO ----------
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(16.dp)
         ) {
+            // Barra de búsqueda
             SearchBar(
                 searchQuery = searchQuery,
                 onQueryChange = { searchQuery = it }
@@ -100,7 +106,7 @@ fun VideoClubSearchPeliculasScreen() {
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            //Lista de películas con scroll vertical ---
+            // Lista de películas
             LazyColumn(
                 verticalArrangement = Arrangement.spacedBy(12.dp),
                 modifier = Modifier.fillMaxSize()
@@ -110,7 +116,7 @@ fun VideoClubSearchPeliculasScreen() {
                         verticalAlignment = Alignment.CenterVertically,
                         modifier = Modifier
                             .fillMaxWidth()
-                            .background(Color(0xFFBBDEFB), RoundedCornerShape(12.dp)) // tarjeta azul clara
+                            .background(coloAuzlClaro, RoundedCornerShape(12.dp)) // ← aquí cambias el color
                             .padding(8.dp)
                     ) {
                         if (movie.imagen != null) {
@@ -129,7 +135,11 @@ fun VideoClubSearchPeliculasScreen() {
                                     .background(Color.Gray, RoundedCornerShape(8.dp)),
                                 contentAlignment = Alignment.Center
                             ) {
-                                Text(stringResource(R.string.img), color = Color.White, fontSize = 12.sp)
+                                Text(
+                                    stringResource(R.string.img),
+                                    color = Color.White,
+                                    fontSize = 12.sp
+                                )
                             }
                         }
 
