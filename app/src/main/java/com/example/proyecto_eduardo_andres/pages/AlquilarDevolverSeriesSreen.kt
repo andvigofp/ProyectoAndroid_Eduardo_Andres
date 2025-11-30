@@ -24,12 +24,13 @@ import com.example.compose.colorAzulOscurso
 import com.example.compose.colorVioleta
 import com.example.proyecto_eduardo_andres.R
 import com.example.proyecto_eduardo_andres.myComponents.componenteAquilarDevolverSeries.AlquilarDevolverSerie
-import com.example.proyecto_eduardo_andres.viewData.AlquilerDevolverSeriesData.AlquilarDevolverSerieData
-import com.example.proyecto_eduardo_andres.viewData.AlquilerDevolverSeriesData.BotonAlquilarDevolverData
+import com.example.proyecto_eduardo_andres.viewData.alquilerDevolverSeriesData.AlquilarDevolverSerieData
 import com.example.proyecto_eduardo_andres.myComponents.componenteAquilarDevolverSeries.BotonAlquilarSeries
-import com.example.proyecto_eduardo_andres.myComponents.componenteCustomScreenPeliculasSeriesWithoutScaffold.CustomScreenWithoutScaffold
-import com.example.proyecto_eduardo_andres.viewData.AlquilerDevolverSeriesData.SeriesAlquilerDevolverData
+import com.example.proyecto_eduardo_andres.myComponents.componenteCustomScreenPeliculasSeries.CustomScreenWithoutScaffold
+import com.example.proyecto_eduardo_andres.viewData.alquilerDevolverSeriesData.SeriesAlquilerDevolverData
 import com.example.proyecto_eduardo_andres.myComponents.componenteToolbar.toolBar
+import com.example.proyecto_eduardo_andres.viewData.buttonsData.ButtonData
+import com.example.proyecto_eduardo_andres.viewData.buttonsData.ButtonType
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -124,9 +125,16 @@ fun AlquilerDevolverSeriesScreen() {
                 .align(Alignment.BottomCenter)
         ) {
             BotonAlquilarSeries(
-                botonAlquilar = BotonAlquilarDevolverData(R.string.alquilar),
-                botonDevolver = BotonAlquilarDevolverData(R.string.devolver)
+                botonAlquilar = ButtonData(
+                    nombre = R.string.alquilar,
+                    type = ButtonType.PRIMARY
+                ),
+                botonDevolver = ButtonData(
+                    nombre = R.string.devolver,
+                    type = ButtonType.SECONDARY
+                )
             )
+
         }
     }
 }

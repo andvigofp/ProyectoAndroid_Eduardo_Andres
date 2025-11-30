@@ -10,8 +10,11 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.proyecto_eduardo_andres.viewData.RecuperarPasswordData.RecuperarPasswordButtonText
+import com.example.proyecto_eduardo_andres.viewData.recuperarPasswordData.RecuperarPasswordButtonText
 import com.example.proyecto_eduardo_andres.R
+import com.example.proyecto_eduardo_andres.myComponents.componenteButtons.AppButton
+import com.example.proyecto_eduardo_andres.viewData.buttonsData.ButtonData
+import com.example.proyecto_eduardo_andres.viewData.buttonsData.ButtonType
 
 /**
  * @author Eduardo
@@ -34,44 +37,41 @@ fun RecuperarPasswordButton(
     ) {
         Row(
             modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(16.dp)
+            horizontalArrangement = Arrangement.spacedBy(16.dp),
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            Button(
+            AppButton(
+                data = ButtonData(
+                    nombre = R.string.repetir_password, // O usar buttonText.recuperarPassword si tienes stringId
+                    type = ButtonType.PRIMARY
+                ),
                 onClick = onRecuperarClick,
-                modifier = Modifier
-                    .weight(1f)
-                    .height(52.dp) // altura consistente si quieres
-            ) {
-                Text(
-                    text = buttonText.recuperarPassword,
-                    fontSize = 14.sp
-                )
-            }
+                modifier = Modifier.height(52.dp).weight(1f)
+            )
 
-            Button(
+            AppButton(
+                data = ButtonData(
+                    nombre = R.string.cancelar, // O usar buttonText.cancelar si tienes stringId
+                    type = ButtonType.DANGER
+                ),
                 onClick = onCancelarClick,
-                modifier = Modifier
-                    .weight(1f)
-                    .height(52.dp),
-                colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.error)
-            ) {
-                Text(
-                    text = buttonText.cancelar,
-                    fontSize = 14.sp
-                )
-            }
+                modifier = Modifier.height(52.dp).weight(1f)
+            )
         }
     }
 }
+
 @Preview(showBackground = true)
 @Composable
 fun RecuperarPasswordButtonPreview() {
-    RecuperarPasswordButton(
-        buttonText = RecuperarPasswordButtonText(
-            cancelar = stringResource(R.string.cancelar),
-            recuperarPassword = stringResource(R.string.repetir_password)
-        ),
-        onRecuperarClick = {},
-        onCancelarClick = {}
-    )
+    MaterialTheme {
+        RecuperarPasswordButton(
+            buttonText = RecuperarPasswordButtonText(
+                cancelar = stringResource(R.string.cancelar),
+                recuperarPassword = stringResource(R.string.repetir_password)
+            ),
+            onRecuperarClick = {},
+            onCancelarClick = {}
+        )
+    }
 }

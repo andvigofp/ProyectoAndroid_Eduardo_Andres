@@ -23,13 +23,14 @@ import androidx.compose.ui.unit.dp
 import com.example.compose.colorAzulOscurso
 import com.example.compose.colorVioleta
 import com.example.proyecto_eduardo_andres.R
-import com.example.proyecto_eduardo_andres.viewData.AlquilerDevolverPeliculasData.AlquilarDevolverPeliculasData
+import com.example.proyecto_eduardo_andres.viewData.alquilerDevolverPeliculasData.AlquilarDevolverPeliculasData
 import com.example.proyecto_eduardo_andres.myComponents.componenteAlquilarDevolverPeliculas.AlquilerDevolverPeliculas
-import com.example.proyecto_eduardo_andres.viewData.AlquilerDevolverPeliculasData.PeliculasAlquilarDevolverData
-import com.example.proyecto_eduardo_andres.viewData.AlquilerDevolverSeriesData.BotonAlquilarDevolverData
-import com.example.proyecto_eduardo_andres.myComponents.componenteAquilarDevolverSeries.BotonAlquilarSeries
-import com.example.proyecto_eduardo_andres.myComponents.componenteCustomScreenPeliculasSeriesWithoutScaffold.CustomScreenWithoutScaffold
+import com.example.proyecto_eduardo_andres.myComponents.componenteAlquilarDevolverPeliculas.BotonAlquilarPeliculas
+import com.example.proyecto_eduardo_andres.viewData.alquilerDevolverPeliculasData.PeliculasAlquilarDevolverData
+import com.example.proyecto_eduardo_andres.myComponents.componenteCustomScreenPeliculasSeries.CustomScreenWithoutScaffold
 import com.example.proyecto_eduardo_andres.myComponents.componenteToolbar.toolBar
+import com.example.proyecto_eduardo_andres.viewData.buttonsData.ButtonData
+import com.example.proyecto_eduardo_andres.viewData.buttonsData.ButtonType
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -119,9 +120,9 @@ fun AlquilarDevolverPeliculasScreen() {
                 .padding(horizontal = 16.dp, vertical = 8.dp)
                 .align(Alignment.BottomCenter)
         ) {
-            BotonAlquilarSeries(
-                botonAlquilar = BotonAlquilarDevolverData(R.string.alquilar),
-                botonDevolver = BotonAlquilarDevolverData(R.string.devolver)
+            BotonAlquilarPeliculas(
+                botonAlquilar = ButtonData(nombre = R.string.alquilar, type = ButtonType.PRIMARY),
+                botonDevolver = ButtonData(nombre = R.string.devolver, type = ButtonType.SECONDARY)
             )
         }
     }

@@ -43,7 +43,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.proyecto_eduardo_andres.myComponents.componenteMenu.VideoClubMenuDrawer
 import com.example.proyecto_eduardo_andres.myComponents.componenteVideoClubListaPeliculas.VideoClubCategoriasBotones
-import com.example.proyecto_eduardo_andres.viewData.ListaSeriesData.SeriesData
+import com.example.proyecto_eduardo_andres.viewData.listaSeriesData.SeriesData
 import com.example.proyecto_eduardo_andres.myComponents.componenteToolbar.toolBarVideoClubOnline
 import kotlin.collections.component1
 import kotlin.collections.component2

@@ -5,10 +5,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -17,13 +14,14 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.proyecto_eduardo_andres.R
-import com.example.proyecto_eduardo_andres.viewData.AlquilerDevolverSeriesData.BotonAlquilarDevolverData
+import com.example.proyecto_eduardo_andres.myComponents.componenteButtons.AppButton
+import com.example.proyecto_eduardo_andres.viewData.buttonsData.ButtonData
+import com.example.proyecto_eduardo_andres.viewData.buttonsData.ButtonType
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -36,61 +34,43 @@ import java.util.Locale
  */
 @Composable
 fun BotonAlquilarPeliculas(
-    botonAlquilar: BotonAlquilarDevolverData,
-    botonDevolver: BotonAlquilarDevolverData,
+    botonAlquilar: ButtonData,
+    botonDevolver: ButtonData,
     onAlquilarClick: () -> Unit = {},
     onDevolverClick: () -> Unit = {}
 ) {
-    val colors = MaterialTheme.colorScheme
-    val typography = MaterialTheme.typography
-
     var showDialog by remember { mutableStateOf(false) }
 
-    // Obtener la fecha actual (esto está correcto como tú quieres)
     val fechaActual = remember {
-        val dateFormat = SimpleDateFormat(R.string.fecha.toString(), Locale.getDefault())
+        val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
         dateFormat.format(Date())
     }
 
     Row(
         horizontalArrangement = Arrangement.spacedBy(16.dp),
-        verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier
             .fillMaxWidth()
             .padding(16.dp)
     ) {
 
-        // Botón Alquilar
-        Button(
+        // Botón Alquilar (usa tu botón atómico)
+        AppButton(
+            data = botonAlquilar,
             onClick = onAlquilarClick,
-            colors = ButtonDefaults.buttonColors(containerColor = colors.primary),
-            shape = RoundedCornerShape(10.dp),
             modifier = Modifier.weight(1f)
-        ) {
-            Text(
-                text = stringResource(botonAlquilar.nombreBoton),
-                style = typography.labelLarge.copy(color = colors.onPrimary)
-            )
-        }
+        )
 
-        // Botón Devolver
-        Button(
+        // Botón Devolver (usa tu botón atómico)
+        AppButton(
+            data = botonDevolver,
             onClick = {
                 onDevolverClick()
                 showDialog = true
             },
-            colors = ButtonDefaults.buttonColors(containerColor = colors.tertiary),
-            shape = RoundedCornerShape(10.dp),
             modifier = Modifier.weight(1f)
-        ) {
-            Text(
-                text = stringResource(botonDevolver.nombreBoton),
-                style = typography.labelLarge.copy(color = colors.onPrimary)
-            )
-        }
+        )
     }
 
-    // Diálogo emergente
     if (showDialog) {
         AlertDialog(
             onDismissRequest = { showDialog = false },
@@ -107,13 +87,20 @@ fun BotonAlquilarPeliculas(
     }
 }
 
+
 @Preview(showBackground = true)
 @Composable
 fun BotonAlquilarPeliculasPreview() {
     MaterialTheme {
         BotonAlquilarPeliculas(
-            botonAlquilar = BotonAlquilarDevolverData(nombreBoton = R.string.alquilar),
-            botonDevolver = BotonAlquilarDevolverData(nombreBoton = R.string.devolver)
+            botonAlquilar = ButtonData(
+                nombre = R.string.alquilar,
+                type = ButtonType.PRIMARY
+            ),
+            botonDevolver = ButtonData(
+                nombre = R.string.devolver,
+                type = ButtonType.SECONDARY
+            )
         )
     }
 }

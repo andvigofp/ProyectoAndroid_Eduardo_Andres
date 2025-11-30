@@ -3,7 +3,7 @@ package com.example.proyecto_eduardo_andres.myComponents.componenteSearchSeries
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
-import com.example.proyecto_eduardo_andres.viewData.ListaSeriesData.VideoClubOnlineData
+import com.example.proyecto_eduardo_andres.viewData.listaSeriesData.VideoClubOnlineData
 
 /**
  * @author Andrés

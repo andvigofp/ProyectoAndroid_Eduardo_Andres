@@ -21,7 +21,7 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.proyecto_eduardo_andres.R
-import com.example.proyecto_eduardo_andres.viewData.PerfilUsuarioData.PerfilUsuarioData
+import com.example.proyecto_eduardo_andres.viewData.perfilUsuarioData.PerfilUsuarioData
 
 /**
  * @author Andrés

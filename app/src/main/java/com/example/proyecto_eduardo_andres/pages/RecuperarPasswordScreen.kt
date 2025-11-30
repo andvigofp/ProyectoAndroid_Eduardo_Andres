@@ -40,8 +40,8 @@ import com.example.compose.colorAzulOscurso
 import com.example.compose.colorVioleta
 import com.example.proyecto_eduardo_andres.R
 import com.example.proyecto_eduardo_andres.myComponents.componenteRecuperarPassword.RecuperarPasswordButton
-import com.example.proyecto_eduardo_andres.viewData.RecuperarPasswordData.RecuperarPasswordButtonText
-import com.example.proyecto_eduardo_andres.viewData.RecuperarPasswordData.RecuperarPasswordData
+import com.example.proyecto_eduardo_andres.viewData.recuperarPasswordData.RecuperarPasswordButtonText
+import com.example.proyecto_eduardo_andres.viewData.recuperarPasswordData.RecuperarPasswordData
 import com.example.proyecto_eduardo_andres.myComponents.componenteRecuperarPassword.RecuperarPasswordFields
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -57,21 +57,19 @@ fun RecuperarPasswordScreen(
             .fillMaxSize()
             .background(Color.White)
     ) {
-        // Degradado superior
+        // --- Degradado superior ---
         Box(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(220.dp)
                 .background(
                     Brush.verticalGradient(
-                        listOf(
-                            colorVioleta, colorAzulOscurso
-                        )
+                        listOf(colorVioleta, colorAzulOscurso)
                     )
                 )
-            )
+        )
 
-        // Degradado inferior
+        // --- Degradado inferior ---
         Box(
             modifier = Modifier
                 .fillMaxWidth()
@@ -79,14 +77,12 @@ fun RecuperarPasswordScreen(
                 .align(Alignment.BottomCenter)
                 .background(
                     Brush.verticalGradient(
-                        listOf(
-                            colorVioleta, colorAzulOscurso
-                        )
+                        listOf(colorVioleta, colorAzulOscurso)
                     )
                 )
         )
 
-        // Contenido principal
+        // --- Contenido principal ---
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -104,7 +100,6 @@ fun RecuperarPasswordScreen(
                 textAlign = TextAlign.Center
             )
 
-
             // Tarjeta del formulario
             Column(
                 modifier = Modifier
@@ -120,7 +115,7 @@ fun RecuperarPasswordScreen(
                     modifier = Modifier
                         .size(120.dp)
                         .shadow(8.dp, CircleShape)
-                        .background(colorAzulOscurso, CircleShape) // ← aquí pones tu color
+                        .background(colorAzulOscurso, CircleShape)
                         .clip(CircleShape),
                     contentAlignment = Alignment.Center
                 ) {
@@ -139,8 +134,10 @@ fun RecuperarPasswordScreen(
                     recuperarPasswordData = recuperarPasswordData,
                     onRecuperarPasswordData = { recuperarPasswordData = it }
                 )
+
                 Spacer(modifier = Modifier.height(32.dp))
-                // Botones
+
+                // Botones modernizados
                 RecuperarPasswordButton(
                     buttonText = RecuperarPasswordButtonText(
                         cancelar = stringResource(R.string.cancelar),
@@ -156,7 +153,7 @@ fun RecuperarPasswordScreen(
 
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
-fun RecuperarPasswordScreendPreview() {
+fun RecuperarPasswordScreenPreview() {
     MaterialTheme {
         RecuperarPasswordScreen()
     }

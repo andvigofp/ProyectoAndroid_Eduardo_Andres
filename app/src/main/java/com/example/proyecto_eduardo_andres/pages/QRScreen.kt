@@ -16,7 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.proyecto_eduardo_andres.viewData.QRData.QRData
+import com.example.proyecto_eduardo_andres.viewData.qrData.QRData
 import com.example.proyecto_eduardo_andres.myComponents.componenteQR.QRView
 import com.example.proyecto_eduardo_andres.myComponents.componenteToolbar.toolBar
 import com.example.proyecto_eduardo_andres.R

@@ -11,17 +11,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.compose.Proyecto_Eduardo_AndresTheme
-import com.example.proyecto_eduardo_andres.viewData.QRData.QRData
-import com.example.proyecto_eduardo_andres.pages.AlquilarDevolverPeliculasScreen
-import com.example.proyecto_eduardo_andres.pages.AlquilerDevolverSeriesScreen
-import com.example.proyecto_eduardo_andres.pages.CamaraScreen
-import com.example.proyecto_eduardo_andres.pages.CrearUsuarioScreen
-import com.example.proyecto_eduardo_andres.pages.LogingScreen
-import com.example.proyecto_eduardo_andres.pages.QRScreen
-import com.example.proyecto_eduardo_andres.pages.RecuperarPasswordScreen
-import com.example.proyecto_eduardo_andres.pages.VideoClubOnlinePeliculasScreen
-import com.example.proyecto_eduardo_andres.pages.VideoClubOnlineSeriesScreen
-import com.example.proyecto_eduardo_andres.pages.VideoClubSearchPeliculasScreen
 
 
 class MainActivity : ComponentActivity() {

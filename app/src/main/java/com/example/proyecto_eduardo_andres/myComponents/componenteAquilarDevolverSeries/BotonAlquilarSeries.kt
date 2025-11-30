@@ -5,10 +5,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -23,7 +20,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.proyecto_eduardo_andres.R
-import com.example.proyecto_eduardo_andres.viewData.AlquilerDevolverSeriesData.BotonAlquilarDevolverData
+import com.example.proyecto_eduardo_andres.myComponents.componenteButtons.AppButton
+import com.example.proyecto_eduardo_andres.viewData.buttonsData.ButtonData
+import com.example.proyecto_eduardo_andres.viewData.buttonsData.ButtonType
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -36,20 +35,15 @@ import java.util.Locale
  */
 @Composable
 fun BotonAlquilarSeries(
-    botonAlquilar: BotonAlquilarDevolverData,
-    botonDevolver: BotonAlquilarDevolverData,
+    botonAlquilar: ButtonData,
+    botonDevolver: ButtonData,
     onAlquilarClick: () -> Unit = {},
     onDevolverClick: () -> Unit = {}
 ) {
-    val colors = MaterialTheme.colorScheme
-    val typography = MaterialTheme.typography
-
-    //Estado del diálogo
     var showDialog by remember { mutableStateOf(false) }
 
-    //Fecha actual
     val fechaActual = remember {
-        val dateFormat = SimpleDateFormat(R.string.fecha.toString(), Locale.getDefault())
+        val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
         dateFormat.format(Date())
     }
 
@@ -60,58 +54,56 @@ fun BotonAlquilarSeries(
             .fillMaxWidth()
             .padding(16.dp)
     ) {
-        //Botón Alquilar
-        Button(
-            onClick = onAlquilarClick,
-            colors = ButtonDefaults.buttonColors(containerColor = colors.primary),
-            shape = RoundedCornerShape(10.dp),
-            modifier = Modifier.weight(1f)
-        ) {
-            Text(
-                text = stringResource(botonAlquilar.nombreBoton),
-                style = typography.labelLarge.copy(color = colors.onPrimary)
-            )
-        }
 
-        //Botón Devolver
-        Button(
+        // ---- Botón Alquilar ----
+        AppButton(
+            data = botonAlquilar,
+            onClick = onAlquilarClick,
+            modifier = Modifier.weight(1f)
+        )
+
+        // ---- Botón Devolver ----
+        AppButton(
+            data = botonDevolver,
             onClick = {
                 onDevolverClick()
-                showDialog = true //Muestra el diálogo al devolver
+                showDialog = true
             },
-            colors = ButtonDefaults.buttonColors(containerColor = colors.tertiary),
-            shape = RoundedCornerShape(10.dp),
             modifier = Modifier.weight(1f)
-        ) {
-            Text(
-                text = stringResource(botonDevolver.nombreBoton),
-                style = typography.labelLarge.copy(color = colors.onPrimary)
-            )
-        }
+        )
     }
 
-    //Diálogo emergente al devolver la serie
+    // ---- Diálogo ----
     if (showDialog) {
         AlertDialog(
             onDismissRequest = { showDialog = false },
-            title = { Text(R.string.devolucion_completada.toString()) },
-            text = { Text("${stringResource(R.string.devolver_serie)} $fechaActual") },
+            title = { Text(stringResource(R.string.devolucion_completada)) },
+            text = {
+                Text("${stringResource(R.string.devolver_serie)} $fechaActual")
+            },
             confirmButton = {
                 TextButton(onClick = { showDialog = false }) {
-                    Text(R.string.aceptar.toString())
+                    Text(stringResource(R.string.aceptar))
                 }
             }
         )
     }
 }
 
+
 @Preview(showBackground = true)
 @Composable
 fun BotonAlquilarSeriesPreview() {
     MaterialTheme {
         BotonAlquilarSeries(
-            botonAlquilar = BotonAlquilarDevolverData(R.string.alquilar),
-            botonDevolver = BotonAlquilarDevolverData(R.string.devolver)
+            botonAlquilar = ButtonData(
+                nombre = R.string.alquilar,
+                type = ButtonType.PRIMARY
+            ),
+            botonDevolver = ButtonData(
+                nombre = R.string.devolver,
+                type = ButtonType.SECONDARY
+            )
         )
     }
 }

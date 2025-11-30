@@ -34,8 +34,8 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.proyecto_eduardo_andres.viewData.ListaSeriesData.SeriesData
-import com.example.proyecto_eduardo_andres.viewData.ListaSeriesData.VideoClubOnlineData
+import com.example.proyecto_eduardo_andres.viewData.listaSeriesData.SeriesData
+import com.example.proyecto_eduardo_andres.viewData.listaSeriesData.VideoClubOnlineData
 import com.example.proyecto_eduardo_andres.R
 
 /**

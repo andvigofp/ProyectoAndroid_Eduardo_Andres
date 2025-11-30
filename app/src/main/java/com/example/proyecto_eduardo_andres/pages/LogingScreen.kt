@@ -28,8 +28,9 @@ import com.example.compose.colorVioleta
 import com.example.proyecto_eduardo_andres.R
 import com.example.proyecto_eduardo_andres.myComponents.componenteLogin.LoginButtons
 import com.example.proyecto_eduardo_andres.myComponents.componenteLogin.CamposLogin
-import com.example.proyecto_eduardo_andres.viewData.LogingData.LoginButtonTextsData
-import com.example.proyecto_eduardo_andres.viewData.LogingData.LoginData
+import com.example.proyecto_eduardo_andres.viewData.buttonsData.ButtonData
+import com.example.proyecto_eduardo_andres.viewData.buttonsData.ButtonType
+import com.example.proyecto_eduardo_andres.viewData.logingData.LoginData
 
 @Composable
 fun LogingScreen(
@@ -44,9 +45,9 @@ fun LogingScreen(
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color.White)
+            .background(MaterialTheme.colorScheme.surfaceBright) // Fondo principal
     ) {
-        // --- Degradado superior (toolbar) ---
+        // --- Degradado superior ---
         Box(
             modifier = Modifier
                 .fillMaxWidth()
@@ -56,9 +57,9 @@ fun LogingScreen(
                         listOf(colorVioleta, colorAzulOscurso)
                     )
                 )
-            )
+        )
 
-        // --- Degradado inferior (detrás de botones / bottom bar) ---
+        // --- Degradado inferior ---
         Box(
             modifier = Modifier
                 .fillMaxWidth()
@@ -69,7 +70,7 @@ fun LogingScreen(
                         listOf(colorVioleta, colorAzulOscurso)
                     )
                 )
-            )
+        )
 
         // --- Contenido principal con scroll ---
         Column(
@@ -94,17 +95,17 @@ fun LogingScreen(
                 modifier = Modifier
                     .fillMaxWidth(0.9f)
                     .shadow(12.dp, RoundedCornerShape(24.dp))
-                    .background(Color.White, RoundedCornerShape(24.dp))
+                    .background(MaterialTheme.colorScheme.surface, RoundedCornerShape(24.dp))
                     .padding(horizontal = 24.dp, vertical = 32.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.spacedBy(40.dp)
             ) {
-                // Imagen redonda del logotipo
+                // Imagen circular del logotipo
                 Box(
                     modifier = Modifier
                         .size(120.dp)
                         .shadow(8.dp, CircleShape)
-                        .background(colorAzulOscurso, CircleShape) // ← aquí pones tu color
+                        .background(MaterialTheme.colorScheme.primary, CircleShape)
                         .clip(CircleShape),
                     contentAlignment = Alignment.Center
                 ) {
@@ -130,7 +131,12 @@ fun LogingScreen(
 
                 // Botones
                 LoginButtons(
-                    loginButtonTexts = LoginButtonTextsData(),
+                    accederButton = ButtonData(
+                        nombre = R.string.acceder,
+                        type = ButtonType.PRIMARY
+                    ),
+                    crearUsuarioButton = ButtonData(nombre = R.string.crear_usuario, type = ButtonType.SECONDARY),
+                    recuperarButton = ButtonData(nombre = R.string.recuperar_contrasenha, type = ButtonType.DANGER),
                     onAccederClick = onAccederClick,
                     onCrearUsuarioClick = onCrearUsuarioClick,
                     onRecuperarPasswordClick = onRecuperarPasswordClick
@@ -139,7 +145,6 @@ fun LogingScreen(
         }
     }
 }
-
 
 @Preview(showBackground = true, showSystemUi = true)
 @Composable

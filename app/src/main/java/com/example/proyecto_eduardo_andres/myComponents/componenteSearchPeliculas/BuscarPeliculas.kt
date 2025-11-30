@@ -1,10 +1,9 @@
 @file:Suppress("ALL")
 package com.example.proyecto_eduardo_andres.myComponents.componenteSearchPeliculas
 
-import android.content.Context
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
-import com.example.proyecto_eduardo_andres.viewData.ListaPeliculasData.VideoClubOnlinePeliculasData
+import com.example.proyecto_eduardo_andres.viewData.listaPeliculasData.VideoClubOnlinePeliculasData
 
 /**
  * @author Eduardo
