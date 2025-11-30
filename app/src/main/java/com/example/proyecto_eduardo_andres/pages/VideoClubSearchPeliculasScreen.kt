@@ -46,7 +46,7 @@ import com.example.compose.colorVioleta
 import com.example.proyecto_eduardo_andres.myComponents.componenteSearchPeliculas.SearchBar
 import com.example.proyecto_eduardo_andres.myComponents.componenteSearchPeliculas.buscarPeliculas
 import com.example.proyecto_eduardo_andres.myComponents.componenteToolbar.toolBar
-import com.example.proyecto_eduardo_andres.viewData.ListaPeliculasData.PeliculasData
+import com.example.proyecto_eduardo_andres.viewData.listaPeliculasData.PeliculasData
 import com.example.proyecto_eduardo_andres.R
 
 @OptIn(ExperimentalMaterial3Api::class)

@@ -32,7 +32,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -40,12 +39,12 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.compose.colorAzulOscurso
-import com.example.compose.colorVioleta
-import com.example.compose.onErrorContainerLight
 import com.example.proyecto_eduardo_andres.R
 import com.example.proyecto_eduardo_andres.myComponents.componeneteCrearUsuario.CampoCrearUsuario
 import com.example.proyecto_eduardo_andres.myComponents.componeneteCrearUsuario.CrearUsuarioData
+import com.example.proyecto_eduardo_andres.myComponents.componenteButtons.AppButton
+import com.example.proyecto_eduardo_andres.viewData.buttonsData.ButtonData
+import com.example.proyecto_eduardo_andres.viewData.buttonsData.ButtonType
 
 @Composable
 fun CrearUsuarioScreen(
@@ -53,13 +52,14 @@ fun CrearUsuarioScreen(
     onCancelarClick: () -> Unit = {}
 ) {
     var crearUsuarioData by remember { mutableStateOf(CrearUsuarioData()) }
-
     val scrollState = rememberScrollState()
+    val colors = MaterialTheme.colorScheme
+    val typography = MaterialTheme.typography
 
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color.White)
+            .background(colors.background)
     ) {
         // --- Degradado superior (toolbar visual) ---
         Box(
@@ -68,7 +68,7 @@ fun CrearUsuarioScreen(
                 .height(220.dp)
                 .background(
                     Brush.verticalGradient(
-                        listOf(colorVioleta, colorAzulOscurso)
+                        listOf(colors.primary, colors.secondary)
                     )
                 )
         )
@@ -81,7 +81,7 @@ fun CrearUsuarioScreen(
                 .align(Alignment.BottomCenter)
                 .background(
                     Brush.verticalGradient(
-                        listOf(colorVioleta, colorAzulOscurso)
+                        listOf(colors.primary, colors.secondary)
                     )
                 )
         )
@@ -100,27 +100,27 @@ fun CrearUsuarioScreen(
                 text = stringResource(R.string.crear_usuario),
                 fontSize = 28.sp,
                 fontWeight = FontWeight.Bold,
-                color = Color.White
+                color = colors.onPrimary
             )
 
             Spacer(modifier = Modifier.height(24.dp))
 
-            // --- Tarjeta blanca del formulario ---
+            // --- Tarjeta del formulario ---
             Column(
                 modifier = Modifier
                     .fillMaxWidth(0.9f)
                     .shadow(12.dp, RoundedCornerShape(24.dp))
-                    .background(Color.White, RoundedCornerShape(24.dp))
+                    .background(colors.surface, RoundedCornerShape(24.dp))
                     .padding(horizontal = 24.dp, vertical = 32.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.spacedBy(20.dp)
             ) {
-                // Imagen redonda del logotipo
+                // Imagen circular del logotipo
                 Box(
                     modifier = Modifier
                         .size(120.dp)
                         .shadow(8.dp, CircleShape)
-                        .background(colorAzulOscurso, CircleShape) // ← aquí pones tu color
+                        .background(colors.primary, CircleShape)
                         .clip(CircleShape),
                     contentAlignment = Alignment.Center
                 ) {
@@ -142,38 +142,39 @@ fun CrearUsuarioScreen(
 
                 Spacer(modifier = Modifier.height(24.dp))
 
-                // Botones
+                // Botones usando AppButton
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
-                    Button(
+                    AppButton(
+                        data = ButtonData(
+                            nombre = R.string.cancelar,
+                            type = ButtonType.SECONDARY
+                        ),
                         onClick = onCancelarClick,
-                        colors = ButtonDefaults.buttonColors(containerColor = onErrorContainerLight),
                         modifier = Modifier
                             .weight(1f)
                             .height(50.dp)
-                    ) {
-                        Text(stringResource(R.string.cancelar), color = Color.White)
-                    }
+                    )
 
                     Spacer(modifier = Modifier.width(16.dp))
 
-                    Button(
+                    AppButton(
+                        data = ButtonData(
+                            nombre = R.string.crear,
+                            type = ButtonType.PRIMARY
+                        ),
                         onClick = onCrearUsuarioClick,
-                        colors = ButtonDefaults.buttonColors(containerColor = colorVioleta),
                         modifier = Modifier
                             .weight(1f)
                             .height(50.dp)
-                    ) {
-                        Text(stringResource(R.string.crear), color = Color.White)
-                    }
+                    )
                 }
             }
         }
     }
 }
-
 
 
 @Preview(showBackground = true, showSystemUi = true)

@@ -16,7 +16,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.example.proyecto_eduardo_andres.viewData.QRData.QRData
+import com.example.proyecto_eduardo_andres.viewData.qrData.QRData
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.qrcode.QRCodeWriter
 import com.example.proyecto_eduardo_andres.R

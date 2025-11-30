@@ -47,7 +47,7 @@ import com.example.proyecto_eduardo_andres.R
 import com.example.proyecto_eduardo_andres.myComponents.componenteSearchSeries.SearchBar
 import com.example.proyecto_eduardo_andres.myComponents.componenteSearchSeries.buscarSeries
 import com.example.proyecto_eduardo_andres.myComponents.componenteToolbar.toolBar
-import com.example.proyecto_eduardo_andres.viewData.ListaSeriesData.SeriesData
+import com.example.proyecto_eduardo_andres.viewData.listaSeriesData.SeriesData
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

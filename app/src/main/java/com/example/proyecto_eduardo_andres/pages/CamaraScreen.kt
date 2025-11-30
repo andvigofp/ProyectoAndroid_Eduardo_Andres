@@ -21,12 +21,13 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.compose.colorAzulOscurso
 import com.example.compose.colorVioleta
-import com.example.proyecto_eduardo_andres.viewData.CamaraData.CamaraButtonData
 import com.example.proyecto_eduardo_andres.myComponents.componenteCamara.CamaraButtonsComponent
 import com.example.proyecto_eduardo_andres.myComponents.componenteCamara.CamaraComponent
-import com.example.proyecto_eduardo_andres.viewData.CamaraData.CamaraData
+import com.example.proyecto_eduardo_andres.viewData.camaraData.CamaraData
 import com.example.proyecto_eduardo_andres.myComponents.componenteToolbar.toolBar
 import com.example.proyecto_eduardo_andres.R
+import com.example.proyecto_eduardo_andres.viewData.buttonsData.ButtonData
+import com.example.proyecto_eduardo_andres.viewData.buttonsData.ButtonType
 
 @Composable
 fun CamaraScreen() {
@@ -47,7 +48,7 @@ fun CamaraScreen() {
             .fillMaxSize()
             .background(colors.background)
     ) {
-        // TopBar con degradado que cubre el reloj + toolbar
+        // TopBar
         Box(
             modifier = Modifier
                 .fillMaxWidth()
@@ -56,22 +57,22 @@ fun CamaraScreen() {
             Column(
                 modifier = Modifier.statusBarsPadding()
             ) {
-                Spacer(modifier = Modifier.height(24.dp)) // espacio visual del reloj
+                Spacer(modifier = Modifier.height(24.dp))
                 toolBar(
-                    onBackClick = { /* TODO: volver */ },
-                    onHomeClick = { /* TODO: ir al inicio */ },
-                    onCameraClick = { /* TODO: recargar cámara */ },
-                    onProfileClick = { /* TODO: perfil */ },
-                    onLogoutClick = { /* TODO: cerrar sesión */ }
+                    onBackClick = { /* TODO */ },
+                    onHomeClick = { /* TODO */ },
+                    onCameraClick = { /* TODO */ },
+                    onProfileClick = { /* TODO */ },
+                    onLogoutClick = { /* TODO */ }
                 )
             }
         }
 
-        // Contenido centrado en la pantalla
+        // Contenido central
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(bottom = 72.dp) // espacio para bottomBar
+                .padding(bottom = 72.dp)
                 .align(Alignment.Center),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
@@ -83,7 +84,7 @@ fun CamaraScreen() {
             )
         }
 
-        // BottomBar con degradado y botones
+        // BottomBar con botones
         Box(
             modifier = Modifier
                 .fillMaxWidth()
@@ -92,14 +93,21 @@ fun CamaraScreen() {
                 .align(Alignment.BottomCenter)
         ) {
             CamaraButtonsComponent(
-                camaraButtonData = CamaraButtonData(
-                    hacerFoto = R.string.hacer_foto,
-                    qr = R.string.qr
-                )
+                hacerFotoButton = ButtonData(
+                    nombre = R.string.hacer_foto,
+                    type = ButtonType.PRIMARY
+                ),
+                qrButton = ButtonData(
+                    nombre = R.string.qr,
+                    type = ButtonType.SECONDARY
+                ),
+                onHacerFotoClick = { /* TODO: acción hacer foto */ },
+                onQrClick = { /* TODO: acción abrir QR */ }
             )
         }
     }
 }
+
 
 @Preview(showBackground = true, showSystemUi = true)
 @Composable

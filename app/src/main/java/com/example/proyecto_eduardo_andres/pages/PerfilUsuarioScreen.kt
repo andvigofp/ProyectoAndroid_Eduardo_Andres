@@ -39,9 +39,9 @@ import com.example.compose.colorAzulOscurso
 import com.example.compose.colorVioleta
 import com.example.proyecto_eduardo_andres.R
 import com.example.proyecto_eduardo_andres.myComponents.componentePerfilUsuario.CampoPerfilUsuario
-import com.example.proyecto_eduardo_andres.viewData.PerfilUsuarioData.PerfilUsuarioButtonTextsData
+import com.example.proyecto_eduardo_andres.viewData.perfilUsuarioData.PerfilUsuarioButtonTextsData
 import com.example.proyecto_eduardo_andres.myComponents.componentePerfilUsuario.PerfilUsuarioButtons
-import com.example.proyecto_eduardo_andres.viewData.PerfilUsuarioData.PerfilUsuarioData
+import com.example.proyecto_eduardo_andres.viewData.perfilUsuarioData.PerfilUsuarioData
 import com.example.proyecto_eduardo_andres.myComponents.componenteToolbar.toolBar
 
 @Composable
@@ -51,39 +51,33 @@ fun PerfilUsuarioScreen() {
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color.White)
+            .background(MaterialTheme.colorScheme.surfaceBright)
     ) {
-
-        // --- Fondo degradado superior igual al ToolBar ---
+        // --- Degradado superior ---
         Box(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(220.dp)
                 .background(
                     Brush.linearGradient(
-                        colors = listOf(
-                            colorVioleta, colorAzulOscurso
-                        ),
+                        colors = listOf(colorVioleta, colorAzulOscurso),
                         start = Offset(0f, 0f),
                         end = Offset(1000f, 1000f)
                     )
                 )
         )
 
-        // --- Degradado inferior (fondo detrás del botón) ---
+        // --- Degradado inferior ---
         Box(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(180.dp)
                 .align(Alignment.BottomCenter)
                 .background(
-                    Brush.verticalGradient(
-                        listOf(
-                            colorVioleta, colorAzulOscurso
-                        )
-                    )
+                    Brush.verticalGradient(listOf(colorVioleta, colorAzulOscurso))
                 )
         )
+
         // --- Contenido principal ---
         Column(
             modifier = Modifier
@@ -92,12 +86,12 @@ fun PerfilUsuarioScreen() {
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Top
         ) {
-            // --- Tarjeta blanca central ---
+            // Tarjeta blanca central
             Column(
                 modifier = Modifier
                     .fillMaxWidth(0.9f)
                     .shadow(12.dp, RoundedCornerShape(24.dp))
-                    .background(Color.White, RoundedCornerShape(24.dp))
+                    .background(MaterialTheme.colorScheme.surface, RoundedCornerShape(24.dp))
                     .padding(horizontal = 24.dp, vertical = 32.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.spacedBy(20.dp)
@@ -107,7 +101,7 @@ fun PerfilUsuarioScreen() {
                     modifier = Modifier
                         .size(120.dp)
                         .shadow(8.dp, CircleShape)
-                        .background(colorAzulOscurso, CircleShape) // ← aquí pones tu color
+                        .background(colorAzulOscurso, CircleShape)
                         .clip(CircleShape),
                     contentAlignment = Alignment.Center
                 ) {
@@ -120,6 +114,7 @@ fun PerfilUsuarioScreen() {
                             .clip(CircleShape)
                     )
                 }
+
                 Spacer(modifier = Modifier.height(16.dp))
 
                 // Campos de perfil
@@ -127,6 +122,7 @@ fun PerfilUsuarioScreen() {
                     perfilUsarioData = perfilUsuarioData,
                     onPerfilUsuarioData = { perfilUsuarioData = it }
                 )
+
                 Spacer(modifier = Modifier.height(16.dp))
 
                 // Texto adicional
@@ -139,26 +135,27 @@ fun PerfilUsuarioScreen() {
 
                 Spacer(modifier = Modifier.height(24.dp))
 
-                // Botón principal
+                // Botón principal usando PerfilUsuarioButtons
                 PerfilUsuarioButtons(
-                    perfilUsuarioButtonTextsData = PerfilUsuarioButtonTextsData(modificar = stringResource(R.string.modificar_usuario)),
+                    perfilUsuarioButtonTextsData = PerfilUsuarioButtonTextsData(
+                        modificar = stringResource(R.string.modificar_usuario)
+                    ),
                     onModificarUsuario = { /* Acción modificar */ }
                 )
             }
         }
 
-        // --- TOOLBAR + TITULO debajo ---
+        // --- TOOLBAR + título ---
         Box(
             modifier = Modifier
                 .align(Alignment.TopCenter)
                 .fillMaxWidth()
-                .padding(top = 20.dp) // separacion del borde superior
+                .padding(top = 20.dp)
         ) {
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier.fillMaxWidth()
             ) {
-                // toolbar (fondo ya full-width)
                 toolBar(
                     onBackClick = {},
                     onHomeClick = {},
@@ -167,14 +164,12 @@ fun PerfilUsuarioScreen() {
                     onLogoutClick = {}
                 )
 
-                // texto justo debajo del toolbar, centrado y en blanco
                 Text(
                     text = stringResource(R.string.datos_usuario),
                     color = Color.White,
                     fontSize = 20.sp,
                     fontWeight = FontWeight.Bold,
-                    modifier = Modifier
-                        .padding(top = 30.dp) // separación entre toolbar y texto
+                    modifier = Modifier.padding(top = 30.dp)
                 )
             }
         }

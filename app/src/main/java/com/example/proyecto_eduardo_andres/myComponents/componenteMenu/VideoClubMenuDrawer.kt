@@ -44,7 +44,7 @@ import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import com.example.proyecto_eduardo_andres.R
-import com.example.proyecto_eduardo_andres.viewData.MenuData.MenuItemData
+import com.example.proyecto_eduardo_andres.viewData.menuData.MenuItemData
 
 /**
  * @author Andrés
