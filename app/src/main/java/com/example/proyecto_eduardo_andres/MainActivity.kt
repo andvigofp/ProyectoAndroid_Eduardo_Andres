@@ -10,7 +10,12 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.compose.rememberNavController
 import com.example.compose.Proyecto_Eduardo_AndresTheme
+import com.example.proyecto_eduardo_andres.pages.VideoClubOnlinePeliculasScreen
+import com.example.proyecto_eduardo_andres.pages.VideoClubOnlineSeriesScreen
+import com.example.proyecto_eduardo_andres.pages.VideoClubSearchPeliculasScreen
+import com.example.proyecto_eduardo_andres.pages.VideoClubSearchSeriesScreen
 
 
 class MainActivity : ComponentActivity() {
@@ -21,6 +26,7 @@ class MainActivity : ComponentActivity() {
             Proyecto_Eduardo_AndresTheme {
                 Scaffold { innerPadding ->
                     Box(Modifier.padding(innerPadding)) {
+                        val navController = rememberNavController()
                         /**LogingScreen(
                         userImageUrl = null,
                         onAccederClick = {},
@@ -34,8 +40,9 @@ class MainActivity : ComponentActivity() {
                         //PerfilUsuarioScreen()
                         //RecuperarPasswordScreen()
                         //VideoClubOnlinePeliculasScreen()
-                        //VideoClubOnlineSeriesScreen()
-                        //VideoClubSearchPeliculasScreen()
+                        //VideoClubOnlineSeriesScreen(navController)
+                        //VideoClubSearchPeliculasScreen(navController)
+                        //VideoClubSearchSeriesScreen(navController)
                         //AlquilerDevolverSeriesScreen()
                         //AlquilarDevolverPeliculasScreen()
 
@@ -61,6 +68,7 @@ class MainActivity : ComponentActivity() {
     @Composable
     fun GreetingPreview() {
         Proyecto_Eduardo_AndresTheme {
+            val navController = rememberNavController()
             /**LogingScreen(
             userImageUrl = null,
             onAccederClick = {},
@@ -73,7 +81,7 @@ class MainActivity : ComponentActivity() {
             //RecuperarPasswordScreen()
             //PerfilUsuarioScreen()
             //RecuperarPasswordScreen()
-            //VideoClubOnlinePeliculasScreen()
+            //VideoClubOnlinePeliculasScreen(navController)
             //VideoClubOnlineSeriesScreen()
             //VideoClubSearchPeliculasScreen()
             //AlquilerDevolverSeriesScreen()

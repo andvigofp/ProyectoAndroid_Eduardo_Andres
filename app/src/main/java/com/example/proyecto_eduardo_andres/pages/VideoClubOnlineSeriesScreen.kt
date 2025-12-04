@@ -49,12 +49,15 @@ import kotlin.collections.component1
 import kotlin.collections.component2
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.ui.res.stringResource
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.example.compose.colorAzulOscurso
 import com.example.compose.colorVioleta
+import com.example.proyecto_eduardo_andres.naveHost.AppScreens
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun VideoClubOnlineSeriesScreen() {
+fun VideoClubOnlineSeriesScreen(navController: NavController) {
     val drawerState = rememberDrawerState(DrawerValue.Closed)
     val scope = rememberCoroutineScope()
     ModalNavigationDrawer(
@@ -85,11 +88,11 @@ fun VideoClubOnlineSeriesScreen() {
                     toolBarVideoClubOnline(
                         drawerState = drawerState,
                         scope = scope,
-                        onHomeClick = {},
-                        onSearchClick = {},
-                        onCameraClick = {},
-                        onProfileClick = {},
-                        onLogoutClick = {}
+                        onHomeClick = { navController.navigate(AppScreens.VideoClubPeliculas.routeId.toString()) },
+                        onSearchClick = { navController.navigate(AppScreens.SearchSeries.routeId.toString()) },
+                        onCameraClick = { navController.navigate(AppScreens.Camara.routeId.toString()) },
+                        onProfileClick = { navController.navigate(AppScreens.PerfilUsuario.routeId.toString()) },
+                        onLogoutClick = { navController.navigate(AppScreens.Login.routeId.toString()) }
                     )
                 }
             },
@@ -177,6 +180,7 @@ fun VideoClubOnlineSeriesScreen() {
 @Composable
 fun VideoClubOnlineSeriesScreenPreview() {
     MaterialTheme {
-        VideoClubOnlineSeriesScreen()
+        val navController = rememberNavController()
+        VideoClubOnlineSeriesScreen(navController)
     }
 }
