@@ -45,17 +45,20 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.example.compose.colorAzulOscurso
 import com.example.compose.colorVioleta
 import com.example.proyecto_eduardo_andres.R
 import com.example.proyecto_eduardo_andres.myComponents.componenteMenu.VideoClubMenuDrawer
 import com.example.proyecto_eduardo_andres.myComponents.componenteToolbar.toolBarVideoClubOnline
 import com.example.proyecto_eduardo_andres.myComponents.componenteVideoClubListaPeliculas.VideoClubCategoriasBotones
+import com.example.proyecto_eduardo_andres.naveHost.AppScreens
 import com.example.proyecto_eduardo_andres.viewData.listaSeriesData.SeriesData
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun VideoClubOnlinePeliculasScreen() {
+fun VideoClubOnlinePeliculasScreen(navController: NavController) {
     val drawerState = rememberDrawerState(DrawerValue.Closed)
     val scope = rememberCoroutineScope()
 
@@ -97,11 +100,11 @@ fun VideoClubOnlinePeliculasScreen() {
                     toolBarVideoClubOnline(
                         drawerState = drawerState,
                         scope = scope,
-                        onHomeClick = {},
-                        onSearchClick = {},
-                        onCameraClick = {},
-                        onProfileClick = {},
-                        onLogoutClick = {}
+                        onHomeClick = { navController.navigate(AppScreens.VideoClubPeliculas.routeId.toString()) },
+                        onSearchClick = { navController.navigate(AppScreens.SearchSeries.routeId.toString()) },
+                        onCameraClick = { navController.navigate(AppScreens.Camara.routeId.toString()) },
+                        onProfileClick = { navController.navigate(AppScreens.PerfilUsuario.routeId.toString()) },
+                        onLogoutClick = { navController.navigate(AppScreens.Login.routeId.toString()) }
                     )
                 }
             }
@@ -194,6 +197,7 @@ fun VideoClubOnlinePeliculasScreen() {
 @Composable
 fun VideoClubOnlineScreenPreview() {
     MaterialTheme {
-        VideoClubOnlinePeliculasScreen()
+        val navController = rememberNavController()
+        VideoClubOnlinePeliculasScreen(navController)
     }
 }
