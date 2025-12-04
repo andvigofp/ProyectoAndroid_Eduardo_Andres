@@ -161,4 +161,6 @@
     <string name="screen_camara">camara</string>
     <string name="screen_menu">menu</string>
     <string name="screen_perfil_usuario">perfil_usuario</string>
+    <string name="screen_alquilar_devolver_series">alquilar_devolver_series</string>
+    <string name="screen_alquilar_devolver_peliculas">alquilar_devolver_peliculas</string>
 </resources>

@@ -36,6 +36,12 @@ sealed class Screen(val routeId: Int) {
 
     @Serializable
     class PerfilUsuario(routeId: Int) : Screen(routeId)
+
+    @Serializable
+    class AlquilerDevolverPeliculas(routeId: Int) : Screen(routeId)
+
+    @Serializable
+    class AlquilerDevolverSeries(routeId: Int) : Screen(routeId)
 }
 
 object AppScreens {
@@ -50,4 +56,9 @@ object AppScreens {
     val Camara = Screen.Camara(R.string.screen_camara)
     val Menu = Screen.Menu(R.string.screen_menu)
     val PerfilUsuario = Screen.PerfilUsuario(R.string.screen_perfil_usuario)
+
+    val AlquilerDevolverSerie = Screen.AlquilerDevolverSeries(R.string.screen_alquilar_devolver_series)
+
+    val AlquilerDevolverPeliculas = Screen.AlquilerDevolverPeliculas(R.string.screen_alquilar_devolver_peliculas)
+
 }
