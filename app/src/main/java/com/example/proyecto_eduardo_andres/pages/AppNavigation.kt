@@ -86,6 +86,36 @@ fun AppNavigation() {
             }
         }
 
+        // VIDEOCLUB SERIES con toolBar
+        composable(AppScreens.VideoClubSeries.routeId.toString()) {
+            val callbacks = toolbarCallbacks()
+            Column {
+                toolBar(
+                    onBackClick = callbacks.onBack,
+                    onHomeClick = callbacks.onHome,
+                    onCameraClick = callbacks.onCamera,
+                    onProfileClick = callbacks.onProfile,
+                    onLogoutClick = callbacks.onLogout
+                )
+                AlquilerDevolverSeriesScreen(navController)
+            }
+        }
+
+        // VIDEOCLUB SERIES con toolBar
+        composable(AppScreens.VideoClubSeries.routeId.toString()) {
+            val callbacks = toolbarCallbacks()
+            Column {
+                toolBar(
+                    onBackClick = callbacks.onBack,
+                    onHomeClick = callbacks.onHome,
+                    onCameraClick = callbacks.onCamera,
+                    onProfileClick = callbacks.onProfile,
+                    onLogoutClick = callbacks.onLogout
+                )
+                AlquilarDevolverPeliculasScreen()
+            }
+        }
+
         // BUSCAR PELÍCULAS
         composable(AppScreens.SearchPeliculas.routeId.toString()) {
             VideoClubSearchPeliculasScreen(navController)
