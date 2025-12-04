@@ -112,7 +112,7 @@ fun AppNavigation() {
                     onProfileClick = callbacks.onProfile,
                     onLogoutClick = callbacks.onLogout
                 )
-                AlquilarDevolverPeliculasScreen()
+                AlquilarDevolverPeliculasScreen(navController)
             }
         }
 

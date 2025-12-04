@@ -20,6 +20,8 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.example.compose.colorAzulOscurso
 import com.example.compose.colorVioleta
 import com.example.proyecto_eduardo_andres.R
@@ -29,12 +31,13 @@ import com.example.proyecto_eduardo_andres.myComponents.componenteAlquilarDevolv
 import com.example.proyecto_eduardo_andres.viewData.alquilerDevolverPeliculasData.PeliculasAlquilarDevolverData
 import com.example.proyecto_eduardo_andres.myComponents.componenteCustomScreenPeliculasSeries.CustomScreenWithoutScaffold
 import com.example.proyecto_eduardo_andres.myComponents.componenteToolbar.toolBar
+import com.example.proyecto_eduardo_andres.naveHost.AppScreens
 import com.example.proyecto_eduardo_andres.viewData.buttonsData.ButtonData
 import com.example.proyecto_eduardo_andres.viewData.buttonsData.ButtonType
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AlquilarDevolverPeliculasScreen() {
+fun AlquilarDevolverPeliculasScreen(navController: NavController) {
 
     val colors = MaterialTheme.colorScheme
     val typography = MaterialTheme.typography
@@ -73,11 +76,11 @@ fun AlquilarDevolverPeliculasScreen() {
                 ) {
                     Spacer(modifier = Modifier.height(8.dp))
                     toolBar(
-                        onBackClick = {},
-                        onHomeClick = {},
-                        onCameraClick = {},
-                        onProfileClick = {},
-                        onLogoutClick = {}
+                        onBackClick = { navController.popBackStack() },
+                        onHomeClick = { navController.navigate(AppScreens.VideoClubPeliculas.routeId.toString()) },
+                        onCameraClick = { navController.navigate(AppScreens.Camara.routeId.toString()) },
+                        onProfileClick = { navController.navigate(AppScreens.PerfilUsuario.routeId.toString()) },
+                        onLogoutClick = { navController.navigate(AppScreens.Login.routeId.toString()) }
                     )
                 }
             }
@@ -134,6 +137,7 @@ fun AlquilarDevolverPeliculasScreen() {
 @Composable
 fun AlquilarDevolverPeliculasScreenPreview() {
     MaterialTheme {
-        AlquilarDevolverPeliculasScreen()
+        val navController = rememberNavController()
+        AlquilarDevolverPeliculasScreen(navController)
     }
 }
