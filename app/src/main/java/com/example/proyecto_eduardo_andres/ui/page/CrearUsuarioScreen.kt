@@ -22,6 +22,8 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -38,19 +40,32 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.proyecto_eduardo_andres.R
 import com.example.proyecto_eduardo_andres.myComponents.componeneteCrearUsuario.CampoCrearUsuario
-import com.example.proyecto_eduardo_andres.myComponents.componeneteCrearUsuario.CrearUsuarioData
+import com.example.proyecto_eduardo_andres.myComponents.componeneteCrearUsuario.CrearUsuarioUiState
 import com.example.proyecto_eduardo_andres.myComponents.componenteButtons.AppButton
 import com.example.proyecto_eduardo_andres.viewData.buttonsData.ButtonData
 import com.example.proyecto_eduardo_andres.viewData.buttonsData.ButtonType
+import com.example.proyecto_eduardo_andres.viewmodel.CrearUsuarioViewModel
 
 @Composable
 fun CrearUsuarioScreen(
+    crearUsuarioViewModel: CrearUsuarioViewModel = viewModel(),
     onCrearUsuarioClick: () -> Unit = {},
     onCancelarClick: () -> Unit = {}
 ) {
-    var crearUsuarioData by remember { mutableStateOf(CrearUsuarioData()) }
+    // --- Estado del ViewModel ---
+    val uiState by crearUsuarioViewModel.uiState.collectAsState()
+
+    // --- Estado local para el formulario (IGUAL que Login Preview) ---
+    var crearUsuarioData by remember { mutableStateOf(uiState) }
+
+    // Mantener sincronizado el state local con el ViewModel
+    LaunchedEffect(uiState) {
+        crearUsuarioData = uiState
+    }
+
     val scrollState = rememberScrollState()
     val colors = MaterialTheme.colorScheme
     val typography = MaterialTheme.typography
@@ -60,7 +75,8 @@ fun CrearUsuarioScreen(
             .fillMaxSize()
             .background(colors.background)
     ) {
-        // --- Degradado superior (toolbar visual) ---
+
+        // --- Degradado superior ---
         Box(
             modifier = Modifier
                 .fillMaxWidth()
@@ -72,7 +88,7 @@ fun CrearUsuarioScreen(
                 )
         )
 
-        // --- Degradado inferior (fondo detrás de botones) ---
+        // --- Degradado inferior ---
         Box(
             modifier = Modifier
                 .fillMaxWidth()
@@ -85,7 +101,7 @@ fun CrearUsuarioScreen(
                 )
         )
 
-        // --- Contenido principal con scroll ---
+        // --- Contenido principal ---
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -94,7 +110,7 @@ fun CrearUsuarioScreen(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Top
         ) {
-            // Título principal
+
             Text(
                 text = stringResource(R.string.crear_usuario),
                 fontSize = 28.sp,
@@ -104,7 +120,7 @@ fun CrearUsuarioScreen(
 
             Spacer(modifier = Modifier.height(24.dp))
 
-            // --- Tarjeta del formulario ---
+            // --- Tarjeta ---
             Column(
                 modifier = Modifier
                     .fillMaxWidth(0.9f)
@@ -114,7 +130,7 @@ fun CrearUsuarioScreen(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.spacedBy(20.dp)
             ) {
-                // Imagen circular del logotipo
+
                 Box(
                     modifier = Modifier
                         .size(120.dp)
@@ -127,25 +143,33 @@ fun CrearUsuarioScreen(
                         painter = painterResource(id = R.drawable.ic_logotipo_team),
                         contentDescription = stringResource(R.string.logo),
                         contentScale = ContentScale.Crop,
-                        modifier = Modifier
-                            .size(80.dp)
-                            .clip(CircleShape)
+                        modifier = Modifier.size(80.dp).clip(CircleShape)
                     )
                 }
 
-                // Campos del formulario
+                // --- Campos del formulario ---
                 CampoCrearUsuario(
                     crearUsuarioData = crearUsuarioData,
-                    onCrearUsuarioData = { crearUsuarioData = it }
+                    onCrearUsuarioData = {
+                        crearUsuarioData = it   // UI inmediata (como Login Preview)
+
+                        // Sincronizar con ViewModel
+                        crearUsuarioViewModel.onNameChange(it.nombre)
+                        crearUsuarioViewModel.onPasswordChange(it.password)
+                        crearUsuarioViewModel.onRepeatPasswordChange(it.repeatPassword)
+                        crearUsuarioViewModel.onEmailChange(it.email)
+                        crearUsuarioViewModel.onRepeatEmailChange(it.repeatEmail)
+                    }
                 )
 
                 Spacer(modifier = Modifier.height(24.dp))
 
-                // Botones usando AppButton
+                // --- Botones (MISMO layout) ---
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
+
                     AppButton(
                         data = ButtonData(
                             nombre = R.string.cancelar,
@@ -157,12 +181,13 @@ fun CrearUsuarioScreen(
                             .height(50.dp)
                     )
 
-                    Spacer(modifier = Modifier.width(16.dp))
+                    Spacer(modifier = Modifier.width(12.dp))
 
                     AppButton(
                         data = ButtonData(
                             nombre = R.string.crear,
-                            type = ButtonType.PRIMARY
+                            type = ButtonType.PRIMARY,
+                            enabled = uiState.isLoginButtonEnabled
                         ),
                         onClick = onCrearUsuarioClick,
                         modifier = Modifier
@@ -174,6 +199,7 @@ fun CrearUsuarioScreen(
         }
     }
 }
+
 
 
 @Preview(showBackground = true, showSystemUi = true)

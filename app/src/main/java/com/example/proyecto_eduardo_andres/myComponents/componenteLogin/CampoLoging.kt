@@ -51,7 +51,7 @@ fun CamposLogin(
         ) {
             Text(
                 text = stringResource(R.string.email),
-                color = MaterialTheme.colorScheme.outline,
+                color = MaterialTheme.colorScheme.primary,
                 modifier = Modifier.weight(1f).alignByBaseline()
             )
             TextField(
@@ -70,7 +70,7 @@ fun CamposLogin(
         ) {
             Text(
                 text = stringResource(R.string.password),
-                color = MaterialTheme.colorScheme.outline,
+                color = MaterialTheme.colorScheme.primary,
                 modifier = Modifier.weight(1f).alignByBaseline()
             )
             TextField(
