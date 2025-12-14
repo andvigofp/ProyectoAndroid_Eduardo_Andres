@@ -2,15 +2,22 @@
 package com.example.proyecto_eduardo_andres.myComponents.componenteRecuperarPassword
 
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Visibility
+import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.proyecto_eduardo_andres.viewData.recuperarPasswordData.RecuperarPasswordData
+import com.example.proyecto_eduardo_andres.viewData.recuperarPasswordData.RecuperarPasswordUiState
 import com.example.proyecto_eduardo_andres.R
 
 /**
@@ -20,8 +27,8 @@ import com.example.proyecto_eduardo_andres.R
  */
 @Composable
 fun RecuperarPasswordFields(
-    recuperarPasswordData: RecuperarPasswordData,
-    onRecuperarPasswordData: (RecuperarPasswordData) -> Unit
+    recuperarPasswordData: RecuperarPasswordUiState,
+    onRecuperarPasswordData: (RecuperarPasswordUiState) -> Unit
 ) {
     Column(
         modifier = Modifier
@@ -43,7 +50,11 @@ fun RecuperarPasswordFields(
                 value = recuperarPasswordData.email,
                 onValueChange = { onRecuperarPasswordData(recuperarPasswordData.copy(email = it)) },
                 singleLine = true,
-                modifier = Modifier.weight(2f)
+                modifier = Modifier.weight(2f),
+                keyboardOptions = KeyboardOptions.Default.copy(
+                    keyboardType = KeyboardType.Email,
+                    imeAction = ImeAction.Next
+                )
             )
         }
 
@@ -61,8 +72,22 @@ fun RecuperarPasswordFields(
                 value = recuperarPasswordData.password,
                 onValueChange = { onRecuperarPasswordData(recuperarPasswordData.copy(password = it)) },
                 singleLine = true,
-                visualTransformation = PasswordVisualTransformation(),
-                modifier = Modifier.weight(2f)
+                visualTransformation = if (recuperarPasswordData.passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
+                modifier = Modifier.weight(2f),
+                keyboardOptions = KeyboardOptions.Default.copy(
+                    keyboardType = KeyboardType.Password,
+                    imeAction = ImeAction.Next
+                ),
+                trailingIcon = {
+                    val image = if (recuperarPasswordData.passwordVisible)
+                        Icons.Filled.Visibility else Icons.Filled.VisibilityOff
+
+                    IconButton(onClick = {
+                        onRecuperarPasswordData(recuperarPasswordData.copy(passwordVisible = !recuperarPasswordData.passwordVisible))
+                    }) {
+                        Icon(imageVector = image, contentDescription = null)
+                    }
+                }
             )
         }
 
@@ -77,11 +102,15 @@ fun RecuperarPasswordFields(
                 modifier = Modifier.weight(1f)
             )
             TextField(
-                value = recuperarPasswordData.repitaPassword,
-                onValueChange = { onRecuperarPasswordData(recuperarPasswordData.copy(repitaPassword = it)) },
+                value = recuperarPasswordData.repeatPassword,
+                onValueChange = { onRecuperarPasswordData(recuperarPasswordData.copy(repeatPassword = it)) },
                 singleLine = true,
-                visualTransformation = PasswordVisualTransformation(),
-                modifier = Modifier.weight(2f)
+                visualTransformation = if (recuperarPasswordData.passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
+                modifier = Modifier.weight(2f),
+                keyboardOptions = KeyboardOptions.Default.copy(
+                    keyboardType = KeyboardType.Password,
+                    imeAction = ImeAction.Done
+                )
             )
         }
     }
@@ -90,10 +119,10 @@ fun RecuperarPasswordFields(
 @Preview(showBackground = true)
 @Composable
 fun RecuperarPasswordFieldsPreview() {
-    var recuperarPasswordData by remember { mutableStateOf(RecuperarPasswordData()) }
+    var recuperarPasswordData by remember { mutableStateOf(RecuperarPasswordUiState()) }
 
     RecuperarPasswordFields(
         recuperarPasswordData = recuperarPasswordData,
-        onRecuperarPasswordData = {recuperarPasswordData = it}
+        onRecuperarPasswordData = { recuperarPasswordData = it }
     )
 }
