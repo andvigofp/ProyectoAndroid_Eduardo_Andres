@@ -12,10 +12,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.rememberNavController
 import com.example.compose.Proyecto_Eduardo_AndresTheme
-import com.example.proyecto_eduardo_andres.pages.VideoClubOnlinePeliculasScreen
-import com.example.proyecto_eduardo_andres.pages.VideoClubOnlineSeriesScreen
-import com.example.proyecto_eduardo_andres.pages.VideoClubSearchPeliculasScreen
-import com.example.proyecto_eduardo_andres.pages.VideoClubSearchSeriesScreen
 
 
 class MainActivity : ComponentActivity() {

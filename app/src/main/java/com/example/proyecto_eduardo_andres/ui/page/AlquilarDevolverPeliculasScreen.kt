@@ -1,5 +1,6 @@
 @file:Suppress("ALL")
-package com.example.proyecto_eduardo_andres.pages
+
+package com.example.proyecto_eduardo_andres.ui.page
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -9,14 +10,14 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -25,11 +26,11 @@ import androidx.navigation.compose.rememberNavController
 import com.example.compose.colorAzulOscurso
 import com.example.compose.colorVioleta
 import com.example.proyecto_eduardo_andres.R
-import com.example.proyecto_eduardo_andres.myComponents.componenteAquilarDevolverSeries.AlquilarDevolverSerie
-import com.example.proyecto_eduardo_andres.viewData.alquilerDevolverSeriesData.AlquilarDevolverSerieData
-import com.example.proyecto_eduardo_andres.myComponents.componenteAquilarDevolverSeries.BotonAlquilarSeries
+import com.example.proyecto_eduardo_andres.viewData.alquilerDevolverPeliculasData.AlquilarDevolverPeliculasData
+import com.example.proyecto_eduardo_andres.myComponents.componenteAlquilarDevolverPeliculas.AlquilerDevolverPeliculas
+import com.example.proyecto_eduardo_andres.myComponents.componenteAlquilarDevolverPeliculas.BotonAlquilarPeliculas
+import com.example.proyecto_eduardo_andres.viewData.alquilerDevolverPeliculasData.PeliculasAlquilarDevolverData
 import com.example.proyecto_eduardo_andres.myComponents.componenteCustomScreenPeliculasSeries.CustomScreenWithoutScaffold
-import com.example.proyecto_eduardo_andres.viewData.alquilerDevolverSeriesData.SeriesAlquilerDevolverData
 import com.example.proyecto_eduardo_andres.myComponents.componenteToolbar.toolBar
 import com.example.proyecto_eduardo_andres.naveHost.AppScreens
 import com.example.proyecto_eduardo_andres.viewData.buttonsData.ButtonData
@@ -37,12 +38,11 @@ import com.example.proyecto_eduardo_andres.viewData.buttonsData.ButtonType
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AlquilerDevolverSeriesScreen(navController: NavController) {
+fun AlquilarDevolverPeliculasScreen(navController: NavController) {
 
     val colors = MaterialTheme.colorScheme
     val typography = MaterialTheme.typography
 
-    // Degradado del toolbar y fondo del reloj
     val toolbarBackGround = Brush.linearGradient(
         colors = listOf(
             colorVioleta,
@@ -52,30 +52,29 @@ fun AlquilerDevolverSeriesScreen(navController: NavController) {
         end = Offset(1000f, 1000f)
     )
 
-    // Recuperar los datos reales desde la lista
-    val listaSeries = SeriesAlquilerDevolverData().nombreSeries
-    val serieSeleccionada = listaSeries.firstOrNull {
-        it.nombreSerie == R.string.mad_men
-    } ?: listaSeries.first()
+    val listaPeliculas = PeliculasAlquilarDevolverData().nombrePeliculas
+    val peliculaSeleccionada = listaPeliculas.firstOrNull {
+        it.nombrePelicula == R.string.la_vida_es_bella
+    } ?: listaPeliculas.first()
 
-    // Crear objeto de tipo AlquilarDevolverSerieData
-    val serieDemo = AlquilarDevolverSerieData(
-        imagen = serieSeleccionada.imagen,
-        nombreSerie = serieSeleccionada.nombreSerie,
-        descripcion = serieSeleccionada.descripcion
+    val peliculaDemo = AlquilarDevolverPeliculasData(
+        imagen = peliculaSeleccionada.imagen,
+        nombrePelicula = peliculaSeleccionada.nombrePelicula,
+        descripcion = peliculaSeleccionada.descripcion
     )
 
-    // Usamos tu contenedor personalizado
     CustomScreenWithoutScaffold(
-        // ---------------- TOP BAR ----------------
+
+        // ---------- TOP BAR ----------
         topBar = {
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .background(toolbarBackGround)
-                    .statusBarsPadding()
+                    .background(toolbarBackGround)   // ← degradado cubre TODO, incluso reloj
             ) {
-                Column {
+                Column(
+                    modifier = Modifier.statusBarsPadding() // solo mueve el contenido
+                ) {
                     Spacer(modifier = Modifier.height(8.dp))
                     toolBar(
                         onBackClick = { navController.popBackStack() },
@@ -88,7 +87,7 @@ fun AlquilerDevolverSeriesScreen(navController: NavController) {
             }
         },
 
-        // ---------------- BOTTOM BAR ----------------
+        // ---------- BOTTOM BAR ----------
         bottomBar = {
             Box(
                 modifier = Modifier
@@ -99,7 +98,7 @@ fun AlquilerDevolverSeriesScreen(navController: NavController) {
         }
     ) {
 
-        // ---------------- CONTENIDO PRINCIPAL ----------------
+        // ---------- CONTENIDO PRINCIPAL ----------
         Column(
             modifier = Modifier
                 .fillMaxWidth()
@@ -109,45 +108,37 @@ fun AlquilerDevolverSeriesScreen(navController: NavController) {
         ) {
             Spacer(modifier = Modifier.height(24.dp))
 
-            // Título centrado
             Text(
-                text = stringResource(R.string.aqlqilar_serie),
+                text = stringResource(R.string.alquiler_peliculas),
                 style = typography.headlineLarge.copy(color = colors.primary),
                 modifier = Modifier.padding(bottom = 24.dp)
             )
 
-            // Imagen + descripción
-            AlquilarDevolverSerie(series = serieDemo)
+            AlquilerDevolverPeliculas(peliculas = peliculaDemo)
         }
 
-        // ---------------- BOTONES (encima del bottom bar) ----------------
+        // ---------- BOTONES ----------
         Box(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp, vertical = 8.dp)
                 .align(Alignment.BottomCenter)
         ) {
-            BotonAlquilarSeries(
-                botonAlquilar = ButtonData(
-                    nombre = R.string.alquilar,
-                    type = ButtonType.PRIMARY
-                ),
-                botonDevolver = ButtonData(
-                    nombre = R.string.devolver,
-                    type = ButtonType.SECONDARY
-                )
+            BotonAlquilarPeliculas(
+                botonAlquilar = ButtonData(nombre = R.string.alquilar, type = ButtonType.PRIMARY),
+                botonDevolver = ButtonData(nombre = R.string.devolver, type = ButtonType.SECONDARY)
             )
-
         }
     }
 }
 
 
+
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
-fun AlquilerDevolverSeriesScreenPreview() {
+fun AlquilarDevolverPeliculasScreenPreview() {
     MaterialTheme {
         val navController = rememberNavController()
-        AlquilerDevolverSeriesScreen(navController)
+        AlquilarDevolverPeliculasScreen(navController)
     }
 }

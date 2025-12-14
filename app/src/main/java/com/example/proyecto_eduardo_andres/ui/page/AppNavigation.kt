@@ -1,4 +1,4 @@
-package com.example.proyecto_eduardo_andres.pages
+package com.example.proyecto_eduardo_andres.ui.page
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.runtime.Composable

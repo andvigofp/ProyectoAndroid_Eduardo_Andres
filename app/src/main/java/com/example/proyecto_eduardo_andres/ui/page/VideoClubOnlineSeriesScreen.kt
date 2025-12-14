@@ -1,5 +1,6 @@
 @file:Suppress("ALL")
-package com.example.proyecto_eduardo_andres.pages
+
+package com.example.proyecto_eduardo_andres.ui.page
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
