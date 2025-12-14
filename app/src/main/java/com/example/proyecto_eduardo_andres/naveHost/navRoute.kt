@@ -56,9 +56,6 @@ object AppScreens {
     val Camara = Screen.Camara(R.string.screen_camara)
     val Menu = Screen.Menu(R.string.screen_menu)
     val PerfilUsuario = Screen.PerfilUsuario(R.string.screen_perfil_usuario)
-
     val AlquilerDevolverSerie = Screen.AlquilerDevolverSeries(R.string.screen_alquilar_devolver_series)
-
     val AlquilerDevolverPeliculas = Screen.AlquilerDevolverPeliculas(R.string.screen_alquilar_devolver_peliculas)
-
 }

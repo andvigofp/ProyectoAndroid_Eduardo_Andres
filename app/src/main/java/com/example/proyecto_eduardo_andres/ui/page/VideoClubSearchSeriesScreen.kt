@@ -1,5 +1,6 @@
 @file:Suppress("ALL")
-package com.example.proyecto_eduardo_andres.pages
+
+package com.example.proyecto_eduardo_andres.ui.page
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -45,20 +46,20 @@ import com.example.compose.coloAuzlClaro
 import com.example.compose.colorAzulOscurso
 import com.example.compose.colorAzulSuave
 import com.example.compose.colorVioleta
-import com.example.proyecto_eduardo_andres.myComponents.componenteSearchPeliculas.SearchBar
-import com.example.proyecto_eduardo_andres.myComponents.componenteSearchPeliculas.buscarPeliculas
-import com.example.proyecto_eduardo_andres.myComponents.componenteToolbar.toolBar
-import com.example.proyecto_eduardo_andres.viewData.listaPeliculasData.PeliculasData
 import com.example.proyecto_eduardo_andres.R
+import com.example.proyecto_eduardo_andres.myComponents.componenteSearchSeries.SearchBar
+import com.example.proyecto_eduardo_andres.myComponents.componenteSearchSeries.buscarSeries
+import com.example.proyecto_eduardo_andres.myComponents.componenteToolbar.toolBar
 import com.example.proyecto_eduardo_andres.naveHost.AppScreens
+import com.example.proyecto_eduardo_andres.viewData.listaSeriesData.SeriesData
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun VideoClubSearchPeliculasScreen(navController: NavController) {
-    val peliculasData = PeliculasData()
+fun VideoClubSearchSeriesScreen(navController: NavController) {
+    val seriesData = SeriesData()
     var searchQuery by remember { mutableStateOf(TextFieldValue("")) }
 
-    val peliculasFiltradas = buscarPeliculas(peliculasData.nombrePeliculas, searchQuery.text)
+    val seriesFiltrada = buscarSeries(seriesData.nombreSeries, searchQuery.text)
 
     // Degradado del toolbar
     val toolbarBackGround = Brush.linearGradient(
@@ -75,15 +76,15 @@ fun VideoClubSearchPeliculasScreen(navController: NavController) {
             .fillMaxSize()
             .background(colorAzulSuave) // fondo general
     ) {
-        // ---------- TOOLBAR ----------
+        // --- TOOLBAR SUPERIOR ---
         Box(
             modifier = Modifier
                 .fillMaxWidth()
                 .background(toolbarBackGround)
-                .statusBarsPadding() // espacio para la barra de estado
+                .statusBarsPadding()
         ) {
             Column {
-                Spacer(modifier = Modifier.height(24.dp)) // espacio para reloj
+                Spacer(modifier = Modifier.height(24.dp))
                 toolBar(
                     onBackClick = { navController.popBackStack() },
                     onHomeClick = { navController.navigate(AppScreens.VideoClubPeliculas.routeId.toString()) },
@@ -94,13 +95,12 @@ fun VideoClubSearchPeliculasScreen(navController: NavController) {
             }
         }
 
-        // ---------- CONTENIDO ----------
+        // --- CONTENIDO PRINCIPAL: búsqueda y lista ---
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(16.dp)
         ) {
-            // Barra de búsqueda
             SearchBar(
                 searchQuery = searchQuery,
                 onQueryChange = { searchQuery = it }
@@ -108,23 +108,22 @@ fun VideoClubSearchPeliculasScreen(navController: NavController) {
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            // Lista de películas
             LazyColumn(
                 verticalArrangement = Arrangement.spacedBy(12.dp),
                 modifier = Modifier.fillMaxSize()
             ) {
-                items(peliculasFiltradas) { movie ->
+                items(seriesFiltrada) { serie ->
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
                         modifier = Modifier
                             .fillMaxWidth()
-                            .background(coloAuzlClaro, RoundedCornerShape(12.dp))
+                            .background(coloAuzlClaro, RoundedCornerShape(12.dp)) // ← aquí cambias el color
                             .padding(8.dp)
                     ) {
-                        if (movie.imagen != null) {
+                        if (serie.imagen != null) {
                             Image(
-                                painter = painterResource(id = movie.imagen),
-                                contentDescription = stringResource(movie.nombrePelicula),
+                                painter = painterResource(id = serie.imagen),
+                                contentDescription = stringResource(serie.nombreSerie),
                                 modifier = Modifier
                                     .size(64.dp)
                                     .clip(RoundedCornerShape(8.dp)),
@@ -137,24 +136,21 @@ fun VideoClubSearchPeliculasScreen(navController: NavController) {
                                     .background(Color.Gray, RoundedCornerShape(8.dp)),
                                 contentAlignment = Alignment.Center
                             ) {
-                                Text(
-                                    stringResource(R.string.img),
-                                    color = Color.White,
-                                    fontSize = 12.sp
-                                )
+                                Text(stringResource(R.string.img), color = Color.White, fontSize = 12.sp)
                             }
                         }
 
                         Spacer(modifier = Modifier.width(16.dp))
+
                         Column {
                             Text(
-                                text = stringResource(movie.nombrePelicula),
+                                text = stringResource(serie.nombreSerie),
                                 fontSize = 16.sp,
                                 fontWeight = FontWeight.Medium,
                                 color = Color.Black
                             )
                             Text(
-                                text = stringResource(movie.nombreCategoria),
+                                text = stringResource(serie.nombreCategoria),
                                 fontSize = 12.sp,
                                 color = Color.DarkGray
                             )
@@ -166,9 +162,10 @@ fun VideoClubSearchPeliculasScreen(navController: NavController) {
     }
 }
 
+
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
-fun VideoClubSearchScreenPeliculasPreview() {
+fun VideoClubSearchScreenSeriePreview() {
     val navController = rememberNavController()
-    VideoClubSearchPeliculasScreen(navController)
+    VideoClubSearchSeriesScreen(navController)
 }

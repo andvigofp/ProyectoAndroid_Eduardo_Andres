@@ -1,15 +1,28 @@
 @file:Suppress("ALL")
-package com.example.proyecto_eduardo_andres.pages
+
+package com.example.proyecto_eduardo_andres.ui.page
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -20,32 +33,30 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.compose.colorAzulOscurso
 import com.example.compose.colorVioleta
 import com.example.proyecto_eduardo_andres.R
-import com.example.proyecto_eduardo_andres.myComponents.componenteLogin.LoginButtons
-import com.example.proyecto_eduardo_andres.myComponents.componenteLogin.CamposLogin
-import com.example.proyecto_eduardo_andres.viewData.buttonsData.ButtonData
-import com.example.proyecto_eduardo_andres.viewData.buttonsData.ButtonType
-import com.example.proyecto_eduardo_andres.viewData.logingData.LoginData
+import com.example.proyecto_eduardo_andres.myComponents.componenteRecuperarPassword.RecuperarPasswordButton
+import com.example.proyecto_eduardo_andres.viewData.recuperarPasswordData.RecuperarPasswordButtonText
+import com.example.proyecto_eduardo_andres.viewData.recuperarPasswordData.RecuperarPasswordData
+import com.example.proyecto_eduardo_andres.myComponents.componenteRecuperarPassword.RecuperarPasswordFields
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun LogingScreen(
-    userImageUrl: String?, // null si no hay imagen
-    onAccederClick: () -> Unit,
-    onCrearUsuarioClick: () -> Unit,
-    onRecuperarPasswordClick: () -> Unit
+fun RecuperarPasswordScreen(
+    onRecuperarClick: () -> Unit = {},
+    onCancelarClick: () -> Unit = {}
 ) {
-    var loginData by remember { mutableStateOf(LoginData()) }
-    val scrollState = rememberScrollState()
+    var recuperarPasswordData by remember { mutableStateOf(RecuperarPasswordData()) }
 
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(MaterialTheme.colorScheme.surfaceBright) // Fondo principal
+            .background(Color.White)
     ) {
         // --- Degradado superior ---
         Box(
@@ -72,46 +83,46 @@ fun LogingScreen(
                 )
         )
 
-        // --- Contenido principal con scroll ---
+        // --- Contenido principal ---
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(top = 95.dp, bottom = 32.dp)
-                .verticalScroll(scrollState),
+                .padding(top = 95.dp, bottom = 32.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Top
         ) {
-            // Título LOGIN
+            // Título
             Text(
-                text = stringResource(R.string.loging),
-                fontSize = 32.sp,
+                text = stringResource(R.string.repetir_password),
+                fontSize = 28.sp,
                 fontWeight = FontWeight.Bold,
                 color = Color.White,
-                modifier = Modifier.padding(bottom = 16.dp)
+                modifier = Modifier.padding(bottom = 16.dp),
+                textAlign = TextAlign.Center
             )
 
-            // Tarjeta blanca del formulario
+            // Tarjeta del formulario
             Column(
                 modifier = Modifier
                     .fillMaxWidth(0.9f)
                     .shadow(12.dp, RoundedCornerShape(24.dp))
-                    .background(MaterialTheme.colorScheme.surface, RoundedCornerShape(24.dp))
+                    .background(Color.White, RoundedCornerShape(24.dp))
                     .padding(horizontal = 24.dp, vertical = 32.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.spacedBy(40.dp)
+                verticalArrangement = Arrangement.spacedBy(32.dp)
             ) {
-                // Imagen circular del logotipo
+                // Imagen circular
                 Box(
                     modifier = Modifier
                         .size(120.dp)
                         .shadow(8.dp, CircleShape)
-                        .background(MaterialTheme.colorScheme.primary, CircleShape)
+                        .background(colorAzulOscurso, CircleShape)
                         .clip(CircleShape),
                     contentAlignment = Alignment.Center
                 ) {
                     Image(
                         painter = painterResource(id = R.drawable.ic_logotipo_team),
-                        contentDescription = stringResource(R.string.logo),
+                        contentDescription = "Logo",
                         contentScale = ContentScale.Crop,
                         modifier = Modifier
                             .size(80.dp)
@@ -119,27 +130,22 @@ fun LogingScreen(
                     )
                 }
 
-                Spacer(modifier = Modifier.height(16.dp))
-
-                // Campos de login
-                CamposLogin(
-                    loginData = loginData,
-                    onLoginDataChange = { loginData = it }
+                // Campos de recuperación
+                RecuperarPasswordFields(
+                    recuperarPasswordData = recuperarPasswordData,
+                    onRecuperarPasswordData = { recuperarPasswordData = it }
                 )
 
-                Spacer(modifier = Modifier.height(16.dp))
+                Spacer(modifier = Modifier.height(32.dp))
 
-                // Botones
-                LoginButtons(
-                    accederButton = ButtonData(
-                        nombre = R.string.acceder,
-                        type = ButtonType.PRIMARY
+                // Botones modernizados
+                RecuperarPasswordButton(
+                    buttonText = RecuperarPasswordButtonText(
+                        cancelar = stringResource(R.string.cancelar),
+                        recuperarPassword = stringResource(R.string.recuperar)
                     ),
-                    crearUsuarioButton = ButtonData(nombre = R.string.crear_usuario, type = ButtonType.SECONDARY),
-                    recuperarButton = ButtonData(nombre = R.string.recuperar_contrasenha, type = ButtonType.DANGER),
-                    onAccederClick = onAccederClick,
-                    onCrearUsuarioClick = onCrearUsuarioClick,
-                    onRecuperarPasswordClick = onRecuperarPasswordClick
+                    onRecuperarClick = onRecuperarClick,
+                    onCancelarClick = onCancelarClick
                 )
             }
         }
@@ -148,13 +154,8 @@ fun LogingScreen(
 
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
-fun LoginScreenPreview() {
+fun RecuperarPasswordScreenPreview() {
     MaterialTheme {
-        LogingScreen(
-            userImageUrl = null,
-            onAccederClick = {},
-            onCrearUsuarioClick = {},
-            onRecuperarPasswordClick = {}
-        )
+        RecuperarPasswordScreen()
     }
 }
