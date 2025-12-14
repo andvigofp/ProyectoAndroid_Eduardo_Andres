@@ -13,12 +13,16 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -37,40 +41,52 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.compose.colorAzulOscurso
 import com.example.compose.colorVioleta
 import com.example.proyecto_eduardo_andres.R
 import com.example.proyecto_eduardo_andres.myComponents.componenteRecuperarPassword.RecuperarPasswordButton
 import com.example.proyecto_eduardo_andres.viewData.recuperarPasswordData.RecuperarPasswordButtonText
-import com.example.proyecto_eduardo_andres.viewData.recuperarPasswordData.RecuperarPasswordData
+import com.example.proyecto_eduardo_andres.viewData.recuperarPasswordData.RecuperarPasswordUiState
 import com.example.proyecto_eduardo_andres.myComponents.componenteRecuperarPassword.RecuperarPasswordFields
+import com.example.proyecto_eduardo_andres.viewmodel.RecuperarPasswordViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RecuperarPasswordScreen(
+    recuperarPasswordViewModel: RecuperarPasswordViewModel = viewModel(),
     onRecuperarClick: () -> Unit = {},
     onCancelarClick: () -> Unit = {}
 ) {
-    var recuperarPasswordData by remember { mutableStateOf(RecuperarPasswordData()) }
+    val uiState by recuperarPasswordViewModel.uiState.collectAsState()
+
+    // Local state para formularios y sincronización
+    var recuperarPasswordData by remember { mutableStateOf(uiState) }
+
+    LaunchedEffect(uiState) {
+        recuperarPasswordData = uiState
+    }
+
+    val colors = MaterialTheme.colorScheme
+    val scrollState = rememberScrollState()
 
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color.White)
+            .background(colors.background)
     ) {
-        // --- Degradado superior ---
+        // Degradados superior e inferior (usa colores de tema si quieres)
         Box(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(220.dp)
                 .background(
                     Brush.verticalGradient(
-                        listOf(colorVioleta, colorAzulOscurso)
+                        listOf(colors.primary, colors.secondary)
                     )
                 )
         )
 
-        // --- Degradado inferior ---
         Box(
             modifier = Modifier
                 .fillMaxWidth()
@@ -78,72 +94,74 @@ fun RecuperarPasswordScreen(
                 .align(Alignment.BottomCenter)
                 .background(
                     Brush.verticalGradient(
-                        listOf(colorVioleta, colorAzulOscurso)
+                        listOf(colors.primary, colors.secondary)
                     )
                 )
         )
 
-        // --- Contenido principal ---
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(top = 95.dp, bottom = 32.dp),
+                .padding(top = 95.dp, bottom = 32.dp)
+                .verticalScroll(scrollState),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Top
         ) {
-            // Título
             Text(
-                text = stringResource(R.string.repetir_password),
+                text = stringResource(R.string.recuperar_contrasenha),
                 fontSize = 28.sp,
                 fontWeight = FontWeight.Bold,
-                color = Color.White,
+                color = colors.onPrimary,
                 modifier = Modifier.padding(bottom = 16.dp),
                 textAlign = TextAlign.Center
             )
 
-            // Tarjeta del formulario
             Column(
                 modifier = Modifier
                     .fillMaxWidth(0.9f)
                     .shadow(12.dp, RoundedCornerShape(24.dp))
-                    .background(Color.White, RoundedCornerShape(24.dp))
+                    .background(colors.surface, RoundedCornerShape(24.dp))
                     .padding(horizontal = 24.dp, vertical = 32.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.spacedBy(32.dp)
             ) {
-                // Imagen circular
                 Box(
                     modifier = Modifier
                         .size(120.dp)
                         .shadow(8.dp, CircleShape)
-                        .background(colorAzulOscurso, CircleShape)
+                        .background(colors.primary, CircleShape)
                         .clip(CircleShape),
                     contentAlignment = Alignment.Center
                 ) {
                     Image(
                         painter = painterResource(id = R.drawable.ic_logotipo_team),
-                        contentDescription = "Logo",
+                        contentDescription = stringResource(R.string.logo),
                         contentScale = ContentScale.Crop,
-                        modifier = Modifier
-                            .size(80.dp)
-                            .clip(CircleShape)
+                        modifier = Modifier.size(80.dp).clip(CircleShape)
                     )
                 }
 
-                // Campos de recuperación
                 RecuperarPasswordFields(
                     recuperarPasswordData = recuperarPasswordData,
-                    onRecuperarPasswordData = { recuperarPasswordData = it }
+                    onRecuperarPasswordData = {
+                        recuperarPasswordData = it
+
+                        // Actualizar ViewModel para mantener estado consistente
+                        recuperarPasswordViewModel.onEmailChange(it.email)
+                        recuperarPasswordViewModel.onPasswordChange(it.password)
+                        recuperarPasswordViewModel.onRepeatPasswordChange(it.repeatPassword)
+                    }
                 )
 
-                Spacer(modifier = Modifier.height(32.dp))
+                // Después de los campos
+                Spacer(modifier = Modifier.height(48.dp))  // Aumenté a 48.dp para más espacio
 
-                // Botones modernizados
                 RecuperarPasswordButton(
                     buttonText = RecuperarPasswordButtonText(
-                        cancelar = stringResource(R.string.cancelar),
-                        recuperarPassword = stringResource(R.string.recuperar)
+                        cancelar = R.string.cancelar,
+                        recuperarPassword = R.string.recuperar
                     ),
+                    enabled = uiState.isLoginButtonEnabled,
                     onRecuperarClick = onRecuperarClick,
                     onCancelarClick = onCancelarClick
                 )
