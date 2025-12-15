@@ -27,8 +27,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.proyecto_eduardo_andres.R
-import com.example.proyecto_eduardo_andres.viewData.alquilerDevolverPeliculasData.AlquilarDevolverPeliculasData
+import com.example.proyecto_eduardo_andres.viewData.alquilerDevolverPeliculasData.AlquilarDevolverPeliculasUiState
 import com.example.proyecto_eduardo_andres.viewData.alquilerDevolverPeliculasData.PeliculasAlquilarDevolverData
+import com.example.proyecto_eduardo_andres.viewData.alquilerDevolverPeliculasData.VideoClubOnlineAlquilarPeliculasUiState
 
 /**
  * @author Eduardo
@@ -38,7 +39,7 @@ import com.example.proyecto_eduardo_andres.viewData.alquilerDevolverPeliculasDat
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AlquilerDevolverPeliculas(
-    peliculas: AlquilarDevolverPeliculasData
+    peliculas: AlquilarDevolverPeliculasUiState
 ) {
     val colors = MaterialTheme.colorScheme
     val typography = MaterialTheme.typography
@@ -60,7 +61,7 @@ fun AlquilerDevolverPeliculas(
             // Imagen
             if (peliculas.imagen != null) {
                 Image(
-                    painter = painterResource(id = peliculas.imagen),
+                    painter = painterResource(id = peliculas.imagen!!),
                     contentDescription = stringResource(peliculas.nombrePelicula),
                     modifier = Modifier
                         .size(150.dp)
@@ -100,20 +101,28 @@ fun AlquilerDevolverPeliculas(
     }
 }
 
+
+
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun AlquilarDevolverPeliculasPreview() {
+    // Obtener la lista de películas
     val listaPeliculas = PeliculasAlquilarDevolverData().nombrePeliculas
 
-    // No uses R.string en previews — causa IDs incorrectos
-    val peliculaSeleccionada = listaPeliculas[5]
+    // Seleccionar una película específica para el preview
+    val peliculaSeleccionada = listaPeliculas[0]
 
-    val peliculaDemo = AlquilarDevolverPeliculasData(
-        imagen = peliculaSeleccionada.imagen,
-        nombrePelicula = peliculaSeleccionada.nombrePelicula,
-        descripcion = peliculaSeleccionada.descripcion
+    // Crear el estado de la película con los valores correctos
+    val peliculaDemo = AlquilarDevolverPeliculasUiState(
+        pelicula = VideoClubOnlineAlquilarPeliculasUiState(
+            imagen = peliculaSeleccionada.imagen,
+            nombrePelicula = peliculaSeleccionada.nombrePelicula,
+            descripcion = peliculaSeleccionada.descripcion
+        ),
+        peliculaAlquilada = false // Definir si la película está alquilada o no
     )
 
+    // Renderizar el componente con el estado definido
     MaterialTheme {
         AlquilerDevolverPeliculas(peliculas = peliculaDemo)
     }

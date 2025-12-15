@@ -15,6 +15,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -37,7 +38,9 @@ fun BotonAlquilarPeliculas(
     botonAlquilar: ButtonData,
     botonDevolver: ButtonData,
     onAlquilarClick: () -> Unit = {},
-    onDevolverClick: () -> Unit = {}
+    onDevolverClick: () -> Unit = {},
+    isAlquilarButtonEnabled: Boolean,
+    isDevolverButtonEnabled: Boolean
 ) {
     var showDialog by remember { mutableStateOf(false) }
 
@@ -57,7 +60,9 @@ fun BotonAlquilarPeliculas(
         AppButton(
             data = botonAlquilar,
             onClick = onAlquilarClick,
-            modifier = Modifier.weight(1f)
+            modifier = Modifier
+                .weight(1f)
+                .then(Modifier.alpha(if (isAlquilarButtonEnabled) 1f else 0.5f)) // Hacer que se vea deshabilitado
         )
 
         // Botón Devolver (usa tu botón atómico)
@@ -67,7 +72,9 @@ fun BotonAlquilarPeliculas(
                 onDevolverClick()
                 showDialog = true
             },
-            modifier = Modifier.weight(1f)
+            modifier = Modifier
+                .weight(1f)
+                .then(Modifier.alpha(if (isDevolverButtonEnabled) 1f else 0.5f)) // Hacer que se vea deshabilitado
         )
     }
 
@@ -88,10 +95,12 @@ fun BotonAlquilarPeliculas(
 }
 
 
+
 @Preview(showBackground = true)
 @Composable
 fun BotonAlquilarPeliculasPreview() {
     MaterialTheme {
+        // Aquí definimos los valores de enabled para los botones
         BotonAlquilarPeliculas(
             botonAlquilar = ButtonData(
                 nombre = R.string.alquilar,
@@ -100,7 +109,9 @@ fun BotonAlquilarPeliculasPreview() {
             botonDevolver = ButtonData(
                 nombre = R.string.devolver,
                 type = ButtonType.SECONDARY
-            )
+            ),
+            isAlquilarButtonEnabled = true, // El botón de alquilar está habilitado
+            isDevolverButtonEnabled = false  // El botón de devolver está deshabilitado
         )
     }
 }

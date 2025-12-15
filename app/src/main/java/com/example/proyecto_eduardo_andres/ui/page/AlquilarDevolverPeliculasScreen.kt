@@ -10,10 +10,14 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
@@ -21,27 +25,30 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.compose.colorAzulOscurso
 import com.example.compose.colorVioleta
 import com.example.proyecto_eduardo_andres.R
-import com.example.proyecto_eduardo_andres.viewData.alquilerDevolverPeliculasData.AlquilarDevolverPeliculasData
 import com.example.proyecto_eduardo_andres.myComponents.componenteAlquilarDevolverPeliculas.AlquilerDevolverPeliculas
 import com.example.proyecto_eduardo_andres.myComponents.componenteAlquilarDevolverPeliculas.BotonAlquilarPeliculas
-import com.example.proyecto_eduardo_andres.viewData.alquilerDevolverPeliculasData.PeliculasAlquilarDevolverData
 import com.example.proyecto_eduardo_andres.myComponents.componenteCustomScreenPeliculasSeries.CustomScreenWithoutScaffold
 import com.example.proyecto_eduardo_andres.myComponents.componenteToolbar.toolBar
 import com.example.proyecto_eduardo_andres.naveHost.AppScreens
 import com.example.proyecto_eduardo_andres.viewData.buttonsData.ButtonData
 import com.example.proyecto_eduardo_andres.viewData.buttonsData.ButtonType
+import com.example.proyecto_eduardo_andres.viewmodel.AlquilarDevolverPeliculasViewModel
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AlquilarDevolverPeliculasScreen(navController: NavController) {
-
+fun AlquilarDevolverPeliculasScreen(
+    navController: NavController,
+    viewModel: AlquilarDevolverPeliculasViewModel = viewModel()
+) {
+    val uiState by viewModel.uiState.collectAsState() // Observamos el estado
     val colors = MaterialTheme.colorScheme
     val typography = MaterialTheme.typography
+    var showDialog by remember { mutableStateOf(false) }
 
     val toolbarBackGround = Brush.linearGradient(
         colors = listOf(
@@ -52,28 +59,15 @@ fun AlquilarDevolverPeliculasScreen(navController: NavController) {
         end = Offset(1000f, 1000f)
     )
 
-    val listaPeliculas = PeliculasAlquilarDevolverData().nombrePeliculas
-    val peliculaSeleccionada = listaPeliculas.firstOrNull {
-        it.nombrePelicula == R.string.la_vida_es_bella
-    } ?: listaPeliculas.first()
-
-    val peliculaDemo = AlquilarDevolverPeliculasData(
-        imagen = peliculaSeleccionada.imagen,
-        nombrePelicula = peliculaSeleccionada.nombrePelicula,
-        descripcion = peliculaSeleccionada.descripcion
-    )
-
     CustomScreenWithoutScaffold(
-
-        // ---------- TOP BAR ----------
         topBar = {
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .background(toolbarBackGround)   // ← degradado cubre TODO, incluso reloj
+                    .background(toolbarBackGround)
             ) {
                 Column(
-                    modifier = Modifier.statusBarsPadding() // solo mueve el contenido
+                    modifier = Modifier.statusBarsPadding()
                 ) {
                     Spacer(modifier = Modifier.height(8.dp))
                     toolBar(
@@ -86,8 +80,6 @@ fun AlquilarDevolverPeliculasScreen(navController: NavController) {
                 }
             }
         },
-
-        // ---------- BOTTOM BAR ----------
         bottomBar = {
             Box(
                 modifier = Modifier
@@ -97,7 +89,6 @@ fun AlquilarDevolverPeliculasScreen(navController: NavController) {
             )
         }
     ) {
-
         // ---------- CONTENIDO PRINCIPAL ----------
         Column(
             modifier = Modifier
@@ -114,7 +105,7 @@ fun AlquilarDevolverPeliculasScreen(navController: NavController) {
                 modifier = Modifier.padding(bottom = 24.dp)
             )
 
-            AlquilerDevolverPeliculas(peliculas = peliculaDemo)
+            AlquilerDevolverPeliculas(peliculas = uiState)
         }
 
         // ---------- BOTONES ----------
@@ -126,13 +117,31 @@ fun AlquilarDevolverPeliculasScreen(navController: NavController) {
         ) {
             BotonAlquilarPeliculas(
                 botonAlquilar = ButtonData(nombre = R.string.alquilar, type = ButtonType.PRIMARY),
-                botonDevolver = ButtonData(nombre = R.string.devolver, type = ButtonType.SECONDARY)
+                botonDevolver = ButtonData(nombre = R.string.devolver, type = ButtonType.SECONDARY),
+                onAlquilarClick = {
+                    viewModel.alquilarPelicula()
+                    showDialog = true
+                },
+                onDevolverClick = {
+                    viewModel.devolverPelicula()
+                    showDialog = true
+                },
+                isAlquilarButtonEnabled = uiState.isAlquilarButtonEnabled,
+                isDevolverButtonEnabled = uiState.isDevolverButtonEnabled
+            )
+        }
+
+        // Mostrar el diálogo de alquiler o devolución
+        if (showDialog) {
+            AlquilarDevolverDialog(
+                isAlquiler = uiState.peliculaAlquilada,
+                fechaAlquiler = uiState.fechaAlquiler,
+                fechaDevolucion = uiState.fechaDevolucion,
+                onConfirmClick = { showDialog = false }
             )
         }
     }
 }
-
-
 
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
