@@ -163,4 +163,9 @@
     <string name="screen_perfil_usuario">perfil_usuario</string>
     <string name="screen_alquilar_devolver_series">alquilar_devolver_series</string>
     <string name="screen_alquilar_devolver_peliculas">alquilar_devolver_peliculas</string>
+    <string name="estado_pelicula">%1$s</string>
+    <string name="fecha_alquiler">Fecha de alquiler: %1$s</string>
+    <string name="fecha_devolucion">Fecha de devolución: %1$s</string>
+    <string name="multa_devolucion_tarde">¡La película fue devuelta tarde! Se aplica una multa.</string>
+    <string name="boton_aceptar">Aceptar</string>
 </resources>

@@ -1,8 +1,7 @@
 package com.example.proyecto_eduardo_andres.viewData.alquilerDevolverPeliculasData
 
-data class AlquilarDevolverPeliculasData(
+data class VideoClubOnlineAlquilarPeliculasUiState(
     val imagen: Int? = null,
     val nombrePelicula: Int,
-    val descripcion: Int,
-    val nombreBoton: String = "",
+    val descripcion:  Int
 )
