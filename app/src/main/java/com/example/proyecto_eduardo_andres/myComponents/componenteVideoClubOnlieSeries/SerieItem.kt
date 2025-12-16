@@ -1,4 +1,4 @@
-package com.example.proyecto_eduardo_andres.viewData.listaPeliculasData
+package com.example.proyecto_eduardo_andres.myComponents.componenteVideoClubOnlieSeries
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -26,11 +26,11 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.example.proyecto_eduardo_andres.R
+import com.example.proyecto_eduardo_andres.viewData.listaSeriesData.VideoClubOnlineSeriesData
 
 @Composable
-fun PeliculaItem(pelicula: VideoClubOnlinePeliculasData) {
+fun SerieItem(serie: VideoClubOnlineSeriesData) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(6.dp),
@@ -40,31 +40,31 @@ fun PeliculaItem(pelicula: VideoClubOnlinePeliculasData) {
             modifier = Modifier
                 .size(130.dp)
                 .clip(RoundedCornerShape(12.dp))
-                .background(MaterialTheme.colorScheme.surfaceVariant) // <- Aquí
-                .clickable { /* manejar click */ },
+                .background(MaterialTheme.colorScheme.surfaceVariant)
+                .clickable { /* acción click */ },
             contentAlignment = Alignment.Center
         ) {
-            pelicula.imagen?.let {
+            serie.imagen?.let {
                 Image(
                     painter = painterResource(id = it),
-                    contentDescription = stringResource(pelicula.nombrePelicula),
+                    contentDescription = stringResource(serie.nombreSerie),
                     contentScale = ContentScale.Crop,
                     modifier = Modifier.fillMaxSize()
                 )
             } ?: Icon(
                 imageVector = Icons.Default.Movie,
                 contentDescription = stringResource(R.string.sin_imagen),
-                tint = MaterialTheme.colorScheme.onSurfaceVariant, // <- icono también del tema
+                tint = MaterialTheme.colorScheme.onSurfaceVariant,
                 modifier = Modifier.size(48.dp)
             )
         }
-
         Text(
-            text = stringResource(pelicula.nombrePelicula),
-            color = MaterialTheme.colorScheme.onBackground,
-            fontSize = 14.sp,
-            fontWeight = FontWeight.Medium,
-            textAlign = TextAlign.Center,
+            text = stringResource(serie.nombreSerie),
+            style = MaterialTheme.typography.bodyMedium.copy(
+                color = MaterialTheme.colorScheme.onBackground,
+                fontWeight = FontWeight.Medium,
+                textAlign = TextAlign.Center
+            ),
             modifier = Modifier.fillMaxWidth()
         )
     }

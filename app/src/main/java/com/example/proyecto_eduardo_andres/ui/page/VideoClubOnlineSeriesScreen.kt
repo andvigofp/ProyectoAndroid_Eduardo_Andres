@@ -9,15 +9,19 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Movie
@@ -49,18 +53,33 @@ import com.example.proyecto_eduardo_andres.myComponents.componenteToolbar.toolBa
 import kotlin.collections.component1
 import kotlin.collections.component2
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.res.stringResource
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.compose.colorAzulOscurso
 import com.example.compose.colorVioleta
+import com.example.proyecto_eduardo_andres.myComponents.componenteVideoClubOnlieSeries.SerieItem
 import com.example.proyecto_eduardo_andres.naveHost.AppScreens
+import com.example.proyecto_eduardo_andres.viewmodel.VideoClubOnlinePeliculasViewModel
+import com.example.proyecto_eduardo_andres.viewmodel.VideoClubOnlineSeriesViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun VideoClubOnlineSeriesScreen(navController: NavController) {
+fun VideoClubOnlineSeriesScreen(
+    navController: NavController,
+    viewModel: VideoClubOnlineSeriesViewModel = viewModel() // ViewModel para series
+) {
     val drawerState = rememberDrawerState(DrawerValue.Closed)
     val scope = rememberCoroutineScope()
+
+    val toolbarHeight = 56.dp + WindowInsets.statusBars.asPaddingValues().calculateTopPadding()
+
+    // Observar estado UI del ViewModel
+    val uiState by viewModel.uiState.collectAsState()
+
     ModalNavigationDrawer(
         drawerState = drawerState,
         drawerContent = {
@@ -72,20 +91,23 @@ fun VideoClubOnlineSeriesScreen(navController: NavController) {
             )
         }
     ) {
-        Scaffold(
-            topBar = {
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .background(
-                            Brush.verticalGradient(
-                                colors = listOf(
-                                    colorVioleta, colorAzulOscurso
-                                )
-                            )
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(MaterialTheme.colorScheme.background)
+        ) {
+            // ---------- TOOLBAR ----------
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(toolbarHeight)
+                    .background(
+                        Brush.verticalGradient(
+                            colors = listOf(colorVioleta, colorAzulOscurso)
                         )
-                        .statusBarsPadding()
-                ) {
+                    )
+            ) {
+                Column(modifier = Modifier.statusBarsPadding()) {
                     toolBarVideoClubOnline(
                         drawerState = drawerState,
                         scope = scope,
@@ -96,29 +118,37 @@ fun VideoClubOnlineSeriesScreen(navController: NavController) {
                         onLogoutClick = { navController.navigate(AppScreens.Login.routeId.toString()) }
                     )
                 }
-            },
-            containerColor = MaterialTheme.colorScheme.background
-        ) { padding ->
+            }
+
+            // ---------- CONTENIDO ----------
             LazyColumn(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(padding)
+                    .padding(top = toolbarHeight)
                     .background(MaterialTheme.colorScheme.background),
                 verticalArrangement = Arrangement.spacedBy(24.dp)
             ) {
-                item { Spacer(modifier = Modifier.height(12.dp)) }
-                item { VideoClubCategoriasBotones() }
+                item { Spacer(modifier = Modifier.height(2.dp)) }
+
+                // Botones de categorías con callback
+                item {
+                    VideoClubCategoriasBotones(
+                        onCategoriaClick = { categoriaId -> viewModel.filtrarPorCategoria(categoriaId) },
+                        modifier = Modifier.statusBarsPadding()
+                    )
+                }
+
                 item { Spacer(modifier = Modifier.height(8.dp)) }
-                val seriesData = SeriesData()
-                val categoriasAgrupadas = seriesData.nombreSeries.groupBy { it.nombreCategoria }
-                categoriasAgrupadas.forEach { (categoria, series) ->
+
+                // Series agrupadas por categoría desde el ViewModel
+                uiState.seriesPorCategoria.forEach { (categoria, series) ->
                     item(key = categoria) {
                         Column(
                             verticalArrangement = Arrangement.spacedBy(16.dp),
                             modifier = Modifier.fillMaxWidth()
                         ) {
                             Text(
-                                text = stringResource( categoria),
+                                text = stringResource(categoria),
                                 fontSize = 22.sp,
                                 fontWeight = FontWeight.Bold,
                                 color = MaterialTheme.colorScheme.primary,
@@ -128,60 +158,28 @@ fun VideoClubOnlineSeriesScreen(navController: NavController) {
                                 horizontalArrangement = Arrangement.spacedBy(16.dp),
                                 modifier = Modifier.fillMaxWidth()
                             ) {
-                                items(series.size) { index ->
-                                    val serie = series[index]
-                                    Column(
-                                        horizontalAlignment = Alignment.CenterHorizontally,
-                                        verticalArrangement = Arrangement.spacedBy(6.dp),
-                                        modifier = Modifier.width(130.dp)
-                                    ) {
-                                        Box(
-                                            modifier = Modifier
-                                                .size(130.dp)
-                                                .clip(RoundedCornerShape(12.dp))
-                                                .background(MaterialTheme.colorScheme.inversePrimary)
-                                                .clickable { /* onSerieClick(serie) */ },
-                                            contentAlignment = Alignment.Center
-                                        ) {
-                                            serie.imagen?.let {
-                                                Image(
-                                                    painter = painterResource(id = it),
-                                                    contentDescription = stringResource(serie.nombreSerie),
-                                                    contentScale = ContentScale.Crop,
-                                                    modifier = Modifier.fillMaxSize()
-                                                )
-                                            } ?: Icon(
-                                                imageVector = Icons.Default.Movie,
-                                                contentDescription = "Sin imagen",
-                                                tint = Color.Gray,
-                                                modifier = Modifier.size(48.dp)
-                                            )
-                                        }
-                                        Text(
-                                            text = stringResource(serie.nombreSerie),
-                                            color = MaterialTheme.colorScheme.onBackground,
-                                            fontSize = 14.sp,
-                                            fontWeight = FontWeight.Medium,
-                                            textAlign = TextAlign.Center,
-                                            modifier = Modifier.fillMaxWidth()
-                                        )
-                                    }
+                                items(series) { serie ->
+                                    SerieItem(serie)
                                 }
                             }
                         }
                     }
                 }
+
                 item { Spacer(modifier = Modifier.height(16.dp)) }
             }
         }
     }
 }
 
+
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun VideoClubOnlineSeriesScreenPreview() {
+    val navController = rememberNavController()
+    val viewModel: VideoClubOnlineSeriesViewModel = viewModel()
+
     MaterialTheme {
-        val navController = rememberNavController()
-        VideoClubOnlineSeriesScreen(navController)
+        VideoClubOnlineSeriesScreen(navController, viewModel)
     }
 }
