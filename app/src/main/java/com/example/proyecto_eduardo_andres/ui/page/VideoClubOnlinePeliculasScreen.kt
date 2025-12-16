@@ -21,6 +21,7 @@ import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Movie
@@ -32,6 +33,8 @@ import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -46,6 +49,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.compose.colorAzulOscurso
@@ -55,15 +60,23 @@ import com.example.proyecto_eduardo_andres.myComponents.componenteMenu.VideoClub
 import com.example.proyecto_eduardo_andres.myComponents.componenteToolbar.toolBarVideoClubOnline
 import com.example.proyecto_eduardo_andres.myComponents.componenteVideoClubListaPeliculas.VideoClubCategoriasBotones
 import com.example.proyecto_eduardo_andres.naveHost.AppScreens
+import com.example.proyecto_eduardo_andres.viewData.listaPeliculasData.PeliculaItem
 import com.example.proyecto_eduardo_andres.viewData.listaSeriesData.SeriesData
+import com.example.proyecto_eduardo_andres.viewmodel.VideoClubOnlinePeliculasViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun VideoClubOnlinePeliculasScreen(navController: NavController) {
+fun VideoClubOnlinePeliculasScreen(
+    navController: NavController,
+    viewModel: VideoClubOnlinePeliculasViewModel = viewModel()// O viewModel() si no usas Hilt
+) {
     val drawerState = rememberDrawerState(DrawerValue.Closed)
     val scope = rememberCoroutineScope()
 
     val toolbarHeight = 56.dp + WindowInsets.statusBars.asPaddingValues().calculateTopPadding()
+
+    // Observar estado UI del ViewModel
+    val uiState by viewModel.uiState.collectAsState()
 
     ModalNavigationDrawer(
         drawerState = drawerState,
@@ -81,7 +94,6 @@ fun VideoClubOnlinePeliculasScreen(navController: NavController) {
                 .fillMaxSize()
                 .background(MaterialTheme.colorScheme.background)
         ) {
-
             // ---------- TOOLBAR ----------
             Box(
                 modifier = Modifier
@@ -96,7 +108,7 @@ fun VideoClubOnlinePeliculasScreen(navController: NavController) {
                     )
             ) {
                 Column(
-                    modifier = Modifier.statusBarsPadding() // mueve solo el contenido del toolbar
+                    modifier = Modifier.statusBarsPadding() // para no tapar status bar
                 ) {
                     toolBarVideoClubOnline(
                         drawerState = drawerState,
@@ -114,18 +126,26 @@ fun VideoClubOnlinePeliculasScreen(navController: NavController) {
             LazyColumn(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(top = toolbarHeight) // contenido debajo del toolbar
+                    .padding(top = toolbarHeight) // debajo toolbar
                     .background(MaterialTheme.colorScheme.background),
                 verticalArrangement = Arrangement.spacedBy(24.dp)
             ) {
-                item { Spacer(modifier = Modifier.height(12.dp)) }
-                item { VideoClubCategoriasBotones() }
+                item { Spacer(modifier = Modifier.height(2.dp)) }
+
+                // Botones de categorías, ahora con callback para filtrar
+                item {
+                    VideoClubCategoriasBotones(
+                        onCategoriaClick = { categoriaId ->
+                            viewModel.filtrarPorCategoria(categoriaId)
+                        },
+                        modifier = Modifier.statusBarsPadding() // separa del status bar si quieres
+                    )
+                }
+
                 item { Spacer(modifier = Modifier.height(8.dp)) }
 
-                val seriesData = SeriesData()
-                val categoriasAgrupadas = seriesData.nombreSeries.groupBy { it.nombreCategoria }
-
-                categoriasAgrupadas.forEach { (categoria, series) ->
+                // Mostrar películas desde el ViewModel, que ya están filtradas/agrupadas
+                uiState.peliculasPorCategoria.forEach { (categoria, peliculas) ->
                     item(key = categoria) {
                         Column(
                             verticalArrangement = Arrangement.spacedBy(16.dp),
@@ -142,44 +162,8 @@ fun VideoClubOnlinePeliculasScreen(navController: NavController) {
                                 horizontalArrangement = Arrangement.spacedBy(16.dp),
                                 modifier = Modifier.fillMaxWidth()
                             ) {
-                                items(series.size) { index ->
-                                    val serie = series[index]
-                                    Column(
-                                        horizontalAlignment = Alignment.CenterHorizontally,
-                                        verticalArrangement = Arrangement.spacedBy(6.dp),
-                                        modifier = Modifier.width(130.dp)
-                                    ) {
-                                        Box(
-                                            modifier = Modifier
-                                                .size(130.dp)
-                                                .clip(RoundedCornerShape(12.dp))
-                                                .background(MaterialTheme.colorScheme.inversePrimary)
-                                                .clickable { /* onSerieClick(serie) */ },
-                                            contentAlignment = Alignment.Center
-                                        ) {
-                                            serie.imagen?.let {
-                                                Image(
-                                                    painter = painterResource(id = it),
-                                                    contentDescription = stringResource(serie.nombreSerie),
-                                                    contentScale = ContentScale.Crop,
-                                                    modifier = Modifier.fillMaxSize()
-                                                )
-                                            } ?: Icon(
-                                                imageVector = Icons.Default.Movie,
-                                                contentDescription = stringResource(R.string.sin_imagen),
-                                                tint = Color.Gray,
-                                                modifier = Modifier.size(48.dp)
-                                            )
-                                        }
-                                        Text(
-                                            text = stringResource(serie.nombreSerie),
-                                            color = MaterialTheme.colorScheme.onBackground,
-                                            fontSize = 14.sp,
-                                            fontWeight = FontWeight.Medium,
-                                            textAlign = TextAlign.Center,
-                                            modifier = Modifier.fillMaxWidth()
-                                        )
-                                    }
+                                items(peliculas) { pelicula ->
+                                    PeliculaItem(pelicula)
                                 }
                             }
                         }
@@ -197,8 +181,13 @@ fun VideoClubOnlinePeliculasScreen(navController: NavController) {
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun VideoClubOnlineScreenPreview() {
+    val navController = rememberNavController()
+    val viewModel: VideoClubOnlinePeliculasViewModel = viewModel() // tu ViewModel real
+
     MaterialTheme {
-        val navController = rememberNavController()
-        VideoClubOnlinePeliculasScreen(navController)
+        VideoClubOnlinePeliculasScreen(
+            navController = navController,
+            viewModel = viewModel
+        )
     }
 }

@@ -3,7 +3,7 @@ package com.example.proyecto_eduardo_andres.myComponents.componenteSearchSeries
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
-import com.example.proyecto_eduardo_andres.viewData.listaSeriesData.VideoClubOnlineData
+import com.example.proyecto_eduardo_andres.viewData.listaSeriesData.VideoClubOnlineSeriesData
 
 /**
  * @author Andrés
@@ -12,9 +12,9 @@ import com.example.proyecto_eduardo_andres.viewData.listaSeriesData.VideoClubOnl
  */
 @Composable
 fun buscarSeries(
-    series: List<VideoClubOnlineData>,
+    series: List<VideoClubOnlineSeriesData>,
     query: String
-): List<VideoClubOnlineData> {
+): List<VideoClubOnlineSeriesData> {
     return series.filter { serie ->
         stringResource(id = serie.nombreSerie).contains(query, ignoreCase = true)
     }

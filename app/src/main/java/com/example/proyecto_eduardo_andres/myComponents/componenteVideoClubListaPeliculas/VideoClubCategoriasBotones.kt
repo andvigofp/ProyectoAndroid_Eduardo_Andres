@@ -6,15 +6,13 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -29,8 +27,10 @@ import com.example.proyecto_eduardo_andres.R
  * @param categorias: Al pulsar cualquier botón de llevará a lista de peliculas de esa categoría correspondiente
  */
 @Composable
-fun VideoClubCategoriasBotones() {
-    // Lista de categorías usando el data class
+fun VideoClubCategoriasBotones(
+    onCategoriaClick: (Int) -> Unit,
+    modifier: Modifier = Modifier
+) {
     val categorias = listOf(
         VideoClubOnlineCategoriasData(R.string.drama, MaterialTheme.colorScheme.primary),
         VideoClubOnlineCategoriasData(R.string.accion, MaterialTheme.colorScheme.secondary),
@@ -38,16 +38,13 @@ fun VideoClubCategoriasBotones() {
         VideoClubOnlineCategoriasData(R.string.dibujos, MaterialTheme.colorScheme.tertiary)
     )
 
-    // Solo el LazyRow con los botones de categorías
     LazyRow(
         horizontalArrangement = Arrangement.spacedBy(16.dp),
-        modifier = Modifier.fillMaxWidth()
+        modifier = modifier.fillMaxWidth()
     ) {
-        items(categorias.size) { index ->
-            val (nombre, color) = categorias[index]
-
+        items(categorias) { (nombre, color) ->
             Button(
-                onClick = { /* En el futuro: navegar a la lista de esa categoría */ },
+                onClick = { onCategoriaClick(nombre) },
                 colors = ButtonDefaults.buttonColors(
                     containerColor = color,
                     contentColor = MaterialTheme.colorScheme.onPrimary
@@ -55,8 +52,6 @@ fun VideoClubCategoriasBotones() {
                 modifier = Modifier
                     .height(55.dp)
                     .width(160.dp)
-                    .clip(RoundedCornerShape(16.dp))
-                    .shadow(4.dp)
             ) {
                 Text(
                     text = stringResource(nombre),
@@ -68,10 +63,13 @@ fun VideoClubCategoriasBotones() {
     }
 }
 
+
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun VideoClubCategoriasBotonesPreview() {
     MaterialTheme {
-        VideoClubCategoriasBotones()
+        VideoClubCategoriasBotones(
+            onCategoriaClick = {  }
+        )
     }
 }
