@@ -4,57 +4,44 @@ import com.example.proyecto_eduardo_andres.R
 import kotlinx.serialization.Serializable
 
 sealed class Screen(val routeId: Int) {
-    @Serializable
-    class Login(val routeId: Int)
 
     @Serializable
-    class CrearUsuario(val routeId: Int)
+    object Login : Screen(R.string.screen_login)
 
     @Serializable
-    class RecuperarPassword(val routeId: Int)
+    object CrearUsuario : Screen(R.string.screen_crear_usuario)
 
     @Serializable
-    class VideoClubOnlinePeliculas(val routeId: Int)
+    object RecuperarPassword : Screen(R.string.screen_recuperar_password)
 
     @Serializable
-    class VideoClubOnlineSeries(val routeId: Int)
+    object VideoClubPeliculas : Screen(R.string.screen_videoclub_peliculas)
 
     @Serializable
-    class SearchPeliculas(val routeId: Int)
+    object VideoClubSeries : Screen(R.string.screen_videoclub_series)
 
     @Serializable
-    class SearchSeries(val routeId: Int)
+    object SearchPeliculas : Screen(R.string.screen_search_peliculas)
 
     @Serializable
-    class QR(val routeId: Int)
+    object SearchSeries : Screen(R.string.screen_search_series)
 
     @Serializable
-    class Camara(val routeId: Int)
+    object QR : Screen(R.string.screen_qr)
 
     @Serializable
-    class Menu(val routeId: Int)
+    object Camara : Screen(R.string.screen_camara)
 
     @Serializable
-    class PerfilUsuario(val routeId: Int)
-    @Serializable
-    class AlquilerDevolverPeliculas(val routeId: Int)
+    object PerfilUsuario : Screen(R.string.screen_perfil_usuario)
 
     @Serializable
-    class AlquilerDevolverSeries(val routeId: Int)
-}
+    object AlquilerDevolverPeliculas : Screen(R.string.screen_alquilar_devolver_peliculas)
 
-object AppScreens {
-    val Login = Screen.Login(R.string.screen_login)
-    val CrearUsuario = Screen.CrearUsuario(R.string.screen_crear_usuario)
-    val RecuperarPassword = Screen.RecuperarPassword(R.string.screen_recuperar_password)
-    val VideoClubPeliculas = Screen.VideoClubOnlinePeliculas(R.string.screen_videoclub_peliculas)
-    val VideoClubSeries = Screen.VideoClubOnlineSeries(R.string.screen_videoclub_series)
-    val SearchPeliculas = Screen.SearchPeliculas(R.string.screen_search_peliculas)
-    val SearchSeries = Screen.SearchSeries(R.string.screen_search_series)
-    val QR = Screen.QR(R.string.screen_qr)
-    val Camara = Screen.Camara(R.string.screen_camara)
-    val Menu = Screen.Menu(R.string.screen_menu)
-    val PerfilUsuario = Screen.PerfilUsuario(R.string.screen_perfil_usuario)
-    val AlquilerDevolverSerie = Screen.AlquilerDevolverSeries(R.string.screen_alquilar_devolver_series)
-    val AlquilerDevolverPeliculas = Screen.AlquilerDevolverPeliculas(R.string.screen_alquilar_devolver_peliculas)
+    @Serializable
+    object AlquilerDevolverSeries : Screen(R.string.screen_alquilar_devolver_series)
+
+    @Serializable
+    object Menu : Screen(R.string.menu)
+
 }
