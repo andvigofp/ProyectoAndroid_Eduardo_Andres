@@ -28,8 +28,9 @@ import com.example.proyecto_eduardo_andres.viewData.listaSeriesData.VideoClubOnl
  * @param categorias: Al pulsar cualquier botón de llevará a lista de series de esa categoría correspondiente
  */
 @Composable
-fun VideoClubCategoriasBotones() {
-    // Lista de categorías usando el data class
+fun VideoClubCategoriasBotones(
+    onCategoriaClick: (Int) -> Unit
+) {
     val categorias = listOf(
         VideoClubOnlineCategoriasData(R.string.drama, MaterialTheme.colorScheme.primary),
         VideoClubOnlineCategoriasData(R.string.accion, MaterialTheme.colorScheme.secondary),
@@ -37,7 +38,6 @@ fun VideoClubCategoriasBotones() {
         VideoClubOnlineCategoriasData(R.string.dibujos, MaterialTheme.colorScheme.tertiary)
     )
 
-    // Solo el LazyRow con los botones de categorías
     LazyRow(
         horizontalArrangement = Arrangement.spacedBy(16.dp),
         modifier = Modifier.fillMaxWidth()
@@ -46,7 +46,7 @@ fun VideoClubCategoriasBotones() {
             val (nombre, color) = categorias[index]
 
             Button(
-                onClick = { /* En el futuro: navegar a la lista de esa categoría */ },
+                onClick = { onCategoriaClick(nombre) }, // aquí enviamos el id de la categoría
                 colors = ButtonDefaults.buttonColors(
                     containerColor = color,
                     contentColor = MaterialTheme.colorScheme.onPrimary
@@ -58,7 +58,7 @@ fun VideoClubCategoriasBotones() {
                     .shadow(4.dp)
             ) {
                 Text(
-                    text = stringResource( nombre),
+                    text = stringResource(nombre),
                     fontSize = 18.sp,
                     fontWeight = FontWeight.Bold
                 )
@@ -67,10 +67,13 @@ fun VideoClubCategoriasBotones() {
     }
 }
 
+
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun VideoClubCategoriasBotonesPreview() {
     MaterialTheme {
-        VideoClubCategoriasBotones()
+        VideoClubCategoriasBotones(
+            onCategoriaClick = {  }
+        )
     }
 }
