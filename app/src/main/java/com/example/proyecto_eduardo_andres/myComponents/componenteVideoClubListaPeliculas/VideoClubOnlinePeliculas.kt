@@ -12,9 +12,11 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Movie
@@ -37,7 +39,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.proyecto_eduardo_andres.R
+import com.example.proyecto_eduardo_andres.viewData.listaPeliculasData.PeliculaItem
 import com.example.proyecto_eduardo_andres.viewData.listaPeliculasData.PeliculasData
+import com.example.proyecto_eduardo_andres.viewData.listaPeliculasData.VideoClubOnlinePeliculasData
 
 /**
  * @author Andres
@@ -46,93 +50,36 @@ import com.example.proyecto_eduardo_andres.viewData.listaPeliculasData.Peliculas
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun VideoClubOnlinePeliculas() {
-    Scaffold(
-        containerColor = MaterialTheme.colorScheme.background
-    ) { padding ->
-        // --- CONTENIDO PRINCIPAL ---
-        LazyColumn(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(padding)
-                .background(MaterialTheme.colorScheme.background),
-            verticalArrangement = Arrangement.spacedBy(24.dp)
-        ) {
-            // Espacio superior
-            item { Spacer(modifier = Modifier.height(12.dp)) }
+fun VideoClubOnlinePeliculas(
+    peliculasPorCategoria: Map<Int, List<VideoClubOnlinePeliculasData>>
+) {
+    LazyColumn(
+        modifier = Modifier
+            .fillMaxSize()
+            .statusBarsPadding(),  // Espacio para el status bar
+        verticalArrangement = Arrangement.spacedBy(24.dp)
+    ) {
+        peliculasPorCategoria.forEach { (categoria, peliculas) ->
+            item(key = categoria) {
+                Column {
 
-            // Lista de películas agrupadas por categoría
-            val peliculasData = PeliculasData()
-            val categoriasAgrupadas = peliculasData.nombrePeliculas.groupBy { it.nombreCategoria }
+                    Text(
+                        text = stringResource(categoria),
+                        fontSize = 22.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = MaterialTheme.colorScheme.primary,
+                        modifier = Modifier.padding(start = 8.dp, bottom = 8.dp)  // Espacio abajo para separar del LazyRow
+                    )
 
-            categoriasAgrupadas.forEach { (categoria, peliculas) ->
-                item(key = categoria) {
-                    Column(
-                        verticalArrangement = Arrangement.spacedBy(16.dp),
-                        modifier = Modifier.fillMaxWidth()
+                    LazyRow(
+                        horizontalArrangement = Arrangement.spacedBy(18.dp)
                     ) {
-                        // Título de la categoría
-                        Text(
-                            text = stringResource(categoria),
-                            fontSize = 22.sp,
-                            fontWeight = FontWeight.Bold,
-                            color = MaterialTheme.colorScheme.primary,
-                            modifier = Modifier.padding(start = 4.dp, bottom = 8.dp)
-                        )
-
-                        // Scroll horizontal de películas
-                        LazyRow(
-                            horizontalArrangement = Arrangement.spacedBy(16.dp),
-                            modifier = Modifier.fillMaxWidth()
-                        ) {
-                            items(peliculas.size) { index ->
-                                val pelicula = peliculas[index]
-
-                                Column(
-                                    horizontalAlignment = Alignment.CenterHorizontally,
-                                    verticalArrangement = Arrangement.spacedBy(6.dp),
-                                    modifier = Modifier.width(130.dp)
-                                ) {
-                                    Box(
-                                        modifier = Modifier
-                                            .size(130.dp)
-                                            .clip(RoundedCornerShape(12.dp))
-                                            .background(Color(0xFFE3F2FD))
-                                            .clickable { /* onPeliculaClick(pelicula) */ },
-                                        contentAlignment = Alignment.Center
-                                    ) {
-                                        pelicula.imagen?.let {
-                                            Image(
-                                                painter = painterResource(id = it),
-                                                contentDescription = stringResource(pelicula.nombrePelicula),
-                                                contentScale = ContentScale.Crop,
-                                                modifier = Modifier.fillMaxSize()
-                                            )
-                                        } ?: Icon(
-                                            imageVector = Icons.Default.Movie,
-                                            contentDescription = stringResource(R.string.sin_imagen),
-                                            tint = Color.Gray,
-                                            modifier = Modifier.size(48.dp)
-                                        )
-                                    }
-
-                                    Text(
-                                        text = stringResource(pelicula.nombrePelicula),
-                                        color = MaterialTheme.colorScheme.onBackground,
-                                        fontSize = 14.sp,
-                                        fontWeight = FontWeight.Medium,
-                                        textAlign = TextAlign.Center,
-                                        modifier = Modifier.fillMaxWidth()
-                                    )
-                                }
-                            }
+                        items(peliculas) { pelicula ->
+                            PeliculaItem(pelicula)
                         }
                     }
                 }
             }
-
-            // Espacio inferior
-            item { Spacer(modifier = Modifier.height(32.dp)) }
         }
     }
 }
@@ -141,6 +88,12 @@ fun VideoClubOnlinePeliculas() {
 @Composable
 fun VideoClubOnlineScreenPreview() {
     MaterialTheme {
-        VideoClubOnlinePeliculas()
+        // Datos de ejemplo para preview
+        val peliculas = PeliculasData().nombrePeliculas
+        val peliculasPorCategoria = peliculas.groupBy { it.nombreCategoria }
+
+        VideoClubOnlinePeliculas(
+            peliculasPorCategoria = peliculasPorCategoria
+        )
     }
 }

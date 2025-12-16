@@ -35,7 +35,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.proyecto_eduardo_andres.viewData.listaSeriesData.SeriesData
-import com.example.proyecto_eduardo_andres.viewData.listaSeriesData.VideoClubOnlineData
+import com.example.proyecto_eduardo_andres.viewData.listaSeriesData.VideoClubOnlineSeriesData
 import com.example.proyecto_eduardo_andres.R
 
 /**
@@ -45,7 +45,7 @@ import com.example.proyecto_eduardo_andres.R
  */
 @Composable
 fun MovieList(
-    series: List<VideoClubOnlineData>
+    series: List<VideoClubOnlineSeriesData>
 ) {
     LazyColumn(
         modifier = Modifier.fillMaxSize(),
