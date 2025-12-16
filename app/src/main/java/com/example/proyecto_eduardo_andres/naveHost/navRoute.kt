@@ -5,43 +5,42 @@ import kotlinx.serialization.Serializable
 
 sealed class Screen(val routeId: Int) {
     @Serializable
-    class Login(routeId: Int) : Screen(routeId)
+    class Login(val routeId: Int)
 
     @Serializable
-    class CrearUsuario(routeId: Int) : Screen(routeId)
+    class CrearUsuario(val routeId: Int)
 
     @Serializable
-    class RecuperarPassword(routeId: Int) : Screen(routeId)
+    class RecuperarPassword(val routeId: Int)
 
     @Serializable
-    class VideoClubOnlinePeliculas(routeId: Int) : Screen(routeId)
+    class VideoClubOnlinePeliculas(val routeId: Int)
 
     @Serializable
-    class VideoClubOnlineSeries(routeId: Int) : Screen(routeId)
+    class VideoClubOnlineSeries(val routeId: Int)
 
     @Serializable
-    class SearchPeliculas(routeId: Int) : Screen(routeId)
+    class SearchPeliculas(val routeId: Int)
 
     @Serializable
-    class SearchSeries(routeId: Int) : Screen(routeId)
+    class SearchSeries(val routeId: Int)
 
     @Serializable
-    class QR(routeId: Int) : Screen(routeId)
+    class QR(val routeId: Int)
 
     @Serializable
-    class Camara(routeId: Int) : Screen(routeId)
+    class Camara(val routeId: Int)
 
     @Serializable
-    class Menu(routeId: Int) : Screen(routeId)
+    class Menu(val routeId: Int)
 
     @Serializable
-    class PerfilUsuario(routeId: Int) : Screen(routeId)
+    class PerfilUsuario(val routeId: Int)
+    @Serializable
+    class AlquilerDevolverPeliculas(val routeId: Int)
 
     @Serializable
-    class AlquilerDevolverPeliculas(routeId: Int) : Screen(routeId)
-
-    @Serializable
-    class AlquilerDevolverSeries(routeId: Int) : Screen(routeId)
+    class AlquilerDevolverSeries(val routeId: Int)
 }
 
 object AppScreens {
