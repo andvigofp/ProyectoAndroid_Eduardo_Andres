@@ -6,58 +6,80 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.proyecto_eduardo_andres.myComponents.componenteToolbar.toolBar
-import com.example.proyecto_eduardo_andres.naveHost.AppScreens
+import com.example.proyecto_eduardo_andres.naveHost.Screen
 import com.example.proyecto_eduardo_andres.viewData.qrData.QRData
 
 @Composable
 fun AppNavigation() {
+
     val navController = rememberNavController()
 
-    // Función helper para los callbacks del toolBar
+    // Callbacks del toolbar
     fun toolbarCallbacks() = object {
         val onBack: () -> Unit = { navController.popBackStack() }
-        val onHome: () -> Unit = { navController.navigate(AppScreens.VideoClubPeliculas.routeId.toString()) }
-        val onCamera: () -> Unit = { navController.navigate(AppScreens.Camara.routeId.toString()) }
-        val onProfile: () -> Unit = { navController.navigate(AppScreens.PerfilUsuario.routeId.toString()) }
-        val onLogout: () -> Unit = { navController.navigate(AppScreens.Login.routeId.toString()) }
+        val onHome: () -> Unit = {
+            navController.navigate(Screen.VideoClubPeliculas.routeId.toString())
+        }
+        val onCamera: () -> Unit = {
+            navController.navigate(Screen.Camara.routeId.toString())
+        }
+        val onProfile: () -> Unit = {
+            navController.navigate(Screen.PerfilUsuario.routeId.toString())
+        }
+        val onLogout: () -> Unit = {
+            navController.navigate(Screen.Login.routeId.toString())
+        }
     }
 
     NavHost(
         navController = navController,
-        startDestination = AppScreens.Login.routeId.toString()
+        startDestination = Screen.Login.routeId.toString()
     ) {
 
         // LOGIN
-        composable(AppScreens.Login.routeId.toString()) {
+        composable(Screen.Login.routeId.toString()) {
             LogingScreen(
                 userImageUrl = null,
-                onAccederClick = { navController.navigate(AppScreens.VideoClubPeliculas.routeId.toString()) },
-                onCrearUsuarioClick = { navController.navigate(AppScreens.CrearUsuario.routeId.toString()) },
-                onRecuperarPasswordClick = { navController.navigate(AppScreens.RecuperarPassword.routeId.toString()) }
+                onAccederClick = {
+                    navController.navigate(
+                        Screen.VideoClubPeliculas.routeId.toString()
+                    )
+                },
+                onCrearUsuarioClick = {
+                    navController.navigate(
+                        Screen.CrearUsuario.routeId.toString()
+                    )
+                },
+                onRecuperarPasswordClick = {
+                    navController.navigate(
+                        Screen.RecuperarPassword.routeId.toString()
+                    )
+                }
             )
         }
 
         // CREAR USUARIO
-        composable(AppScreens.CrearUsuario.routeId.toString()) {
+        composable(Screen.CrearUsuario.routeId.toString()) {
             CrearUsuarioScreen(
-                onCrearUsuarioClick = { navController.navigate(AppScreens.Login.routeId.toString()) },
-                onCancelarClick = { navController.popBackStack() }
-            )
-        }
-
-        // RECUPERAR PASSWORD
-        composable(AppScreens.RecuperarPassword.routeId.toString()) {
-            RecuperarPasswordScreen(
-                onRecuperarClick = {
-                    // Lógica de recuperación de contraseña, por ejemplo:
-                    navController.navigate(AppScreens.Login.routeId.toString())
+                onCrearUsuarioClick = {
+                    navController.navigate(Screen.Login.routeId.toString())
                 },
                 onCancelarClick = { navController.popBackStack() }
             )
         }
 
-        // VIDEOCLUB PELÍCULAS con toolBar
-        composable(AppScreens.VideoClubPeliculas.routeId.toString()) {
+        // RECUPERAR PASSWORD
+        composable(Screen.RecuperarPassword.routeId.toString()) {
+            RecuperarPasswordScreen(
+                onRecuperarClick = {
+                    navController.navigate(Screen.Login.routeId.toString())
+                },
+                onCancelarClick = { navController.popBackStack() }
+            )
+        }
+
+        // VIDEOCLUB PELÍCULAS
+        composable(Screen.VideoClubPeliculas.routeId.toString()) {
             val callbacks = toolbarCallbacks()
             Column {
                 toolBar(
@@ -71,8 +93,8 @@ fun AppNavigation() {
             }
         }
 
-        // VIDEOCLUB SERIES con toolBar
-        composable(AppScreens.VideoClubSeries.routeId.toString()) {
+        // VIDEOCLUB SERIES
+        composable(Screen.VideoClubSeries.routeId.toString()) {
             val callbacks = toolbarCallbacks()
             Column {
                 toolBar(
@@ -86,8 +108,8 @@ fun AppNavigation() {
             }
         }
 
-        // VIDEOCLUB SERIES con toolBar
-        composable(AppScreens.VideoClubSeries.routeId.toString()) {
+        //ALQUILER / DEVOLVER SERIES
+        composable(Screen.AlquilerDevolverSeries.routeId.toString()) {
             val callbacks = toolbarCallbacks()
             Column {
                 toolBar(
@@ -101,8 +123,8 @@ fun AppNavigation() {
             }
         }
 
-        // VIDEOCLUB SERIES con toolBar
-        composable(AppScreens.VideoClubSeries.routeId.toString()) {
+        //ALQUILER / DEVOLVER PELÍCULAS
+        composable(Screen.AlquilerDevolverPeliculas.routeId.toString()) {
             val callbacks = toolbarCallbacks()
             Column {
                 toolBar(
@@ -117,17 +139,17 @@ fun AppNavigation() {
         }
 
         // BUSCAR PELÍCULAS
-        composable(AppScreens.SearchPeliculas.routeId.toString()) {
+        composable(Screen.SearchPeliculas.routeId.toString()) {
             VideoClubSearchPeliculasScreen(navController)
         }
 
         // BUSCAR SERIES
-        composable(AppScreens.SearchSeries.routeId.toString()) {
+        composable(Screen.SearchSeries.routeId.toString()) {
             VideoClubSearchSeriesScreen(navController)
         }
 
-        // QR con toolBar
-        composable(AppScreens.QR.routeId.toString()) {
+        // QR
+        composable(Screen.QR.routeId.toString()) {
             val callbacks = toolbarCallbacks()
             Column {
                 toolBar(
@@ -149,7 +171,7 @@ fun AppNavigation() {
         }
 
         // CÁMARA
-        composable(AppScreens.Camara.routeId.toString()) {
+        composable(Screen.Camara.routeId.toString()) {
             CamaraScreen()
         }
     }
