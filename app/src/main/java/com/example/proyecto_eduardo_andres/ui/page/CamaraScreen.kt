@@ -31,7 +31,13 @@ import com.example.proyecto_eduardo_andres.viewData.buttonsData.ButtonData
 import com.example.proyecto_eduardo_andres.viewData.buttonsData.ButtonType
 
 @Composable
-fun CamaraScreen() {
+fun CamaraScreen(
+    onBackClick: () -> Unit,
+    onHomeClick: () -> Unit,
+    onCameraClick: () -> Unit,
+    onProfileClick: () -> Unit,
+    onLogoutClick: () -> Unit
+) {
     val colors = MaterialTheme.colorScheme
     val typography = MaterialTheme.typography
 
@@ -60,11 +66,11 @@ fun CamaraScreen() {
             ) {
                 Spacer(modifier = Modifier.height(24.dp))
                 toolBar(
-                    onBackClick = { /* TODO */ },
-                    onHomeClick = { /* TODO */ },
-                    onCameraClick = { /* TODO */ },
-                    onProfileClick = { /* TODO */ },
-                    onLogoutClick = { /* TODO */ }
+                    onBackClick = onBackClick,
+                    onHomeClick = onHomeClick,
+                    onCameraClick = onCameraClick,
+                    onProfileClick = onProfileClick,
+                    onLogoutClick = onLogoutClick
                 )
             }
         }
@@ -114,6 +120,12 @@ fun CamaraScreen() {
 @Composable
 fun CamaraScreenPreview() {
     MaterialTheme {
-        CamaraScreen()
+        CamaraScreen(
+            onBackClick = {},
+            onHomeClick = {},
+            onCameraClick = {},
+            onProfileClick = {},
+            onLogoutClick = {}
+        )
     }
 }

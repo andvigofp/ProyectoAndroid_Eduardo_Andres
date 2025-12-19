@@ -3,45 +3,25 @@ package com.example.proyecto_eduardo_andres.naveHost
 import com.example.proyecto_eduardo_andres.R
 import kotlinx.serialization.Serializable
 
-sealed class Screen(val routeId: Int) {
+sealed class Screen(val route: String) {
 
-    @Serializable
-    object Login : Screen(R.string.screen_login)
+    object Login : Screen("login")
+    object CrearUsuario : Screen("crear_usuario")
+    object RecuperarPassword : Screen("recuperar_password")
 
-    @Serializable
-    object CrearUsuario : Screen(R.string.screen_crear_usuario)
+    object VideoClubPeliculas : Screen("videoclub_peliculas")
+    object VideoClubSeries : Screen("videoclub_series")
 
-    @Serializable
-    object RecuperarPassword : Screen(R.string.screen_recuperar_password)
+    object SearchPeliculas : Screen("search_peliculas")
+    object SearchSeries : Screen("search_series")
 
-    @Serializable
-    object VideoClubPeliculas : Screen(R.string.screen_videoclub_peliculas)
+    object QR : Screen("qr")
+    object Camara : Screen("camara")
 
-    @Serializable
-    object VideoClubSeries : Screen(R.string.screen_videoclub_series)
+    object PerfilUsuario : Screen("perfil_usuario")
 
-    @Serializable
-    object SearchPeliculas : Screen(R.string.screen_search_peliculas)
+    object AlquilerDevolverPeliculas : Screen("alquiler_peliculas")
+    object AlquilerDevolverSeries : Screen("alquiler_series")
 
-    @Serializable
-    object SearchSeries : Screen(R.string.screen_search_series)
-
-    @Serializable
-    object QR : Screen(R.string.screen_qr)
-
-    @Serializable
-    object Camara : Screen(R.string.screen_camara)
-
-    @Serializable
-    object PerfilUsuario : Screen(R.string.screen_perfil_usuario)
-
-    @Serializable
-    object AlquilerDevolverPeliculas : Screen(R.string.screen_alquilar_devolver_peliculas)
-
-    @Serializable
-    object AlquilerDevolverSeries : Screen(R.string.screen_alquilar_devolver_series)
-
-    @Serializable
-    object Menu : Screen(R.string.menu)
-
+    object Menu : Screen("menu")
 }

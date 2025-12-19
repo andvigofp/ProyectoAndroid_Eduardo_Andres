@@ -32,13 +32,18 @@ import com.example.proyecto_eduardo_andres.myComponents.componenteAquilarDevolve
 import com.example.proyecto_eduardo_andres.myComponents.componenteCustomScreenPeliculasSeries.CustomScreenWithoutScaffold
 import com.example.proyecto_eduardo_andres.viewData.alquilerDevolverSeriesData.SeriesAlquilerDevolverData
 import com.example.proyecto_eduardo_andres.myComponents.componenteToolbar.toolBar
-import com.example.proyecto_eduardo_andres.naveHost.AppScreens
 import com.example.proyecto_eduardo_andres.viewData.buttonsData.ButtonData
 import com.example.proyecto_eduardo_andres.viewData.buttonsData.ButtonType
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AlquilerDevolverSeriesScreen(navController: NavController) {
+fun AlquilerDevolverSeriesScreen(
+    onBackClick: () -> Unit,
+    onHomeClick: () -> Unit,
+    onCameraClick: () -> Unit,
+    onProfileClick: () -> Unit,
+    onLogoutClick: () -> Unit
+) {
 
     val colors = MaterialTheme.colorScheme
     val typography = MaterialTheme.typography
@@ -79,11 +84,11 @@ fun AlquilerDevolverSeriesScreen(navController: NavController) {
                 Column {
                     Spacer(modifier = Modifier.height(8.dp))
                     toolBar(
-                        onBackClick = { navController.popBackStack() },
-                        onHomeClick = { navController.navigate(AppScreens.VideoClubPeliculas.routeId.toString()) },
-                        onCameraClick = { navController.navigate(AppScreens.Camara.routeId.toString()) },
-                        onProfileClick = { navController.navigate(AppScreens.PerfilUsuario.routeId.toString()) },
-                        onLogoutClick = { navController.navigate(AppScreens.Login.routeId.toString()) }
+                        onBackClick = onBackClick,
+                        onHomeClick = onHomeClick,
+                        onCameraClick = onCameraClick,
+                        onProfileClick = onProfileClick,
+                        onLogoutClick = onLogoutClick
                     )
                 }
             }
@@ -149,6 +154,12 @@ fun AlquilerDevolverSeriesScreen(navController: NavController) {
 fun AlquilerDevolverSeriesScreenPreview() {
     MaterialTheme {
         val navController = rememberNavController()
-        AlquilerDevolverSeriesScreen(navController)
+        AlquilerDevolverSeriesScreen(
+            onBackClick = {},
+            onHomeClick = {},
+            onCameraClick = {},
+            onProfileClick = {},
+            onLogoutClick = {}
+        )
     }
 }

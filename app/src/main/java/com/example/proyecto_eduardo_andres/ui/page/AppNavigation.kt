@@ -2,177 +2,161 @@ package com.example.proyecto_eduardo_andres.ui.page
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.example.proyecto_eduardo_andres.myComponents.componenteToolbar.toolBar
-import com.example.proyecto_eduardo_andres.naveHost.Screen
+import com.example.proyecto_eduardo_andres.naveHost.RouteNavigation
+import com.example.proyecto_eduardo_andres.naveHost.SessionEvents
 import com.example.proyecto_eduardo_andres.viewData.qrData.QRData
+import kotlinx.coroutines.launch
 
 @Composable
 fun AppNavigation() {
-
     val navController = rememberNavController()
+    val scope = rememberCoroutineScope()
 
-    // Callbacks del toolbar
-    fun toolbarCallbacks() = object {
-        val onBack: () -> Unit = { navController.popBackStack() }
-        val onHome: () -> Unit = {
-            navController.navigate(Screen.VideoClubPeliculas.routeId.toString())
-        }
-        val onCamera: () -> Unit = {
-            navController.navigate(Screen.Camara.routeId.toString())
-        }
-        val onProfile: () -> Unit = {
-            navController.navigate(Screen.PerfilUsuario.routeId.toString())
-        }
-        val onLogout: () -> Unit = {
-            navController.navigate(Screen.Login.routeId.toString())
+    // Escuchar eventos de navegación
+    LaunchedEffect(Unit) {
+        SessionEvents.navigation.collect { route ->
+            when (route) {
+                is RouteNavigation.Login -> {
+                    navController.navigate(RouteNavigation.Login) {
+                        popUpTo(0)
+                    }
+                }
+                else -> navController.navigate(route)
+            }
         }
     }
 
     NavHost(
         navController = navController,
-        startDestination = Screen.Login.routeId.toString()
+        startDestination = RouteNavigation.Login
     ) {
-
         // LOGIN
-        composable(Screen.Login.routeId.toString()) {
+        composable<RouteNavigation.Login> {
             LogingScreen(
                 userImageUrl = null,
-                onAccederClick = {
-                    navController.navigate(
-                        Screen.VideoClubPeliculas.routeId.toString()
-                    )
-                },
-                onCrearUsuarioClick = {
-                    navController.navigate(
-                        Screen.CrearUsuario.routeId.toString()
-                    )
-                },
-                onRecuperarPasswordClick = {
-                    navController.navigate(
-                        Screen.RecuperarPassword.routeId.toString()
-                    )
-                }
+                onAccederClick = { /* normal ViewModel action */ },
+                onCrearUsuarioClick = { scope.launch { SessionEvents.emitNavigation(RouteNavigation.CrearUsuario) } },
+                onRecuperarPasswordClick = { scope.launch { SessionEvents.emitNavigation(RouteNavigation.RecuperarPassword) } }
             )
         }
 
         // CREAR USUARIO
-        composable(Screen.CrearUsuario.routeId.toString()) {
+        composable<RouteNavigation.CrearUsuario> {
             CrearUsuarioScreen(
-                onCrearUsuarioClick = {
-                    navController.navigate(Screen.Login.routeId.toString())
-                },
-                onCancelarClick = { navController.popBackStack() }
+                onCrearUsuarioClick = { scope.launch { SessionEvents.emitNavigation(RouteNavigation.Login) } },
+                onCancelarClick = { scope.launch { SessionEvents.emitNavigation(RouteNavigation.Login) } }
             )
         }
 
         // RECUPERAR PASSWORD
-        composable(Screen.RecuperarPassword.routeId.toString()) {
+        composable<RouteNavigation.RecuperarPassword> {
             RecuperarPasswordScreen(
-                onRecuperarClick = {
-                    navController.navigate(Screen.Login.routeId.toString())
-                },
-                onCancelarClick = { navController.popBackStack() }
+                onRecuperarClick = { scope.launch { SessionEvents.emitNavigation(RouteNavigation.Login) } },
+                onCancelarClick = { scope.launch { SessionEvents.emitNavigation(RouteNavigation.Login) } }
             )
         }
 
         // VIDEOCLUB PELÍCULAS
-        composable(Screen.VideoClubPeliculas.routeId.toString()) {
-            val callbacks = toolbarCallbacks()
-            Column {
-                toolBar(
-                    onBackClick = callbacks.onBack,
-                    onHomeClick = callbacks.onHome,
-                    onCameraClick = callbacks.onCamera,
-                    onProfileClick = callbacks.onProfile,
-                    onLogoutClick = callbacks.onLogout
+        composable<RouteNavigation.VideoClubPeliculas> {
+                VideoClubOnlinePeliculasScreen(
+                    onHomeClick = { scope.launch { SessionEvents.emitNavigation(RouteNavigation.VideoClubPeliculas) } },
+                    onSearchClick = { scope.launch { SessionEvents.emitNavigation(RouteNavigation.SearchPeliculas) } },
+                    onCameraClick = { scope.launch { SessionEvents.emitNavigation(RouteNavigation.Camara) } },
+                    onProfileClick = { scope.launch { SessionEvents.emitNavigation(RouteNavigation.PerfilUsuario) } },
+                    onLogoutClick = { scope.launch { SessionEvents.emitNavigation(RouteNavigation.Login) } },
+                    onDrawerPeliculasClick = { scope.launch { SessionEvents.emitNavigation(RouteNavigation.VideoClubPeliculas) } },
+                    onDrawerSeriesClick = { scope.launch { SessionEvents.emitNavigation(RouteNavigation.VideoClubSeries) } }
                 )
-                VideoClubOnlinePeliculasScreen(navController)
             }
-        }
 
         // VIDEOCLUB SERIES
-        composable(Screen.VideoClubSeries.routeId.toString()) {
-            val callbacks = toolbarCallbacks()
-            Column {
-                toolBar(
-                    onBackClick = callbacks.onBack,
-                    onHomeClick = callbacks.onHome,
-                    onCameraClick = callbacks.onCamera,
-                    onProfileClick = callbacks.onProfile,
-                    onLogoutClick = callbacks.onLogout
+        composable<RouteNavigation.VideoClubSeries> {
+                VideoClubOnlineSeriesScreen(
+                    onHomeClick = { scope.launch { SessionEvents.emitNavigation(RouteNavigation.VideoClubPeliculas) } },
+                    onSearchClick = { scope.launch { SessionEvents.emitNavigation(RouteNavigation.SearchSeries) } },
+                    onCameraClick = { scope.launch { SessionEvents.emitNavigation(RouteNavigation.Camara) } },
+                    onProfileClick = { scope.launch { SessionEvents.emitNavigation(RouteNavigation.PerfilUsuario) } },
+                    onLogoutClick = { scope.launch { SessionEvents.emitNavigation(RouteNavigation.Login) } },
+                    onDrawerPeliculasClick = { scope.launch { SessionEvents.emitNavigation(RouteNavigation.VideoClubPeliculas) } },
+                    onDrawerSeriesClick = { scope.launch { SessionEvents.emitNavigation(RouteNavigation.VideoClubSeries) } }
                 )
-                VideoClubOnlineSeriesScreen(navController)
+            }
+
+
+        // ALQUILER / DEVOLVER PELÍCULAS
+        composable<RouteNavigation.AlquilerDevolverPeliculas> {
+            Column {
+                AlquilarDevolverPeliculasScreen(
+                    onBackClick = { scope.launch { SessionEvents.emitNavigation(RouteNavigation.VideoClubPeliculas) } },
+                    onHomeClick = { scope.launch { SessionEvents.emitNavigation(RouteNavigation.VideoClubPeliculas) } },
+                    onCameraClick = { scope.launch { SessionEvents.emitNavigation(RouteNavigation.Camara) } },
+                    onProfileClick = { scope.launch { SessionEvents.emitNavigation(RouteNavigation.PerfilUsuario) } },
+                    onLogoutClick = { scope.launch { SessionEvents.emitNavigation(RouteNavigation.Login) } }
+                )
             }
         }
 
-        //ALQUILER / DEVOLVER SERIES
-        composable(Screen.AlquilerDevolverSeries.routeId.toString()) {
-            val callbacks = toolbarCallbacks()
+        // ALQUILER / DEVOLVER SERIES
+        composable<RouteNavigation.AlquilerDevolverSeries> {
             Column {
-                toolBar(
-                    onBackClick = callbacks.onBack,
-                    onHomeClick = callbacks.onHome,
-                    onCameraClick = callbacks.onCamera,
-                    onProfileClick = callbacks.onProfile,
-                    onLogoutClick = callbacks.onLogout
+                AlquilerDevolverSeriesScreen(
+                    onBackClick = { scope.launch { SessionEvents.emitNavigation(RouteNavigation.VideoClubSeries) } },
+                    onHomeClick = { scope.launch { SessionEvents.emitNavigation(RouteNavigation.VideoClubSeries) } },
+                    onCameraClick = { scope.launch { SessionEvents.emitNavigation(RouteNavigation.Camara) } },
+                    onProfileClick = { scope.launch { SessionEvents.emitNavigation(RouteNavigation.PerfilUsuario) } },
+                    onLogoutClick = { scope.launch { SessionEvents.emitNavigation(RouteNavigation.Login) } }
                 )
-                AlquilerDevolverSeriesScreen(navController)
-            }
-        }
-
-        //ALQUILER / DEVOLVER PELÍCULAS
-        composable(Screen.AlquilerDevolverPeliculas.routeId.toString()) {
-            val callbacks = toolbarCallbacks()
-            Column {
-                toolBar(
-                    onBackClick = callbacks.onBack,
-                    onHomeClick = callbacks.onHome,
-                    onCameraClick = callbacks.onCamera,
-                    onProfileClick = callbacks.onProfile,
-                    onLogoutClick = callbacks.onLogout
-                )
-                AlquilarDevolverPeliculasScreen(navController)
             }
         }
 
         // BUSCAR PELÍCULAS
-        composable(Screen.SearchPeliculas.routeId.toString()) {
-            VideoClubSearchPeliculasScreen(navController)
+        composable<RouteNavigation.SearchPeliculas> {
+            VideoClubSearchPeliculasScreen(
+                onBackClick = { scope.launch { SessionEvents.emitNavigation(RouteNavigation.VideoClubSeries) } },
+                onHomeClick = { scope.launch { SessionEvents.emitNavigation(RouteNavigation.VideoClubSeries) } },
+                onCameraClick = { scope.launch { SessionEvents.emitNavigation(RouteNavigation.Camara) } },
+                onProfileClick = { scope.launch { SessionEvents.emitNavigation(RouteNavigation.PerfilUsuario) } },
+                onLogoutClick = { scope.launch { SessionEvents.emitNavigation(RouteNavigation.Login) } }
+            )
         }
 
         // BUSCAR SERIES
-        composable(Screen.SearchSeries.routeId.toString()) {
-            VideoClubSearchSeriesScreen(navController)
+        composable<RouteNavigation.SearchSeries> {
+            VideoClubSearchSeriesScreen(
+                onBackClick = { scope.launch { SessionEvents.emitNavigation(RouteNavigation.VideoClubSeries) } },
+                onHomeClick = { scope.launch { SessionEvents.emitNavigation(RouteNavigation.VideoClubSeries) } },
+                onCameraClick = { scope.launch { SessionEvents.emitNavigation(RouteNavigation.Camara) } },
+                onProfileClick = { scope.launch { SessionEvents.emitNavigation(RouteNavigation.PerfilUsuario) } },
+                onLogoutClick = { scope.launch { SessionEvents.emitNavigation(RouteNavigation.Login) } }
+            )
         }
 
         // QR
-        composable(Screen.QR.routeId.toString()) {
-            val callbacks = toolbarCallbacks()
-            Column {
-                toolBar(
-                    onBackClick = callbacks.onBack,
-                    onHomeClick = callbacks.onHome,
-                    onCameraClick = callbacks.onCamera,
-                    onProfileClick = callbacks.onProfile,
-                    onLogoutClick = callbacks.onLogout
-                )
-                QRScreen(
-                    qrData = QRData(""),
-                    onBackClick = callbacks.onBack,
-                    onHomeClick = callbacks.onHome,
-                    onCameraClick = callbacks.onCamera,
-                    onProfileClick = callbacks.onProfile,
-                    onLogoutClick = callbacks.onLogout
-                )
-            }
+        composable<RouteNavigation.QR> {
+            QRScreen(
+                qrData = QRData(""),
+                onBackClick = { scope.launch { SessionEvents.emitNavigation(RouteNavigation.VideoClubSeries) } },
+                onHomeClick = { scope.launch { SessionEvents.emitNavigation(RouteNavigation.VideoClubSeries) } },
+                onCameraClick = { scope.launch { SessionEvents.emitNavigation(RouteNavigation.Camara) } },
+                onProfileClick = { scope.launch { SessionEvents.emitNavigation(RouteNavigation.PerfilUsuario) } },
+                onLogoutClick = { scope.launch { SessionEvents.emitNavigation(RouteNavigation.Login) } }
+            )
         }
 
         // CÁMARA
-        composable(Screen.Camara.routeId.toString()) {
-            CamaraScreen()
+        composable<RouteNavigation.Camara> {
+            CamaraScreen(
+                onBackClick = { scope.launch { SessionEvents.emitNavigation(RouteNavigation.VideoClubPeliculas) } },
+                onHomeClick = { scope.launch { SessionEvents.emitNavigation(RouteNavigation.VideoClubPeliculas) } },
+                onCameraClick = { scope.launch { SessionEvents.emitNavigation(RouteNavigation.Camara) } },
+                onProfileClick = { scope.launch { SessionEvents.emitNavigation(RouteNavigation.PerfilUsuario) } },
+                onLogoutClick = { scope.launch { SessionEvents.emitNavigation(RouteNavigation.Login) } }
+            )
         }
     }
 }
