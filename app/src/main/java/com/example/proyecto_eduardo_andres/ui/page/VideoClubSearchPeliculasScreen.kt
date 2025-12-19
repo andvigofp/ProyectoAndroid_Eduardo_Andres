@@ -40,7 +40,6 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.compose.coloAuzlClaro
 import com.example.compose.colorAzulOscurso
@@ -51,11 +50,16 @@ import com.example.proyecto_eduardo_andres.myComponents.componenteSearchPelicula
 import com.example.proyecto_eduardo_andres.myComponents.componenteToolbar.toolBar
 import com.example.proyecto_eduardo_andres.viewData.listaPeliculasData.PeliculasData
 import com.example.proyecto_eduardo_andres.R
-import com.example.proyecto_eduardo_andres.naveHost.AppScreens
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun VideoClubSearchPeliculasScreen(navController: NavController) {
+fun VideoClubSearchPeliculasScreen(
+    onBackClick: () -> Unit,
+    onHomeClick: () -> Unit,
+    onCameraClick: () -> Unit,
+    onProfileClick: () -> Unit,
+    onLogoutClick: () -> Unit
+) {
     val peliculasData = PeliculasData()
     var searchQuery by remember { mutableStateOf(TextFieldValue("")) }
 
@@ -86,11 +90,11 @@ fun VideoClubSearchPeliculasScreen(navController: NavController) {
             Column {
                 Spacer(modifier = Modifier.height(24.dp)) // espacio para reloj
                 toolBar(
-                    onBackClick = { navController.popBackStack() },
-                    onHomeClick = { navController.navigate(AppScreens.VideoClubPeliculas.routeId.toString()) },
-                    onCameraClick = { navController.navigate(AppScreens.Camara.routeId.toString()) },
-                    onProfileClick = { navController.navigate(AppScreens.PerfilUsuario.routeId.toString()) },
-                    onLogoutClick = { navController.navigate(AppScreens.Login.routeId.toString()) }
+                    onBackClick = onBackClick,
+                    onHomeClick = onHomeClick,
+                    onCameraClick = onCameraClick,
+                    onProfileClick =onProfileClick,
+                    onLogoutClick = onLogoutClick
                 )
             }
         }
@@ -170,6 +174,11 @@ fun VideoClubSearchPeliculasScreen(navController: NavController) {
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun VideoClubSearchScreenPeliculasPreview() {
-    val navController = rememberNavController()
-    VideoClubSearchPeliculasScreen(navController)
+    VideoClubSearchPeliculasScreen(
+        onBackClick = {},
+        onHomeClick = {},
+        onCameraClick = {},
+        onProfileClick = {},
+        onLogoutClick = {}
+    )
 }

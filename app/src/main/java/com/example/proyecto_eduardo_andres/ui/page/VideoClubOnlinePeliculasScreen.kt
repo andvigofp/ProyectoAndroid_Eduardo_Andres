@@ -36,30 +36,34 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import com.example.compose.colorAzulOscurso
 import com.example.compose.colorVioleta
 import com.example.proyecto_eduardo_andres.myComponents.componenteMenu.VideoClubMenuDrawer
 import com.example.proyecto_eduardo_andres.myComponents.componenteToolbar.toolBarVideoClubOnline
 import com.example.proyecto_eduardo_andres.myComponents.componenteVideoClubListaPeliculas.VideoClubCategoriasBotones
-import com.example.proyecto_eduardo_andres.naveHost.AppScreens
 import com.example.proyecto_eduardo_andres.myComponents.componenteVideoClubListaPeliculas.PeliculaItem
 import com.example.proyecto_eduardo_andres.viewmodel.VideoClubOnlinePeliculasViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun VideoClubOnlinePeliculasScreen(
-    navController: NavController,
-    viewModel: VideoClubOnlinePeliculasViewModel = viewModel()//viewModel()
+    viewModel: VideoClubOnlinePeliculasViewModel = viewModel(),
+    onHomeClick: () -> Unit = {},
+    onSearchClick: () -> Unit = {},
+    onCameraClick: () -> Unit = {},
+    onProfileClick: () -> Unit = {},
+    onLogoutClick: () -> Unit = {},
+    onDrawerPeliculasClick: () -> Unit = {},
+    onDrawerSeriesClick: () -> Unit = {}
 ) {
     val drawerState = rememberDrawerState(DrawerValue.Closed)
-    val scope = rememberCoroutineScope()
 
     val toolbarHeight = 56.dp + WindowInsets.statusBars.asPaddingValues().calculateTopPadding()
 
     // Observar estado UI del ViewModel
     val uiState by viewModel.uiState.collectAsState()
+
+    val scope = rememberCoroutineScope()
 
     ModalNavigationDrawer(
         drawerState = drawerState,
@@ -67,8 +71,8 @@ fun VideoClubOnlinePeliculasScreen(
             VideoClubMenuDrawer(
                 drawerState = drawerState,
                 scope = scope,
-                onPeliculasClick = {},
-                onSeriesClick = {}
+                onPeliculasClick =  onDrawerPeliculasClick,
+                onSeriesClick = onDrawerSeriesClick
             )
         }
     ) {
@@ -93,15 +97,18 @@ fun VideoClubOnlinePeliculasScreen(
                 Column(
                     modifier = Modifier.statusBarsPadding() // para no tapar status bar
                 ) {
+
+
                     toolBarVideoClubOnline(
                         drawerState = drawerState,
                         scope = scope,
-                        onHomeClick = { navController.navigate(AppScreens.VideoClubPeliculas.routeId.toString()) },
-                        onSearchClick = { navController.navigate(AppScreens.SearchSeries.routeId.toString()) },
-                        onCameraClick = { navController.navigate(AppScreens.Camara.routeId.toString()) },
-                        onProfileClick = { navController.navigate(AppScreens.PerfilUsuario.routeId.toString()) },
-                        onLogoutClick = { navController.navigate(AppScreens.Login.routeId.toString()) }
+                        onHomeClick = onHomeClick,
+                        onSearchClick = onSearchClick,
+                        onCameraClick = onCameraClick,
+                        onProfileClick = onProfileClick,
+                        onLogoutClick = onLogoutClick
                     )
+
                 }
             }
 
@@ -164,13 +171,11 @@ fun VideoClubOnlinePeliculasScreen(
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun VideoClubOnlineScreenPreview() {
-    val navController = rememberNavController()
     val viewModel: VideoClubOnlinePeliculasViewModel = viewModel() // tu ViewModel
 
     MaterialTheme {
         VideoClubOnlinePeliculasScreen(
-            navController = navController,
-            viewModel = viewModel
+            viewModel = viewModel,
         )
     }
 }
