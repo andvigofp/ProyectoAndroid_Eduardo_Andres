@@ -33,13 +33,20 @@ import com.example.proyecto_eduardo_andres.myComponents.componenteAlquilarDevolv
 import com.example.proyecto_eduardo_andres.myComponents.componenteAlquilarDevolverPeliculas.BotonAlquilarPeliculas
 import com.example.proyecto_eduardo_andres.myComponents.componenteCustomScreenPeliculasSeries.CustomScreenWithoutScaffold
 import com.example.proyecto_eduardo_andres.myComponents.componenteToolbar.toolBar
+import com.example.proyecto_eduardo_andres.repository.AlquilerPeliculasRepository.AlquilerPeliculasRepositoryInMemory
+import com.example.proyecto_eduardo_andres.repository.AlquilerPeliculasRepository.IAlquilerPeliculasRepository
 import com.example.proyecto_eduardo_andres.viewData.buttonsData.ButtonData
 import com.example.proyecto_eduardo_andres.viewData.buttonsData.ButtonType
 import com.example.proyecto_eduardo_andres.viewmodel.AlquilarDevolverPeliculasViewModel
+import com.example.proyecto_eduardo_andres.viewmodel.AlquilarDevolverPeliculasViewModelFactory
 
 @Composable
 fun AlquilarDevolverPeliculasScreen(
-    viewModel: AlquilarDevolverPeliculasViewModel = viewModel(),
+    userId: Int,
+    repository: IAlquilerPeliculasRepository,
+    viewModel: AlquilarDevolverPeliculasViewModel = viewModel(
+        factory = AlquilarDevolverPeliculasViewModelFactory(userId, repository)
+    ),
     onBackClick: () -> Unit,
     onHomeClick: () -> Unit,
     onCameraClick: () -> Unit,
@@ -52,24 +59,15 @@ fun AlquilarDevolverPeliculasScreen(
     var showDialog by remember { mutableStateOf(false) }
 
     val toolbarBackGround = Brush.linearGradient(
-        colors = listOf(
-            colorVioleta,
-            colorAzulOscurso
-        ),
+        colors = listOf(colorVioleta, colorAzulOscurso),
         start = Offset(0f, 0f),
         end = Offset(1000f, 1000f)
     )
 
     CustomScreenWithoutScaffold(
         topBar = {
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .background(toolbarBackGround)
-            ) {
-                Column(
-                    modifier = Modifier.statusBarsPadding()
-                ) {
+            Box(modifier = Modifier.fillMaxWidth().background(toolbarBackGround)) {
+                Column(modifier = Modifier.statusBarsPadding()) {
                     Spacer(modifier = Modifier.height(8.dp))
                     toolBar(
                         onBackClick = onBackClick,
@@ -90,7 +88,6 @@ fun AlquilarDevolverPeliculasScreen(
             )
         }
     ) {
-        // ---------- CONTENIDO PRINCIPAL ----------
         Column(
             modifier = Modifier
                 .fillMaxWidth()
@@ -109,7 +106,6 @@ fun AlquilarDevolverPeliculasScreen(
             AlquilerDevolverPeliculas(peliculas = uiState)
         }
 
-        // ---------- BOTONES ----------
         Box(
             modifier = Modifier
                 .fillMaxWidth()
@@ -132,7 +128,6 @@ fun AlquilarDevolverPeliculasScreen(
             )
         }
 
-        // Mostrar el diálogo de alquiler o devolución
         if (showDialog) {
             AlquilarDevolverDialog(
                 isAlquiler = uiState.peliculaAlquilada,
@@ -147,9 +142,16 @@ fun AlquilarDevolverPeliculasScreen(
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun AlquilarDevolverPeliculasScreenPreview() {
-    val viewModel: AlquilarDevolverPeliculasViewModel = viewModel() // tu ViewModel
+    val repository = AlquilerPeliculasRepositoryInMemory()
+    val userId = 1
+    val viewModel: AlquilarDevolverPeliculasViewModel = viewModel(
+        factory = AlquilarDevolverPeliculasViewModelFactory(userId, repository)
+    )
+
     MaterialTheme {
         AlquilarDevolverPeliculasScreen(
+            userId = userId,
+            repository = repository,
             viewModel = viewModel,
             onBackClick = {},
             onHomeClick = {},

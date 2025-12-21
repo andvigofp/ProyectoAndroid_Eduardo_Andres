@@ -46,7 +46,13 @@ import com.example.proyecto_eduardo_andres.viewData.perfilUsuarioData.PerfilUsua
 import com.example.proyecto_eduardo_andres.myComponents.componenteToolbar.toolBar
 
 @Composable
-fun PerfilUsuarioScreen() {
+fun PerfilUsuarioScreen(
+    onBackClick: () -> Unit,
+    onHomeClick: () -> Unit,
+    onCameraClick: () -> Unit,
+    onProfileClick: () -> Unit,
+    onLogoutClick: () -> Unit
+) {
     var perfilUsuarioData by remember { mutableStateOf(PerfilUsuarioData()) }
 
     Box(
@@ -158,11 +164,11 @@ fun PerfilUsuarioScreen() {
                 modifier = Modifier.fillMaxWidth()
             ) {
                 toolBar(
-                    onBackClick = {},
-                    onHomeClick = {},
-                    onCameraClick = {},
-                    onProfileClick = {},
-                    onLogoutClick = {}
+                    onBackClick = onBackClick,
+                    onHomeClick = onHomeClick,
+                    onCameraClick = onCameraClick,
+                    onProfileClick = onProfileClick,
+                    onLogoutClick = onLogoutClick
                 )
 
                 Text(
@@ -181,6 +187,12 @@ fun PerfilUsuarioScreen() {
 @Composable
 fun PerfilUsuarioScreenPreview() {
     MaterialTheme {
-        PerfilUsuarioScreen()
+        PerfilUsuarioScreen(
+            onBackClick = {},
+            onHomeClick = {},
+            onCameraClick = {},
+            onProfileClick = {},
+            onLogoutClick = {}
+        )
     }
 }

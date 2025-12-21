@@ -2,9 +2,9 @@ package com.example.proyecto_eduardo_andres.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.proyecto_eduardo_andres.naveHost.RouteNavigation
 import com.example.proyecto_eduardo_andres.naveHost.SessionEvents
-import com.example.proyecto_eduardo_andres.repository.UserRepositoryInMemory
-import com.example.proyecto_eduardo_andres.ui.page.VideoClubSearchPeliculasScreen
+import com.example.proyecto_eduardo_andres.repository.LoginRepository.UserRepositoryInMemory
 import com.example.proyecto_eduardo_andres.viewData.logingData.LoginUiState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -35,7 +35,7 @@ class LoginViewModel : ViewModel() {
         _userRepo.login(_uiState.value.email, _uiState.value.password, onError = {}) { userDTO ->
             //llamar al evento login nav
             viewModelScope.launch {
-                SessionEvents.emitNavigation(VideoClubSearchPeliculasScreen(userDTO.id))
+                SessionEvents.emitNavigation(RouteNavigation.VideoClubPeliculas(userDTO.id))
             }
         }
     }
