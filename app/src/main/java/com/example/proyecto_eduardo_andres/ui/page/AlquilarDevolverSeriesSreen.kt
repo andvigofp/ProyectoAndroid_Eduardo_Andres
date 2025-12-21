@@ -21,13 +21,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.compose.colorAzulOscurso
 import com.example.compose.colorVioleta
 import com.example.proyecto_eduardo_andres.R
 import com.example.proyecto_eduardo_andres.myComponents.componenteAquilarDevolverSeries.AlquilarDevolverSerie
-import com.example.proyecto_eduardo_andres.viewData.alquilerDevolverSeriesData.AlquilarDevolverSerieData
+import com.example.proyecto_eduardo_andres.viewData.alquilerDevolverSeriesData.AlquilarDevolverSeriesUiState
 import com.example.proyecto_eduardo_andres.myComponents.componenteAquilarDevolverSeries.BotonAlquilarSeries
 import com.example.proyecto_eduardo_andres.myComponents.componenteCustomScreenPeliculasSeries.CustomScreenWithoutScaffold
 import com.example.proyecto_eduardo_andres.viewData.alquilerDevolverSeriesData.SeriesAlquilerDevolverData
@@ -64,12 +63,12 @@ fun AlquilerDevolverSeriesScreen(
         it.nombreSerie == R.string.mad_men
     } ?: listaSeries.first()
 
-    // Crear objeto de tipo AlquilarDevolverSerieData
-    val serieDemo = AlquilarDevolverSerieData(
+    // Crear objeto de tipo AlquilarDevolverSeriesUiState
+    /**val serieDemo = AlquilarDevolverSeriesUiState(
         imagen = serieSeleccionada.imagen,
         nombreSerie = serieSeleccionada.nombreSerie,
         descripcion = serieSeleccionada.descripcion
-    )
+    )**/
 
     // Usamos tu contenedor personalizado
     CustomScreenWithoutScaffold(
@@ -123,7 +122,7 @@ fun AlquilerDevolverSeriesScreen(
             )
 
             // Imagen + descripción
-            AlquilarDevolverSerie(series = serieDemo)
+            //AlquilarDevolverSerie(series = serieDemo)
         }
 
         // ---------------- BOTONES (encima del bottom bar) ----------------

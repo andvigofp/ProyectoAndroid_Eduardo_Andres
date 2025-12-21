@@ -14,29 +14,29 @@ sealed interface RouteNavigation {
     object RecuperarPassword : RouteNavigation
 
     @Serializable
-    object VideoClubPeliculas : RouteNavigation
+    class VideoClubPeliculas(val id: Int) : RouteNavigation
 
     @Serializable
-    object VideoClubSeries : RouteNavigation
+    class VideoClubSeries(val id: Int) : RouteNavigation
 
     @Serializable
-    object SearchPeliculas : RouteNavigation
+    class SearchPeliculas(val id: Int) : RouteNavigation
 
     @Serializable
-    object SearchSeries : RouteNavigation
+    class SearchSeries(val id: Int) : RouteNavigation
 
     @Serializable
-    object QR : RouteNavigation
+    class QR(val id: Int) : RouteNavigation
 
     @Serializable
-    object Camara : RouteNavigation
+    class Camara(val id: Int) : RouteNavigation
 
     @Serializable
-    object PerfilUsuario : RouteNavigation
+    class PerfilUsuario(val id: Int) : RouteNavigation
 
     @Serializable
-    object AlquilerDevolverPeliculas : RouteNavigation
+    class AlquilerDevolverPeliculas(val id: Int) : RouteNavigation
 
     @Serializable
-    object AlquilerDevolverSeries : RouteNavigation
+    class AlquilerDevolverSeries(val id: Int) : RouteNavigation
 }

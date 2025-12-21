@@ -27,8 +27,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.proyecto_eduardo_andres.R
-import com.example.proyecto_eduardo_andres.viewData.alquilerDevolverSeriesData.AlquilarDevolverSerieData
+import com.example.proyecto_eduardo_andres.viewData.alquilerDevolverSeriesData.AlquilarDevolverSeriesUiState
 import com.example.proyecto_eduardo_andres.viewData.alquilerDevolverSeriesData.SeriesAlquilerDevolverData
+import com.example.proyecto_eduardo_andres.viewData.alquilerDevolverSeriesData.VideoClubOnlineAlquilarSeriesUiState
 
 /**
  * @author Andrés
@@ -38,7 +39,7 @@ import com.example.proyecto_eduardo_andres.viewData.alquilerDevolverSeriesData.S
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AlquilarDevolverSerie(
-    series: AlquilarDevolverSerieData
+    series: AlquilarDevolverSeriesUiState
 ) {
     val colors = MaterialTheme.colorScheme
     val typography = MaterialTheme.typography
@@ -60,7 +61,7 @@ fun AlquilarDevolverSerie(
             // Imagen o icono a la izquierda
             if (series.imagen != null) {
                 Image(
-                    painter = painterResource(id = series.imagen),
+                    painter = painterResource(id = series.imagen!!),
                     contentDescription = stringResource( series.nombreSerie),
                     modifier = Modifier
                         .size(150.dp)
@@ -103,19 +104,24 @@ fun AlquilarDevolverSerie(
 /**
  * @author Andrés
  * Componenente imagen descripción
- * @param series: AlquilarDevolverSerieData
+ * @param series: AlquilarDevolverSeriesUiState
  */
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun AlquilarDevolverSeriePreview() {
+    // Obtener la lista de series
     val listaSeries = SeriesAlquilerDevolverData().nombreSeries
-    val serieSeleccionada = listaSeries.firstOrNull { it.nombreSerie == R.string.mad_men }
-        ?: listaSeries.first()
 
-    val serieDemo = AlquilarDevolverSerieData(
-        imagen = serieSeleccionada.imagen, // se pasa la imagen R.drawable.ic_mad_men
-        nombreSerie = serieSeleccionada.nombreSerie,
-        descripcion = serieSeleccionada.descripcion
+    // Seleccionar una serie específica para el preview
+    val serieSeleccionada = listaSeries[0]
+
+    val serieDemo = AlquilarDevolverSeriesUiState(
+        serie = VideoClubOnlineAlquilarSeriesUiState(
+            imagen = serieSeleccionada.imagen,
+            nombreSerie = serieSeleccionada.nombreSerie,
+            descripcion = serieSeleccionada.descripcion
+        ),
+        serieAlquilada  = false // Definir si la película está alquilada o no
     )
 
     MaterialTheme {

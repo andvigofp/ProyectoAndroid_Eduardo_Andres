@@ -1,4 +1,4 @@
-package com.example.proyecto_eduardo_andres.repository
+package com.example.proyecto_eduardo_andres.repository.LoginRepository
 
 import com.example.proyecto_eduardo_andres.modelo.UserDTO
 
