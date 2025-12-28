@@ -38,7 +38,9 @@ fun BotonAlquilarSeries(
     botonAlquilar: ButtonData,
     botonDevolver: ButtonData,
     onAlquilarClick: () -> Unit = {},
-    onDevolverClick: () -> Unit = {}
+    onDevolverClick: () -> Unit = {},
+    isAlquilarButtonEnabled: Boolean,
+    isDevolverButtonEnabled: Boolean
 ) {
     var showDialog by remember { mutableStateOf(false) }
 
@@ -103,7 +105,9 @@ fun BotonAlquilarSeriesPreview() {
             botonDevolver = ButtonData(
                 nombre = R.string.devolver,
                 type = ButtonType.SECONDARY
-            )
+            ),
+            isAlquilarButtonEnabled = true, // El botón de alquilar está habilitado
+            isDevolverButtonEnabled = false  // El botón de devolver está deshabilitado
         )
     }
 }
