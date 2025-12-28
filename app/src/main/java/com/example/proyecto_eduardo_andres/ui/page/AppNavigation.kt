@@ -12,6 +12,7 @@ import com.example.proyecto_eduardo_andres.naveHost.RouteNavigation
 import com.example.proyecto_eduardo_andres.naveHost.SessionEvents
 import com.example.proyecto_eduardo_andres.repository.AlquilerPeliculasRepository.AlquilerPeliculasRepositoryInMemory
 import com.example.proyecto_eduardo_andres.repository.AlquilerSeriesRepository.AlquilerSeriesRepositoryInMemory
+import com.example.proyecto_eduardo_andres.repository.CamaraRepository.CamaraRepositoryInMemory
 import com.example.proyecto_eduardo_andres.viewData.qrData.QRData
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -23,6 +24,8 @@ fun AppNavigation() {
     val scope = rememberCoroutineScope()
     val repositoryPeliculas = remember { AlquilerPeliculasRepositoryInMemory() }
     val repositorySeries = remember { AlquilerSeriesRepositoryInMemory() }
+    val repositoryCamara = remember { CamaraRepositoryInMemory() }
+
 
     // Helper para emitir navegación
     fun navigate(route: RouteNavigation) {
@@ -145,12 +148,12 @@ fun AppNavigation() {
         composable<RouteNavigation.Camara> { route ->
             val route = route.toRoute<RouteNavigation.Camara>()
             CamaraScreen(
-                //userId = route.id,
+                repository = repositoryCamara,
                 onBackClick = { navigate(RouteNavigation.VideoClubPeliculas(route.id)) },
                 onHomeClick = { navigate(RouteNavigation.VideoClubPeliculas(route.id)) },
                 onCameraClick = { navigate(RouteNavigation.Camara(route.id)) },
                 onProfileClick = { navigate(RouteNavigation.PerfilUsuario(route.id)) },
-                onLogoutClick = { navigate(RouteNavigation.Login) }
+                onLogoutClick = { navigate(RouteNavigation.Login) },
             )
         }
 
