@@ -17,26 +17,47 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.rememberNavController
 import com.example.compose.colorAzulOscurso
 import com.example.compose.colorVioleta
 import com.example.proyecto_eduardo_andres.R
+import com.example.proyecto_eduardo_andres.myComponents.componenteAlquilarDevolverPeliculas.AlquilerDevolverPeliculas
+import com.example.proyecto_eduardo_andres.myComponents.componenteAlquilarDevolverPeliculas.BotonAlquilarPeliculas
 import com.example.proyecto_eduardo_andres.myComponents.componenteAquilarDevolverSeries.AlquilarDevolverSerie
 import com.example.proyecto_eduardo_andres.viewData.alquilerDevolverSeriesData.AlquilarDevolverSeriesUiState
 import com.example.proyecto_eduardo_andres.myComponents.componenteAquilarDevolverSeries.BotonAlquilarSeries
 import com.example.proyecto_eduardo_andres.myComponents.componenteCustomScreenPeliculasSeries.CustomScreenWithoutScaffold
 import com.example.proyecto_eduardo_andres.viewData.alquilerDevolverSeriesData.SeriesAlquilerDevolverData
 import com.example.proyecto_eduardo_andres.myComponents.componenteToolbar.toolBar
+import com.example.proyecto_eduardo_andres.repository.AlquilerPeliculasRepository.AlquilerPeliculasRepositoryInMemory
+import com.example.proyecto_eduardo_andres.repository.AlquilerPeliculasRepository.IAlquilerPeliculasRepository
+import com.example.proyecto_eduardo_andres.repository.AlquilerSeriesRepository.AlquilerSeriesRepositoryInMemory
+import com.example.proyecto_eduardo_andres.repository.AlquilerSeriesRepository.IAlquilerSeriesRepository
 import com.example.proyecto_eduardo_andres.viewData.buttonsData.ButtonData
 import com.example.proyecto_eduardo_andres.viewData.buttonsData.ButtonType
+import com.example.proyecto_eduardo_andres.viewmodel.AlquilarDevolverPeliculasViewModel
+import com.example.proyecto_eduardo_andres.viewmodel.AlquilarDevolverPeliculasViewModelFactory
+import com.example.proyecto_eduardo_andres.viewmodel.AlquilarDevolverSeriesViewModel
+import com.example.proyecto_eduardo_andres.viewmodel.AlquilarDevolverSeriesViewModelFactory
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AlquilerDevolverSeriesScreen(
+    userId: Int,
+    repository: IAlquilerSeriesRepository,
+    viewModel: AlquilarDevolverSeriesViewModel = viewModel(
+        factory = AlquilarDevolverSeriesViewModelFactory (userId, repository)
+    ),
     onBackClick: () -> Unit,
     onHomeClick: () -> Unit,
     onCameraClick: () -> Unit,
@@ -44,43 +65,21 @@ fun AlquilerDevolverSeriesScreen(
     onLogoutClick: () -> Unit
 ) {
 
+    val uiState by viewModel.uiState.collectAsState() // Observamos el estado
     val colors = MaterialTheme.colorScheme
     val typography = MaterialTheme.typography
+    var showDialog by remember { mutableStateOf(false) }
 
-    // Degradado del toolbar y fondo del reloj
     val toolbarBackGround = Brush.linearGradient(
-        colors = listOf(
-            colorVioleta,
-            colorAzulOscurso
-        ),
+        colors = listOf(colorVioleta, colorAzulOscurso),
         start = Offset(0f, 0f),
         end = Offset(1000f, 1000f)
     )
 
-    // Recuperar los datos reales desde la lista
-    val listaSeries = SeriesAlquilerDevolverData().nombreSeries
-    val serieSeleccionada = listaSeries.firstOrNull {
-        it.nombreSerie == R.string.mad_men
-    } ?: listaSeries.first()
-
-    // Crear objeto de tipo AlquilarDevolverSeriesUiState
-    /**val serieDemo = AlquilarDevolverSeriesUiState(
-        imagen = serieSeleccionada.imagen,
-        nombreSerie = serieSeleccionada.nombreSerie,
-        descripcion = serieSeleccionada.descripcion
-    )**/
-
-    // Usamos tu contenedor personalizado
     CustomScreenWithoutScaffold(
-        // ---------------- TOP BAR ----------------
         topBar = {
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .background(toolbarBackGround)
-                    .statusBarsPadding()
-            ) {
-                Column {
+            Box(modifier = Modifier.fillMaxWidth().background(toolbarBackGround)) {
+                Column(modifier = Modifier.statusBarsPadding()) {
                     Spacer(modifier = Modifier.height(8.dp))
                     toolBar(
                         onBackClick = onBackClick,
@@ -92,8 +91,6 @@ fun AlquilerDevolverSeriesScreen(
                 }
             }
         },
-
-        // ---------------- BOTTOM BAR ----------------
         bottomBar = {
             Box(
                 modifier = Modifier
@@ -103,8 +100,6 @@ fun AlquilerDevolverSeriesScreen(
             )
         }
     ) {
-
-        // ---------------- CONTENIDO PRINCIPAL ----------------
         Column(
             modifier = Modifier
                 .fillMaxWidth()
@@ -114,18 +109,15 @@ fun AlquilerDevolverSeriesScreen(
         ) {
             Spacer(modifier = Modifier.height(24.dp))
 
-            // Título centrado
             Text(
-                text = stringResource(R.string.aqlqilar_serie),
+                text = stringResource(R.string.alquiler_serie),
                 style = typography.headlineLarge.copy(color = colors.primary),
                 modifier = Modifier.padding(bottom = 24.dp)
             )
 
-            // Imagen + descripción
-            //AlquilarDevolverSerie(series = serieDemo)
+            AlquilarDevolverSerie(series = uiState)
         }
 
-        // ---------------- BOTONES (encima del bottom bar) ----------------
         Box(
             modifier = Modifier
                 .fillMaxWidth()
@@ -133,16 +125,28 @@ fun AlquilerDevolverSeriesScreen(
                 .align(Alignment.BottomCenter)
         ) {
             BotonAlquilarSeries(
-                botonAlquilar = ButtonData(
-                    nombre = R.string.alquilar,
-                    type = ButtonType.PRIMARY
-                ),
-                botonDevolver = ButtonData(
-                    nombre = R.string.devolver,
-                    type = ButtonType.SECONDARY
-                )
+                botonAlquilar = ButtonData(nombre = R.string.alquilar, type = ButtonType.PRIMARY),
+                botonDevolver = ButtonData(nombre = R.string.devolver, type = ButtonType.SECONDARY),
+                onAlquilarClick = {
+                    viewModel.alquilarSerie()
+                    showDialog = true
+                },
+                onDevolverClick = {
+                    viewModel.devolverSerie()
+                    showDialog = true
+                },
+                isAlquilarButtonEnabled = uiState.isAlquilarButtonEnabled,
+                isDevolverButtonEnabled = uiState.isDevolverButtonEnabled
             )
+        }
 
+        if (showDialog) {
+            AlquilarDevolverDialog(
+                isAlquiler = uiState.serieAlquilada,
+                fechaAlquiler = uiState.fechaAlquiler,
+                fechaDevolucion = uiState.fechaDevolucion,
+                onConfirmClick = { showDialog = false }
+            )
         }
     }
 }
@@ -152,8 +156,15 @@ fun AlquilerDevolverSeriesScreen(
 @Composable
 fun AlquilerDevolverSeriesScreenPreview() {
     MaterialTheme {
-        val navController = rememberNavController()
+        val repository = AlquilerSeriesRepositoryInMemory()
+        val userId = 1
+        val viewModel: AlquilarDevolverSeriesViewModel = viewModel(
+            factory = AlquilarDevolverSeriesViewModelFactory(userId, repository)
+        )
         AlquilerDevolverSeriesScreen(
+            userId = userId,
+            repository = repository,
+            viewModel = viewModel,
             onBackClick = {},
             onHomeClick = {},
             onCameraClick = {},

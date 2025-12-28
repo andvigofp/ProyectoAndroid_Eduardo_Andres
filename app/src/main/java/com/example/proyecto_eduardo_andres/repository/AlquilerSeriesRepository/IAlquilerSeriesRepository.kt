@@ -10,7 +10,7 @@ interface IAlquilerSeriesRepository {
         onSuccess: () -> Unit
     )
 
-    fun devolverPelicula(
+    fun devolverSerie(
         userId: Int,
         serie: VideoClubOnlineAlquilarSeriesUiState,
         onError: (Throwable) -> Unit,

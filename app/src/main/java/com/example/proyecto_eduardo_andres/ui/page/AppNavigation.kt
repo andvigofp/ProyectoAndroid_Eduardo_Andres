@@ -11,6 +11,7 @@ import androidx.navigation.toRoute
 import com.example.proyecto_eduardo_andres.naveHost.RouteNavigation
 import com.example.proyecto_eduardo_andres.naveHost.SessionEvents
 import com.example.proyecto_eduardo_andres.repository.AlquilerPeliculasRepository.AlquilerPeliculasRepositoryInMemory
+import com.example.proyecto_eduardo_andres.repository.AlquilerSeriesRepository.AlquilerSeriesRepositoryInMemory
 import com.example.proyecto_eduardo_andres.viewData.qrData.QRData
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -20,7 +21,8 @@ fun AppNavigation() {
 
     val navController = rememberNavController()
     val scope = rememberCoroutineScope()
-    val repository = remember { AlquilerPeliculasRepositoryInMemory() }
+    val repositoryPeliculas = remember { AlquilerPeliculasRepositoryInMemory() }
+    val repositorySeries = remember { AlquilerSeriesRepositoryInMemory() }
 
     // Helper para emitir navegación
     fun navigate(route: RouteNavigation) {
@@ -170,7 +172,7 @@ fun AppNavigation() {
             val route = route.toRoute<RouteNavigation.AlquilerDevolverPeliculas>()
             AlquilarDevolverPeliculasScreen(
                 userId = route.id,
-                repository = repository,
+                repository = repositoryPeliculas,
                 onBackClick = { navigate(RouteNavigation.VideoClubPeliculas(route.id)) },
                 onHomeClick = { navigate(RouteNavigation.VideoClubPeliculas(route.id)) },
                 onCameraClick = { navigate(RouteNavigation.Camara(route.id)) },
@@ -183,12 +185,13 @@ fun AppNavigation() {
         composable<RouteNavigation.AlquilerDevolverSeries> { route ->
             val route = route.toRoute<RouteNavigation.AlquilerDevolverSeries>()
             AlquilerDevolverSeriesScreen(
-                //userId = route.id,
+                userId = route.id,
+                repository = repositorySeries,
                 onBackClick = { navigate(RouteNavigation.VideoClubSeries(route.id)) },
                 onHomeClick = { navigate(RouteNavigation.VideoClubSeries(route.id)) },
                 onCameraClick = { navigate(RouteNavigation.Camara(route.id)) },
                 onProfileClick = { navigate(RouteNavigation.PerfilUsuario(route.id)) },
-                onLogoutClick = { navigate(RouteNavigation.Login) }
+                onLogoutClick = { navigate(RouteNavigation.Login) },
             )
         }
 

@@ -1,8 +1,7 @@
 package com.example.proyecto_eduardo_andres.repository.AlquilerSeriesRepository
 
-import com.example.proyecto_eduardo_andres.repository.AlquilerPeliculasRepository.IAlquilerPeliculasRepository
-import com.example.proyecto_eduardo_andres.viewData.alquilerDevolverPeliculasData.VideoClubOnlineAlquilarPeliculasUiState
 import com.example.proyecto_eduardo_andres.viewData.alquilerDevolverSeriesData.VideoClubOnlineAlquilarSeriesUiState
+
 
 class AlquilerSeriesRepositoryInMemory : IAlquilerSeriesRepository {
 
@@ -23,7 +22,7 @@ class AlquilerSeriesRepositoryInMemory : IAlquilerSeriesRepository {
         }
     }
 
-    override fun devolverPelicula(
+    override fun devolverSerie(
         userId: Int,
         serie: VideoClubOnlineAlquilarSeriesUiState,
         onError: (Throwable) -> Unit,
