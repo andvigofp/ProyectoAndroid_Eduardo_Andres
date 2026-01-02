@@ -64,7 +64,7 @@ data class PeliculasAlquilarDevolverData(
             descripcion = R.string.cybor_protege_futuro
         ),
         VideoClubOnlineAlquilarPeliculasUiState(
-            imagen = R.drawable.ic_die_hard,
+            imagen = R.drawable.ic_terminator_dos, // Temporal: ic_die_hard está corrupto
             nombrePelicula = R.string.die_hard,
             descripcion = R.string.policia_lucha_terroristas
         ),
@@ -113,7 +113,7 @@ data class PeliculasAlquilarDevolverData(
             descripcion = R.string.anciano_viaja_casa_globos
         ),
         VideoClubOnlineAlquilarPeliculasUiState(
-            imagen = R.drawable.ic_shreck,
+            imagen = R.drawable.ic_toy_story, // Temporal: ic_shreck está corrupto
             nombrePelicula = R.string.shrek,
             descripcion = R.string.ogro_rescata_princesa
         ),
@@ -128,7 +128,7 @@ data class PeliculasAlquilarDevolverData(
             descripcion = R.string.niño_viaja_mundo_muertos
         ),
         VideoClubOnlineAlquilarPeliculasUiState(
-            imagen = R.drawable.ic_frozen,
+            imagen = R.drawable.ic_coco, // Temporal: ic_frozen está corrupto
             nombrePelicula = R.string.frozen,
             descripcion = R.string.dos_hermas_poder_amor_magia
         )

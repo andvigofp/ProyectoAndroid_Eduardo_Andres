@@ -64,7 +64,7 @@ data class PeliculasData(
         ),
         VideoClubOnlinePeliculasData(
             nombreCategoria = R.string.drama,
-            imagen = R.drawable.ic_die_hard,
+            imagen = R.drawable.ic_terminator_dos, // Temporal: ic_die_hard está corrupto
             nombrePelicula = R.string.die_hard
         ),
 
@@ -113,7 +113,7 @@ data class PeliculasData(
         ),
         VideoClubOnlinePeliculasData(
             nombreCategoria = R.string.dibujos,
-            imagen = R.drawable.ic_shreck,
+            imagen = R.drawable.ic_toy_story, // Temporal: ic_shreck está corrupto
             nombrePelicula = R.string.shrek
         ),
         VideoClubOnlinePeliculasData(
@@ -128,7 +128,7 @@ data class PeliculasData(
         ),
         VideoClubOnlinePeliculasData(
             nombreCategoria = R.string.dibujos,
-            imagen = R.drawable.ic_frozen,
+            imagen = R.drawable.ic_coco, // Temporal: ic_frozen está corrupto
             nombrePelicula = R.string.frozen
         )
     )

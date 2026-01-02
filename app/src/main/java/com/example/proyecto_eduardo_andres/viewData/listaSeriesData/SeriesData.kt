@@ -81,7 +81,7 @@ data class SeriesData(
         ),
         VideoClubOnlineSeriesData(
             nombreCategoria = R.string.terror,
-            imagen = R.drawable.ic_the_walking_dead,
+            imagen = R.drawable.ic_american_horror_story, // Temporal: ic_the_walking_dead está corrupto
             nombreSerie = R.string.the_walking_dead
         ),
         VideoClubOnlineSeriesData(
