@@ -168,4 +168,5 @@
     <string name="fecha_devolucion">Fecha de devolución: %1$s</string>
     <string name="multa_devolucion_tarde">¡La película fue devuelta tarde! Se aplica una multa.</string>
     <string name="boton_aceptar">Aceptar</string>
+    <string name="guardar">Guardar</string>
 </resources>

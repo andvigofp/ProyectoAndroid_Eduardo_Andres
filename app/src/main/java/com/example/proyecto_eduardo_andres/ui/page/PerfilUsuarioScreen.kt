@@ -18,6 +18,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -36,6 +37,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.compose.colorAzulOscurso
 import com.example.compose.colorVioleta
 import com.example.proyecto_eduardo_andres.R
@@ -44,9 +46,11 @@ import com.example.proyecto_eduardo_andres.viewData.perfilUsuarioData.PerfilUsua
 import com.example.proyecto_eduardo_andres.myComponents.componentePerfilUsuario.PerfilUsuarioButtons
 import com.example.proyecto_eduardo_andres.viewData.perfilUsuarioData.PerfilUsuarioData
 import com.example.proyecto_eduardo_andres.myComponents.componenteToolbar.toolBar
+import com.example.proyecto_eduardo_andres.viewmodel.PerfilUsuarioViewModel
 
 @Composable
 fun PerfilUsuarioScreen(
+    viewModel: PerfilUsuarioViewModel = viewModel(),
     onBackClick: () -> Unit,
     onHomeClick: () -> Unit,
     onCameraClick: () -> Unit,
@@ -54,6 +58,7 @@ fun PerfilUsuarioScreen(
     onLogoutClick: () -> Unit
 ) {
     var perfilUsuarioData by remember { mutableStateOf(PerfilUsuarioData()) }
+    val uiState by viewModel.uiState.collectAsState()
 
     Box(
         modifier = Modifier
@@ -145,14 +150,23 @@ fun PerfilUsuarioScreen(
                 // Botón principal usando PerfilUsuarioButtons
                 PerfilUsuarioButtons(
                     perfilUsuarioButtonTextsData = PerfilUsuarioButtonTextsData(
-                        modificar = stringResource(R.string.modificar_usuario)
+                        modificar = if (uiState.isEditing)
+                            stringResource(R.string.guardar)
+                        else
+                            stringResource(R.string.modificar_usuario)
                     ),
-                    onModificarUsuario = { /* Acción modificar */ }
+                    onModificarUsuario = {
+                        if (uiState.isEditing) {
+                            viewModel.guardarCambios()
+                        } else {
+                            viewModel.toggleEditing()
+                        }
+                    }
                 )
             }
         }
 
-        // --- TOOLBAR + título ---
+                // --- TOOLBAR + título ---
         Box(
             modifier = Modifier
                 .align(Alignment.TopCenter)
