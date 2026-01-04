@@ -208,7 +208,6 @@ fun AppNavigation() {
                 onCameraClick = { navigate(RouteNavigation.Camara(route.id)) },
                 onProfileClick = { navigate(RouteNavigation.PerfilUsuario(route.id)) },
                 onLogoutClick = { navigate(RouteNavigation.Login) },
-                qrData = QRData("")
             )
         }
     }
