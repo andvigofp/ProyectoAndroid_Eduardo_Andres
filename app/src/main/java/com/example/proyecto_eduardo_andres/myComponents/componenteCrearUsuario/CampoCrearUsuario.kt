@@ -7,6 +7,11 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Visibility
+import androidx.compose.material.icons.filled.VisibilityOff
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -21,6 +26,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.proyecto_eduardo_andres.R
@@ -33,7 +39,9 @@ import com.example.proyecto_eduardo_andres.R
 @Composable
 fun CampoCrearUsuario(
     crearUsuarioData: CrearUsuarioUiState,
-    onCrearUsuarioData: (CrearUsuarioUiState) -> Unit
+    onCrearUsuarioData: (CrearUsuarioUiState) -> Unit,
+    onTogglePasswordVisibility: () -> Unit,
+    onToggleRepeatPasswordVisibility: () -> Unit
 ) {
     Column(
         modifier = Modifier
@@ -79,13 +87,27 @@ fun CampoCrearUsuario(
                     onCrearUsuarioData(crearUsuarioData.copy(password = it))
                 },
                 singleLine = true,
-                visualTransformation = PasswordVisualTransformation(),
+                visualTransformation = if (crearUsuarioData.passwordVisible)
+                    VisualTransformation.None
+                else
+                    PasswordVisualTransformation(),
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+                trailingIcon = {
+                    IconButton(onClick = onTogglePasswordVisibility) {
+                        Icon(
+                            imageVector = if (crearUsuarioData.passwordVisible)
+                                Icons.Default.VisibilityOff
+                            else
+                                Icons.Default.Visibility,
+                            contentDescription = null
+                        )
+                    }
+                },
                 modifier = Modifier.weight(2f).alignByBaseline()
             )
         }
 
-        // REPETIR PASSWORD
+            // REPETIR PASSWORD
         Row(
             modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically
@@ -101,8 +123,22 @@ fun CampoCrearUsuario(
                     onCrearUsuarioData(crearUsuarioData.copy(repeatPassword = it))
                 },
                 singleLine = true,
-                visualTransformation = PasswordVisualTransformation(),
+                visualTransformation = if (crearUsuarioData.repeatPasswordVisible)
+                    VisualTransformation.None
+                else
+                    PasswordVisualTransformation(),
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+                trailingIcon = {
+                    IconButton(onClick = onToggleRepeatPasswordVisibility) {
+                        Icon(
+                            imageVector = if (crearUsuarioData.repeatPasswordVisible)
+                                Icons.Default.VisibilityOff
+                            else
+                                Icons.Default.Visibility,
+                            contentDescription = null
+                        )
+                    }
+                },
                 modifier = Modifier.weight(2f).alignByBaseline()
             )
         }
@@ -160,6 +196,16 @@ fun CampoCrearUsuarioPreview() {
 
     CampoCrearUsuario(
         crearUsuarioData = crearUsuarioData,
-        onCrearUsuarioData = { crearUsuarioData = it }
+        onCrearUsuarioData = { crearUsuarioData = it },
+        onTogglePasswordVisibility = {
+            crearUsuarioData = crearUsuarioData.copy(
+                passwordVisible = !crearUsuarioData.passwordVisible
+            )
+        },
+        onToggleRepeatPasswordVisibility = {
+            crearUsuarioData = crearUsuarioData.copy(
+                repeatPasswordVisible = !crearUsuarioData.repeatPasswordVisible
+            )
+        }
     )
 }

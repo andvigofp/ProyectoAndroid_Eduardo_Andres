@@ -1,4 +1,4 @@
-package com.example.proyecto_eduardo_andres.repository.LoginRepository
+package com.example.proyecto_eduardo_andres.repository.loginRepository
 
 import com.example.proyecto_eduardo_andres.modelo.UserDTO
 
@@ -18,8 +18,6 @@ class UserRepositoryInMemory : IUserRepository {
                     name = "User $i",
                     email = "user$i@example.com",
                     password = "password$i",
-                    age = 20 + i,
-                    surname = "Surname $i"
                 )
             )
         }

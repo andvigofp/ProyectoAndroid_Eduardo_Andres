@@ -1,4 +1,4 @@
-package com.example.proyecto_eduardo_andres.repository.AlquilerSeriesRepository
+package com.example.proyecto_eduardo_andres.repository.alquilerSeriesRepository
 
 import com.example.proyecto_eduardo_andres.viewData.alquilerDevolverSeriesData.VideoClubOnlineAlquilarSeriesUiState
 

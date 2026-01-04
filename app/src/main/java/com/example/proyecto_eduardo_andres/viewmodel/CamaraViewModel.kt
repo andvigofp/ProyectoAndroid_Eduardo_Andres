@@ -3,7 +3,7 @@ package com.example.proyecto_eduardo_andres.viewmodel
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.example.proyecto_eduardo_andres.repository.CamaraRepository.ICamaraRepository
+import com.example.proyecto_eduardo_andres.repository.camaraRepository.ICamaraRepository
 import com.example.proyecto_eduardo_andres.viewData.camaraData.CamaraUiState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow

@@ -36,7 +36,7 @@ import com.example.proyecto_eduardo_andres.viewData.logingData.LoginUiState
 fun CamposLogin(
     loginData: LoginUiState,
     onLoginDataChange: (LoginUiState) -> Unit,
-    onTogglePasswordVisibility: () -> Unit
+    onTogglePasswordVisibility: () -> Unit,
 ) {
     Column(
         modifier = Modifier

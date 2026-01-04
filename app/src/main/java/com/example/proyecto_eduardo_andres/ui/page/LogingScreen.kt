@@ -32,7 +32,6 @@ import com.example.proyecto_eduardo_andres.myComponents.componenteLogin.LoginBut
 import com.example.proyecto_eduardo_andres.myComponents.componenteLogin.CamposLogin
 import com.example.proyecto_eduardo_andres.viewData.buttonsData.ButtonData
 import com.example.proyecto_eduardo_andres.viewData.buttonsData.ButtonType
-import com.example.proyecto_eduardo_andres.viewData.logingData.LoginUiState
 import com.example.proyecto_eduardo_andres.viewmodel.LoginViewModel
 
 @Composable
@@ -128,7 +127,9 @@ fun LogingScreen(
                     crearUsuarioButton = ButtonData(nombre = R.string.crear_usuario, type = ButtonType.SECONDARY),
                     recuperarButton = ButtonData(nombre = R.string.recuperar_contrasenha, type = ButtonType.DANGER),
                     enabledAcceder = uiState.isLoginButtonEnabled,
-                    onAccederClick = onAccederClick,
+                    onAccederClick = {
+                        loginViewModel.logging()
+                    },
                     onCrearUsuarioClick = onCrearUsuarioClick,
                     onRecuperarPasswordClick = onRecuperarPasswordClick
                 )

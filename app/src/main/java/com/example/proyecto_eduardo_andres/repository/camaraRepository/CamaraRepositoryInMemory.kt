@@ -1,4 +1,4 @@
-package com.example.proyecto_eduardo_andres.repository.CamaraRepository
+package com.example.proyecto_eduardo_andres.repository.camaraRepository
 
 import com.example.proyecto_eduardo_andres.R
 

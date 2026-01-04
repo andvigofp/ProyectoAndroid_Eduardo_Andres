@@ -2,6 +2,7 @@
 
 package com.example.proyecto_eduardo_andres.ui.page
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -43,7 +44,6 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.proyecto_eduardo_andres.R
 import com.example.proyecto_eduardo_andres.myComponents.componeneteCrearUsuario.CampoCrearUsuario
-import com.example.proyecto_eduardo_andres.myComponents.componeneteCrearUsuario.CrearUsuarioUiState
 import com.example.proyecto_eduardo_andres.myComponents.componenteButtons.AppButton
 import com.example.proyecto_eduardo_andres.viewData.buttonsData.ButtonData
 import com.example.proyecto_eduardo_andres.viewData.buttonsData.ButtonType
@@ -149,18 +149,22 @@ fun CrearUsuarioScreen(
 
                 // --- Campos del formulario ---
                 CampoCrearUsuario(
-                    crearUsuarioData = crearUsuarioData,
+                    crearUsuarioData = uiState,
                     onCrearUsuarioData = {
-                        crearUsuarioData = it   // UI inmediata (como Login Preview)
-
-                        // Sincronizar con ViewModel
                         crearUsuarioViewModel.onNameChange(it.nombre)
                         crearUsuarioViewModel.onPasswordChange(it.password)
                         crearUsuarioViewModel.onRepeatPasswordChange(it.repeatPassword)
                         crearUsuarioViewModel.onEmailChange(it.email)
                         crearUsuarioViewModel.onRepeatEmailChange(it.repeatEmail)
+                    },
+                    onTogglePasswordVisibility = {
+                        crearUsuarioViewModel.togglePasswordVisibility()
+                    },
+                    onToggleRepeatPasswordVisibility = {
+                        crearUsuarioViewModel.toggleRepeatPasswordVisibility()
                     }
                 )
+
 
                 Spacer(modifier = Modifier.height(24.dp))
 
@@ -189,11 +193,23 @@ fun CrearUsuarioScreen(
                             type = ButtonType.PRIMARY,
                             enabled = uiState.isLoginButtonEnabled
                         ),
-                        onClick = onCrearUsuarioClick,
+                        onClick = {
+                            crearUsuarioViewModel.crearUsuario(
+                                onSuccess = {
+                                    // Usuario creado correctamente
+                                    onCrearUsuarioClick()
+                                },
+                                onError = { error ->
+                                    // Aquí puedes mostrar Snackbar / Toast / Log
+                                    Log.e("CrearUsuario", error.message ?: "Error desconocido")
+                                }
+                            )
+                        },
                         modifier = Modifier
                             .weight(1f)
                             .height(50.dp)
                     )
+
                 }
             }
         }
