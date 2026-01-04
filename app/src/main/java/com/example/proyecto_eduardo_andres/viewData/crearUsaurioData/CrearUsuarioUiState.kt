@@ -7,10 +7,14 @@ data class CrearUsuarioUiState(
     val email: String = "",
     val repeatEmail: String = "",
     val passwordVisible: Boolean = false,
+    val repeatPasswordVisible: Boolean = false
 ) {
     val isLoginButtonEnabled: Boolean
-        get() = nombre.isNotBlank() && password.isNotBlank() && repeatPassword.isNotBlank()
-                && email.isNotBlank() && repeatEmail.isNotBlank()
-
+        get() = nombre.isNotBlank() &&
+                password.isNotBlank() &&
+                repeatPassword.isNotBlank() &&
+                email.isNotBlank() &&
+                repeatEmail.isNotBlank()
 }
+
 

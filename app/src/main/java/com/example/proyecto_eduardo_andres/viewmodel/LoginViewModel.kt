@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.proyecto_eduardo_andres.naveHost.RouteNavigation
 import com.example.proyecto_eduardo_andres.naveHost.SessionEvents
-import com.example.proyecto_eduardo_andres.repository.LoginRepository.UserRepositoryInMemory
+import com.example.proyecto_eduardo_andres.repository.loginRepository.UserRepositoryInMemory
 import com.example.proyecto_eduardo_andres.viewData.logingData.LoginUiState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow

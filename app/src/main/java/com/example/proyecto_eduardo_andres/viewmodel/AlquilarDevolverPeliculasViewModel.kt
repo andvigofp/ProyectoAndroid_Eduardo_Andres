@@ -3,7 +3,7 @@ package com.example.proyecto_eduardo_andres.viewmodel
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.example.proyecto_eduardo_andres.repository.AlquilerPeliculasRepository.IAlquilerPeliculasRepository
+import com.example.proyecto_eduardo_andres.repository.alquilerPeliculasRepository.IAlquilerPeliculasRepository
 import com.example.proyecto_eduardo_andres.viewData.alquilerDevolverPeliculasData.AlquilarDevolverPeliculasUiState
 import com.example.proyecto_eduardo_andres.viewData.alquilerDevolverPeliculasData.PeliculasAlquilarDevolverData
 import kotlinx.coroutines.flow.MutableStateFlow

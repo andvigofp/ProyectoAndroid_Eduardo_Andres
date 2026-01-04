@@ -30,8 +30,8 @@ import com.example.proyecto_eduardo_andres.myComponents.componenteCamara.CamaraC
 import com.example.proyecto_eduardo_andres.viewData.camaraData.CamaraData
 import com.example.proyecto_eduardo_andres.myComponents.componenteToolbar.toolBar
 import com.example.proyecto_eduardo_andres.R
-import com.example.proyecto_eduardo_andres.repository.CamaraRepository.CamaraRepositoryInMemory
-import com.example.proyecto_eduardo_andres.repository.CamaraRepository.ICamaraRepository
+import com.example.proyecto_eduardo_andres.repository.camaraRepository.CamaraRepositoryInMemory
+import com.example.proyecto_eduardo_andres.repository.camaraRepository.ICamaraRepository
 import com.example.proyecto_eduardo_andres.viewData.buttonsData.ButtonData
 import com.example.proyecto_eduardo_andres.viewData.buttonsData.ButtonType
 import com.example.proyecto_eduardo_andres.viewmodel.CamaraViewModel

@@ -41,7 +41,7 @@ fun CrearUsuarioButtons(
     cancelarButton: ButtonData,
     enabledCrear: Boolean,
     onCrearClick: () -> Unit,
-    onCancelarClick: () -> Unit
+    onCancelarClick: () -> Unit,
 ) {
     Column(
         modifier = Modifier.fillMaxWidth(),
