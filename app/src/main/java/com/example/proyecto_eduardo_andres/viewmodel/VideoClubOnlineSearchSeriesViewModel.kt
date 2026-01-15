@@ -1,4 +1,48 @@
 package com.example.proyecto_eduardo_andres.viewmodel
 
-class VideoClubOnlineSearchSeriesViewModel {
+import androidx.lifecycle.ViewModel
+import com.example.proyecto_eduardo_andres.viewData.listaSeriesData.SeriesData
+import com.example.proyecto_eduardo_andres.viewData.searchSeriesData.VideoClubOnlineSearchSeriesUiState
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
+
+class VideoClubOnlineSearchSeriesViewModel : ViewModel() {
+
+    private val _uiState = MutableStateFlow(VideoClubOnlineSearchSeriesUiState())
+    val uiState: StateFlow<VideoClubOnlineSearchSeriesUiState> =
+        _uiState.asStateFlow()
+
+    init {
+        cargarSeries()
+    }
+
+    private fun cargarSeries() {
+        val series = SeriesData().nombreSeries
+
+        _uiState.update {
+            it.copy(
+                series = series,
+                seriesFiltradas = series
+            )
+        }
+    }
+
+    fun onQueryChange(query: String) {
+        val seriesFiltradas = _uiState.value.series.filter { serie ->
+            // OJO: aquí NO usamos stringResource en el ViewModel
+            // asumimos que nombreSerie es Int (string resource)
+            query.isBlank() ||
+                    serie.nombreSerie.toString()
+                        .contains(query, ignoreCase = true)
+        }
+
+        _uiState.update {
+            it.copy(
+                query = query,
+                seriesFiltradas = seriesFiltradas
+            )
+        }
+    }
 }
