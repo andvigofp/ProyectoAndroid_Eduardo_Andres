@@ -19,13 +19,13 @@ import com.example.proyecto_eduardo_andres.R
  */
 @Composable
 fun SearchBar(
-    searchQuery: TextFieldValue,
-    onQueryChange: (TextFieldValue) -> Unit
+    searchQuery: String,
+    onQueryChange: (String) -> Unit
 ) {
     OutlinedTextField(
         value = searchQuery,
         onValueChange = onQueryChange,
-        placeholder = { Text(stringResource(R.string.buscar_series))},
+        placeholder = { Text(stringResource(R.string.buscar_series)) },
         modifier = Modifier
             .fillMaxWidth()
             .padding(vertical = 8.dp)
