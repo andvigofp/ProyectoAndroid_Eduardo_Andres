@@ -103,7 +103,7 @@ fun VideoClubScreenPreview() {
             .fillMaxSize()
             .padding(16.dp)
     ) {
-        SearchBar(searchQuery = searchQuery, onQueryChange = { searchQuery = it })
+        //SearchBar(searchQuery = searchQuery, onQueryChange = { searchQuery = it })
         Spacer(modifier = Modifier.height(16.dp))
         MovieList(series = seriesFiltrada)
     }
