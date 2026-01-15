@@ -22,7 +22,7 @@ class MainActivity : ComponentActivity() {
             Proyecto_Eduardo_AndresTheme {
                 Scaffold { innerPadding ->
                     Box(Modifier.padding(innerPadding)) {
-                        AppNavigation()
+                        //AppNavigation()
 
                         /**LogingScreen(
                         userImageUrl = null,
