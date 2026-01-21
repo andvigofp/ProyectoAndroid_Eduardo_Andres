@@ -1,4 +1,4 @@
-package com.example.proyecto_eduardo_andres.myComponents.componenteSearchSeries
+package com.example.proyecto_eduardo_andres.myComponents.componenteSearchSeriesPeliculas
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -25,10 +25,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.compose.coloAuzlClaro
 import com.example.proyecto_eduardo_andres.R
-import com.example.proyecto_eduardo_andres.viewData.listaSeriesData.VideoClubOnlineSeriesData
+import com.example.proyecto_eduardo_andres.viewData.mediaItemData.MediaItemData
 
 @Composable
-fun SerieItem(serie: VideoClubOnlineSeriesData) {
+fun MediaItem(item: MediaItemData) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier
@@ -36,16 +36,18 @@ fun SerieItem(serie: VideoClubOnlineSeriesData) {
             .background(coloAuzlClaro, RoundedCornerShape(12.dp))
             .padding(8.dp)
     ) {
-        if (serie.imagen != null) {
+        // Solo llamamos a painterResource si imagen NO es null
+        item.imagen?.let { imagenId ->
             Image(
-                painter = painterResource(id = serie.imagen),
-                contentDescription = stringResource(serie.nombreSerie),
+                painter = painterResource(id = imagenId),
+                contentDescription = stringResource(item.nombre),
                 modifier = Modifier
                     .size(64.dp)
                     .clip(RoundedCornerShape(8.dp)),
                 contentScale = ContentScale.Crop
             )
-        } else {
+        } ?: run {
+            // Si imagen es null mostramos un placeholder
             Box(
                 modifier = Modifier
                     .size(64.dp)
@@ -64,13 +66,13 @@ fun SerieItem(serie: VideoClubOnlineSeriesData) {
 
         Column {
             Text(
-                text = stringResource(serie.nombreSerie),
+                text = stringResource(item.nombre),
                 fontSize = 16.sp,
                 fontWeight = FontWeight.Medium,
                 color = Color.Black
             )
             Text(
-                text = stringResource(serie.nombreCategoria),
+                text = stringResource(item.categoria),
                 fontSize = 12.sp,
                 color = Color.DarkGray
             )

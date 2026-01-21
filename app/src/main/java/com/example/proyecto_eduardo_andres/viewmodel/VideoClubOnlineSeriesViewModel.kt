@@ -14,12 +14,12 @@ class VideoClubOnlineSeriesViewModel : ViewModel() {
     val uiState: StateFlow<VideoClubOnlineSeriesUiState> = _uiState.asStateFlow()
 
     init {
-        cargarPeliculas()
+        cargarSeries()
     }
 
-    private fun cargarPeliculas() {
-        val serie = SeriesData().nombreSeries
-        val agrupadas = serie.groupBy { it.nombreCategoria }
+    private fun cargarSeries() {
+        val serie = SeriesData().series
+        val agrupadas = serie.groupBy { it.categoria }
 
         _uiState.update {
             it.copy(
@@ -31,7 +31,7 @@ class VideoClubOnlineSeriesViewModel : ViewModel() {
 
     fun filtrarPorCategoria(categoria: Int) {
         val filtradas = _uiState.value.series
-            .filter { it.nombreCategoria == categoria }
+            .filter { it.categoria == categoria }
 
         _uiState.update {
             it.copy(

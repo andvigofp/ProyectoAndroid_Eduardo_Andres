@@ -19,7 +19,7 @@ class VideoClubOnlineSearchSeriesViewModel : ViewModel() {
     }
 
     private fun cargarSeries() {
-        val series = SeriesData().nombreSeries
+        val series = SeriesData().series
 
         _uiState.update {
             it.copy(

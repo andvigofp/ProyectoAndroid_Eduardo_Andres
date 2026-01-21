@@ -62,7 +62,7 @@ fun SerieList(
                 if (movie.imagen != null) {
                     Image(
                         painter = painterResource(id = movie.imagen),
-                        contentDescription = stringResource(movie.nombreSerie),
+                        contentDescription = stringResource(movie.nombre),
                         modifier = Modifier
                             .size(64.dp)
                             .clip(RoundedCornerShape(8.dp)),
@@ -81,8 +81,8 @@ fun SerieList(
 
                 Spacer(modifier = Modifier.width(16.dp))
                 Column {
-                    Text(text = stringResource(movie.nombreSerie), fontSize = 20.sp, color = Color.Black)
-                    Text(text = stringResource(movie.nombreCategoria), fontSize = 12.sp, color = Color.DarkGray)
+                    Text(text = stringResource(movie.nombre), fontSize = 20.sp, color = Color.Black)
+                    Text(text = stringResource(movie.categoria), fontSize = 12.sp, color = Color.DarkGray)
                 }
             }
         }
@@ -96,7 +96,7 @@ fun VideoClubScreenPreview() {
     var searchQuery by remember { mutableStateOf(TextFieldValue("")) }
 
     //Llamada a buscarSeries dentro del composable
-    val seriesFiltrada = buscarSeries(seriesData.nombreSeries, searchQuery.text)
+    val seriesFiltrada = buscarSeries(seriesData.series, searchQuery.text)
 
     Column(
         modifier = Modifier

@@ -30,7 +30,7 @@ import com.example.compose.colorAzulOscurso
 import com.example.compose.colorAzulSuave
 import com.example.compose.colorVioleta
 import com.example.proyecto_eduardo_andres.myComponents.componenteSearchSeries.SearchBar
-import com.example.proyecto_eduardo_andres.myComponents.componenteSearchSeries.SerieItem
+import com.example.proyecto_eduardo_andres.myComponents.componenteSearchSeriesPeliculas.MediaItem
 import com.example.proyecto_eduardo_andres.myComponents.componenteToolbar.toolBar
 import com.example.proyecto_eduardo_andres.viewmodel.VideoClubOnlineSearchSeriesViewModel
 
@@ -51,7 +51,7 @@ fun VideoClubSearchSeriesScreen(
     val seriesFiltradas = remember(uiState.query, uiState.series) {
         uiState.series.filter { serie ->
             uiState.query.isBlank() ||
-                    context.getString(serie.nombreSerie)
+                    context.getString(serie.nombre)
                         .contains(uiState.query, ignoreCase = true)
         }
     }
@@ -107,7 +107,7 @@ fun VideoClubSearchSeriesScreen(
                 modifier = Modifier.fillMaxSize()
             ) {
                 items(seriesFiltradas) { serie ->
-                    SerieItem(serie = serie)
+                    MediaItem(serie)
                 }
             }
         }

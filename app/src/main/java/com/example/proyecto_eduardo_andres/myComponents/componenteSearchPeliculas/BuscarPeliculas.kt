@@ -16,6 +16,6 @@ fun buscarPeliculas(
     query: String
 ): List<VideoClubOnlinePeliculasData> {
     return peliculas.filter {
-        stringResource(id = it.nombrePelicula).contains(query, ignoreCase = true)
+        stringResource(id = it.nombre).contains(query, ignoreCase = true)
     }
 }

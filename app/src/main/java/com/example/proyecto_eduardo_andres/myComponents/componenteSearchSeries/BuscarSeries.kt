@@ -16,7 +16,7 @@ fun buscarSeries(
     query: String
 ): List<VideoClubOnlineSeriesData> {
     return series.filter { serie ->
-        stringResource(id = serie.nombreSerie).contains(query, ignoreCase = true)
+        stringResource(id = serie.nombre).contains(query, ignoreCase = true)
     }
 }
 
