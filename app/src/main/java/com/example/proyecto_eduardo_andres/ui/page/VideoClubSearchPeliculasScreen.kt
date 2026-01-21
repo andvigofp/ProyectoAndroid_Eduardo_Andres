@@ -22,6 +22,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -33,6 +34,7 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -40,30 +42,38 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.compose.rememberNavController
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.compose.coloAuzlClaro
 import com.example.compose.colorAzulOscurso
 import com.example.compose.colorAzulSuave
 import com.example.compose.colorVioleta
-import com.example.proyecto_eduardo_andres.myComponents.componenteSearchPeliculas.SearchBar
-import com.example.proyecto_eduardo_andres.myComponents.componenteSearchPeliculas.buscarPeliculas
 import com.example.proyecto_eduardo_andres.myComponents.componenteToolbar.toolBar
-import com.example.proyecto_eduardo_andres.viewData.listaPeliculasData.PeliculasData
 import com.example.proyecto_eduardo_andres.R
+import com.example.proyecto_eduardo_andres.myComponents.componenteSearchPeliculas.MovieList
+import com.example.proyecto_eduardo_andres.myComponents.componenteSearchSeries.SearchBar
+import com.example.proyecto_eduardo_andres.viewmodel.VideoClubOnlineSearchPeliculasViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun VideoClubSearchPeliculasScreen(
+    viewModel: VideoClubOnlineSearchPeliculasViewModel = viewModel(),
     onBackClick: () -> Unit,
     onHomeClick: () -> Unit,
     onCameraClick: () -> Unit,
     onProfileClick: () -> Unit,
     onLogoutClick: () -> Unit
 ) {
-    val peliculasData = PeliculasData()
-    var searchQuery by remember { mutableStateOf(TextFieldValue("")) }
+    val uiState by viewModel.uiState.collectAsState()
 
-    val peliculasFiltradas = buscarPeliculas(peliculasData.nombrePeliculas, searchQuery.text)
+    val context = LocalContext.current
+
+    val peliculasFiltradas = remember(uiState.query, uiState.peliculas) {
+        uiState.peliculas.filter { pelicula ->
+            uiState.query.isBlank() ||
+                    context.getString(pelicula.nombrePelicula)
+                        .contains(uiState.query, ignoreCase = true)
+        }
+    }
 
     // Degradado del toolbar
     val toolbarBackGround = Brush.linearGradient(
@@ -107,11 +117,13 @@ fun VideoClubSearchPeliculasScreen(
         ) {
             // Barra de búsqueda
             SearchBar(
-                searchQuery = searchQuery,
-                onQueryChange = { searchQuery = it }
+                searchQuery = uiState.query,
+                onQueryChange = { viewModel.onQueryChange(it) }
             )
 
             Spacer(modifier = Modifier.height(16.dp))
+
+            MovieList(peliculas = peliculasFiltradas)
 
             // Lista de películas
             LazyColumn(

@@ -34,10 +34,10 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -47,9 +47,8 @@ import com.example.compose.colorAzulOscurso
 import com.example.compose.colorAzulSuave
 import com.example.compose.colorVioleta
 import com.example.proyecto_eduardo_andres.R
-import com.example.proyecto_eduardo_andres.myComponents.componenteSearchSeries.MovieList
 import com.example.proyecto_eduardo_andres.myComponents.componenteSearchSeries.SearchBar
-import com.example.proyecto_eduardo_andres.myComponents.componenteSearchSeries.buscarSeries
+import com.example.proyecto_eduardo_andres.myComponents.componenteSearchSeries.SerieList
 import com.example.proyecto_eduardo_andres.myComponents.componenteToolbar.toolBar
 import com.example.proyecto_eduardo_andres.viewData.listaSeriesData.SeriesData
 import com.example.proyecto_eduardo_andres.viewmodel.VideoClubOnlineSearchSeriesViewModel
@@ -65,10 +64,16 @@ fun VideoClubSearchSeriesScreen(
     onLogoutClick: () -> Unit
 ) {
     val uiState by viewModel.uiState.collectAsState()
-    val seriesData = SeriesData()
-    var searchQuery by remember { mutableStateOf(TextFieldValue("")) }
 
-    val seriesFiltrada = buscarSeries(seriesData.nombreSeries, searchQuery.text)
+    val context = LocalContext.current
+
+    val seriesFiltradas = remember(uiState.query, uiState.series) {
+        uiState.series.filter { serie ->
+            uiState.query.isBlank() ||
+                    context.getString(serie.nombreSerie)
+                        .contains(uiState.query, ignoreCase = true)
+        }
+    }
 
     // Degradado del toolbar
     val toolbarBackGround = Brush.linearGradient(
@@ -117,13 +122,13 @@ fun VideoClubSearchSeriesScreen(
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            MovieList(series = uiState.seriesFiltradas)
+            SerieList(series = seriesFiltradas)
 
             LazyColumn(
                 verticalArrangement = Arrangement.spacedBy(12.dp),
                 modifier = Modifier.fillMaxSize()
             ) {
-                items(seriesFiltrada) { serie ->
+                items(seriesFiltradas) { serie ->
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
                         modifier = Modifier

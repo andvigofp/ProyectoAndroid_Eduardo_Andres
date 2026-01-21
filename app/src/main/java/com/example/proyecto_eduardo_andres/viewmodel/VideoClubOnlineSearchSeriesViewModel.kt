@@ -30,19 +30,8 @@ class VideoClubOnlineSearchSeriesViewModel : ViewModel() {
     }
 
     fun onQueryChange(query: String) {
-        val seriesFiltradas = _uiState.value.series.filter { serie ->
-            // OJO: aquí NO usamos stringResource en el ViewModel
-            // asumimos que nombreSerie es Int (string resource)
-            query.isBlank() ||
-                    serie.nombreSerie.toString()
-                        .contains(query, ignoreCase = true)
-        }
-
         _uiState.update {
-            it.copy(
-                query = query,
-                seriesFiltradas = seriesFiltradas
-            )
+            it.copy(query = query)
         }
     }
 }

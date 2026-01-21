@@ -29,19 +29,9 @@ class VideoClubOnlineSearchPeliculasViewModel : ViewModel(){
     }
 
     fun onQueryChange(query: String) {
-        val peliculasFiltradas = _uiState.value.peliculas.filter { pelicula ->
-            // OJO: aquí NO usamos stringResource en el ViewModel
-            // asumimos que nombreSerie es Int (string resource)
-            query.isBlank() ||
-                    pelicula.nombrePelicula.toString()
-                        .contains(query, ignoreCase = true)
-        }
-
         _uiState.update {
-            it.copy(
-                query = query,
-                peliculasFiltradas = peliculasFiltradas
-            )
+            it.copy(query = query)
         }
     }
+
 }

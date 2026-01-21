@@ -44,7 +44,7 @@ import com.example.proyecto_eduardo_andres.R
  * @param peliculas: Introduce el nombre de las series
  */
 @Composable
-fun MovieList(
+fun SerieList(
     series: List<VideoClubOnlineSeriesData>
 ) {
     LazyColumn(
@@ -105,6 +105,6 @@ fun VideoClubScreenPreview() {
     ) {
         //SearchBar(searchQuery = searchQuery, onQueryChange = { searchQuery = it })
         Spacer(modifier = Modifier.height(16.dp))
-        MovieList(series = seriesFiltrada)
+        SerieList(series = seriesFiltrada)
     }
 }
