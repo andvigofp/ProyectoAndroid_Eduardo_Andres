@@ -2,12 +2,14 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <!-- Permisos para acceso a internet -->
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
-    <!-- 🔹 Permiso para usar la cámara -->
+    <!-- Permiso para usar la cámara -->
     <uses-permission android:name="android.permission.CAMERA" />
 
-    <!-- 🔹 Declarar que la app usa hardware de cámara -->
+    <!-- Declarar que la app usa hardware de cámara -->
     <uses-feature
         android:name="android.hardware.camera.any"
         android:required="false" />
