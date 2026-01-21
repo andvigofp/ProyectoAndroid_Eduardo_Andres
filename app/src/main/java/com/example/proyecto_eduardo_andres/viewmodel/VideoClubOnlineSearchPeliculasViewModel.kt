@@ -18,7 +18,7 @@ class VideoClubOnlineSearchPeliculasViewModel : ViewModel(){
     }
 
     private fun cargarPeliculas() {
-        val peliculas = PeliculasData().nombrePeliculas
+        val peliculas = PeliculasData().peliculas
 
         _uiState.update {
             it.copy(

@@ -88,8 +88,8 @@ fun VideoClubOnlineSeries(
 fun VideoClubOnlineSeriesPreview() {
     MaterialTheme {
         // Datos de ejemplo para preview
-        val series = SeriesData().nombreSeries
-        val seriesPorCategoria = series.groupBy { it.nombreCategoria }
+        val series = SeriesData().series
+        val seriesPorCategoria = series.groupBy { it.categoria }
         VideoClubOnlineSeries(
             seriesPorCategoria = seriesPorCategoria
         )

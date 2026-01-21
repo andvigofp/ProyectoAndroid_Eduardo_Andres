@@ -47,7 +47,7 @@ fun SerieItem(serie: VideoClubOnlineSeriesData) {
             serie.imagen?.let {
                 Image(
                     painter = painterResource(id = it),
-                    contentDescription = stringResource(serie.nombreSerie),
+                    contentDescription = stringResource(serie.nombre),
                     contentScale = ContentScale.Crop,
                     modifier = Modifier.fillMaxSize()
                 )
@@ -59,7 +59,7 @@ fun SerieItem(serie: VideoClubOnlineSeriesData) {
             )
         }
         Text(
-            text = stringResource(serie.nombreSerie),
+            text = stringResource(serie.nombre),
             style = MaterialTheme.typography.bodyMedium.copy(
                 color = MaterialTheme.colorScheme.onBackground,
                 fontWeight = FontWeight.Medium,

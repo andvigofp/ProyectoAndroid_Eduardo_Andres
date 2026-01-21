@@ -48,7 +48,7 @@ fun PeliculaItem(pelicula: VideoClubOnlinePeliculasData) {
             pelicula.imagen?.let {
                 Image(
                     painter = painterResource(id = it),
-                    contentDescription = stringResource(pelicula.nombrePelicula),
+                    contentDescription = stringResource(pelicula.nombre),
                     contentScale = ContentScale.Crop,
                     modifier = Modifier.fillMaxSize()
                 )
@@ -61,7 +61,7 @@ fun PeliculaItem(pelicula: VideoClubOnlinePeliculasData) {
         }
 
         Text(
-            text = stringResource(pelicula.nombrePelicula),
+            text = stringResource(pelicula.nombre),
             color = MaterialTheme.colorScheme.onBackground,
             fontSize = 14.sp,
             fontWeight = FontWeight.Medium,

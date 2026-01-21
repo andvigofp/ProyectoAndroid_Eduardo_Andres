@@ -62,7 +62,7 @@ fun MovieList(
                 if (movie.imagen != null) {
                     Image(
                         painter = painterResource(id = movie.imagen),
-                        contentDescription = stringResource(movie.nombrePelicula),
+                        contentDescription = stringResource(movie.nombre),
                         modifier = Modifier
                             .size(64.dp)
                             .clip(RoundedCornerShape(8.dp)),
@@ -81,8 +81,8 @@ fun MovieList(
 
                 Spacer(modifier = Modifier.width(16.dp))
                 Column {
-                    Text(text = stringResource(movie.nombrePelicula), fontSize = 20.sp, color = Color.Black)
-                    Text(text = stringResource(movie.nombreCategoria), fontSize = 12.sp, color = Color.DarkGray)
+                    Text(text = stringResource(movie.nombre), fontSize = 20.sp, color = Color.Black)
+                    Text(text = stringResource(movie.categoria), fontSize = 12.sp, color = Color.DarkGray)
                 }
             }
         }
@@ -95,7 +95,7 @@ fun VideoClubScreenPreview() {
     val peliculasData = PeliculasData()
     var searchQuery by remember { mutableStateOf(TextFieldValue("")) }
 
-    val peliculasFiltradas = buscarPeliculas(peliculasData.nombrePeliculas, searchQuery.text)
+    val peliculasFiltradas = buscarPeliculas(peliculasData.peliculas, searchQuery.text)
 
     Column(modifier = Modifier
         .fillMaxSize()

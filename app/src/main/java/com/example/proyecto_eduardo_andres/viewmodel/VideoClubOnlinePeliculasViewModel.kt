@@ -18,8 +18,8 @@ class VideoClubOnlinePeliculasViewModel : ViewModel() {
     }
 
     private fun cargarPeliculas() {
-        val peliculas = PeliculasData().nombrePeliculas
-        val agrupadas = peliculas.groupBy { it.nombreCategoria }
+        val peliculas = PeliculasData().peliculas
+        val agrupadas = peliculas.groupBy { it.categoria }
 
         _uiState.update {
             it.copy(
@@ -31,7 +31,7 @@ class VideoClubOnlinePeliculasViewModel : ViewModel() {
 
     fun filtrarPorCategoria(categoria: Int) {
         val filtradas = _uiState.value.peliculas
-            .filter { it.nombreCategoria == categoria }
+            .filter { it.categoria == categoria }
 
         _uiState.update {
             it.copy(

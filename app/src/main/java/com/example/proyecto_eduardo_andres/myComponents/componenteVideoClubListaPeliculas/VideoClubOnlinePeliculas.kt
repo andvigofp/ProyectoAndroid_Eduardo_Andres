@@ -67,8 +67,8 @@ fun VideoClubOnlinePeliculas(
 fun VideoClubOnlineScreenPreview() {
     MaterialTheme {
         // Datos de ejemplo para preview
-        val peliculas = PeliculasData().nombrePeliculas
-        val peliculasPorCategoria = peliculas.groupBy { it.nombreCategoria }
+        val peliculas = PeliculasData().peliculas
+        val peliculasPorCategoria = peliculas.groupBy { it.categoria }
 
         VideoClubOnlinePeliculas(
             peliculasPorCategoria = peliculasPorCategoria
