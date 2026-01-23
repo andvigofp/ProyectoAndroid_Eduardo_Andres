@@ -30,7 +30,10 @@ import com.example.proyecto_eduardo_andres.R
 import com.example.proyecto_eduardo_andres.viewData.listaSeriesData.VideoClubOnlineSeriesData
 
 @Composable
-fun SerieItem(serie: VideoClubOnlineSeriesData) {
+fun SerieItem(
+    serie: VideoClubOnlineSeriesData,
+    onClick: (nombreSerie: Int) -> Unit
+) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(6.dp),
@@ -41,7 +44,7 @@ fun SerieItem(serie: VideoClubOnlineSeriesData) {
                 .size(130.dp)
                 .clip(RoundedCornerShape(12.dp))
                 .background(MaterialTheme.colorScheme.surfaceVariant)
-                .clickable { /* acción click */ },
+                .clickable { onClick(serie.nombre) }, // <-- aquí
             contentAlignment = Alignment.Center
         ) {
             serie.imagen?.let {

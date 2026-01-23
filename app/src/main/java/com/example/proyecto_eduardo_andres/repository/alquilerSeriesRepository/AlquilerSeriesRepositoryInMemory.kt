@@ -1,17 +1,19 @@
 package com.example.proyecto_eduardo_andres.repository.alquilerSeriesRepository
 
 import com.example.proyecto_eduardo_andres.viewData.alquilerDevolverSeriesData.VideoClubOnlineAlquilarSeriesUiState
+import com.example.proyecto_eduardo_andres.viewData.listaSeriesData.VideoClubOnlineSeriesData
 
 
 class AlquilerSeriesRepositoryInMemory : IAlquilerSeriesRepository {
 
-    private val alquileres: MutableMap<Int, MutableList<VideoClubOnlineAlquilarSeriesUiState>> = mutableMapOf()
+    private val alquileres =
+        mutableMapOf<Int, MutableList<VideoClubOnlineSeriesData>>()
 
     override fun alquilarSerie(
         userId: Int,
-        serie: VideoClubOnlineAlquilarSeriesUiState,
+        serie: VideoClubOnlineSeriesData,
         onError: (Throwable) -> Unit,
-        onSuccess: () -> Unit,
+        onSuccess: () -> Unit
     ) {
         try {
             val seriesUsuario = alquileres.getOrPut(userId) { mutableListOf() }
@@ -24,13 +26,12 @@ class AlquilerSeriesRepositoryInMemory : IAlquilerSeriesRepository {
 
     override fun devolverSerie(
         userId: Int,
-        serie: VideoClubOnlineAlquilarSeriesUiState,
+        serie: VideoClubOnlineSeriesData,
         onError: (Throwable) -> Unit,
-        onSuccess: () -> Unit,
+        onSuccess: () -> Unit
     ) {
         try {
-            val seriesUsuario = alquileres[userId]
-            seriesUsuario?.remove(serie)
+            alquileres[userId]?.remove(serie)
             onSuccess()
         } catch (e: Throwable) {
             onError(e)

@@ -56,7 +56,8 @@ fun VideoClubOnlineSeriesScreen(
     onProfileClick: () -> Unit = {},
     onLogoutClick: () -> Unit = {},
     onDrawerPeliculasClick: () -> Unit = {},
-    onDrawerSeriesClick: () -> Unit = {}
+    onDrawerSeriesClick: () -> Unit = {},
+    onSerieClick: (nombreSerie: Int) -> Unit
 ) {
     val drawerState = rememberDrawerState(DrawerValue.Closed)
     val scope = rememberCoroutineScope()
@@ -147,7 +148,12 @@ fun VideoClubOnlineSeriesScreen(
                                 modifier = Modifier.fillMaxWidth()
                             ) {
                                 items(series) { serie ->
-                                    SerieItem(serie)
+                                    SerieItem(
+                                        serie = serie,
+                                        onClick = {
+                                            onSerieClick(serie.nombre)
+                                        }
+                                    )
                                 }
                             }
                         }
@@ -167,6 +173,9 @@ fun VideoClubOnlineSeriesScreenPreview() {
     val viewModel: VideoClubOnlineSeriesViewModel = viewModel()
 
     MaterialTheme {
-        VideoClubOnlineSeriesScreen( viewModel)
+        VideoClubOnlineSeriesScreen(
+            viewModel = viewModel,
+            onSerieClick = {} // <- obligatorio para navegar
+        )
     }
 }
