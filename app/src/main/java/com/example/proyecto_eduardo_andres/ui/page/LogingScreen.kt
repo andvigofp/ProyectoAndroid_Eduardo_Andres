@@ -128,7 +128,9 @@ fun LogingScreen(
                     recuperarButton = ButtonData(nombre = R.string.recuperar_contrasenha, type = ButtonType.DANGER),
                     enabledAcceder = uiState.isLoginButtonEnabled,
                     onAccederClick = {
-                        loginViewModel.logging()
+                        loginViewModel.logging {
+                            onAccederClick() // Esto hará la navegación
+                        }
                     },
                     onCrearUsuarioClick = onCrearUsuarioClick,
                     onRecuperarPasswordClick = onRecuperarPasswordClick
@@ -145,7 +147,7 @@ fun LoginScreenPreview() {
     MaterialTheme {
         LogingScreen(
             userImageUrl = null,
-            onAccederClick = {},
+            onAccederClick = { println("Acceder clic - login con usuario de ejemplo") },
             onCrearUsuarioClick = {},
             onRecuperarPasswordClick = {}
         )

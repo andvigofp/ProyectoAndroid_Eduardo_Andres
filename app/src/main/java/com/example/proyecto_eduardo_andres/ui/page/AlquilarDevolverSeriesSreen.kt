@@ -45,9 +45,10 @@ import com.example.proyecto_eduardo_andres.viewmodel.AlquilarDevolverSeriesViewM
 @Composable
 fun AlquilerDevolverSeriesScreen(
     userId: Int,
+    nombreSerie: Int,
     repository: IAlquilerSeriesRepository,
     viewModel: AlquilarDevolverSeriesViewModel = viewModel(
-        factory = AlquilarDevolverSeriesViewModelFactory (userId, repository)
+        factory = AlquilarDevolverSeriesViewModelFactory (userId, nombreSerie, repository)
     ),
     onBackClick: () -> Unit,
     onHomeClick: () -> Unit,
@@ -149,18 +150,20 @@ fun AlquilerDevolverSeriesScreenPreview() {
     MaterialTheme {
         val repository = AlquilerSeriesRepositoryInMemory()
         val userId = 1
+        val nombreSerie = R.string.mad_men
         val viewModel: AlquilarDevolverSeriesViewModel = viewModel(
-            factory = AlquilarDevolverSeriesViewModelFactory(userId, repository)
+            factory = AlquilarDevolverSeriesViewModelFactory(userId, nombreSerie, repository)
         )
         AlquilerDevolverSeriesScreen(
             userId = userId,
+            nombreSerie = nombreSerie,
             repository = repository,
             viewModel = viewModel,
             onBackClick = {},
             onHomeClick = {},
             onCameraClick = {},
             onProfileClick = {},
-            onLogoutClick = {}
+            onLogoutClick = {},
         )
     }
 }

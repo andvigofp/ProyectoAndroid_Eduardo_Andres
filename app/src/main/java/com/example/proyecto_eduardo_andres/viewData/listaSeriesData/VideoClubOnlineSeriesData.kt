@@ -3,14 +3,19 @@ package com.example.proyecto_eduardo_andres.viewData.listaSeriesData
 import com.example.proyecto_eduardo_andres.viewData.mediaItemData.MediaItemData
 
 data class VideoClubOnlineSeriesData(
+    val id: Int,
     override val nombre: Int,
     override val categoria: Int,
-    override val imagen: Int?
+    override val imagen: Int?,
+    val descripcion: Int
 ) : MediaItemData
 
-fun serie(categoria: Int, imagen: Int?, nombre: Int) =
+
+fun serie(id: Int, categoria: Int, imagen: Int?, nombre: Int, descripcion: Int) =
     VideoClubOnlineSeriesData(
+        id = id,
         nombre = nombre,
         categoria = categoria,
-        imagen = imagen
+        imagen = imagen,
+        descripcion = descripcion
     )

@@ -114,16 +114,27 @@ fun AppNavigation() {
                 onSearchClick = { navigate(RouteNavigation.SearchSeries(route.id)) },
                 onCameraClick = { navigate(RouteNavigation.Camara(route.id)) },
                 onProfileClick = { navigate(RouteNavigation.PerfilUsuario(route.id)) },
-                onLogoutClick = { navigate(RouteNavigation.Login) }
-            )
+                onLogoutClick = { navigate(RouteNavigation.Login) },
+                onDrawerPeliculasClick = { navigate(RouteNavigation.VideoClubPeliculas(route.id)) },
+                onDrawerSeriesClick = { navigate(RouteNavigation.VideoClubSeries(route.id)) },
+                onSerieClick = { nombreSerie ->
+                    val userId = 1
+                    navigate(
+                        RouteNavigation.AlquilerDevolverSeries(
+                            userId = userId,
+                            nombreSerie = nombreSerie
+                        )
+                    )
+                })
         }
+
 
         // ---------- SEARCH PELÍCULAS ----------
         composable<RouteNavigation.SearchPeliculas> { route ->
             val route = route.toRoute<RouteNavigation.SearchPeliculas>()
             VideoClubSearchPeliculasScreen(
                 //userId = route.id,
-                onBackClick = { navigate(RouteNavigation.VideoClubPeliculas(route.id)) },
+                onBackClick = { navController.popBackStack() },
                 onHomeClick = { navigate(RouteNavigation.VideoClubPeliculas(route.id)) },
                 onCameraClick = { navigate(RouteNavigation.Camara(route.id)) },
                 onProfileClick = { navigate(RouteNavigation.PerfilUsuario(route.id)) },
@@ -136,7 +147,7 @@ fun AppNavigation() {
             val route = route.toRoute<RouteNavigation.SearchSeries>()
             VideoClubSearchSeriesScreen(
                 //userId = route.id,
-                onBackClick = { navigate(RouteNavigation.VideoClubSeries(route.id)) },
+                onBackClick = { navController.popBackStack() },
                 onHomeClick = { navigate(RouteNavigation.VideoClubSeries(route.id)) },
                 onCameraClick = { navigate(RouteNavigation.Camara(route.id)) },
                 onProfileClick = { navigate(RouteNavigation.PerfilUsuario(route.id)) },
@@ -149,7 +160,7 @@ fun AppNavigation() {
             val route = route.toRoute<RouteNavigation.Camara>()
             CamaraScreen(
                 repository = repositoryCamara,
-                onBackClick = { navigate(RouteNavigation.VideoClubPeliculas(route.id)) },
+                onBackClick = { navController.popBackStack() },
                 onHomeClick = { navigate(RouteNavigation.VideoClubPeliculas(route.id)) },
                 onCameraClick = { navigate(RouteNavigation.Camara(route.id)) },
                 onProfileClick = { navigate(RouteNavigation.PerfilUsuario(route.id)) },
@@ -162,7 +173,7 @@ fun AppNavigation() {
             val route = route.toRoute<RouteNavigation.PerfilUsuario>()
             PerfilUsuarioScreen(
                 //userId = route.id,
-                onBackClick = { navigate(RouteNavigation.VideoClubPeliculas(route.id)) },
+                onBackClick = { navController.popBackStack() },
                 onHomeClick = { navigate(RouteNavigation.VideoClubPeliculas(route.id)) },
                 onCameraClick = { navigate(RouteNavigation.Camara(route.id)) },
                 onProfileClick = { navigate(RouteNavigation.PerfilUsuario(route.id)) },
@@ -176,7 +187,7 @@ fun AppNavigation() {
             AlquilarDevolverPeliculasScreen(
                 userId = route.id,
                 repository = repositoryPeliculas,
-                onBackClick = { navigate(RouteNavigation.VideoClubPeliculas(route.id)) },
+                onBackClick = { navController.popBackStack() },
                 onHomeClick = { navigate(RouteNavigation.VideoClubPeliculas(route.id)) },
                 onCameraClick = { navigate(RouteNavigation.Camara(route.id)) },
                 onProfileClick = { navigate(RouteNavigation.PerfilUsuario(route.id)) },
@@ -188,12 +199,13 @@ fun AppNavigation() {
         composable<RouteNavigation.AlquilerDevolverSeries> { route ->
             val route = route.toRoute<RouteNavigation.AlquilerDevolverSeries>()
             AlquilerDevolverSeriesScreen(
-                userId = route.id,
+                userId = route.userId,
                 repository = repositorySeries,
-                onBackClick = { navigate(RouteNavigation.VideoClubSeries(route.id)) },
-                onHomeClick = { navigate(RouteNavigation.VideoClubSeries(route.id)) },
-                onCameraClick = { navigate(RouteNavigation.Camara(route.id)) },
-                onProfileClick = { navigate(RouteNavigation.PerfilUsuario(route.id)) },
+                nombreSerie = route.nombreSerie,
+                onBackClick = { navController.popBackStack() },
+                onHomeClick = { navigate(RouteNavigation.VideoClubSeries(route.userId)) },
+                onCameraClick = { navigate(RouteNavigation.Camara(route.userId)) },
+                onProfileClick = { navigate(RouteNavigation.PerfilUsuario(route.userId)) },
                 onLogoutClick = { navigate(RouteNavigation.Login) },
             )
         }
@@ -203,7 +215,7 @@ fun AppNavigation() {
             val route = route.toRoute<RouteNavigation.QR>()
             QRScreen(
                 //userId = route.id,
-                onBackClick = { navigate(RouteNavigation.VideoClubPeliculas(route.id)) },
+                onBackClick = { navController.popBackStack() },
                 onHomeClick = { navigate(RouteNavigation.VideoClubPeliculas(route.id)) },
                 onCameraClick = { navigate(RouteNavigation.Camara(route.id)) },
                 onProfileClick = { navigate(RouteNavigation.PerfilUsuario(route.id)) },

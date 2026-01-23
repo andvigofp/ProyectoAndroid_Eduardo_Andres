@@ -1,9 +1,10 @@
 package com.example.proyecto_eduardo_andres.viewData.alquilerDevolverSeriesData
 
+import com.example.proyecto_eduardo_andres.viewData.listaSeriesData.VideoClubOnlineSeriesData
 import java.util.Date
 
 data class AlquilarDevolverSeriesUiState(
-    val serie: VideoClubOnlineAlquilarSeriesUiState, // Película seleccionada
+    val serie: VideoClubOnlineSeriesData, // Película seleccionada
     val serieAlquilada: Boolean = false, // Si está alquilada o no
     val fechaAlquiler: Date? = null, // Fecha de alquiler
     val fechaDevolucion: Date? = null // Fecha de devolución
@@ -17,7 +18,7 @@ data class AlquilarDevolverSeriesUiState(
     val imagen: Int?
         get() = serie.imagen
     val nombreSerie: Int
-        get() = serie.nombreSerie
+        get() = serie.nombre
     val descripcion: Int
         get() = serie.descripcion
 }

@@ -50,7 +50,8 @@ import com.example.proyecto_eduardo_andres.viewData.listaSeriesData.VideoClubOnl
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun VideoClubOnlineSeries(
-    seriesPorCategoria: Map<Int, List<VideoClubOnlineSeriesData>>
+    seriesPorCategoria: Map<Int, List<VideoClubOnlineSeriesData>>,
+    onSerieClick: (nombreSerie: Int) -> Unit
 ) {
     LazyColumn(
         modifier = Modifier
@@ -73,7 +74,13 @@ fun VideoClubOnlineSeries(
                         horizontalArrangement = Arrangement.spacedBy(18.dp)
                     ) {
                         items(series) { serie ->
-                            SerieItem(serie)
+                            SerieItem(
+                                serie = serie,
+                                onClick = { clickedSerie ->
+                                    onSerieClick(clickedSerie)
+
+                                }
+                            )
                         }
                     }
                 }
@@ -91,7 +98,8 @@ fun VideoClubOnlineSeriesPreview() {
         val series = SeriesData().series
         val seriesPorCategoria = series.groupBy { it.categoria }
         VideoClubOnlineSeries(
-            seriesPorCategoria = seriesPorCategoria
+            seriesPorCategoria = seriesPorCategoria,
+            onSerieClick = {}
         )
     }
 }

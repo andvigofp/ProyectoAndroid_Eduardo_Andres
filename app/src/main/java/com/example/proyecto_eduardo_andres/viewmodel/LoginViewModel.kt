@@ -13,8 +13,15 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class LoginViewModel : ViewModel() {
-    private val _uiState = MutableStateFlow(LoginUiState())
     private val _userRepo = UserRepositoryInMemory()
+
+    // Usuario de ejemplo prellenado
+    private val _uiState = MutableStateFlow(
+        LoginUiState(
+            email = "user1@example.com",
+            password = "password1"
+        )
+    )
 
     val uiState: StateFlow<LoginUiState> = _uiState.asStateFlow()
 
@@ -30,13 +37,17 @@ class LoginViewModel : ViewModel() {
         _uiState.update { it.copy(passwordVisible = !it.passwordVisible) }
     }
 
-    fun logging() {
-
-        _userRepo.login(_uiState.value.email, _uiState.value.password, onError = {}) { userDTO ->
-            //llamar al evento login nav
-            viewModelScope.launch {
-                SessionEvents.emitNavigation(RouteNavigation.VideoClubPeliculas(userDTO.id))
+    fun logging(onSuccess: () -> Unit = {}) {
+        _userRepo.login(
+            email = _uiState.value.email,
+            password = _uiState.value.password,
+            onError = { throwable ->
+                println("Login fallido: ${throwable.message}")
+            },
+            onSuccess = { userDTO ->
+                println("Login exitoso: ${userDTO.name}")
+                onSuccess() // Llamamos al callback del composable
             }
-        }
+        )
     }
 }

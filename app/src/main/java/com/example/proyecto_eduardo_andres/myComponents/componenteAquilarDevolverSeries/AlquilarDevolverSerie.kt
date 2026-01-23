@@ -28,8 +28,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.proyecto_eduardo_andres.R
 import com.example.proyecto_eduardo_andres.viewData.alquilerDevolverSeriesData.AlquilarDevolverSeriesUiState
-import com.example.proyecto_eduardo_andres.viewData.alquilerDevolverSeriesData.SeriesAlquilerDevolverData
 import com.example.proyecto_eduardo_andres.viewData.alquilerDevolverSeriesData.VideoClubOnlineAlquilarSeriesUiState
+import com.example.proyecto_eduardo_andres.viewData.listaSeriesData.VideoClubOnlineSeriesData
 
 /**
  * @author Andrés
@@ -109,22 +109,22 @@ fun AlquilarDevolverSerie(
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun AlquilarDevolverSeriePreview() {
-    // Obtener la lista de series
-    val listaSeries = SeriesAlquilerDevolverData().nombreSeries
-
-    // Seleccionar una serie específica para el preview
-    val serieSeleccionada = listaSeries[0]
 
     val serieDemo = AlquilarDevolverSeriesUiState(
-        serie = VideoClubOnlineAlquilarSeriesUiState(
-            imagen = serieSeleccionada.imagen,
-            nombreSerie = serieSeleccionada.nombreSerie,
-            descripcion = serieSeleccionada.descripcion
+        serie = VideoClubOnlineSeriesData(
+            id = 1,
+            categoria = R.string.drama,
+            imagen = R.drawable.ic_mad_men,
+            nombre = R.string.mad_men,
+            descripcion = R.string.vida_don_draper
         ),
-        serieAlquilada  = false // Definir si la película está alquilada o no
+        serieAlquilada = false,
+        fechaAlquiler = null,
+        fechaDevolucion = null
     )
 
     MaterialTheme {
         AlquilarDevolverSerie(series = serieDemo)
     }
 }
+
