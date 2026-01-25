@@ -42,6 +42,7 @@ import com.example.proyecto_eduardo_andres.myComponents.componenteMenu.VideoClub
 import com.example.proyecto_eduardo_andres.myComponents.componenteToolbar.toolBarVideoClubOnline
 import com.example.proyecto_eduardo_andres.myComponents.componenteVideoClubListaPeliculas.VideoClubCategoriasBotones
 import com.example.proyecto_eduardo_andres.myComponents.componenteVideoClubListaPeliculas.PeliculaItem
+import com.example.proyecto_eduardo_andres.viewData.listaPeliculasData.VideoClubOnlinePeliculasData
 import com.example.proyecto_eduardo_andres.viewmodel.VideoClubOnlinePeliculasViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -54,7 +55,8 @@ fun VideoClubOnlinePeliculasScreen(
     onProfileClick: () -> Unit = {},
     onLogoutClick: () -> Unit = {},
     onDrawerPeliculasClick: () -> Unit = {},
-    onDrawerSeriesClick: () -> Unit = {}
+    onDrawerSeriesClick: () -> Unit = {},
+    onPeliculaClick: (VideoClubOnlinePeliculasData) -> Unit,
 ) {
     val drawerState = rememberDrawerState(DrawerValue.Closed)
 
@@ -153,7 +155,12 @@ fun VideoClubOnlinePeliculasScreen(
                                 modifier = Modifier.fillMaxWidth()
                             ) {
                                 items(peliculas) { pelicula ->
-                                    PeliculaItem(pelicula)
+                                    PeliculaItem(
+                                      pelicula = pelicula,
+                                        onClick = {
+                                            onPeliculaClick(pelicula)
+                                        }
+                                    )
                                 }
                             }
                         }
@@ -176,6 +183,7 @@ fun VideoClubOnlineScreenPreview() {
     MaterialTheme {
         VideoClubOnlinePeliculasScreen(
             viewModel = viewModel,
+            onPeliculaClick = {}
         )
     }
 }

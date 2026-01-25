@@ -58,7 +58,7 @@ fun VideoClubOnlineSeriesScreen(
     onLogoutClick: () -> Unit = {},
     onDrawerPeliculasClick: () -> Unit = {},
     onDrawerSeriesClick: () -> Unit = {},
-    onSerieClick: (VideoClubOnlineSeriesData) -> Unit
+    onSerieClick: (VideoClubOnlineSeriesData) -> Unit,
 ) {
     val drawerState = rememberDrawerState(DrawerValue.Closed)
     val scope = rememberCoroutineScope()

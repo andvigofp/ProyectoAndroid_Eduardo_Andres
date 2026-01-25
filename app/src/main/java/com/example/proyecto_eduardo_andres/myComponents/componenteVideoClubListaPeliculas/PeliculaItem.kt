@@ -31,7 +31,10 @@ import com.example.proyecto_eduardo_andres.R
 import com.example.proyecto_eduardo_andres.viewData.listaPeliculasData.VideoClubOnlinePeliculasData
 
 @Composable
-fun PeliculaItem(pelicula: VideoClubOnlinePeliculasData) {
+fun PeliculaItem(
+    pelicula: VideoClubOnlinePeliculasData,
+    onClick: (nombrePelicula: Int) -> Unit
+) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(6.dp),
@@ -42,7 +45,7 @@ fun PeliculaItem(pelicula: VideoClubOnlinePeliculasData) {
                 .size(130.dp)
                 .clip(RoundedCornerShape(12.dp))
                 .background(MaterialTheme.colorScheme.surfaceVariant) // <- Aquí
-                .clickable { /* manejar click */ },
+                .clickable {  onClick(pelicula.nombre) },
             contentAlignment = Alignment.Center
         ) {
             pelicula.imagen?.let {
