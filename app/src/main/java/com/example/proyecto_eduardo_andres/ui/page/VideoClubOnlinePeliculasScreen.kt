@@ -43,12 +43,17 @@ import com.example.proyecto_eduardo_andres.myComponents.componenteToolbar.toolBa
 import com.example.proyecto_eduardo_andres.myComponents.componenteVideoClubListaPeliculas.VideoClubCategoriasBotones
 import com.example.proyecto_eduardo_andres.myComponents.componenteVideoClubListaPeliculas.PeliculaItem
 import com.example.proyecto_eduardo_andres.viewData.listaPeliculasData.VideoClubOnlinePeliculasData
+import com.example.proyecto_eduardo_andres.repository.peliculasRepository.IPeliculasRepository
 import com.example.proyecto_eduardo_andres.viewmodel.VideoClubOnlinePeliculasViewModel
+import com.example.proyecto_eduardo_andres.viewmodel.VideoClubOnlinePeliculasViewModelFactory
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun VideoClubOnlinePeliculasScreen(
-    viewModel: VideoClubOnlinePeliculasViewModel = viewModel(),
+    repository: IPeliculasRepository,
+    viewModel: VideoClubOnlinePeliculasViewModel = viewModel(
+        factory = VideoClubOnlinePeliculasViewModelFactory(repository)
+    ),
     onHomeClick: () -> Unit = {},
     onSearchClick: () -> Unit = {},
     onCameraClick: () -> Unit = {},
@@ -178,10 +183,14 @@ fun VideoClubOnlinePeliculasScreen(
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun VideoClubOnlineScreenPreview() {
-    val viewModel: VideoClubOnlinePeliculasViewModel = viewModel() // tu ViewModel
+    val repository = com.example.proyecto_eduardo_andres.repository.peliculasRepository.PeliculasRepositoryInMemory()
+    val viewModel: VideoClubOnlinePeliculasViewModel = viewModel(
+        factory = com.example.proyecto_eduardo_andres.viewmodel.VideoClubOnlinePeliculasViewModelFactory(repository)
+    )
 
     MaterialTheme {
         VideoClubOnlinePeliculasScreen(
+            repository = repository,
             viewModel = viewModel,
             onPeliculaClick = {}
         )

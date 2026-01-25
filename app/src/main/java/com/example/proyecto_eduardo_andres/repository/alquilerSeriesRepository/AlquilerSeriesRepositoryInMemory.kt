@@ -1,6 +1,6 @@
 package com.example.proyecto_eduardo_andres.repository.alquilerSeriesRepository
 
-import com.example.proyecto_eduardo_andres.viewData.alquilerDevolverSeriesData.VideoClubOnlineAlquilarSeriesUiState
+import com.example.proyecto_eduardo_andres.viewData.listaSeriesData.SeriesData
 import com.example.proyecto_eduardo_andres.viewData.listaSeriesData.VideoClubOnlineSeriesData
 
 
@@ -33,6 +33,19 @@ class AlquilerSeriesRepositoryInMemory : IAlquilerSeriesRepository {
         try {
             alquileres[userId]?.remove(serie)
             onSuccess()
+        } catch (e: Throwable) {
+            onError(e)
+        }
+    }
+
+    override fun obtenerSeriesAlquiladas(
+        userId: Int,
+        onError: (Throwable) -> Unit,
+        onSuccess: (List<VideoClubOnlineSeriesData>) -> Unit
+    ) {
+        try {
+            val seriesUsuario = alquileres[userId] ?: emptyList()
+            onSuccess(seriesUsuario)
         } catch (e: Throwable) {
             onError(e)
         }

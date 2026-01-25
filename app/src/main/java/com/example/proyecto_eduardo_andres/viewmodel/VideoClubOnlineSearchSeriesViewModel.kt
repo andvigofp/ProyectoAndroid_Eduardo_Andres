@@ -1,14 +1,17 @@
 package com.example.proyecto_eduardo_andres.viewmodel
 
 import androidx.lifecycle.ViewModel
-import com.example.proyecto_eduardo_andres.viewData.listaSeriesData.SeriesData
+import androidx.lifecycle.ViewModelProvider
+import com.example.proyecto_eduardo_andres.repository.seriesRepository.ISeriesRepository
 import com.example.proyecto_eduardo_andres.viewData.searchSeriesData.VideoClubOnlineSearchSeriesUiState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 
-class VideoClubOnlineSearchSeriesViewModel : ViewModel() {
+class VideoClubOnlineSearchSeriesViewModel(
+    private val repository: ISeriesRepository
+) : ViewModel() {
 
     private val _uiState = MutableStateFlow(VideoClubOnlineSearchSeriesUiState())
     val uiState: StateFlow<VideoClubOnlineSearchSeriesUiState> =
@@ -19,19 +22,34 @@ class VideoClubOnlineSearchSeriesViewModel : ViewModel() {
     }
 
     private fun cargarSeries() {
-        val series = SeriesData().series
-
-        _uiState.update {
-            it.copy(
-                series = series,
-                seriesFiltradas = series
-            )
-        }
+        repository.obtenerSeries(
+            onError = { /* manejar error */ },
+            onSuccess = { series ->
+                _uiState.update {
+                    it.copy(
+                        series = series,
+                        seriesFiltradas = series
+                    )
+                }
+            }
+        )
     }
 
     fun onQueryChange(query: String) {
         _uiState.update {
             it.copy(query = query)
         }
+    }
+}
+
+class VideoClubOnlineSearchSeriesViewModelFactory(
+    private val repository: ISeriesRepository
+) : ViewModelProvider.Factory {
+    @Suppress("UNCHECKED_CAST")
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
+        if (modelClass.isAssignableFrom(VideoClubOnlineSearchSeriesViewModel::class.java)) {
+            return VideoClubOnlineSearchSeriesViewModel(repository) as T
+        }
+        throw IllegalArgumentException("Unknown ViewModel class")
     }
 }

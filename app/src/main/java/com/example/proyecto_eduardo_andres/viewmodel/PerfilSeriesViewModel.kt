@@ -3,23 +3,22 @@ package com.example.proyecto_eduardo_andres.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.example.proyecto_eduardo_andres.modelo.UserDTO
-import com.example.proyecto_eduardo_andres.repository.alquilerPeliculasRepository.IAlquilerPeliculasRepository
+import com.example.proyecto_eduardo_andres.repository.alquilerSeriesRepository.IAlquilerSeriesRepository
 import com.example.proyecto_eduardo_andres.repository.perfilRepositorio.IPerfilUsuarioRepository
 import com.example.proyecto_eduardo_andres.repository.perfilRepositorio.PerfilUsuarioRepositoryInMemory
-import com.example.proyecto_eduardo_andres.viewData.perfilUsuarioData.PerfilUsuarioUiState
+import com.example.proyecto_eduardo_andres.viewData.perfilUsuarioData.PerfilSeriesUiState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 
-class PerfilUsuarioViewModel(
+class PerfilSeriesViewModel(
     private val repository: IPerfilUsuarioRepository = PerfilUsuarioRepositoryInMemory(),
-    private val userId: String = "",
-    private val alquilerRepository: IAlquilerPeliculasRepository? = null
+    private val alquilerRepository: IAlquilerSeriesRepository? = null
 ) : ViewModel() {
 
-    private val _uiState = MutableStateFlow(PerfilUsuarioUiState())
-    val uiState: StateFlow<PerfilUsuarioUiState> = _uiState.asStateFlow()
+    private val _uiState = MutableStateFlow(PerfilSeriesUiState())
+    val uiState: StateFlow<PerfilSeriesUiState> = _uiState.asStateFlow()
 
     // Cargar usuario
     fun cargarUsuario(id: String) {
@@ -28,34 +27,34 @@ class PerfilUsuarioViewModel(
             onError = { /* manejar error */ },
             onSuccess = { usuario ->
                 // Actualizamos directamente el uiState sin mappers
-                _uiState.value = PerfilUsuarioUiState(
+                _uiState.value = PerfilSeriesUiState(
                     nombreUsuario = usuario.name,
                     email = usuario.email,
                     password = usuario.password,
                     isEditing = false,
                     userId = id
                 )
-                // Cargar películas alquiladas
-                cargarPeliculasAlquiladas(id)
+                // Cargar series alquiladas
+                cargarSeriesAlquiladas(id)
             }
         )
     }
 
-    // Cargar películas alquiladas
-    private fun cargarPeliculasAlquiladas(userId: String) {
+    // Cargar series alquiladas
+    private fun cargarSeriesAlquiladas(userId: String) {
         val userIdInt = userId.toIntOrNull() ?: return
-        alquilerRepository?.obtenerPeliculasAlquiladas(
+        alquilerRepository?.obtenerSeriesAlquiladas(
             userId = userIdInt,
             onError = { /* manejar error */ },
-            onSuccess = { peliculas ->
-                _uiState.update { it.copy(peliculasAlquiladas = peliculas) }
+            onSuccess = { series ->
+                _uiState.update { it.copy(seriesAlquiladas = series) }
             }
         )
     }
 
-    // Recargar películas alquiladas (método público)
-    fun recargarPeliculasAlquiladas(userId: String) {
-        cargarPeliculasAlquiladas(userId)
+    // Recargar series alquiladas (método público)
+    fun recargarSeriesAlquiladas(userId: String) {
+        cargarSeriesAlquiladas(userId)
     }
 
     // Cambios de campos
@@ -82,9 +81,9 @@ class PerfilUsuarioViewModel(
         if (!state.isModificarButtonEnabled) return
 
         // Convertimos directamente UiState a UserDTO usando el userId correcto
-        val usuarioId = if (userId.isNotEmpty()) userId else state.userId
+
         val usuario = UserDTO(
-            id = usuarioId,
+            id = state.userId,
             name = state.nombreUsuario,
             email = state.email,
             password = state.password
@@ -110,17 +109,17 @@ class PerfilUsuarioViewModel(
     }
 }
 
-class PerfilUsuarioViewModelFactory(
+class PerfilSeriesViewModelFactory(
     private val userId: String,
     private val repository: IPerfilUsuarioRepository = PerfilUsuarioRepositoryInMemory(),
-    private val alquilerRepository: IAlquilerPeliculasRepository? = null
+    private val alquilerRepository: IAlquilerSeriesRepository? = null
 ) : ViewModelProvider.Factory {
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        if (modelClass.isAssignableFrom(PerfilUsuarioViewModel::class.java)) {
-            val viewModel = PerfilUsuarioViewModel(repository, userId, alquilerRepository)
+        if (modelClass.isAssignableFrom(PerfilSeriesViewModel::class.java)) {
+            val viewModel = PerfilSeriesViewModel(repository, alquilerRepository)
             // Cargar usuario al crear el ViewModel
-            viewModel.cargarUsuario(userId.toString())
+            viewModel.cargarUsuario(userId)
             return viewModel as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")

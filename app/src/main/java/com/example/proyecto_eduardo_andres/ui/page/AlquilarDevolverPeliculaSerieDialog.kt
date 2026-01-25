@@ -1,14 +1,20 @@
 package com.example.proyecto_eduardo_andres.ui.page
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import com.example.proyecto_eduardo_andres.R
 import java.text.SimpleDateFormat
+import java.util.Calendar
 import java.util.Date
 import java.util.Locale
 
@@ -19,64 +25,73 @@ fun AlquilarDevolverDialog(
     fechaDevolucion: Date?,
     onConfirmClick: () -> Unit
 ) {
-    // Crear el formateador de fecha
+    // Formateador de fecha
     val dateFormat = SimpleDateFormat(stringResource(R.string.fecha), Locale.getDefault())
-
-    // Formatear las fechas a cadenas (String)
     val fechaAlquilerFormatted = fechaAlquiler?.let { dateFormat.format(it) }
     val fechaDevolucionFormatted = fechaDevolucion?.let { dateFormat.format(it) }
 
-    // Comparar fechas para ver si se aplica multa
+    // Multa
     val fechaActual = Date()
     val esMulta = fechaDevolucion != null && fechaActual.after(fechaDevolucion)
 
-    // Obtener el estado de la película dinámicamente
-    val estadoPelicula = if (isAlquiler) {
-        stringResource(id = R.string.estado_pelicula, "Película Alquilada")
-    } else {
-        stringResource(id = R.string.estado_pelicula, "Película Devuelta")
-    }
+    // Texto del estado de la película
+    val estadoPelicula = stringResource(
+        id = R.string.estado_pelicula,
+        if (isAlquiler) "Película Alquilada" else "Película Devuelta"
+    )
 
-    // Usar stringResource con el placeholder de fecha de alquiler
+    // Textos para fechas y multa
     val fechaAlquilerText = stringResource(id = R.string.fecha_alquiler, fechaAlquilerFormatted ?: "")
-
-    // Usar stringResource con el placeholder de fecha de devolución
     val fechaDevolucionText = stringResource(id = R.string.fecha_devolucion, fechaDevolucionFormatted ?: "")
-
-    // Usar stringResource para la multa
     val multaText = stringResource(id = R.string.multa_devolucion_tarde)
-
-    // Usar stringResource para el botón Aceptar
     val aceptarText = stringResource(id = R.string.boton_aceptar)
 
     AlertDialog(
-        onDismissRequest = { /* Cerrar el diálogo */ },
-        title = {
-            Text(
-                text = estadoPelicula,  // Usamos el texto dinámico del estado de la película
-                style = MaterialTheme.typography.bodyLarge
-            )
-        },
+        onDismissRequest = onConfirmClick,
+        title = { Text(text = estadoPelicula, style = MaterialTheme.typography.bodyLarge) },
         text = {
             Column {
-                // Mostrar fecha de alquiler usando el stringResource
-                Text(fechaAlquilerText)  // Aquí mostramos la fecha de alquiler
+                Text(fechaAlquilerText)
                 if (!isAlquiler) {
-                    // Mostrar fecha de devolución usando el stringResource
-                    Text(fechaDevolucionText)  // Aquí mostramos la fecha de devolución
-                    if (esMulta) {
-                        Text(
-                            multaText,  // Usamos el stringResource con el texto de multa
-                            color = MaterialTheme.colorScheme.error
-                        )
-                    }
+                    Text(fechaDevolucionText)
+                    if (esMulta) Text(multaText, color = MaterialTheme.colorScheme.error)
                 }
             }
         },
         confirmButton = {
             TextButton(onClick = onConfirmClick) {
-                Text(aceptarText)  // Usamos el stringResource con el texto "Aceptar"
+                Text(aceptarText)
             }
         }
     )
 }
+
+// Preview mostrando alquiler y devolución con multa
+@Preview(showBackground = true)
+@Composable
+fun AlquilarDevolverDialogPreview() {
+    val fechaAlquiler = Calendar.getInstance().apply { add(Calendar.DAY_OF_MONTH, -10) }.time
+    val fechaDevolucion = Calendar.getInstance().apply { add(Calendar.DAY_OF_MONTH, -3) }.time
+
+    Column {
+        // Diálogo de alquiler
+        AlquilarDevolverDialog(
+            isAlquiler = true,
+            fechaAlquiler = fechaAlquiler,
+            fechaDevolucion = null,
+            onConfirmClick = {}
+        )
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        // Diálogo de devolución (con multa)
+        AlquilarDevolverDialog(
+            isAlquiler = false,
+            fechaAlquiler = fechaAlquiler,
+            fechaDevolucion = fechaDevolucion,
+            onConfirmClick = {}
+        )
+    }
+}
+
+

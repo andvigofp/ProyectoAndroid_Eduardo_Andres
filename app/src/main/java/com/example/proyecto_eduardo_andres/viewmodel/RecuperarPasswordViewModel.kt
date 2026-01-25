@@ -1,13 +1,17 @@
 package com.example.proyecto_eduardo_andres.viewmodel
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import com.example.proyecto_eduardo_andres.repository.recuperarPasswordRepository.IRecuperarPasswordRepository
 import com.example.proyecto_eduardo_andres.viewData.recuperarPasswordData.RecuperarPasswordUiState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 
-class RecuperarPasswordViewModel : ViewModel(){
+class RecuperarPasswordViewModel(
+    private val repository: IRecuperarPasswordRepository
+) : ViewModel(){
     private val _uiState = MutableStateFlow(RecuperarPasswordUiState())
     val uiState: StateFlow<RecuperarPasswordUiState> = _uiState.asStateFlow()
 
@@ -23,8 +27,41 @@ class RecuperarPasswordViewModel : ViewModel(){
         _uiState.update { it.copy(repeatPassword = newRepeatPassword) }
     }
 
-
     fun togglePasswordVisibility() {
         _uiState.update { it.copy(passwordVisible = !it.passwordVisible) }
+    }
+
+    fun recuperarPassword(
+        onSuccess: () -> Unit,
+        onError: (String) -> Unit
+    ) {
+        val state = _uiState.value
+        if (state.password != state.repeatPassword) {
+            onError("Las contraseñas no coinciden")
+            return
+        }
+
+        repository.recuperarPassword(
+            email = state.email,
+            newPassword = state.password,
+            onError = { error ->
+                onError(error.message ?: "Error al recuperar contraseña")
+            },
+            onSuccess = {
+                onSuccess()
+            }
+        )
+    }
+}
+
+class RecuperarPasswordViewModelFactory(
+    private val repository: IRecuperarPasswordRepository
+) : ViewModelProvider.Factory {
+    @Suppress("UNCHECKED_CAST")
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
+        if (modelClass.isAssignableFrom(RecuperarPasswordViewModel::class.java)) {
+            return RecuperarPasswordViewModel(repository) as T
+        }
+        throw IllegalArgumentException("Unknown ViewModel class")
     }
 }

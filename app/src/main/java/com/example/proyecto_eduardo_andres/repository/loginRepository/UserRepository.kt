@@ -14,7 +14,7 @@ class UserRepositoryInMemory : IUserRepository {
         for (i in 1..10) {
             users.add(
                 UserDTO(
-                    id = i,
+                    id = i.toString(),
                     name = "User $i",
                     email = "user$i@example.com",
                     password = "password$i",
@@ -28,7 +28,7 @@ class UserRepositoryInMemory : IUserRepository {
         onError: (Throwable) -> Unit,
         onSuccess: (UserDTO) -> Unit
     ) {
-        val user = users.find { it.id == id }
+        val user = users.find { it.id == id.toString() }
         if (user != null) {
             onSuccess(user)
         } else {

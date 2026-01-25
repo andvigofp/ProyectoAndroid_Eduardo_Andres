@@ -1,5 +1,6 @@
 package com.example.proyecto_eduardo_andres.repository.alquilerPeliculasRepository
 
+import com.example.proyecto_eduardo_andres.viewData.alquilerDevolverPeliculasData.EstadoAlquiler
 import com.example.proyecto_eduardo_andres.viewData.listaPeliculasData.VideoClubOnlinePeliculasData
 
 // Interfaz del repositorio de películas
@@ -16,5 +17,18 @@ interface IAlquilerPeliculasRepository {
         pelicula: VideoClubOnlinePeliculasData,
         onError: (Throwable) -> Unit,
         onSuccess: () -> Unit
+    )
+
+    fun obtenerEstadoAlquiler(
+        userId: Int,
+        pelicula: VideoClubOnlinePeliculasData,
+        onError: (Throwable) -> Unit,
+        onSuccess: (EstadoAlquiler) -> Unit
+    )
+
+    fun obtenerPeliculasAlquiladas(
+        userId: Int,
+        onError: (Throwable) -> Unit,
+        onSuccess: (List<VideoClubOnlinePeliculasData>) -> Unit
     )
 }

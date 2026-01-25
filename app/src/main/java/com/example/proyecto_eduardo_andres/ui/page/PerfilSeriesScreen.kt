@@ -53,13 +53,13 @@ import com.example.proyecto_eduardo_andres.myComponents.componentePerfilUsuario.
 import com.example.proyecto_eduardo_andres.viewData.perfilUsuarioData.PerfilUsuarioData
 import com.example.proyecto_eduardo_andres.myComponents.componenteToolbar.toolBar
 import com.example.proyecto_eduardo_andres.repository.perfilRepositorio.PerfilUsuarioRepositoryInMemory
-import com.example.proyecto_eduardo_andres.viewmodel.PerfilUsuarioViewModel
-import com.example.proyecto_eduardo_andres.viewmodel.PerfilUsuarioViewModelFactory
+import com.example.proyecto_eduardo_andres.viewmodel.PerfilSeriesViewModel
+import com.example.proyecto_eduardo_andres.viewmodel.PerfilSeriesViewModelFactory
 
 @Composable
-fun PerfilUsuarioScreen(
-    userId: String, // Ahora necesitamos el id del usuario
-    viewModel: PerfilUsuarioViewModel = viewModel(factory = PerfilUsuarioViewModelFactory(userId)),
+fun PerfilSeriesScreen(
+    userId: String,
+    viewModel: PerfilSeriesViewModel = viewModel(factory = PerfilSeriesViewModelFactory(userId)),
     onBackClick: () -> Unit,
     onHomeClick: () -> Unit,
     onCameraClick: () -> Unit,
@@ -71,9 +71,9 @@ fun PerfilUsuarioScreen(
         viewModel.cargarUsuario(userId)
     }
 
-    // Recargar películas alquiladas cuando se vuelve a la pantalla
+    // Recargar series alquiladas cuando se vuelve a la pantalla
     LaunchedEffect(Unit) {
-        viewModel.recargarPeliculasAlquiladas(userId)
+        viewModel.recargarSeriesAlquiladas(userId)
     }
 
     val uiState by viewModel.uiState.collectAsState()
@@ -167,7 +167,7 @@ fun PerfilUsuarioScreen(
 
                 // Texto adicional
                 Text(
-                    text = stringResource(R.string.peliculas_alquiladas),
+                    text = stringResource(R.string.series_alquiladas),
                     color = MaterialTheme.colorScheme.primary,
                     fontWeight = FontWeight.Medium,
                     fontSize = 16.sp
@@ -175,10 +175,10 @@ fun PerfilUsuarioScreen(
 
                 Spacer(modifier = Modifier.height(8.dp))
 
-                // Lista de películas alquiladas
-                if (uiState.peliculasAlquiladas.isEmpty()) {
+                // Lista de series alquiladas
+                if (uiState.seriesAlquiladas.isEmpty()) {
                     Text(
-                        text = "No hay películas alquiladas",
+                        text = "No hay series alquiladas",
                         color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f),
                         fontSize = 14.sp,
                         modifier = Modifier.padding(start = 8.dp)
@@ -190,7 +190,7 @@ fun PerfilUsuarioScreen(
                             .height(150.dp),
                         verticalArrangement = Arrangement.spacedBy(8.dp)
                     ) {
-                        items(uiState.peliculasAlquiladas) { pelicula ->
+                        items(uiState.seriesAlquiladas) { serie ->
                             Row(
                                 modifier = Modifier
                                     .fillMaxWidth()
@@ -201,10 +201,10 @@ fun PerfilUsuarioScreen(
                                     .padding(8.dp),
                                 verticalAlignment = Alignment.CenterVertically
                             ) {
-                                if (pelicula.imagen != null) {
+                                if (serie.imagen != null) {
                                     Image(
-                                        painter = painterResource(id = pelicula.imagen),
-                                        contentDescription = stringResource(pelicula.nombre),
+                                        painter = painterResource(id = serie.imagen),
+                                        contentDescription = stringResource(serie.nombre),
                                         modifier = Modifier
                                             .size(48.dp)
                                             .clip(RoundedCornerShape(8.dp)),
@@ -214,13 +214,13 @@ fun PerfilUsuarioScreen(
                                 }
                                 Column {
                                     Text(
-                                        text = stringResource(pelicula.nombre),
+                                        text = stringResource(serie.nombre),
                                         fontSize = 14.sp,
                                         fontWeight = FontWeight.Medium,
                                         color = MaterialTheme.colorScheme.onSurface
                                     )
                                     Text(
-                                        text = stringResource(pelicula.categoria),
+                                        text = stringResource(serie.categoria),
                                         fontSize = 12.sp,
                                         color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
                                     )
@@ -314,16 +314,16 @@ fun PerfilUsuarioScreen(
 
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
-fun PerfilUsuarioScreenPreview() {
+fun PerfilSeriesScreenPreview() {
     val repository = PerfilUsuarioRepositoryInMemory()
-    val viewModel = PerfilUsuarioViewModel(repository)
+    val viewModel = PerfilSeriesViewModel(repository)
     // Para preview cargamos un usuario de prueba
     LaunchedEffect(Unit) {
         viewModel.cargarUsuario("1")
     }
 
     MaterialTheme {
-        PerfilUsuarioScreen(
+        PerfilSeriesScreen(
             userId = "1",
             viewModel = viewModel,
             onBackClick = {},
@@ -334,3 +334,4 @@ fun PerfilUsuarioScreenPreview() {
         )
     }
 }
+

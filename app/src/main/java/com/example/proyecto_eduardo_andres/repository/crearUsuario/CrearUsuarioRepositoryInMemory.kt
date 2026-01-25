@@ -22,7 +22,7 @@ class CrearUsuarioRepositoryInMemory : ICrearUsuarioRepository {
         }
 
         val newUser = UserDTO(
-            id = nextId++,
+            id = nextId++.toString(),
             name = nombre,
             email = email,
             password = password,

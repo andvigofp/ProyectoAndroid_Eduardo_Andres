@@ -23,11 +23,17 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.proyecto_eduardo_andres.viewData.qrData.QRData
 import com.example.proyecto_eduardo_andres.myComponents.componenteQR.QRView
 import com.example.proyecto_eduardo_andres.myComponents.componenteToolbar.toolBar
+import com.example.proyecto_eduardo_andres.repository.qrRepository.IQRRepository
 import com.example.proyecto_eduardo_andres.viewmodel.QRViewModel
+import com.example.proyecto_eduardo_andres.viewmodel.QRViewModelFactory
 
 @Composable
 fun QRScreen(
-    viewModel: QRViewModel = viewModel(),
+    userId: Int,
+    repository: IQRRepository,
+    viewModel: QRViewModel = viewModel(
+        factory = QRViewModelFactory(repository, userId)
+    ),
     onBackClick: () -> Unit,
     onHomeClick: () -> Unit,
     onCameraClick: () -> Unit,
@@ -93,12 +99,14 @@ fun QRScreen(
 @Preview(showBackground = true)
 @Composable
 fun QRScreenPreview() {
-    val fakeViewModel = QRViewModel().apply {
-        setQRData("https://preview-qr.com")
-    }
+    val repository = com.example.proyecto_eduardo_andres.repository.qrRepository.QRRepositoryInMemory()
+    val viewModel = QRViewModel(repository, 1)
+    viewModel.setQRData("https://preview-qr.com")
 
     QRScreen(
-        viewModel = fakeViewModel,
+        userId = 1,
+        repository = repository,
+        viewModel = viewModel,
         onBackClick = {},
         onHomeClick = {},
         onCameraClick = {},

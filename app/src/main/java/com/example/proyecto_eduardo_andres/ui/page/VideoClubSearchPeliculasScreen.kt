@@ -32,17 +32,24 @@ import com.example.compose.colorVioleta
 import com.example.proyecto_eduardo_andres.myComponents.componenteToolbar.toolBar
 import com.example.proyecto_eduardo_andres.myComponents.componenteSearchSeries.SearchBar
 import com.example.proyecto_eduardo_andres.myComponents.componenteSearchSeriesPeliculas.MediaItem
+import com.example.proyecto_eduardo_andres.repository.peliculasRepository.IPeliculasRepository
 import com.example.proyecto_eduardo_andres.viewmodel.VideoClubOnlineSearchPeliculasViewModel
+import com.example.proyecto_eduardo_andres.viewmodel.VideoClubOnlineSearchPeliculasViewModelFactory
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun VideoClubSearchPeliculasScreen(
-    viewModel: VideoClubOnlineSearchPeliculasViewModel = viewModel(),
+    userId: Int,
+    repository: IPeliculasRepository,
+    viewModel: VideoClubOnlineSearchPeliculasViewModel = viewModel(
+        factory = VideoClubOnlineSearchPeliculasViewModelFactory(repository)
+    ),
     onBackClick: () -> Unit,
     onHomeClick: () -> Unit,
     onCameraClick: () -> Unit,
     onProfileClick: () -> Unit,
-    onLogoutClick: () -> Unit
+    onLogoutClick: () -> Unit,
+    onPeliculaClick: (Int) -> Unit
 ) {
     val uiState by viewModel.uiState.collectAsState()
     val context = LocalContext.current
@@ -107,7 +114,10 @@ fun VideoClubSearchPeliculasScreen(
                 modifier = Modifier.fillMaxSize()
             ) {
                 items(peliculasFiltradas) { movie ->
-                    MediaItem(movie)
+                    MediaItem(
+                        item = movie,
+                        onClick = { onPeliculaClick(movie.nombre) }
+                    )
                 }
             }
         }
@@ -117,11 +127,15 @@ fun VideoClubSearchPeliculasScreen(
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun VideoClubSearchScreenPeliculasPreview() {
+    val repository = com.example.proyecto_eduardo_andres.repository.peliculasRepository.PeliculasRepositoryInMemory()
     VideoClubSearchPeliculasScreen(
+        userId = 1,
+        repository = repository,
         onBackClick = {},
         onHomeClick = {},
         onCameraClick = {},
         onProfileClick = {},
-        onLogoutClick = {}
+        onLogoutClick = {},
+        onPeliculaClick = {}
     )
 }

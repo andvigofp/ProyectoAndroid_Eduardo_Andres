@@ -1,13 +1,13 @@
 package com.example.proyecto_eduardo_andres.viewmodel
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.example.proyecto_eduardo_andres.naveHost.RouteNavigation
 import com.example.proyecto_eduardo_andres.naveHost.SessionEvents
-import com.example.proyecto_eduardo_andres.viewData.listaPeliculasData.PeliculasData
+import com.example.proyecto_eduardo_andres.repository.peliculasRepository.IPeliculasRepository
 import com.example.proyecto_eduardo_andres.viewData.listaPeliculasData.VideoClubOnlinePeliculasData
 import com.example.proyecto_eduardo_andres.viewData.listaPeliculasData.VideoClubOnlinePeliculasUiState
-import com.example.proyecto_eduardo_andres.viewData.listaSeriesData.VideoClubOnlineSeriesData
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -15,6 +15,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class VideoClubOnlinePeliculasViewModel(
+    private val repository: IPeliculasRepository,
     private val sessionEvents: SessionEvents = SessionEvents
 ) : ViewModel() {
 
@@ -26,15 +27,18 @@ class VideoClubOnlinePeliculasViewModel(
     }
 
     private fun cargarPeliculas() {
-        val peliculas = PeliculasData().peliculas
-        val agrupadas = peliculas.groupBy { it.categoria }
-
-        _uiState.update {
-            it.copy(
-                peliculas = peliculas,
-                peliculasPorCategoria = agrupadas
-            )
-        }
+        repository.obtenerPeliculas(
+            onError = { /* manejar error */ },
+            onSuccess = { peliculas ->
+                val agrupadas = peliculas.groupBy { it.categoria }
+                _uiState.update {
+                    it.copy(
+                        peliculas = peliculas,
+                        peliculasPorCategoria = agrupadas
+                    )
+                }
+            }
+        )
     }
 
     fun filtrarPorCategoria(categoria: Int) {
@@ -61,5 +65,17 @@ class VideoClubOnlinePeliculasViewModel(
                 )
             )
         }
+    }
+}
+
+class VideoClubOnlinePeliculasViewModelFactory(
+    private val repository: IPeliculasRepository
+) : ViewModelProvider.Factory {
+    @Suppress("UNCHECKED_CAST")
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
+        if (modelClass.isAssignableFrom(VideoClubOnlinePeliculasViewModel::class.java)) {
+            return VideoClubOnlinePeliculasViewModel(repository) as T
+        }
+        throw IllegalArgumentException("Unknown ViewModel class")
     }
 }
