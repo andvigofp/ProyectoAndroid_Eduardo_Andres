@@ -43,9 +43,10 @@ import com.example.proyecto_eduardo_andres.viewmodel.AlquilarDevolverPeliculasVi
 @Composable
 fun AlquilarDevolverPeliculasScreen(
     userId: Int,
+    nombrePelicula: Int,
     repository: IAlquilerPeliculasRepository,
     viewModel: AlquilarDevolverPeliculasViewModel = viewModel(
-        factory = AlquilarDevolverPeliculasViewModelFactory(userId, repository)
+        factory = AlquilarDevolverPeliculasViewModelFactory(userId, nombrePelicula, repository)
     ),
     onBackClick: () -> Unit,
     onHomeClick: () -> Unit,
@@ -144,13 +145,15 @@ fun AlquilarDevolverPeliculasScreen(
 fun AlquilarDevolverPeliculasScreenPreview() {
     val repository = AlquilerPeliculasRepositoryInMemory()
     val userId = 1
+    val nombrePelicula = R.string.cadena_perpetua
     val viewModel: AlquilarDevolverPeliculasViewModel = viewModel(
-        factory = AlquilarDevolverPeliculasViewModelFactory(userId, repository)
+        factory = AlquilarDevolverPeliculasViewModelFactory(userId, nombrePelicula, repository)
     )
 
     MaterialTheme {
         AlquilarDevolverPeliculasScreen(
             userId = userId,
+            nombrePelicula = nombrePelicula,
             repository = repository,
             viewModel = viewModel,
             onBackClick = {},

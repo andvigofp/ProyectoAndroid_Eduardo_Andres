@@ -28,8 +28,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.proyecto_eduardo_andres.R
 import com.example.proyecto_eduardo_andres.viewData.alquilerDevolverPeliculasData.AlquilarDevolverPeliculasUiState
-import com.example.proyecto_eduardo_andres.viewData.alquilerDevolverPeliculasData.PeliculasAlquilarDevolverData
 import com.example.proyecto_eduardo_andres.viewData.alquilerDevolverPeliculasData.VideoClubOnlineAlquilarPeliculasUiState
+import com.example.proyecto_eduardo_andres.viewData.alquilerDevolverSeriesData.AlquilarDevolverSeriesUiState
+import com.example.proyecto_eduardo_andres.viewData.listaPeliculasData.VideoClubOnlinePeliculasData
+import com.example.proyecto_eduardo_andres.viewData.listaSeriesData.VideoClubOnlineSeriesData
 
 /**
  * @author Eduardo
@@ -106,21 +108,19 @@ fun AlquilerDevolverPeliculas(
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun AlquilarDevolverPeliculasPreview() {
-    // Obtener la lista de películas
-    val listaPeliculas = PeliculasAlquilarDevolverData().nombrePeliculas
-
-    // Seleccionar una película específica para el preview
-    val peliculaSeleccionada = listaPeliculas[0]
-
-    // Crear el estado de la película con los valores correctos
     val peliculaDemo = AlquilarDevolverPeliculasUiState(
-        pelicula = VideoClubOnlineAlquilarPeliculasUiState(
-            imagen = peliculaSeleccionada.imagen,
-            nombrePelicula = peliculaSeleccionada.nombrePelicula,
-            descripcion = peliculaSeleccionada.descripcion
+        pelicula = VideoClubOnlinePeliculasData(
+            id = 1,
+            categoria = R.string.drama,
+            imagen = R.drawable.ic_cadena_perpetua,
+            nombre = R.string.cadena_perpetua,
+            descripcion = R.string.banquero_inocente
         ),
-        peliculaAlquilada = false // Definir si la película está alquilada o no
+        peliculaAlquilada  = false,
+        fechaAlquiler = null,
+        fechaDevolucion = null
     )
+
 
     // Renderizar el componente con el estado definido
     MaterialTheme {
