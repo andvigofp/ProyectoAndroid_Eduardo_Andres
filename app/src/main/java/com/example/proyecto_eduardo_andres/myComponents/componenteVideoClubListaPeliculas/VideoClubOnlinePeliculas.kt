@@ -29,7 +29,8 @@ import com.example.proyecto_eduardo_andres.viewData.listaPeliculasData.VideoClub
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun VideoClubOnlinePeliculas(
-    peliculasPorCategoria: Map<Int, List<VideoClubOnlinePeliculasData>>
+    peliculasPorCategoria: Map<Int, List<VideoClubOnlinePeliculasData>>,
+    onPeliculaClick: (nombrePelicula: Int) -> Unit
 ) {
     LazyColumn(
         modifier = Modifier
@@ -53,7 +54,12 @@ fun VideoClubOnlinePeliculas(
                         horizontalArrangement = Arrangement.spacedBy(18.dp)
                     ) {
                         items(peliculas) { pelicula ->
-                            PeliculaItem(pelicula)
+                            PeliculaItem(
+                                pelicula = pelicula,
+                                onClick = { clickedPelicula ->
+                                    onPeliculaClick(clickedPelicula)
+                                }
+                            )
                         }
                     }
                 }
@@ -71,7 +77,8 @@ fun VideoClubOnlineScreenPreview() {
         val peliculasPorCategoria = peliculas.groupBy { it.categoria }
 
         VideoClubOnlinePeliculas(
-            peliculasPorCategoria = peliculasPorCategoria
+            peliculasPorCategoria = peliculasPorCategoria,
+            onPeliculaClick = {}
         )
     }
 }

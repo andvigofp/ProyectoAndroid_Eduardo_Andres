@@ -36,7 +36,7 @@ sealed interface RouteNavigation {
 
     @Serializable
     class AlquilerDevolverPeliculas(
-        val id: Int,
+        val userId: Int,
         val nombrePelicula: Int
     ) : RouteNavigation
 

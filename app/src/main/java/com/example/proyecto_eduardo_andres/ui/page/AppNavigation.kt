@@ -15,6 +15,7 @@ import com.example.proyecto_eduardo_andres.repository.alquilerPeliculasRepositor
 import com.example.proyecto_eduardo_andres.repository.alquilerSeriesRepository.AlquilerSeriesRepositoryInMemory
 import com.example.proyecto_eduardo_andres.repository.camaraRepository.CamaraRepositoryInMemory
 import com.example.proyecto_eduardo_andres.viewData.qrData.QRData
+import com.example.proyecto_eduardo_andres.viewmodel.VideoClubOnlinePeliculasViewModel
 import com.example.proyecto_eduardo_andres.viewmodel.VideoClubOnlineSeriesViewModel
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -95,6 +96,7 @@ fun AppNavigation() {
         // ---------- VIDEOCLUB PELÍCULAS ----------
         composable<RouteNavigation.VideoClubPeliculas> { route ->
             val route = route.toRoute<RouteNavigation.VideoClubPeliculas>()
+            val viewModel: VideoClubOnlinePeliculasViewModel = viewModel()
             VideoClubOnlinePeliculasScreen(
                 //userId = route.id,
                 onHomeClick = { navigate(RouteNavigation.VideoClubPeliculas(route.id)) },
@@ -103,8 +105,10 @@ fun AppNavigation() {
                 onProfileClick = { navigate(RouteNavigation.PerfilUsuario(route.id)) },
                 onLogoutClick = { navigate(RouteNavigation.Login) },
                 onDrawerPeliculasClick = { navigate(RouteNavigation.VideoClubPeliculas(route.id)) },
-                onDrawerSeriesClick = { navigate(RouteNavigation.VideoClubSeries(route.id)) }
-            )
+                onDrawerSeriesClick = { navigate(RouteNavigation.VideoClubSeries(route.id)) },
+                onPeliculaClick = { pelicula ->
+                    viewModel.onPeliculaClick(route.id, pelicula)
+                })
         }
 
         // ---------- VIDEOCLUB SERIES ----------
@@ -182,13 +186,13 @@ fun AppNavigation() {
         composable<RouteNavigation.AlquilerDevolverPeliculas> { route ->
             val route = route.toRoute<RouteNavigation.AlquilerDevolverPeliculas>()
             AlquilarDevolverPeliculasScreen(
-                userId = route.id,
+                userId = route.userId,
                 repository = repositoryPeliculas,
                 nombrePelicula = route.nombrePelicula,
                 onBackClick = { navController.popBackStack() },
-                onHomeClick = { navigate(RouteNavigation.VideoClubPeliculas(route.id)) },
-                onCameraClick = { navigate(RouteNavigation.Camara(route.id)) },
-                onProfileClick = { navigate(RouteNavigation.PerfilUsuario(route.id)) },
+                onHomeClick = { navigate(RouteNavigation.VideoClubPeliculas(route.userId)) },
+                onCameraClick = { navigate(RouteNavigation.Camara(route.userId)) },
+                onProfileClick = { navigate(RouteNavigation.PerfilUsuario(route.userId)) },
                 onLogoutClick = { navigate(RouteNavigation.Login) }
             )
         }
