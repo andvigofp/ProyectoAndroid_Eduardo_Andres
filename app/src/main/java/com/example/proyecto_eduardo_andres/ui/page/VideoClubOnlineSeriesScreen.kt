@@ -45,12 +45,17 @@ import com.example.compose.colorAzulOscurso
 import com.example.compose.colorVioleta
 import com.example.proyecto_eduardo_andres.myComponents.componenteVideoClubOnlieSeries.SerieItem
 import com.example.proyecto_eduardo_andres.viewData.listaSeriesData.VideoClubOnlineSeriesData
+import com.example.proyecto_eduardo_andres.repository.seriesRepository.ISeriesRepository
 import com.example.proyecto_eduardo_andres.viewmodel.VideoClubOnlineSeriesViewModel
+import com.example.proyecto_eduardo_andres.viewmodel.VideoClubOnlineSeriesViewModelFactory
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun VideoClubOnlineSeriesScreen(
-    viewModel: VideoClubOnlineSeriesViewModel = viewModel(),
+    repository: ISeriesRepository,
+    viewModel: VideoClubOnlineSeriesViewModel = viewModel(
+        factory = VideoClubOnlineSeriesViewModelFactory(repository)
+    ),
     onHomeClick: () -> Unit = {},
     onSearchClick: () -> Unit = {},
     onCameraClick: () -> Unit = {},
@@ -171,10 +176,14 @@ fun VideoClubOnlineSeriesScreen(
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun VideoClubOnlineSeriesScreenPreview() {
-    val viewModel: VideoClubOnlineSeriesViewModel = viewModel()
+    val repository = com.example.proyecto_eduardo_andres.repository.seriesRepository.SeriesRepositoryInMemory()
+    val viewModel: VideoClubOnlineSeriesViewModel = viewModel(
+        factory = com.example.proyecto_eduardo_andres.viewmodel.VideoClubOnlineSeriesViewModelFactory(repository)
+    )
 
     MaterialTheme {
         VideoClubOnlineSeriesScreen(
+            repository = repository,
             viewModel = viewModel,
             onSerieClick = {} // <- obligatorio para navegar
         )

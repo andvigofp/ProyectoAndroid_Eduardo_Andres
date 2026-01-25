@@ -17,4 +17,10 @@ interface IAlquilerSeriesRepository {
         onError: (Throwable) -> Unit,
         onSuccess: () -> Unit
     )
+
+    fun obtenerSeriesAlquiladas(
+        userId: Int,
+        onError: (Throwable) -> Unit,
+        onSuccess: (List<VideoClubOnlineSeriesData>) -> Unit
+    )
 }

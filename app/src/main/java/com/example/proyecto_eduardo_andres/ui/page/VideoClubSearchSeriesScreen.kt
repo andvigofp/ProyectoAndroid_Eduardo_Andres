@@ -32,17 +32,24 @@ import com.example.compose.colorVioleta
 import com.example.proyecto_eduardo_andres.myComponents.componenteSearchSeries.SearchBar
 import com.example.proyecto_eduardo_andres.myComponents.componenteSearchSeriesPeliculas.MediaItem
 import com.example.proyecto_eduardo_andres.myComponents.componenteToolbar.toolBar
+import com.example.proyecto_eduardo_andres.repository.seriesRepository.ISeriesRepository
 import com.example.proyecto_eduardo_andres.viewmodel.VideoClubOnlineSearchSeriesViewModel
+import com.example.proyecto_eduardo_andres.viewmodel.VideoClubOnlineSearchSeriesViewModelFactory
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun VideoClubSearchSeriesScreen(
-    viewModel: VideoClubOnlineSearchSeriesViewModel = viewModel(),
+    userId: Int,
+    repository: ISeriesRepository,
+    viewModel: VideoClubOnlineSearchSeriesViewModel = viewModel(
+        factory = VideoClubOnlineSearchSeriesViewModelFactory(repository)
+    ),
     onBackClick: () -> Unit,
     onHomeClick: () -> Unit,
     onCameraClick: () -> Unit,
     onProfileClick: () -> Unit,
-    onLogoutClick: () -> Unit
+    onLogoutClick: () -> Unit,
+    onSerieClick: (Int) -> Unit
 ) {
     val uiState by viewModel.uiState.collectAsState()
     val context = LocalContext.current
@@ -107,7 +114,10 @@ fun VideoClubSearchSeriesScreen(
                 modifier = Modifier.fillMaxSize()
             ) {
                 items(seriesFiltradas) { serie ->
-                    MediaItem(serie)
+                    MediaItem(
+                        item = serie,
+                        onClick = { onSerieClick(serie.nombre) }
+                    )
                 }
             }
         }
@@ -117,11 +127,15 @@ fun VideoClubSearchSeriesScreen(
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun VideoClubSearchScreenSeriePreview() {
+    val repository = com.example.proyecto_eduardo_andres.repository.seriesRepository.SeriesRepositoryInMemory()
     VideoClubSearchSeriesScreen(
+        userId = 1,
+        repository = repository,
         onBackClick = {},
         onHomeClick = {},
         onCameraClick = {},
         onProfileClick = {},
-        onLogoutClick = {}
+        onLogoutClick = {},
+        onSerieClick = {}
     )
 }

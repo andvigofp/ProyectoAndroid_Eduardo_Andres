@@ -54,7 +54,7 @@ fun AlquilarDevolverPeliculasScreen(
     onProfileClick: () -> Unit,
     onLogoutClick: () -> Unit
 ) {
-    val uiState by viewModel.uiState.collectAsState() // Observamos el estado
+    val uiState by viewModel.uiState.collectAsState()
     val colors = MaterialTheme.colorScheme
     val typography = MaterialTheme.typography
     var showDialog by remember { mutableStateOf(false) }
@@ -104,6 +104,7 @@ fun AlquilarDevolverPeliculasScreen(
                 modifier = Modifier.padding(bottom = 24.dp)
             )
 
+            // Mostrar la película seleccionada
             AlquilerDevolverPeliculas(peliculas = uiState)
         }
 
@@ -146,9 +147,15 @@ fun AlquilarDevolverPeliculasScreenPreview() {
     val repository = AlquilerPeliculasRepositoryInMemory()
     val userId = 1
     val nombrePelicula = R.string.cadena_perpetua
-    val viewModel: AlquilarDevolverPeliculasViewModel = viewModel(
-        factory = AlquilarDevolverPeliculasViewModelFactory(userId, nombrePelicula, repository)
-    )
+
+    // Simular ViewModel para el preview
+    val viewModel = remember {
+        AlquilarDevolverPeliculasViewModel(
+            userId = userId,
+            nombrePelicula = nombrePelicula,
+            repository = repository
+        )
+    }
 
     MaterialTheme {
         AlquilarDevolverPeliculasScreen(

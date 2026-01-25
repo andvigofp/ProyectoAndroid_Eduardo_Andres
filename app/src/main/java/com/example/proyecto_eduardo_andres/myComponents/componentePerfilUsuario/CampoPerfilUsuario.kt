@@ -4,7 +4,9 @@ package com.example.proyecto_eduardo_andres.myComponents.componentePerfilUsuario
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -31,7 +33,8 @@ import com.example.proyecto_eduardo_andres.viewData.perfilUsuarioData.PerfilUsua
 @Composable
 fun CampoPerfilUsuario(
     perfilUsarioData: PerfilUsuarioData,
-    onPerfilUsuarioData: (PerfilUsuarioData) -> Unit
+    onPerfilUsuarioData: (PerfilUsuarioData) -> Unit,
+    isEditing: Boolean = false // <- agregado para controlar la edición
 ) {
     val primaryColor = MaterialTheme.colorScheme.primary
     val secondaryColor = MaterialTheme.colorScheme.secondary
@@ -56,6 +59,7 @@ fun CampoPerfilUsuario(
                 value = perfilUsarioData.nombreUsuaro,
                 onValueChange = { onPerfilUsuarioData(perfilUsarioData.copy(nombreUsuaro = it)) },
                 singleLine = true,
+                enabled = isEditing, // <- controla edición
                 modifier = Modifier.weight(2f)
             )
         }
@@ -74,6 +78,7 @@ fun CampoPerfilUsuario(
                 value = perfilUsarioData.email,
                 onValueChange = { onPerfilUsuarioData(perfilUsarioData.copy(email = it)) },
                 singleLine = true,
+                enabled = isEditing, // <- controla edición
                 modifier = Modifier.weight(2f)
             )
         }
@@ -93,19 +98,34 @@ fun CampoPerfilUsuario(
                 onValueChange = { onPerfilUsuarioData(perfilUsarioData.copy(password = it)) },
                 singleLine = true,
                 visualTransformation = PasswordVisualTransformation(),
+                enabled = isEditing, // <- controla edición
                 modifier = Modifier.weight(2f)
             )
         }
     }
 }
 
+
 @Preview(showBackground = true)
 @Composable
 fun CampoPerfilUsuarioPreview() {
     var perfilUsuarioData by remember { mutableStateOf(PerfilUsuarioData()) }
 
-    CampoPerfilUsuario(
-        perfilUsarioData = perfilUsuarioData,
-        onPerfilUsuarioData = { perfilUsuarioData = it }
-    )
+    Column {
+        Text("Edición deshabilitada")
+        CampoPerfilUsuario(
+            perfilUsarioData = perfilUsuarioData,
+            onPerfilUsuarioData = { perfilUsuarioData = it },
+            isEditing = false
+        )
+
+        Spacer(modifier = Modifier.height(24.dp))
+
+        Text("Edición habilitada")
+        CampoPerfilUsuario(
+            perfilUsarioData = perfilUsuarioData,
+            onPerfilUsuarioData = { perfilUsuarioData = it },
+            isEditing = true
+        )
+    }
 }

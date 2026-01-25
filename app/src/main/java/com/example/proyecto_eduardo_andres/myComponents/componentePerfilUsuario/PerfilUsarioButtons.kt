@@ -16,9 +16,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.proyecto_eduardo_andres.R
-import com.example.proyecto_eduardo_andres.myComponents.componenteButtons.AppButton
-import com.example.proyecto_eduardo_andres.viewData.buttonsData.ButtonData
-import com.example.proyecto_eduardo_andres.viewData.buttonsData.ButtonType
+import com.example.proyecto_eduardo_andres.myComponents.componenteButtons.PrimaryButton
 import com.example.proyecto_eduardo_andres.viewData.perfilUsuarioData.PerfilUsuarioButtonTextsData
 
 /**
@@ -38,25 +36,16 @@ fun PerfilUsuarioButtons(
         else
             stringResource(R.string.modificar_usuario)
 
-    // Creamos un ButtonData para usar AppButton
-    val modificarUsuarioButtonData = ButtonData(
-        nombre = R.string.modificar_usuario,
-        type = ButtonType.PRIMARY,
-        enabled = true
-    )
-
     // Contenedor centrado
     Row(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.Center,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        AppButton(
-            data = modificarUsuarioButtonData.copy(
-                // Usamos el texto dinámico
-                nombre = R.string.modificar_usuario
-            ),
+        PrimaryButton(
+            text = modificarUsuarioText,
             onClick = onModificarUsuario,
+            enabled = true,
             modifier = Modifier
                 .height(55.dp)
                 .fillMaxWidth(0.9f) // 90% del ancho

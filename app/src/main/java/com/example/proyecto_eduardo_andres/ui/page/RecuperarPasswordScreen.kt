@@ -49,12 +49,17 @@ import com.example.proyecto_eduardo_andres.myComponents.componenteRecuperarPassw
 import com.example.proyecto_eduardo_andres.viewData.recuperarPasswordData.RecuperarPasswordButtonText
 import com.example.proyecto_eduardo_andres.viewData.recuperarPasswordData.RecuperarPasswordUiState
 import com.example.proyecto_eduardo_andres.myComponents.componenteRecuperarPassword.RecuperarPasswordFields
+import com.example.proyecto_eduardo_andres.repository.recuperarPasswordRepository.IRecuperarPasswordRepository
 import com.example.proyecto_eduardo_andres.viewmodel.RecuperarPasswordViewModel
+import com.example.proyecto_eduardo_andres.viewmodel.RecuperarPasswordViewModelFactory
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RecuperarPasswordScreen(
-    recuperarPasswordViewModel: RecuperarPasswordViewModel = viewModel(),
+    repository: IRecuperarPasswordRepository,
+    recuperarPasswordViewModel: RecuperarPasswordViewModel = viewModel(
+        factory = RecuperarPasswordViewModelFactory(repository)
+    ),
     onRecuperarClick: () -> Unit = {},
     onCancelarClick: () -> Unit = {}
 ) {
@@ -162,7 +167,12 @@ fun RecuperarPasswordScreen(
                         recuperarPassword = R.string.recuperar
                     ),
                     enabled = uiState.isLoginButtonEnabled,
-                    onRecuperarClick = onRecuperarClick,
+                    onRecuperarClick = {
+                        recuperarPasswordViewModel.recuperarPassword(
+                            onSuccess = onRecuperarClick,
+                            onError = { /* manejar error */ }
+                        )
+                    },
                     onCancelarClick = onCancelarClick
                 )
             }
@@ -173,7 +183,10 @@ fun RecuperarPasswordScreen(
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun RecuperarPasswordScreenPreview() {
+    val repository = com.example.proyecto_eduardo_andres.repository.recuperarPasswordRepository.RecuperarPasswordRepositoryInMemory()
     MaterialTheme {
-        RecuperarPasswordScreen()
+        RecuperarPasswordScreen(
+            repository = repository
+        )
     }
 }

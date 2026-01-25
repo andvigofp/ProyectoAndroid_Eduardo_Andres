@@ -1,10 +1,11 @@
 package com.example.proyecto_eduardo_andres.viewmodel
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.example.proyecto_eduardo_andres.naveHost.RouteNavigation
 import com.example.proyecto_eduardo_andres.naveHost.SessionEvents
-import com.example.proyecto_eduardo_andres.viewData.listaSeriesData.SeriesData
+import com.example.proyecto_eduardo_andres.repository.seriesRepository.ISeriesRepository
 import com.example.proyecto_eduardo_andres.viewData.listaSeriesData.VideoClubOnlineSeriesData
 import com.example.proyecto_eduardo_andres.viewData.listaSeriesData.VideoClubOnlineSeriesUiState
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -14,6 +15,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class VideoClubOnlineSeriesViewModel(
+    private val repository: ISeriesRepository,
     private val sessionEvents: SessionEvents = SessionEvents // Inyectable para testing
 ) : ViewModel() {
 
@@ -25,15 +27,18 @@ class VideoClubOnlineSeriesViewModel(
     }
 
     private fun cargarSeries() {
-        val serie = SeriesData().series
-        val agrupadas = serie.groupBy { it.categoria }
-
-        _uiState.update {
-            it.copy(
-                series = serie,
-                seriesPorCategoria = agrupadas
-            )
-        }
+        repository.obtenerSeries(
+            onError = { /* manejar error */ },
+            onSuccess = { series ->
+                val agrupadas = series.groupBy { it.categoria }
+                _uiState.update {
+                    it.copy(
+                        series = series,
+                        seriesPorCategoria = agrupadas
+                    )
+                }
+            }
+        )
     }
 
     fun filtrarPorCategoria(categoria: Int) {
@@ -57,9 +62,20 @@ class VideoClubOnlineSeriesViewModel(
                 RouteNavigation.AlquilerDevolverSeries(
                     userId = userId,
                     nombreSerie = serie.nombre,
-
-                    )
+                )
             )
         }
+    }
+}
+
+class VideoClubOnlineSeriesViewModelFactory(
+    private val repository: ISeriesRepository
+) : ViewModelProvider.Factory {
+    @Suppress("UNCHECKED_CAST")
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
+        if (modelClass.isAssignableFrom(VideoClubOnlineSeriesViewModel::class.java)) {
+            return VideoClubOnlineSeriesViewModel(repository) as T
+        }
+        throw IllegalArgumentException("Unknown ViewModel class")
     }
 }

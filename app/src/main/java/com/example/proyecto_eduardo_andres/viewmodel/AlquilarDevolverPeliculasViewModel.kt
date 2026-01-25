@@ -25,23 +25,39 @@ class AlquilarDevolverPeliculasViewModel(
 
     private val _uiState = MutableStateFlow(
         AlquilarDevolverPeliculasUiState(
-            pelicula = peliculaSeleccionada,
-            peliculaAlquilada = false,
-            fechaAlquiler = null,
-            fechaDevolucion = null
+            pelicula = peliculaSeleccionada
         )
     )
     val uiState: StateFlow<AlquilarDevolverPeliculasUiState> = _uiState.asStateFlow()
 
-    // Función para alquilar una película
+    init {
+        cargarDatosIniciales()
+    }
+
+    fun cargarDatosIniciales() {
+        repository.obtenerEstadoAlquiler(
+            userId,
+            peliculaSeleccionada,
+            onError = { Log.e("ViewModel", "Error al cargar estado de alquiler", it) },
+            onSuccess = { estado ->
+                _uiState.update {
+                    it.copy(
+                        peliculaAlquilada = estado.estaAlquilada,
+                        fechaAlquiler = estado.fechaAlquiler,
+                        fechaDevolucion = estado.fechaDevolucion
+                    )
+                }
+            }
+        )
+    }
+
     fun alquilarPelicula() {
         val fechaAlquiler = Date()
-        val fechaDevolucion = Date(fechaAlquiler.time + 7 * 24 * 60 * 60 * 1000L) // 7 días después
+        val fechaDevolucion = Date(fechaAlquiler.time + 7 * 24 * 60 * 60 * 1000L)
 
-        // Llamamos al repositorio
         repository.alquilarPelicula(
             userId = userId,
-            pelicula = _uiState.value.pelicula,
+            pelicula = peliculaSeleccionada,
             onError = { Log.e("Alquiler", "Error al alquilar", it) },
             onSuccess = {
                 _uiState.update {
@@ -55,16 +71,15 @@ class AlquilarDevolverPeliculasViewModel(
         )
     }
 
-    // Función para devolver una película
     fun devolverPelicula() {
         repository.devolverPelicula(
             userId = userId,
-            pelicula = _uiState.value.pelicula,
+            pelicula = peliculaSeleccionada,
             onError = { Log.e("Devolucion", "Error al devolver", it) },
             onSuccess = {
                 _uiState.update {
                     it.copy(
-                        peliculaAlquilada  = false,
+                        peliculaAlquilada = false,
                         fechaDevolucion = Date()
                     )
                 }
@@ -72,6 +87,8 @@ class AlquilarDevolverPeliculasViewModel(
         )
     }
 }
+
+
 
 // Factory para pasar userId y repository al ViewModel
 class AlquilarDevolverPeliculasViewModelFactory(
