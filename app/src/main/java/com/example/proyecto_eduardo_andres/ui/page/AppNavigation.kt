@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -14,6 +15,7 @@ import com.example.proyecto_eduardo_andres.repository.alquilerPeliculasRepositor
 import com.example.proyecto_eduardo_andres.repository.alquilerSeriesRepository.AlquilerSeriesRepositoryInMemory
 import com.example.proyecto_eduardo_andres.repository.camaraRepository.CamaraRepositoryInMemory
 import com.example.proyecto_eduardo_andres.viewData.qrData.QRData
+import com.example.proyecto_eduardo_andres.viewmodel.VideoClubOnlineSeriesViewModel
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
@@ -108,6 +110,7 @@ fun AppNavigation() {
         // ---------- VIDEOCLUB SERIES ----------
         composable<RouteNavigation.VideoClubSeries> { route ->
             val route = route.toRoute<RouteNavigation.VideoClubSeries>()
+            val viewModel: VideoClubOnlineSeriesViewModel = viewModel()
             VideoClubOnlineSeriesScreen(
                 //userId = route.id,
                 onHomeClick = { navigate(RouteNavigation.VideoClubPeliculas(route.id)) },
@@ -117,14 +120,8 @@ fun AppNavigation() {
                 onLogoutClick = { navigate(RouteNavigation.Login) },
                 onDrawerPeliculasClick = { navigate(RouteNavigation.VideoClubPeliculas(route.id)) },
                 onDrawerSeriesClick = { navigate(RouteNavigation.VideoClubSeries(route.id)) },
-                onSerieClick = { nombreSerie ->
-                    val userId = 1
-                    navigate(
-                        RouteNavigation.AlquilerDevolverSeries(
-                            userId = userId,
-                            nombreSerie = nombreSerie
-                        )
-                    )
+                onSerieClick = { serie ->
+                    viewModel.onSerieClick(route.id, serie)
                 })
         }
 
@@ -187,6 +184,7 @@ fun AppNavigation() {
             AlquilarDevolverPeliculasScreen(
                 userId = route.id,
                 repository = repositoryPeliculas,
+                nombrePelicula = route.nombrePelicula,
                 onBackClick = { navController.popBackStack() },
                 onHomeClick = { navigate(RouteNavigation.VideoClubPeliculas(route.id)) },
                 onCameraClick = { navigate(RouteNavigation.Camara(route.id)) },

@@ -44,6 +44,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.compose.colorAzulOscurso
 import com.example.compose.colorVioleta
 import com.example.proyecto_eduardo_andres.myComponents.componenteVideoClubOnlieSeries.SerieItem
+import com.example.proyecto_eduardo_andres.viewData.listaSeriesData.VideoClubOnlineSeriesData
 import com.example.proyecto_eduardo_andres.viewmodel.VideoClubOnlineSeriesViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -57,7 +58,7 @@ fun VideoClubOnlineSeriesScreen(
     onLogoutClick: () -> Unit = {},
     onDrawerPeliculasClick: () -> Unit = {},
     onDrawerSeriesClick: () -> Unit = {},
-    onSerieClick: (nombreSerie: Int) -> Unit
+    onSerieClick: (VideoClubOnlineSeriesData) -> Unit
 ) {
     val drawerState = rememberDrawerState(DrawerValue.Closed)
     val scope = rememberCoroutineScope()
@@ -151,7 +152,7 @@ fun VideoClubOnlineSeriesScreen(
                                     SerieItem(
                                         serie = serie,
                                         onClick = {
-                                            onSerieClick(serie.nombre)
+                                            onSerieClick(serie)
                                         }
                                     )
                                 }

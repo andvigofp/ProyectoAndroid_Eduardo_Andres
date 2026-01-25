@@ -1,14 +1,17 @@
 package com.example.proyecto_eduardo_andres.repository.alquilerPeliculasRepository
 
-import com.example.proyecto_eduardo_andres.viewData.alquilerDevolverPeliculasData.VideoClubOnlineAlquilarPeliculasUiState
+
+import com.example.proyecto_eduardo_andres.viewData.listaPeliculasData.VideoClubOnlinePeliculasData
 
 class AlquilerPeliculasRepositoryInMemory : IAlquilerPeliculasRepository {
 
-    private val alquileres: MutableMap<Int, MutableList<VideoClubOnlineAlquilarPeliculasUiState>> = mutableMapOf()
+    private val alquileres =
+        mutableMapOf<Int, MutableList<VideoClubOnlinePeliculasData>>()
+
 
     override fun alquilarPelicula(
         userId: Int,
-        pelicula: VideoClubOnlineAlquilarPeliculasUiState,
+        pelicula: VideoClubOnlinePeliculasData,
         onError: (Throwable) -> Unit,
         onSuccess: () -> Unit
     ) {
@@ -23,7 +26,7 @@ class AlquilerPeliculasRepositoryInMemory : IAlquilerPeliculasRepository {
 
     override fun devolverPelicula(
         userId: Int,
-        pelicula: VideoClubOnlineAlquilarPeliculasUiState,
+        pelicula: VideoClubOnlinePeliculasData,
         onError: (Throwable) -> Unit,
         onSuccess: () -> Unit
     ) {
