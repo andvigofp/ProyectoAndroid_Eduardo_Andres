@@ -45,26 +45,25 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.proyecto_eduardo_andres.R
 import com.example.proyecto_eduardo_andres.myComponents.componeneteCrearUsuario.CampoCrearUsuario
 import com.example.proyecto_eduardo_andres.myComponents.componenteButtons.AppButton
+import com.example.proyecto_eduardo_andres.remote.RetrofitClient
+import com.example.proyecto_eduardo_andres.repository.crearUsuario.CrearUsuarioRepositoryInMemory
 import com.example.proyecto_eduardo_andres.viewData.buttonsData.ButtonData
 import com.example.proyecto_eduardo_andres.viewData.buttonsData.ButtonType
 import com.example.proyecto_eduardo_andres.viewmodel.CrearUsuarioViewModel
+import com.example.proyecto_eduardo_andres.viewmodel.CrearUsuarioViewModelFactory
 
 @Composable
 fun CrearUsuarioScreen(
-    crearUsuarioViewModel: CrearUsuarioViewModel = viewModel(),
+    crearUsuarioViewModel: CrearUsuarioViewModel = viewModel(
+        factory = CrearUsuarioViewModelFactory(
+            CrearUsuarioRepositoryInMemory(RetrofitClient.authApiService)
+        )
+    ),
     onCrearUsuarioClick: () -> Unit = {},
     onCancelarClick: () -> Unit = {}
 ) {
     // --- Estado del ViewModel ---
     val uiState by crearUsuarioViewModel.uiState.collectAsState()
-
-    // --- Estado local para el formulario (IGUAL que Login Preview) ---
-    var crearUsuarioData by remember { mutableStateOf(uiState) }
-
-    // Mantener sincronizado el state local con el ViewModel
-    LaunchedEffect(uiState) {
-        crearUsuarioData = uiState
-    }
 
     val scrollState = rememberScrollState()
     val colors = MaterialTheme.colorScheme
@@ -150,12 +149,12 @@ fun CrearUsuarioScreen(
                 // --- Campos del formulario ---
                 CampoCrearUsuario(
                     crearUsuarioData = uiState,
-                    onCrearUsuarioData = {
-                        crearUsuarioViewModel.onNameChange(it.nombre)
-                        crearUsuarioViewModel.onPasswordChange(it.password)
-                        crearUsuarioViewModel.onRepeatPasswordChange(it.repeatPassword)
-                        crearUsuarioViewModel.onEmailChange(it.email)
-                        crearUsuarioViewModel.onRepeatEmailChange(it.repeatEmail)
+                    onCrearUsuarioData = { data ->
+                        crearUsuarioViewModel.onNameChange(data.nombre)
+                        crearUsuarioViewModel.onPasswordChange(data.password)
+                        crearUsuarioViewModel.onRepeatPasswordChange(data.repeatPassword)
+                        crearUsuarioViewModel.onEmailChange(data.email)
+                        crearUsuarioViewModel.onRepeatEmailChange(data.repeatEmail)
                     },
                     onTogglePasswordVisibility = {
                         crearUsuarioViewModel.togglePasswordVisibility()

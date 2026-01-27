@@ -52,6 +52,8 @@ import com.example.proyecto_eduardo_andres.viewData.perfilUsuarioData.PerfilUsua
 import com.example.proyecto_eduardo_andres.myComponents.componentePerfilUsuario.PerfilUsuarioButtons
 import com.example.proyecto_eduardo_andres.viewData.perfilUsuarioData.PerfilUsuarioData
 import com.example.proyecto_eduardo_andres.myComponents.componenteToolbar.toolBar
+import com.example.proyecto_eduardo_andres.remote.RetrofitClient
+import com.example.proyecto_eduardo_andres.repository.alquilerSeriesRepository.AlquilerSeriesRepositoryInMemory
 import com.example.proyecto_eduardo_andres.repository.perfilRepositorio.PerfilUsuarioRepositoryInMemory
 import com.example.proyecto_eduardo_andres.viewmodel.PerfilSeriesViewModel
 import com.example.proyecto_eduardo_andres.viewmodel.PerfilSeriesViewModelFactory
@@ -59,7 +61,14 @@ import com.example.proyecto_eduardo_andres.viewmodel.PerfilSeriesViewModelFactor
 @Composable
 fun PerfilSeriesScreen(
     userId: String,
-    viewModel: PerfilSeriesViewModel = viewModel(factory = PerfilSeriesViewModelFactory(userId)),
+    viewModel: PerfilSeriesViewModel = viewModel(factory = PerfilSeriesViewModelFactory(
+        userId,
+        repository = PerfilUsuarioRepositoryInMemory(
+            apiService = RetrofitClient.usuarioApiService
+        ),
+        alquilerRepository = AlquilerSeriesRepositoryInMemory()
+
+    )),
     onBackClick: () -> Unit,
     onHomeClick: () -> Unit,
     onCameraClick: () -> Unit,
@@ -315,7 +324,9 @@ fun PerfilSeriesScreen(
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun PerfilSeriesScreenPreview() {
-    val repository = PerfilUsuarioRepositoryInMemory()
+    val repository = PerfilUsuarioRepositoryInMemory(
+        apiService = RetrofitClient.usuarioApiService
+    )
     val viewModel = PerfilSeriesViewModel(repository)
     // Para preview cargamos un usuario de prueba
     LaunchedEffect(Unit) {

@@ -1,5 +1,6 @@
 package com.example.proyecto_eduardo_andres.remote
 
+import com.example.proyecto_eduardo_andres.remote.api.AuthApiService
 import com.example.proyecto_eduardo_andres.remote.api.UsuarioApiService
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -23,8 +24,6 @@ object RetrofitClient {
             .build()
     }
 
-
-
     private val retrofit: Retrofit by lazy {
         Retrofit.Builder()
             .baseUrl(BASE_URL)
@@ -34,4 +33,5 @@ object RetrofitClient {
     }
 
     val usuarioApiService: UsuarioApiService = retrofit.create(UsuarioApiService::class.java)
+    val authApiService: AuthApiService = retrofit.create(AuthApiService::class.java)
 }
