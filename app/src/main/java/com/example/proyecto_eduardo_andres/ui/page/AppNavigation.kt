@@ -63,10 +63,6 @@ fun AppNavigation() {
             CrearUsuarioRepositoryInMemory(RetrofitClient.authApiService)
         )
     )
-    
-    
-
-
 
     // Helper para emitir navegación
     fun navigate(route: RouteNavigation) {

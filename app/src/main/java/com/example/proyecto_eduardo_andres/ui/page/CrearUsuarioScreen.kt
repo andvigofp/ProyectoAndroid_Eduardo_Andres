@@ -20,6 +20,8 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -195,11 +197,8 @@ fun CrearUsuarioScreen(
                         onClick = {
                             crearUsuarioViewModel.crearUsuario(
                                 onSuccess = {
-                                    // Usuario creado correctamente
-                                    onCrearUsuarioClick()
                                 },
                                 onError = { error ->
-                                    // Aquí puedes mostrar Snackbar / Toast / Log
                                     Log.e("CrearUsuario", error.message ?: "Error desconocido")
                                 }
                             )
@@ -208,10 +207,35 @@ fun CrearUsuarioScreen(
                             .weight(1f)
                             .height(50.dp)
                     )
-
                 }
             }
         }
+    }
+    // --- AlertDialog Crear Usuario ---
+    if (crearUsuarioViewModel.showCrearUsuarioDialog) {
+        AlertDialog(
+            onDismissRequest = {
+                crearUsuarioViewModel.dismissDialog()
+                // Solo navegar si el mensaje indica éxito
+                if (crearUsuarioViewModel.crearUsuarioMessage.contains("correctamente")) {
+                    onCrearUsuarioClick()
+                }
+            },
+            title = { Text(text = "Crear Usuario") },
+            text = { Text(text = crearUsuarioViewModel.crearUsuarioMessage) },
+            confirmButton = {
+                Button(
+                    onClick = {
+                        crearUsuarioViewModel.dismissDialog()
+                        if (crearUsuarioViewModel.crearUsuarioMessage.contains("correctamente")) {
+                            onCrearUsuarioClick()
+                        }
+                    }
+                ) {
+                    Text("OK")
+                }
+            }
+        )
     }
 }
 
