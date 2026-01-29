@@ -1,29 +1,30 @@
 package com.example.proyecto_eduardo_andres.viewmodel
 
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import com.example.proyecto_eduardo_andres.naveHost.RouteNavigation
-import com.example.proyecto_eduardo_andres.naveHost.SessionEvents
+import androidx.lifecycle.ViewModelProvider
+
 import com.example.proyecto_eduardo_andres.repository.loginRepository.UserRepositoryInMemory
 import com.example.proyecto_eduardo_andres.viewData.logingData.LoginUiState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
-import kotlinx.coroutines.launch
 
-class LoginViewModel : ViewModel() {
-    private val _userRepo = UserRepositoryInMemory()
+class LoginViewModel(
+    private val userRepository: UserRepositoryInMemory
+) : ViewModel() {
 
-    // Usuario de ejemplo prellenado
-    private val _uiState = MutableStateFlow(
-        LoginUiState(
-            email = "user1@example.com",
-            password = "password1"
-        )
-    )
-
+    private val _uiState = MutableStateFlow(LoginUiState())
     val uiState: StateFlow<LoginUiState> = _uiState.asStateFlow()
+
+    var loginMessage by mutableStateOf("")
+        private set
+
+    var showLoginDialog by mutableStateOf(false)
+        private set
 
     fun onEmailChange(newEmail: String) {
         _uiState.update { it.copy(email = newEmail) }
@@ -38,16 +39,34 @@ class LoginViewModel : ViewModel() {
     }
 
     fun logging(onSuccess: () -> Unit = {}) {
-        _userRepo.login(
+        userRepository.login(
             email = _uiState.value.email,
             password = _uiState.value.password,
             onError = { throwable ->
-                println("Login fallido: ${throwable.message}")
+                loginMessage = "Login fallido: ${throwable.message}"
+                showLoginDialog = true
             },
-            onSuccess = { userDTO ->
-                println("Login exitoso: ${userDTO.name}")
-                onSuccess() // Llamamos al callback del composable
+            onSuccess = { user ->
+                loginMessage = "¡Bienvenido ${user.name}!"
+                showLoginDialog = true
+                onSuccess()
             }
         )
+    }
+
+    fun dismissDialog() {
+        showLoginDialog = false
+    }
+}
+
+class LoginViewModelFactory(
+    private val repository: UserRepositoryInMemory
+) : ViewModelProvider.Factory {
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
+        if (modelClass.isAssignableFrom(LoginViewModel::class.java)) {
+            @Suppress("UNCHECKED_CAST")
+            return LoginViewModel(repository) as T
+        }
+        throw IllegalArgumentException("Unknown ViewModel class")
     }
 }

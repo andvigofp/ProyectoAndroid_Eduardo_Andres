@@ -11,18 +11,31 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
 import com.example.proyecto_eduardo_andres.naveHost.RouteNavigation
 import com.example.proyecto_eduardo_andres.naveHost.SessionEvents
+import com.example.proyecto_eduardo_andres.remote.RetrofitClient
+import com.example.proyecto_eduardo_andres.remote.api.AuthApiService
 import com.example.proyecto_eduardo_andres.repository.alquilerPeliculasRepository.AlquilerPeliculasRepositoryInMemory
 import com.example.proyecto_eduardo_andres.repository.alquilerSeriesRepository.AlquilerSeriesRepositoryInMemory
 import com.example.proyecto_eduardo_andres.repository.camaraRepository.CamaraRepositoryInMemory
+import com.example.proyecto_eduardo_andres.repository.crearUsuario.CrearUsuarioRepositoryInMemory
+import com.example.proyecto_eduardo_andres.repository.loginRepository.UserRepositoryInMemory
 import com.example.proyecto_eduardo_andres.repository.peliculasRepository.PeliculasRepositoryInMemory
+import com.example.proyecto_eduardo_andres.repository.perfilRepositorio.PerfilUsuarioRepositoryInMemory
 import com.example.proyecto_eduardo_andres.repository.qrRepository.QRRepositoryInMemory
 import com.example.proyecto_eduardo_andres.repository.recuperarPasswordRepository.RecuperarPasswordRepositoryInMemory
 import com.example.proyecto_eduardo_andres.repository.seriesRepository.SeriesRepositoryInMemory
 import com.example.proyecto_eduardo_andres.viewData.qrData.QRData
+import com.example.proyecto_eduardo_andres.viewmodel.CrearUsuarioViewModel
+import com.example.proyecto_eduardo_andres.viewmodel.CrearUsuarioViewModelFactory
+import com.example.proyecto_eduardo_andres.viewmodel.LoginViewModel
+import com.example.proyecto_eduardo_andres.viewmodel.LoginViewModelFactory
 import com.example.proyecto_eduardo_andres.viewmodel.PerfilSeriesViewModel
+import com.example.proyecto_eduardo_andres.viewmodel.PerfilSeriesViewModelFactory
 import com.example.proyecto_eduardo_andres.viewmodel.PerfilUsuarioViewModel
+import com.example.proyecto_eduardo_andres.viewmodel.PerfilUsuarioViewModelFactory
 import com.example.proyecto_eduardo_andres.viewmodel.VideoClubOnlinePeliculasViewModel
+import com.example.proyecto_eduardo_andres.viewmodel.VideoClubOnlinePeliculasViewModelFactory
 import com.example.proyecto_eduardo_andres.viewmodel.VideoClubOnlineSeriesViewModel
+import com.example.proyecto_eduardo_andres.viewmodel.VideoClubOnlineSeriesViewModelFactory
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
@@ -38,7 +51,18 @@ fun AppNavigation() {
     val repositoryRecuperarPassword = remember { RecuperarPasswordRepositoryInMemory() }
     val repositoryPeliculasData = remember { PeliculasRepositoryInMemory() }
     val repositorySeriesData = remember { SeriesRepositoryInMemory() }
+    val authRepository = remember {
+        UserRepositoryInMemory(RetrofitClient.authApiService)}
 
+    val loginViewModel: LoginViewModel = viewModel(
+        factory = LoginViewModelFactory(authRepository)
+    )
+
+    val crearUsuarioViewModel: CrearUsuarioViewModel = viewModel(
+        factory = CrearUsuarioViewModelFactory(
+            CrearUsuarioRepositoryInMemory(RetrofitClient.authApiService)
+        )
+    )
 
     // Helper para emitir navegación
     fun navigate(route: RouteNavigation) {
@@ -81,7 +105,7 @@ fun AppNavigation() {
         // ---------- LOGIN ----------
         composable<RouteNavigation.Login> {
             LogingScreen(
-                userImageUrl = null,
+                loginViewModel = loginViewModel,
                 onAccederClick = { navigate(RouteNavigation.VideoClubPeliculas(1)) },
                 onCrearUsuarioClick = { navigate(RouteNavigation.CrearUsuario) },
                 onRecuperarPasswordClick = { navigate(RouteNavigation.RecuperarPassword) }
@@ -91,6 +115,7 @@ fun AppNavigation() {
         // ---------- CREAR USUARIO ----------
         composable<RouteNavigation.CrearUsuario> {
             CrearUsuarioScreen(
+                crearUsuarioViewModel = crearUsuarioViewModel,
                 onCrearUsuarioClick = { navigate(RouteNavigation.Login) },
                 onCancelarClick = { navigate(RouteNavigation.Login) }
             )
@@ -109,7 +134,7 @@ fun AppNavigation() {
         composable<RouteNavigation.VideoClubPeliculas> { route ->
             val route = route.toRoute<RouteNavigation.VideoClubPeliculas>()
             val viewModel: VideoClubOnlinePeliculasViewModel = viewModel(
-                factory = com.example.proyecto_eduardo_andres.viewmodel.VideoClubOnlinePeliculasViewModelFactory(
+                factory = VideoClubOnlinePeliculasViewModelFactory(
                     repositoryPeliculasData
                 )
             )
@@ -133,7 +158,7 @@ fun AppNavigation() {
         composable<RouteNavigation.VideoClubSeries> { route ->
             val route = route.toRoute<RouteNavigation.VideoClubSeries>()
             val viewModel: VideoClubOnlineSeriesViewModel = viewModel(
-                factory = com.example.proyecto_eduardo_andres.viewmodel.VideoClubOnlineSeriesViewModelFactory(
+                factory = VideoClubOnlineSeriesViewModelFactory(
                     repositorySeriesData
                 )
             )
@@ -205,9 +230,13 @@ fun AppNavigation() {
         composable<RouteNavigation.PerfilUsuario> { route ->
             val route = route.toRoute<RouteNavigation.PerfilUsuario>()
             val viewModel: PerfilUsuarioViewModel = viewModel(
-                factory = com.example.proyecto_eduardo_andres.viewmodel.PerfilUsuarioViewModelFactory(
+                factory = PerfilUsuarioViewModelFactory(
                     userId = route.id.toString(),
-                    alquilerRepository = repositoryPeliculas
+                    repository = PerfilUsuarioRepositoryInMemory(
+                        apiService = RetrofitClient.usuarioApiService
+                    ),
+                    alquilerRepository = repositoryPeliculas,
+
                 )
             )
             PerfilUsuarioScreen(
@@ -225,11 +254,15 @@ fun AppNavigation() {
         composable<RouteNavigation.PerfilSeries> { route ->
             val route = route.toRoute<RouteNavigation.PerfilSeries>()
             val viewModel: PerfilSeriesViewModel = viewModel(
-                factory = com.example.proyecto_eduardo_andres.viewmodel.PerfilSeriesViewModelFactory(
+                factory = PerfilSeriesViewModelFactory(
                     userId = route.id.toString(),
+                    repository = PerfilUsuarioRepositoryInMemory(
+                        apiService = RetrofitClient.usuarioApiService
+                    ),
                     alquilerRepository = repositorySeries
                 )
             )
+
             PerfilSeriesScreen(
                 userId = route.id.toString(),
                 onBackClick = { navController.popBackStack() },

@@ -30,14 +30,18 @@ import com.example.compose.colorVioleta
 import com.example.proyecto_eduardo_andres.R
 import com.example.proyecto_eduardo_andres.myComponents.componenteLogin.LoginButtons
 import com.example.proyecto_eduardo_andres.myComponents.componenteLogin.CamposLogin
+import com.example.proyecto_eduardo_andres.remote.RetrofitClient
+import com.example.proyecto_eduardo_andres.repository.loginRepository.UserRepositoryInMemory
 import com.example.proyecto_eduardo_andres.viewData.buttonsData.ButtonData
 import com.example.proyecto_eduardo_andres.viewData.buttonsData.ButtonType
 import com.example.proyecto_eduardo_andres.viewmodel.LoginViewModel
+import com.example.proyecto_eduardo_andres.viewmodel.LoginViewModelFactory
 
 @Composable
 fun LogingScreen(
-    userImageUrl: String?,
-    loginViewModel: LoginViewModel = viewModel(),
+    loginViewModel: LoginViewModel = viewModel(
+        factory = LoginViewModelFactory(UserRepositoryInMemory(RetrofitClient.authApiService))
+    ),
     onAccederClick: () -> Unit,
     onCrearUsuarioClick: () -> Unit,
     onRecuperarPasswordClick: () -> Unit
@@ -115,7 +119,10 @@ fun LogingScreen(
                 // Campos de login
                 CamposLogin(
                     loginData = uiState,
-                    onLoginDataChange = { loginViewModel.onEmailChange(it.email); loginViewModel.onPasswordChange(it.password) },
+                    onLoginDataChange = {
+                        loginViewModel.onEmailChange(it.email)
+                        loginViewModel.onPasswordChange(it.password)
+                    },
                     onTogglePasswordVisibility = { loginViewModel.togglePasswordVisibility() }
                 )
 
@@ -129,7 +136,7 @@ fun LogingScreen(
                     enabledAcceder = uiState.isLoginButtonEnabled,
                     onAccederClick = {
                         loginViewModel.logging {
-                            onAccederClick() // Esto hará la navegación
+                            onAccederClick() // navegación
                         }
                     },
                     onCrearUsuarioClick = onCrearUsuarioClick,
@@ -138,7 +145,21 @@ fun LogingScreen(
             }
         }
     }
+
+    if (loginViewModel.showLoginDialog) {
+        AlertDialog(
+            onDismissRequest = { loginViewModel.dismissDialog() },
+            title = { Text(text = "Login") },
+            text = { Text(text = loginViewModel.loginMessage) },
+            confirmButton = {
+                Button(onClick = { loginViewModel.dismissDialog() }) {
+                    Text("OK")
+                }
+            }
+        )
+    }
 }
+
 
 
 @Preview(showBackground = true, showSystemUi = true)
@@ -146,7 +167,6 @@ fun LogingScreen(
 fun LoginScreenPreview() {
     MaterialTheme {
         LogingScreen(
-            userImageUrl = null,
             onAccederClick = { println("Acceder clic - login con usuario de ejemplo") },
             onCrearUsuarioClick = {},
             onRecuperarPasswordClick = {}

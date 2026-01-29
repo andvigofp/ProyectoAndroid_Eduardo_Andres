@@ -1,11 +1,14 @@
 package com.example.proyecto_eduardo_andres.repository.crearUsuario
 
 import com.example.proyecto_eduardo_andres.modelo.UserDTO
+import com.example.proyecto_eduardo_andres.remote.api.AuthApiService
+import com.example.proyecto_eduardo_andres.remote.dto.RegisterDto
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
-class CrearUsuarioRepositoryInMemory : ICrearUsuarioRepository {
-
-    private val users = mutableListOf<UserDTO>()
-    private var nextId = 1
+class CrearUsuarioRepositoryInMemory(private val authApi: AuthApiService) : ICrearUsuarioRepository {
 
     override fun crearUsuario(
         nombre: String,
@@ -14,21 +17,39 @@ class CrearUsuarioRepositoryInMemory : ICrearUsuarioRepository {
         onError: (Throwable) -> Unit,
         onSuccess: (UserDTO) -> Unit
     ) {
-        // Verificar si el email ya existe
-        val exists = users.any { it.email == email }
-        if (exists) {
-            onError(Throwable("El email ya está registrado"))
-            return
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                val request = RegisterDto(name = nombre, email = email, passwd = password)
+                val response = authApi.register(request)
+
+                if (response.isSuccessful) {
+                    val body = response.body()
+                    if (body != null) {
+                        val user = UserDTO(
+                            id = body.id,
+                            name = body.name,
+                            email = body.email,
+                            password = password // guardamos la misma que se usó
+                        )
+                        withContext(Dispatchers.Main) {
+                            onSuccess(user)
+                        }
+                    } else {
+                        withContext(Dispatchers.Main) {
+                            onError(Throwable("Respuesta vacía"))
+                        }
+                    }
+                } else {
+                    withContext(Dispatchers.Main) {
+                        onError(Throwable("Registro fallido: ${response.code()}"))
+                    }
+                }
+
+            } catch (e: Exception) {
+                withContext(Dispatchers.Main) {
+                    onError(e)
+                }
+            }
         }
-
-        val newUser = UserDTO(
-            id = nextId++.toString(),
-            name = nombre,
-            email = email,
-            password = password,
-        )
-
-        users.add(newUser)
-        onSuccess(newUser)
     }
 }

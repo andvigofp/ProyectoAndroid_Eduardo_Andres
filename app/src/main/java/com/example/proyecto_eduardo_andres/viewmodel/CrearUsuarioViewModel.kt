@@ -1,20 +1,30 @@
 package com.example.proyecto_eduardo_andres.viewmodel
 
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import com.example.proyecto_eduardo_andres.modelo.UserDTO
 import com.example.proyecto_eduardo_andres.myComponents.componeneteCrearUsuario.CrearUsuarioUiState
 import com.example.proyecto_eduardo_andres.repository.crearUsuario.CrearUsuarioRepositoryInMemory
-import com.example.proyecto_eduardo_andres.repository.crearUsuario.ICrearUsuarioRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 
 class CrearUsuarioViewModel(
-    private val repository: ICrearUsuarioRepository = CrearUsuarioRepositoryInMemory()
+    private val repositoryInMemory: CrearUsuarioRepositoryInMemory
 ) : ViewModel() {
+
     private val _uiState = MutableStateFlow(CrearUsuarioUiState())
     val uiState: StateFlow<CrearUsuarioUiState> = _uiState.asStateFlow()
+
+    var showCrearUsuarioDialog by mutableStateOf(false)
+        private set
+
+    var crearUsuarioMessage by mutableStateOf("")
+        private set
 
     fun onNameChange(newName: String) {
         _uiState.update { it.copy(nombre = newName) }
@@ -44,29 +54,64 @@ class CrearUsuarioViewModel(
         _uiState.update { it.copy(repeatPasswordVisible = !it.repeatPasswordVisible) }
     }
 
+    fun clearFields() {
+        _uiState.value = CrearUsuarioUiState() // Resetea todos los campos
+    }
+
+
+    fun showDialog(message: String) {
+        crearUsuarioMessage = message
+        showCrearUsuarioDialog = true
+    }
+
+    fun dismissDialog() {
+        showCrearUsuarioDialog = false
+    }
+
     fun crearUsuario(
         onSuccess: (UserDTO) -> Unit,
         onError: (Throwable) -> Unit
     ) {
         val state = _uiState.value
 
-        // Validaciones de formulario
+        // Validaciones
         if (state.password != state.repeatPassword) {
-            onError(Throwable("Las contraseñas no coinciden"))
+            showDialog("Las contraseñas no coinciden")
             return
         }
 
         if (state.email != state.repeatEmail) {
-            onError(Throwable("Los emails no coinciden"))
+            showDialog("Los emails no coinciden")
             return
         }
 
-        repository.crearUsuario(
+        repositoryInMemory.crearUsuario(
             nombre = state.nombre,
             email = state.email,
             password = state.password,
-            onSuccess = onSuccess,
-            onError = onError
+            onSuccess = { user ->
+                showDialog("Usuario creado correctamente")
+                clearFields()  // Limpiamos los campos
+                onSuccess(user) // Esto se usará solo para navegar
+            },
+            onError = { error ->
+                showDialog(error.message ?: "Error desconocido")
+                clearFields()  // También limpiamos los campos si falla
+                onError(error) // Solo mostrar error, no navegar
+            }
         )
     }
 }
+
+
+    class CrearUsuarioViewModelFactory(
+        private val repositoryInMemory: CrearUsuarioRepositoryInMemory
+    ) : ViewModelProvider.Factory {
+        override fun <T : ViewModel> create(modelClass: Class<T>): T {
+            if (modelClass.isAssignableFrom(CrearUsuarioViewModel::class.java)) {
+                @Suppress("UNCHECKED_CAST")
+                return CrearUsuarioViewModel(repositoryInMemory) as T
+            }
+            throw IllegalArgumentException("Unknown ViewModel class")
+        }
+    }

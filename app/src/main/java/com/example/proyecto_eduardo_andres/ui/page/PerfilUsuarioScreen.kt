@@ -52,6 +52,8 @@ import com.example.proyecto_eduardo_andres.viewData.perfilUsuarioData.PerfilUsua
 import com.example.proyecto_eduardo_andres.myComponents.componentePerfilUsuario.PerfilUsuarioButtons
 import com.example.proyecto_eduardo_andres.viewData.perfilUsuarioData.PerfilUsuarioData
 import com.example.proyecto_eduardo_andres.myComponents.componenteToolbar.toolBar
+import com.example.proyecto_eduardo_andres.remote.RetrofitClient
+import com.example.proyecto_eduardo_andres.repository.alquilerPeliculasRepository.AlquilerPeliculasRepositoryInMemory
 import com.example.proyecto_eduardo_andres.repository.perfilRepositorio.PerfilUsuarioRepositoryInMemory
 import com.example.proyecto_eduardo_andres.viewmodel.PerfilUsuarioViewModel
 import com.example.proyecto_eduardo_andres.viewmodel.PerfilUsuarioViewModelFactory
@@ -59,7 +61,13 @@ import com.example.proyecto_eduardo_andres.viewmodel.PerfilUsuarioViewModelFacto
 @Composable
 fun PerfilUsuarioScreen(
     userId: String, // Ahora necesitamos el id del usuario
-    viewModel: PerfilUsuarioViewModel = viewModel(factory = PerfilUsuarioViewModelFactory(userId)),
+    viewModel: PerfilUsuarioViewModel = viewModel(factory = PerfilUsuarioViewModelFactory(
+        userId,
+        repository = PerfilUsuarioRepositoryInMemory(
+            apiService = RetrofitClient.usuarioApiService
+        ),
+        alquilerRepository = AlquilerPeliculasRepositoryInMemory()
+    )),
     onBackClick: () -> Unit,
     onHomeClick: () -> Unit,
     onCameraClick: () -> Unit,
@@ -315,7 +323,9 @@ fun PerfilUsuarioScreen(
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun PerfilUsuarioScreenPreview() {
-    val repository = PerfilUsuarioRepositoryInMemory()
+    val repository = PerfilUsuarioRepositoryInMemory(
+        apiService = RetrofitClient.usuarioApiService
+    )
     val viewModel = PerfilUsuarioViewModel(repository)
     // Para preview cargamos un usuario de prueba
     LaunchedEffect(Unit) {

@@ -20,6 +20,8 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -45,26 +47,25 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.proyecto_eduardo_andres.R
 import com.example.proyecto_eduardo_andres.myComponents.componeneteCrearUsuario.CampoCrearUsuario
 import com.example.proyecto_eduardo_andres.myComponents.componenteButtons.AppButton
+import com.example.proyecto_eduardo_andres.remote.RetrofitClient
+import com.example.proyecto_eduardo_andres.repository.crearUsuario.CrearUsuarioRepositoryInMemory
 import com.example.proyecto_eduardo_andres.viewData.buttonsData.ButtonData
 import com.example.proyecto_eduardo_andres.viewData.buttonsData.ButtonType
 import com.example.proyecto_eduardo_andres.viewmodel.CrearUsuarioViewModel
+import com.example.proyecto_eduardo_andres.viewmodel.CrearUsuarioViewModelFactory
 
 @Composable
 fun CrearUsuarioScreen(
-    crearUsuarioViewModel: CrearUsuarioViewModel = viewModel(),
+    crearUsuarioViewModel: CrearUsuarioViewModel = viewModel(
+        factory = CrearUsuarioViewModelFactory(
+            CrearUsuarioRepositoryInMemory(RetrofitClient.authApiService)
+        )
+    ),
     onCrearUsuarioClick: () -> Unit = {},
     onCancelarClick: () -> Unit = {}
 ) {
     // --- Estado del ViewModel ---
     val uiState by crearUsuarioViewModel.uiState.collectAsState()
-
-    // --- Estado local para el formulario (IGUAL que Login Preview) ---
-    var crearUsuarioData by remember { mutableStateOf(uiState) }
-
-    // Mantener sincronizado el state local con el ViewModel
-    LaunchedEffect(uiState) {
-        crearUsuarioData = uiState
-    }
 
     val scrollState = rememberScrollState()
     val colors = MaterialTheme.colorScheme
@@ -150,12 +151,12 @@ fun CrearUsuarioScreen(
                 // --- Campos del formulario ---
                 CampoCrearUsuario(
                     crearUsuarioData = uiState,
-                    onCrearUsuarioData = {
-                        crearUsuarioViewModel.onNameChange(it.nombre)
-                        crearUsuarioViewModel.onPasswordChange(it.password)
-                        crearUsuarioViewModel.onRepeatPasswordChange(it.repeatPassword)
-                        crearUsuarioViewModel.onEmailChange(it.email)
-                        crearUsuarioViewModel.onRepeatEmailChange(it.repeatEmail)
+                    onCrearUsuarioData = { data ->
+                        crearUsuarioViewModel.onNameChange(data.nombre)
+                        crearUsuarioViewModel.onPasswordChange(data.password)
+                        crearUsuarioViewModel.onRepeatPasswordChange(data.repeatPassword)
+                        crearUsuarioViewModel.onEmailChange(data.email)
+                        crearUsuarioViewModel.onRepeatEmailChange(data.repeatEmail)
                     },
                     onTogglePasswordVisibility = {
                         crearUsuarioViewModel.togglePasswordVisibility()
@@ -196,11 +197,8 @@ fun CrearUsuarioScreen(
                         onClick = {
                             crearUsuarioViewModel.crearUsuario(
                                 onSuccess = {
-                                    // Usuario creado correctamente
-                                    onCrearUsuarioClick()
                                 },
                                 onError = { error ->
-                                    // Aquí puedes mostrar Snackbar / Toast / Log
                                     Log.e("CrearUsuario", error.message ?: "Error desconocido")
                                 }
                             )
@@ -209,10 +207,35 @@ fun CrearUsuarioScreen(
                             .weight(1f)
                             .height(50.dp)
                     )
-
                 }
             }
         }
+    }
+    // --- AlertDialog Crear Usuario ---
+    if (crearUsuarioViewModel.showCrearUsuarioDialog) {
+        AlertDialog(
+            onDismissRequest = {
+                crearUsuarioViewModel.dismissDialog()
+                // Solo navegar si el mensaje indica éxito
+                if (crearUsuarioViewModel.crearUsuarioMessage.contains("correctamente")) {
+                    onCrearUsuarioClick()
+                }
+            },
+            title = { Text(text = "Crear Usuario") },
+            text = { Text(text = crearUsuarioViewModel.crearUsuarioMessage) },
+            confirmButton = {
+                Button(
+                    onClick = {
+                        crearUsuarioViewModel.dismissDialog()
+                        if (crearUsuarioViewModel.crearUsuarioMessage.contains("correctamente")) {
+                            onCrearUsuarioClick()
+                        }
+                    }
+                ) {
+                    Text("OK")
+                }
+            }
+        )
     }
 }
 

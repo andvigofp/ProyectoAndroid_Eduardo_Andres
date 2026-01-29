@@ -1,5 +1,6 @@
 package com.example.proyecto_eduardo_andres.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.example.proyecto_eduardo_andres.modelo.UserDTO
@@ -13,8 +14,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 
 class PerfilUsuarioViewModel(
-    private val repository: IPerfilUsuarioRepository = PerfilUsuarioRepositoryInMemory(),
-    private val userId: String = "",
+    private val repository: IPerfilUsuarioRepository,
     private val alquilerRepository: IAlquilerPeliculasRepository? = null
 ) : ViewModel() {
 
@@ -25,18 +25,18 @@ class PerfilUsuarioViewModel(
     fun cargarUsuario(id: String) {
         repository.getUsuario(
             id = id,
-            onError = { /* manejar error */ },
+            onError = { error ->
+                Log.e("PerfilViewModel", "Error al cargar usuario", error)
+            },
             onSuccess = { usuario ->
-                // Actualizamos directamente el uiState sin mappers
                 _uiState.value = PerfilUsuarioUiState(
                     nombreUsuario = usuario.name,
                     email = usuario.email,
-                    password = usuario.password,
+                    password = usuario.password, // ya no es nullable
                     isEditing = false,
-                    userId = id
+                    userId = usuario.id ?: id
                 )
-                // Cargar películas alquiladas
-                cargarPeliculasAlquiladas(id)
+                cargarPeliculasAlquiladas(usuario.id ?: id)
             }
         )
     }
@@ -53,7 +53,6 @@ class PerfilUsuarioViewModel(
         )
     }
 
-    // Recargar películas alquiladas (método público)
     fun recargarPeliculasAlquiladas(userId: String) {
         cargarPeliculasAlquiladas(userId)
     }
@@ -81,10 +80,8 @@ class PerfilUsuarioViewModel(
         val state = _uiState.value
         if (!state.isModificarButtonEnabled) return
 
-        // Convertimos directamente UiState a UserDTO usando el userId correcto
-        val usuarioId = if (userId.isNotEmpty()) userId else state.userId
         val usuario = UserDTO(
-            id = usuarioId,
+            id = state.userId,
             name = state.nombreUsuario,
             email = state.email,
             password = state.password
@@ -92,9 +89,9 @@ class PerfilUsuarioViewModel(
 
         repository.actualizarUsuario(
             usuario = usuario,
-            onError = { /* manejar error */ },
+            onError = { error -> Log.e("PerfilViewModel", "Error al actualizar", error) },
             onSuccess = {
-                _uiState.update { 
+                _uiState.update {
                     it.copy(
                         isEditing = false,
                         showConfirmacionDialog = true
@@ -104,7 +101,6 @@ class PerfilUsuarioViewModel(
         )
     }
 
-    // Cerrar diálogo de confirmación
     fun cerrarConfirmacionDialog() {
         _uiState.update { it.copy(showConfirmacionDialog = false) }
     }
@@ -112,18 +108,16 @@ class PerfilUsuarioViewModel(
 
 class PerfilUsuarioViewModelFactory(
     private val userId: String,
-    private val repository: IPerfilUsuarioRepository = PerfilUsuarioRepositoryInMemory(),
+    private val repository: IPerfilUsuarioRepository,
     private val alquilerRepository: IAlquilerPeliculasRepository? = null
 ) : ViewModelProvider.Factory {
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(PerfilUsuarioViewModel::class.java)) {
-            val viewModel = PerfilUsuarioViewModel(repository, userId, alquilerRepository)
-            // Cargar usuario al crear el ViewModel
-            viewModel.cargarUsuario(userId.toString())
+            val viewModel = PerfilUsuarioViewModel(repository, alquilerRepository)
+            viewModel.cargarUsuario(userId)
             return viewModel as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")
     }
 }
-

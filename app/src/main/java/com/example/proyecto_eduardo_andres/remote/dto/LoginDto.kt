@@ -2,16 +2,10 @@ package com.example.proyecto_eduardo_andres.remote.dto
 
 import com.google.gson.annotations.SerializedName
 
-data class UsuarioDto(
-    @SerializedName("id")
-    val id: String,
-
-    @SerializedName("name")
-    val name: String,
-
+data class LoginDto(
     @SerializedName("email")
     val email: String,
 
     @SerializedName("passwd")
-    val passwd: String,
+    val passwd: String
 )
