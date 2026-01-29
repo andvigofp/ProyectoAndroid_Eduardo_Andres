@@ -13,6 +13,7 @@ import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
@@ -56,7 +57,7 @@ fun CampoCrearUsuario(
         ) {
             Text(
                 text = stringResource(R.string.nombre_usuario),
-                color = MaterialTheme.colorScheme.primary,
+                color = MaterialTheme.colorScheme.onSurface,
                 modifier = Modifier.weight(1f).alignByBaseline()
             )
             TextField(
@@ -66,7 +67,11 @@ fun CampoCrearUsuario(
                 },
                 singleLine = true,
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
-                modifier = Modifier.weight(2f).alignByBaseline()
+                modifier = Modifier.weight(2f).alignByBaseline(),
+                colors = OutlinedTextFieldDefaults.colors(
+                    focusedContainerColor = MaterialTheme.colorScheme.surfaceVariant,
+                    unfocusedContainerColor = MaterialTheme.colorScheme.surfaceVariant
+                )
             )
         }
 
@@ -77,7 +82,7 @@ fun CampoCrearUsuario(
         ) {
             Text(
                 text = stringResource(R.string.password),
-                color = MaterialTheme.colorScheme.primary,
+                color = MaterialTheme.colorScheme.onSurface,
                 modifier = Modifier.weight(1f).alignByBaseline()
             )
             TextField(
@@ -102,7 +107,11 @@ fun CampoCrearUsuario(
                         )
                     }
                 },
-                modifier = Modifier.weight(2f).alignByBaseline()
+                modifier = Modifier.weight(2f).alignByBaseline(),
+                colors = OutlinedTextFieldDefaults.colors(
+                    focusedContainerColor = MaterialTheme.colorScheme.surfaceVariant,
+                    unfocusedContainerColor = MaterialTheme.colorScheme.surfaceVariant
+                )
             )
         }
 
@@ -113,7 +122,7 @@ fun CampoCrearUsuario(
         ) {
             Text(
                 text = stringResource(R.string.repetir_password),
-                color = MaterialTheme.colorScheme.primary,
+                color = MaterialTheme.colorScheme.onSurface,
                 modifier = Modifier.weight(1f).alignByBaseline()
             )
             TextField(
@@ -138,7 +147,11 @@ fun CampoCrearUsuario(
                         )
                     }
                 },
-                modifier = Modifier.weight(2f).alignByBaseline()
+                modifier = Modifier.weight(2f).alignByBaseline(),
+                colors = OutlinedTextFieldDefaults.colors(
+                    focusedContainerColor = MaterialTheme.colorScheme.surfaceVariant,
+                    unfocusedContainerColor = MaterialTheme.colorScheme.surfaceVariant
+                )
             )
         }
 
@@ -149,7 +162,7 @@ fun CampoCrearUsuario(
         ) {
             Text(
                 text = stringResource(R.string.email),
-                color = MaterialTheme.colorScheme.primary,
+                color = MaterialTheme.colorScheme.onSurface,
                 modifier = Modifier.weight(1f).alignByBaseline()
             )
             TextField(
@@ -159,7 +172,11 @@ fun CampoCrearUsuario(
                 },
                 singleLine = true,
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
-                modifier = Modifier.weight(2f).alignByBaseline()
+                modifier = Modifier.weight(2f).alignByBaseline(),
+                colors = OutlinedTextFieldDefaults.colors(
+                    focusedContainerColor = MaterialTheme.colorScheme.surfaceVariant,
+                    unfocusedContainerColor = MaterialTheme.colorScheme.surfaceVariant
+                )
             )
         }
 
@@ -170,7 +187,7 @@ fun CampoCrearUsuario(
         ) {
             Text(
                 text = stringResource(R.string.repetir_email),
-                color = MaterialTheme.colorScheme.primary,
+                color = MaterialTheme.colorScheme.onSurface,
                 modifier = Modifier.weight(1f).alignByBaseline()
             )
             TextField(
@@ -180,7 +197,11 @@ fun CampoCrearUsuario(
                 },
                 singleLine = true,
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
-                modifier = Modifier.weight(2f).alignByBaseline()
+                modifier = Modifier.weight(2f).alignByBaseline(),
+                colors = OutlinedTextFieldDefaults.colors(
+                    focusedContainerColor = MaterialTheme.colorScheme.surfaceVariant,
+                    unfocusedContainerColor = MaterialTheme.colorScheme.surfaceVariant
+                )
             )
         }
     }

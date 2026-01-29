@@ -8,9 +8,11 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldColors
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -51,7 +53,7 @@ fun CamposLogin(
         ) {
             Text(
                 text = stringResource(R.string.email),
-                color = MaterialTheme.colorScheme.primary,
+                color = MaterialTheme.colorScheme.onSurface,
                 modifier = Modifier.weight(1f).alignByBaseline()
             )
             TextField(
@@ -59,7 +61,11 @@ fun CamposLogin(
                 onValueChange = { onLoginDataChange(loginData.copy(email = it)) },
                 singleLine = true,
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
-                modifier = Modifier.weight(2f).alignByBaseline()
+                modifier = Modifier.weight(2f).alignByBaseline(),
+                colors = OutlinedTextFieldDefaults.colors(
+                    focusedContainerColor = MaterialTheme.colorScheme.surfaceVariant,
+                    unfocusedContainerColor = MaterialTheme.colorScheme.surfaceVariant
+                )
             )
         }
 
@@ -70,7 +76,7 @@ fun CamposLogin(
         ) {
             Text(
                 text = stringResource(R.string.password),
-                color = MaterialTheme.colorScheme.primary,
+                color = MaterialTheme.colorScheme.onSurface,
                 modifier = Modifier.weight(1f).alignByBaseline()
             )
             TextField(
@@ -86,7 +92,11 @@ fun CamposLogin(
                         Text(text)
                     }
                 },
-                modifier = Modifier.weight(2f).alignByBaseline()
+                modifier = Modifier.weight(2f).alignByBaseline(),
+                colors = OutlinedTextFieldDefaults.colors(
+                    focusedContainerColor = MaterialTheme.colorScheme.surfaceVariant,
+                    unfocusedContainerColor = MaterialTheme.colorScheme.surfaceVariant
+                )
             )
         }
     }

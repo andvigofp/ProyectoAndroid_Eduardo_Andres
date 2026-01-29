@@ -43,7 +43,7 @@ fun RecuperarPasswordFields(
         ) {
             Text(
                 text = "Email",
-                color = MaterialTheme.colorScheme.primary,
+                color = MaterialTheme.colorScheme.onSurface,
                 modifier = Modifier.weight(1f)
             )
             TextField(
@@ -51,6 +51,10 @@ fun RecuperarPasswordFields(
                 onValueChange = { onRecuperarPasswordData(recuperarPasswordData.copy(email = it)) },
                 singleLine = true,
                 modifier = Modifier.weight(2f),
+                colors = OutlinedTextFieldDefaults.colors(
+                    focusedContainerColor = MaterialTheme.colorScheme.surfaceVariant,
+                    unfocusedContainerColor = MaterialTheme.colorScheme.surfaceVariant
+                ),
                 keyboardOptions = KeyboardOptions.Default.copy(
                     keyboardType = KeyboardType.Email,
                     imeAction = ImeAction.Next
@@ -65,7 +69,7 @@ fun RecuperarPasswordFields(
         ) {
             Text(
                 text = stringResource(R.string.password),
-                color = MaterialTheme.colorScheme.primary,
+                color = MaterialTheme.colorScheme.onSurface,
                 modifier = Modifier.weight(1f)
             )
             TextField(
@@ -74,6 +78,10 @@ fun RecuperarPasswordFields(
                 singleLine = true,
                 visualTransformation = if (recuperarPasswordData.passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
                 modifier = Modifier.weight(2f),
+                colors = OutlinedTextFieldDefaults.colors(
+                    focusedContainerColor = MaterialTheme.colorScheme.surfaceVariant,
+                    unfocusedContainerColor = MaterialTheme.colorScheme.surfaceVariant
+                ),
                 keyboardOptions = KeyboardOptions.Default.copy(
                     keyboardType = KeyboardType.Password,
                     imeAction = ImeAction.Next
@@ -98,7 +106,7 @@ fun RecuperarPasswordFields(
         ) {
             Text(
                 text = stringResource(R.string.repetir_password),
-                color = MaterialTheme.colorScheme.primary,
+                color = MaterialTheme.colorScheme.onSurface,
                 modifier = Modifier.weight(1f)
             )
             TextField(
@@ -107,6 +115,10 @@ fun RecuperarPasswordFields(
                 singleLine = true,
                 visualTransformation = if (recuperarPasswordData.passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
                 modifier = Modifier.weight(2f),
+                colors = OutlinedTextFieldDefaults.colors(
+                    focusedContainerColor = MaterialTheme.colorScheme.surfaceVariant,
+                    unfocusedContainerColor = MaterialTheme.colorScheme.surfaceVariant
+                ),
                 keyboardOptions = KeyboardOptions.Default.copy(
                     keyboardType = KeyboardType.Password,
                     imeAction = ImeAction.Done
