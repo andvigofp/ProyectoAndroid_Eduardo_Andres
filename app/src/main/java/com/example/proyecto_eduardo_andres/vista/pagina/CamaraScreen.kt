@@ -26,8 +26,8 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.compose.colorAzulOscurso
 import com.example.compose.colorVioleta
 import com.example.proyecto_eduardo_andres.R
-import com.example.proyecto_eduardo_andres.repository.camaraRepository.CamaraRepositoryInMemory
-import com.example.proyecto_eduardo_andres.repository.camaraRepository.ICamaraRepository
+import com.example.proyecto_eduardo_andres.data.repository.camaraRepository.CamaraRepositoryInMemory
+import com.example.proyecto_eduardo_andres.data.repository.camaraRepository.ICamaraRepository
 import com.example.proyecto_eduardo_andres.modelo.ButtonData
 import com.example.proyecto_eduardo_andres.modelo.ButtonType
 import com.example.proyecto_eduardo_andres.modelo.CamaraDto

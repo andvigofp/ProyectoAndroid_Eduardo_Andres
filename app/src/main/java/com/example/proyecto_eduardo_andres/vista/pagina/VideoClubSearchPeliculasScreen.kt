@@ -29,8 +29,8 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.compose.colorAzulOscurso
 import com.example.compose.colorAzulSuave
 import com.example.compose.colorVioleta
-import com.example.proyecto_eduardo_andres.repository.peliculasRepository.IPeliculasRepository
-import com.example.proyecto_eduardo_andres.repository.peliculasRepository.PeliculasRepositoryInMemory
+import com.example.proyecto_eduardo_andres.data.repository.peliculasRepository.IPeliculasRepository
+import com.example.proyecto_eduardo_andres.data.repository.peliculasRepository.PeliculasRepositoryInMemory
 import com.example.proyecto_eduardo_andres.viewmodel.vm.VideoClubOnlineSearchPeliculasViewModel
 import com.example.proyecto_eduardo_andres.viewmodel.vm.VideoClubOnlineSearchPeliculasViewModelFactory
 import com.example.proyecto_eduardo_andres.vista.componente.componenteSearchSeries.SearchBar
@@ -40,7 +40,7 @@ import com.example.proyecto_eduardo_andres.vista.componente.componenteToolbar.to
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun VideoClubSearchPeliculasScreen(
-    userId: Int,
+    userId: String,
     repository: IPeliculasRepository,
     viewModel: VideoClubOnlineSearchPeliculasViewModel = viewModel(
         factory = VideoClubOnlineSearchPeliculasViewModelFactory(repository)
@@ -130,7 +130,7 @@ fun VideoClubSearchPeliculasScreen(
 fun VideoClubSearchScreenPeliculasPreview() {
     val repository = PeliculasRepositoryInMemory()
     VideoClubSearchPeliculasScreen(
-        userId = 1,
+        userId = 1.toString(),
         repository = repository,
         onBackClick = {},
         onHomeClick = {},

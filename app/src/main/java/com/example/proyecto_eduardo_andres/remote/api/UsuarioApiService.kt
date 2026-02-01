@@ -5,7 +5,6 @@ import retrofit2.Response
 import retrofit2.http.GET
 
 interface UsuarioApiService {
-
-    @GET("json/users")
-    suspend fun obtenerUsuarios(): Response<UsuarioDto>
+    @GET("json/user")
+    suspend fun obtenerUsuarios(): Response<List<UsuarioDto>>
 }

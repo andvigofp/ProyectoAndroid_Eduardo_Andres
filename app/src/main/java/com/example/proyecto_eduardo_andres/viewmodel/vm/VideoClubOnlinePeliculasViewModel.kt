@@ -5,7 +5,6 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.example.proyecto_eduardo_andres.naveHost.RouteNavigation
 import com.example.proyecto_eduardo_andres.naveHost.SessionEvents
-import com.example.proyecto_eduardo_andres.data.repository.peliculasRepository.IPeliculasRepository
 import com.example.proyecto_eduardo_andres.modelo.VideoClubOnlinePeliculasData
 import com.example.proyecto_eduardo_andres.viewmodel.ustate.VideoClubOnlinePeliculasUiState
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -55,12 +54,12 @@ class VideoClubOnlinePeliculasViewModel(
     // =========================
     // NUEVA FUNCIÓN: cuando el usuario toca una serie
     // =========================
-    fun onPeliculaClick(userId: Int, pelicula: VideoClubOnlinePeliculasData) {
+    fun onPeliculaClick(userId: String, pelicula: VideoClubOnlinePeliculasData) {
         // Emitimos la navegación usando SessionEvents
         viewModelScope.launch {
             sessionEvents.emitNavigation(
                 RouteNavigation.AlquilerDevolverPeliculas(
-                    userId = userId,
+                    userId = userId.toString(),
                     nombrePelicula = pelicula.nombre,
                 )
             )

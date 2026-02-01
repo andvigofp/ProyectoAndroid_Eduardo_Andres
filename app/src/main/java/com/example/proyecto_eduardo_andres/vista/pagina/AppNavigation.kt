@@ -9,19 +9,19 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
+import com.example.proyecto_eduardo_andres.data.repository.alquilerPeliculasRepository.AlquilerPeliculasRepositoryInMemory
+import com.example.proyecto_eduardo_andres.data.repository.alquilerSeriesRepository.AlquilerSeriesRepositoryInMemory
+import com.example.proyecto_eduardo_andres.data.repository.camaraRepository.CamaraRepositoryInMemory
+import com.example.proyecto_eduardo_andres.data.repository.crearUsuario.CrearUsuarioRepositoryInMemory
+import com.example.proyecto_eduardo_andres.data.repository.loginRepository.UserRepositoryInMemory
+import com.example.proyecto_eduardo_andres.data.repository.peliculasRepository.PeliculasRepositoryInMemory
+import com.example.proyecto_eduardo_andres.data.repository.perfilRepositorio.PerfilUsuarioRepositoryInMemory
+import com.example.proyecto_eduardo_andres.data.repository.qrRepository.QRRepositoryInMemory
+import com.example.proyecto_eduardo_andres.data.repository.recuperarPasswordRepository.RecuperarPasswordRepositoryInMemory
+import com.example.proyecto_eduardo_andres.data.repository.seriesRepository.SeriesRepositoryInMemory
 import com.example.proyecto_eduardo_andres.naveHost.RouteNavigation
 import com.example.proyecto_eduardo_andres.naveHost.SessionEvents
 import com.example.proyecto_eduardo_andres.remote.RetrofitClient
-import com.example.proyecto_eduardo_andres.repository.alquilerPeliculasRepository.AlquilerPeliculasRepositoryInMemory
-import com.example.proyecto_eduardo_andres.repository.alquilerSeriesRepository.AlquilerSeriesRepositoryInMemory
-import com.example.proyecto_eduardo_andres.repository.camaraRepository.CamaraRepositoryInMemory
-import com.example.proyecto_eduardo_andres.repository.crearUsuario.CrearUsuarioRepositoryInMemory
-import com.example.proyecto_eduardo_andres.repository.loginRepository.UserRepositoryInMemory
-import com.example.proyecto_eduardo_andres.repository.peliculasRepository.PeliculasRepositoryInMemory
-import com.example.proyecto_eduardo_andres.repository.perfilRepositorio.PerfilUsuarioRepositoryInMemory
-import com.example.proyecto_eduardo_andres.repository.qrRepository.QRRepositoryInMemory
-import com.example.proyecto_eduardo_andres.repository.recuperarPasswordRepository.RecuperarPasswordRepositoryInMemory
-import com.example.proyecto_eduardo_andres.repository.seriesRepository.SeriesRepositoryInMemory
 import com.example.proyecto_eduardo_andres.viewmodel.vm.CrearUsuarioViewModel
 import com.example.proyecto_eduardo_andres.viewmodel.vm.CrearUsuarioViewModelFactory
 import com.example.proyecto_eduardo_andres.viewmodel.vm.LoginViewModel
@@ -50,7 +50,8 @@ fun AppNavigation() {
     val repositoryPeliculasData = remember { PeliculasRepositoryInMemory() }
     val repositorySeriesData = remember { SeriesRepositoryInMemory() }
     val authRepository = remember {
-        UserRepositoryInMemory(RetrofitClient.authApiService)}
+        UserRepositoryInMemory(RetrofitClient.authApiService)
+    }
 
     val loginViewModel: LoginViewModel = viewModel(
         factory = LoginViewModelFactory(authRepository)
@@ -102,9 +103,15 @@ fun AppNavigation() {
 
         // ---------- LOGIN ----------
         composable<RouteNavigation.Login> {
+
             LogingScreen(
                 loginViewModel = loginViewModel,
-                onAccederClick = { navigate(RouteNavigation.VideoClubPeliculas(1)) },
+                onAccederClick = {
+                    loginViewModel.logging {
+                        val userId = loginViewModel.loggedInUserId ?: return@logging
+                        navigate(RouteNavigation.VideoClubPeliculas(userId))
+                    }
+                },
                 onCrearUsuarioClick = { navigate(RouteNavigation.CrearUsuario) },
                 onRecuperarPasswordClick = { navigate(RouteNavigation.RecuperarPassword) }
             )
@@ -138,15 +145,15 @@ fun AppNavigation() {
             )
             VideoClubOnlinePeliculasScreen(
                 repository = repositoryPeliculasData,
-                onHomeClick = { navigate(RouteNavigation.VideoClubPeliculas(route.id)) },
-                onSearchClick = { navigate(RouteNavigation.SearchPeliculas(route.id)) },
-                onCameraClick = { navigate(RouteNavigation.Camara(route.id)) },
-                onProfileClick = { navigate(RouteNavigation.PerfilUsuario(route.id)) },
+                onHomeClick = { navigate(RouteNavigation.VideoClubPeliculas(route.userId)) },
+                onSearchClick = { navigate(RouteNavigation.SearchPeliculas(route.userId)) },
+                onCameraClick = { navigate(RouteNavigation.Camara(route.userId)) },
+                onProfileClick = { navigate(RouteNavigation.PerfilUsuario(route.userId)) },
                 onLogoutClick = { navigate(RouteNavigation.Login) },
-                onDrawerPeliculasClick = { navigate(RouteNavigation.VideoClubPeliculas(route.id)) },
-                onDrawerSeriesClick = { navigate(RouteNavigation.VideoClubSeries(route.id)) },
+                onDrawerPeliculasClick = { navigate(RouteNavigation.VideoClubPeliculas(route.userId)) },
+                onDrawerSeriesClick = { navigate(RouteNavigation.VideoClubSeries(route.userId)) },
                 onPeliculaClick = { pelicula ->
-                    viewModel.onPeliculaClick(route.id, pelicula)
+                    viewModel.onPeliculaClick(route.userId, pelicula)
                 },
                 viewModel = viewModel
             )
@@ -162,15 +169,15 @@ fun AppNavigation() {
             )
             VideoClubOnlineSeriesScreen(
                 repository = repositorySeriesData,
-                onHomeClick = { navigate(RouteNavigation.VideoClubPeliculas(route.id)) },
-                onSearchClick = { navigate(RouteNavigation.SearchSeries(route.id)) },
-                onCameraClick = { navigate(RouteNavigation.Camara(route.id)) },
-                onProfileClick = { navigate(RouteNavigation.PerfilSeries(route.id)) },
+                onHomeClick = { navigate(RouteNavigation.VideoClubPeliculas(route.userId)) },
+                onSearchClick = { navigate(RouteNavigation.SearchSeries(route.userId)) },
+                onCameraClick = { navigate(RouteNavigation.Camara(route.userId)) },
+                onProfileClick = { navigate(RouteNavigation.PerfilSeries(route.userId)) },
                 onLogoutClick = { navigate(RouteNavigation.Login) },
-                onDrawerPeliculasClick = { navigate(RouteNavigation.VideoClubPeliculas(route.id)) },
-                onDrawerSeriesClick = { navigate(RouteNavigation.VideoClubSeries(route.id)) },
+                onDrawerPeliculasClick = { navigate(RouteNavigation.VideoClubPeliculas(route.userId)) },
+                onDrawerSeriesClick = { navigate(RouteNavigation.VideoClubSeries(route.userId)) },
                 onSerieClick = { serie ->
-                    viewModel.onSerieClick(route.id, serie)
+                    viewModel.onSerieClick(route.userId, serie)
                 },
                 viewModel = viewModel
             )
@@ -181,15 +188,15 @@ fun AppNavigation() {
         composable<RouteNavigation.SearchPeliculas> { route ->
             val route = route.toRoute<RouteNavigation.SearchPeliculas>()
             VideoClubSearchPeliculasScreen(
-                userId = route.id,
+                userId = route.userId,
                 repository = repositoryPeliculasData,
                 onBackClick = { navController.popBackStack() },
-                onHomeClick = { navigate(RouteNavigation.VideoClubPeliculas(route.id)) },
-                onCameraClick = { navigate(RouteNavigation.Camara(route.id)) },
-                onProfileClick = { navigate(RouteNavigation.PerfilUsuario(route.id)) },
+                onHomeClick = { navigate(RouteNavigation.VideoClubPeliculas(route.userId)) },
+                onCameraClick = { navigate(RouteNavigation.Camara(route.userId)) },
+                onProfileClick = { navigate(RouteNavigation.PerfilUsuario(route.userId)) },
                 onLogoutClick = { navigate(RouteNavigation.Login) },
                 onPeliculaClick = { nombrePelicula ->
-                    navigate(RouteNavigation.AlquilerDevolverPeliculas(route.id, nombrePelicula))
+                    navigate(RouteNavigation.AlquilerDevolverPeliculas(route.userId, nombrePelicula))
                 }
             )
         }
@@ -198,15 +205,15 @@ fun AppNavigation() {
         composable<RouteNavigation.SearchSeries> { route ->
             val route = route.toRoute<RouteNavigation.SearchSeries>()
             VideoClubSearchSeriesScreen(
-                userId = route.id,
+                userId = route.userId,
                 repository = repositorySeriesData,
                 onBackClick = { navController.popBackStack() },
-                onHomeClick = { navigate(RouteNavigation.VideoClubSeries(route.id)) },
-                onCameraClick = { navigate(RouteNavigation.Camara(route.id)) },
-                onProfileClick = { navigate(RouteNavigation.PerfilSeries(route.id)) },
+                onHomeClick = { navigate(RouteNavigation.VideoClubSeries(route.userId)) },
+                onCameraClick = { navigate(RouteNavigation.Camara(route.userId)) },
+                onProfileClick = { navigate(RouteNavigation.PerfilSeries(route.userId)) },
                 onLogoutClick = { navigate(RouteNavigation.Login) },
                 onSerieClick = { nombreSerie ->
-                    navigate(RouteNavigation.AlquilerDevolverSeries(route.id, nombreSerie))
+                    navigate(RouteNavigation.AlquilerDevolverSeries(route.userId, nombreSerie))
                 }
             )
         }
@@ -217,9 +224,9 @@ fun AppNavigation() {
             CamaraScreen(
                 repository = repositoryCamara,
                 onBackClick = { navController.popBackStack() },
-                onHomeClick = { navigate(RouteNavigation.VideoClubPeliculas(route.id)) },
-                onCameraClick = { navigate(RouteNavigation.Camara(route.id)) },
-                onProfileClick = { navigate(RouteNavigation.PerfilUsuario(route.id)) },
+                onHomeClick = { navigate(RouteNavigation.VideoClubPeliculas(route.userId)) },
+                onCameraClick = { navigate(RouteNavigation.Camara(route.userId)) },
+                onProfileClick = { navigate(RouteNavigation.PerfilUsuario(route.userId)) },
                 onLogoutClick = { navigate(RouteNavigation.Login) },
             )
         }
@@ -229,7 +236,7 @@ fun AppNavigation() {
             val route = route.toRoute<RouteNavigation.PerfilUsuario>()
             val viewModel: PerfilUsuarioViewModel = viewModel(
                 factory = PerfilUsuarioViewModelFactory(
-                    userId = route.id.toString(),
+                    userId = route.userId,
                     repository = PerfilUsuarioRepositoryInMemory(
                         apiService = RetrofitClient.usuarioApiService
                     ),
@@ -238,11 +245,11 @@ fun AppNavigation() {
                 )
             )
             PerfilUsuarioScreen(
-                userId = route.id.toString(),
+                userId = route.userId,
                 onBackClick = { navController.popBackStack() },
-                onHomeClick = { navigate(RouteNavigation.VideoClubPeliculas(route.id)) },
-                onCameraClick = { navigate(RouteNavigation.Camara(route.id)) },
-                onProfileClick = { navigate(RouteNavigation.PerfilUsuario(route.id)) },
+                onHomeClick = { navigate(RouteNavigation.VideoClubPeliculas(route.userId)) },
+                onCameraClick = { navigate(RouteNavigation.Camara(route.userId)) },
+                onProfileClick = { navigate(RouteNavigation.PerfilUsuario(route.userId)) },
                 onLogoutClick = { navigate(RouteNavigation.Login) },
                 viewModel = viewModel
             )
@@ -253,7 +260,7 @@ fun AppNavigation() {
             val route = route.toRoute<RouteNavigation.PerfilSeries>()
             val viewModel: PerfilSeriesViewModel = viewModel(
                 factory = PerfilSeriesViewModelFactory(
-                    userId = route.id.toString(),
+                    userId = route.userId,
                     repository = PerfilUsuarioRepositoryInMemory(
                         apiService = RetrofitClient.usuarioApiService
                     ),
@@ -262,11 +269,11 @@ fun AppNavigation() {
             )
 
             PerfilSeriesScreen(
-                userId = route.id.toString(),
+                userId = route.userId,
                 onBackClick = { navController.popBackStack() },
-                onHomeClick = { navigate(RouteNavigation.VideoClubSeries(route.id)) },
-                onCameraClick = { navigate(RouteNavigation.Camara(route.id)) },
-                onProfileClick = { navigate(RouteNavigation.PerfilSeries(route.id)) },
+                onHomeClick = { navigate(RouteNavigation.VideoClubSeries(route.userId)) },
+                onCameraClick = { navigate(RouteNavigation.Camara(route.userId)) },
+                onProfileClick = { navigate(RouteNavigation.PerfilSeries(route.userId)) },
                 onLogoutClick = { navigate(RouteNavigation.Login) },
                 viewModel = viewModel
             )
@@ -282,7 +289,7 @@ fun AppNavigation() {
                 onBackClick = { navController.popBackStack() },
                 onHomeClick = { navigate(RouteNavigation.VideoClubPeliculas(route.userId)) },
                 onCameraClick = { navigate(RouteNavigation.Camara(route.userId)) },
-                onProfileClick = { navigate(RouteNavigation.PerfilUsuario(route.userId)) },
+                onProfileClick = { navigate(RouteNavigation.PerfilUsuario(route.userId.toString())) },
                 onLogoutClick = { navigate(RouteNavigation.Login) }
             )
         }
@@ -306,12 +313,12 @@ fun AppNavigation() {
         composable<RouteNavigation.QR> { route ->
             val route = route.toRoute<RouteNavigation.QR>()
             QRScreen(
-                userId = route.id,
+                userId = route.userId,
                 repository = repositoryQR,
                 onBackClick = { navController.popBackStack() },
-                onHomeClick = { navigate(RouteNavigation.VideoClubPeliculas(route.id)) },
-                onCameraClick = { navigate(RouteNavigation.Camara(route.id)) },
-                onProfileClick = { navigate(RouteNavigation.PerfilUsuario(route.id)) },
+                onHomeClick = { navigate(RouteNavigation.VideoClubPeliculas(route.userId)) },
+                onCameraClick = { navigate(RouteNavigation.Camara(route.userId)) },
+                onProfileClick = { navigate(RouteNavigation.PerfilUsuario(route.userId)) },
                 onLogoutClick = { navigate(RouteNavigation.Login) },
             )
         }

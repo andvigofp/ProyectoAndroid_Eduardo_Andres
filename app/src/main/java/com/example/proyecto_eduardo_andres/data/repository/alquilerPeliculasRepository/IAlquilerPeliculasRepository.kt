@@ -3,31 +3,30 @@ package com.example.proyecto_eduardo_andres.data.repository.alquilerPeliculasRep
 import com.example.proyecto_eduardo_andres.modelo.EstadoAlquilerDto
 import com.example.proyecto_eduardo_andres.modelo.VideoClubOnlinePeliculasData
 
-// Interfaz del repositorio de películas
 interface IAlquilerPeliculasRepository {
     fun alquilarPelicula(
-        userId: Int,
+        userId: String,
         pelicula: VideoClubOnlinePeliculasData,
         onError: (Throwable) -> Unit,
         onSuccess: () -> Unit
     )
 
     fun devolverPelicula(
-        userId: Int,
+        userId: String,
         pelicula: VideoClubOnlinePeliculasData,
         onError: (Throwable) -> Unit,
         onSuccess: () -> Unit
     )
 
     fun obtenerEstadoAlquiler(
-        userId: Int,
+        userId: String,
         pelicula: VideoClubOnlinePeliculasData,
         onError: (Throwable) -> Unit,
         onSuccess: (EstadoAlquilerDto) -> Unit
     )
 
     fun obtenerPeliculasAlquiladas(
-        userId: Int,
+        userId: String,
         onError: (Throwable) -> Unit,
         onSuccess: (List<VideoClubOnlinePeliculasData>) -> Unit
     )

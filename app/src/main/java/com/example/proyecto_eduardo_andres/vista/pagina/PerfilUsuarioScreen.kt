@@ -47,11 +47,11 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.compose.colorAzulOscurso
 import com.example.compose.colorVioleta
 import com.example.proyecto_eduardo_andres.R
+import com.example.proyecto_eduardo_andres.data.repository.alquilerPeliculasRepository.AlquilerPeliculasRepositoryInMemory
+import com.example.proyecto_eduardo_andres.data.repository.perfilRepositorio.PerfilUsuarioRepositoryInMemory
 import com.example.proyecto_eduardo_andres.modelo.PerfilUsuarioButtonTextsDto
 import com.example.proyecto_eduardo_andres.modelo.PerfilUsuarioDto
 import com.example.proyecto_eduardo_andres.remote.RetrofitClient
-import com.example.proyecto_eduardo_andres.repository.alquilerPeliculasRepository.AlquilerPeliculasRepositoryInMemory
-import com.example.proyecto_eduardo_andres.repository.perfilRepositorio.PerfilUsuarioRepositoryInMemory
 import com.example.proyecto_eduardo_andres.viewmodel.vm.PerfilUsuarioViewModel
 import com.example.proyecto_eduardo_andres.viewmodel.vm.PerfilUsuarioViewModelFactory
 import com.example.proyecto_eduardo_andres.vista.componente.componentePerfilUsuario.CampoPerfilUsuario

@@ -14,9 +14,9 @@ import kotlinx.coroutines.flow.update
 import java.util.Date
 
 class AlquilarDevolverSeriesViewModel(
-    private val userId: Int,
+    private val userId: String,
     private val nombreSerie: Int,
-    private val repository: com.example.proyecto_eduardo_andres.data.repository.alquilerSeriesRepository.IAlquilerSeriesRepository
+    private val repository: IAlquilerSeriesRepository
 ) : ViewModel() {
 
     private val serieSeleccionada: VideoClubOnlineSeriesData =
@@ -39,7 +39,7 @@ class AlquilarDevolverSeriesViewModel(
         val fechaDevolucion = Date(fechaAlquiler.time + 7 * 24 * 60 * 60 * 1000L)
 
         repository.alquilarSerie(
-            userId = userId,
+            userId = userId.toString(),
             serie = _uiState.value.serie,
             onError = { Log.e("Alquiler", "Error al alquilar", it) },
             onSuccess = {
@@ -56,7 +56,7 @@ class AlquilarDevolverSeriesViewModel(
 
     fun devolverSerie() {
         repository.devolverSerie(
-            userId = userId,
+            userId = userId.toString(),
             serie = _uiState.value.serie,
             onError = { Log.e("Devolucion", "Error al devolver", it) },
             onSuccess = {
@@ -73,9 +73,9 @@ class AlquilarDevolverSeriesViewModel(
 
 // Factory para pasar userId y repository al ViewModel
 class AlquilarDevolverSeriesViewModelFactory(
-    private val userId: Int,
+    private val userId: String,
     private val nombreSerie: Int,
-    private val repository: com.example.proyecto_eduardo_andres.data.repository.alquilerSeriesRepository.IAlquilerSeriesRepository
+    private val repository: IAlquilerSeriesRepository
 ) : ViewModelProvider.Factory {
 
     override fun <T : ViewModel> create(modelClass: Class<T>): T {

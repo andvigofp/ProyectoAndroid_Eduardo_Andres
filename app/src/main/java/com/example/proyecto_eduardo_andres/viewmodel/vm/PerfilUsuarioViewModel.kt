@@ -13,16 +13,16 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 
 class PerfilUsuarioViewModel(
-    private val repository: com.example.proyecto_eduardo_andres.data.repository.perfilRepositorio.IPerfilUsuarioRepository,
-    private val alquilerRepository: com.example.proyecto_eduardo_andres.data.repository.alquilerPeliculasRepository.IAlquilerPeliculasRepository? = null
+private val repository: IPerfilUsuarioRepository,
+private val alquilerRepository: IAlquilerPeliculasRepository? = null
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(PerfilUsuarioUiState())
     val uiState: StateFlow<PerfilUsuarioUiState> = _uiState.asStateFlow()
 
-    // Cargar usuario
+    // Cargar usuario por email
     fun cargarUsuario(id: String) {
-        repository.getUsuario(
+        repository.getUsuarioPorId(
             id = id,
             onError = { error ->
                 Log.e("PerfilViewModel", "Error al cargar usuario", error)
@@ -31,21 +31,20 @@ class PerfilUsuarioViewModel(
                 _uiState.value = PerfilUsuarioUiState(
                     nombreUsuario = usuario.name,
                     email = usuario.email,
-                    password = usuario.password, // ya no es nullable
+                    password = usuario.password,
                     isEditing = false,
-                    userId = usuario.id ?: id
+                    userId = usuario.id.toString()
                 )
-                cargarPeliculasAlquiladas(usuario.id ?: id)
+                cargarPeliculasAlquiladas(usuario.id.toString())
             }
         )
     }
 
-    // Cargar películas alquiladas
+    // Cargar películas alquiladas usando UUID como String
     private fun cargarPeliculasAlquiladas(userId: String) {
-        val userIdInt = userId.toIntOrNull() ?: return
         alquilerRepository?.obtenerPeliculasAlquiladas(
-            userId = userIdInt,
-            onError = { /* manejar error */ },
+            userId = userId, // actualizar repositorio para aceptar String
+            onError = { error -> Log.e("PerfilViewModel", "Error al cargar películas", error) },
             onSuccess = { peliculas ->
                 _uiState.update { it.copy(peliculasAlquiladas = peliculas) }
             }
@@ -53,7 +52,7 @@ class PerfilUsuarioViewModel(
     }
 
     fun recargarPeliculasAlquiladas(userId: String) {
-        cargarPeliculasAlquiladas(userId)
+        cargarPeliculasAlquiladas(userId.toString())
     }
 
     // Cambios de campos
@@ -105,16 +104,17 @@ class PerfilUsuarioViewModel(
     }
 }
 
+// Factory actualizado para usar email en lugar de userId
 class PerfilUsuarioViewModelFactory(
-    private val userId: String,
-    private val repository: com.example.proyecto_eduardo_andres.data.repository.perfilRepositorio.IPerfilUsuarioRepository,
-    private val alquilerRepository: com.example.proyecto_eduardo_andres.data.repository.alquilerPeliculasRepository.IAlquilerPeliculasRepository? = null
+    private val userId: String,  // <--- ahora es id
+    private val repository: IPerfilUsuarioRepository,
+    private val alquilerRepository: IAlquilerPeliculasRepository? = null
 ) : ViewModelProvider.Factory {
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(PerfilUsuarioViewModel::class.java)) {
             val viewModel = PerfilUsuarioViewModel(repository, alquilerRepository)
-            viewModel.cargarUsuario(userId)
+            viewModel.cargarUsuario(userId) // <--- pasamos id
             return viewModel as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")

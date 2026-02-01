@@ -3,14 +3,12 @@ package com.example.proyecto_eduardo_andres.data.repository.alquilerSeriesReposi
 import com.example.proyecto_eduardo_andres.modelo.VideoClubOnlineSeriesData
 
 
-class AlquilerSeriesRepositoryInMemory :
-    com.example.proyecto_eduardo_andres.data.repository.alquilerSeriesRepository.IAlquilerSeriesRepository {
+class AlquilerSeriesRepositoryInMemory : IAlquilerSeriesRepository {
 
-    private val alquileres =
-        mutableMapOf<Int, MutableList<VideoClubOnlineSeriesData>>()
+    private val alquileres = mutableMapOf<String, MutableList<VideoClubOnlineSeriesData>>() // <-- String
 
     override fun alquilarSerie(
-        userId: Int,
+        userId: String,
         serie: VideoClubOnlineSeriesData,
         onError: (Throwable) -> Unit,
         onSuccess: () -> Unit
@@ -25,7 +23,7 @@ class AlquilerSeriesRepositoryInMemory :
     }
 
     override fun devolverSerie(
-        userId: Int,
+        userId: String,
         serie: VideoClubOnlineSeriesData,
         onError: (Throwable) -> Unit,
         onSuccess: () -> Unit
@@ -39,7 +37,7 @@ class AlquilerSeriesRepositoryInMemory :
     }
 
     override fun obtenerSeriesAlquiladas(
-        userId: Int,
+        userId: String,
         onError: (Throwable) -> Unit,
         onSuccess: (List<VideoClubOnlineSeriesData>) -> Unit
     ) {

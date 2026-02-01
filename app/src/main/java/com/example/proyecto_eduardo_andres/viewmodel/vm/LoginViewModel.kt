@@ -14,7 +14,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 
 class LoginViewModel(
-    private val userRepository: com.example.proyecto_eduardo_andres.data.repository.loginRepository.UserRepositoryInMemory
+    private val userRepository: UserRepositoryInMemory
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(LoginUiState())
@@ -25,6 +25,10 @@ class LoginViewModel(
 
     var showLoginDialog by mutableStateOf(false)
         private set
+
+    var loggedInUserId: String? by mutableStateOf(null)
+        private set
+
 
     fun onEmailChange(newEmail: String) {
         _uiState.update { it.copy(email = newEmail) }
@@ -49,10 +53,12 @@ class LoginViewModel(
             onSuccess = { user ->
                 loginMessage = "¡Bienvenido ${user.name}!"
                 showLoginDialog = true
+                loggedInUserId = user.id  // <-- guardamos el userId aquí
                 onSuccess()
             }
         )
     }
+
 
     fun dismissDialog() {
         showLoginDialog = false
@@ -60,7 +66,7 @@ class LoginViewModel(
 }
 
 class LoginViewModelFactory(
-    private val repository: com.example.proyecto_eduardo_andres.data.repository.loginRepository.UserRepositoryInMemory
+    private val repository: UserRepositoryInMemory
 ) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(LoginViewModel::class.java)) {

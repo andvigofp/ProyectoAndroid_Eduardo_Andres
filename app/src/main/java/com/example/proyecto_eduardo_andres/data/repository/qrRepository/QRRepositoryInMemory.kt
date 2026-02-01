@@ -3,7 +3,7 @@ package com.example.proyecto_eduardo_andres.data.repository.qrRepository
 class QRRepositoryInMemory :
     com.example.proyecto_eduardo_andres.data.repository.qrRepository.IQRRepository {
     override fun obtenerQRData(
-        userId: Int,
+        userId: String,
         onError: (Throwable) -> Unit,
         onSuccess: (String) -> Unit
     ) {
