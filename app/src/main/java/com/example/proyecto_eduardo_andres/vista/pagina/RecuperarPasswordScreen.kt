@@ -42,9 +42,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.proyecto_eduardo_andres.R
+import com.example.proyecto_eduardo_andres.data.repository.recuperarPasswordRepository.IRecuperarPasswordRepository
+import com.example.proyecto_eduardo_andres.data.repository.recuperarPasswordRepository.RecuperarPasswordRepositoryInMemory
 import com.example.proyecto_eduardo_andres.modelo.RecuperarPasswordButtonDto
-import com.example.proyecto_eduardo_andres.repository.recuperarPasswordRepository.IRecuperarPasswordRepository
-import com.example.proyecto_eduardo_andres.repository.recuperarPasswordRepository.RecuperarPasswordRepositoryInMemory
 import com.example.proyecto_eduardo_andres.viewmodel.vm.RecuperarPasswordViewModel
 import com.example.proyecto_eduardo_andres.viewmodel.vm.RecuperarPasswordViewModelFactory
 import com.example.proyecto_eduardo_andres.vista.componente.componenteRecuperarPassword.RecuperarPasswordButton

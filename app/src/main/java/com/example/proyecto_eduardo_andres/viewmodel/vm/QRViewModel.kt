@@ -10,8 +10,8 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 
 class QRViewModel(
-    private val repository: com.example.proyecto_eduardo_andres.data.repository.qrRepository.IQRRepository,
-    private val userId: Int
+    private val repository: IQRRepository,
+    private val userId: String
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(QRUiState())
@@ -81,8 +81,8 @@ class QRViewModel(
 }
 
 class QRViewModelFactory(
-    private val repository: com.example.proyecto_eduardo_andres.data.repository.qrRepository.IQRRepository,
-    private val userId: Int
+    private val repository: IQRRepository,
+    private val userId: String
 ) : ViewModelProvider.Factory {
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(modelClass: Class<T>): T {

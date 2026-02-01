@@ -4,48 +4,28 @@ import kotlinx.serialization.Serializable
 
 sealed interface RouteNavigation {
 
-    @Serializable
-    object Login : RouteNavigation
+    @Serializable object Login : RouteNavigation
+    @Serializable object CrearUsuario : RouteNavigation
+    @Serializable object RecuperarPassword : RouteNavigation
 
-    @Serializable
-    object CrearUsuario : RouteNavigation
-
-    @Serializable
-    object RecuperarPassword : RouteNavigation
-
-    @Serializable
-    class VideoClubPeliculas(val id: Int) : RouteNavigation
-
-    @Serializable
-    class VideoClubSeries(val id: Int) : RouteNavigation
-
-    @Serializable
-    class SearchPeliculas(val id: Int) : RouteNavigation
-
-    @Serializable
-    class SearchSeries(val id: Int) : RouteNavigation
-
-    @Serializable
-    class QR(val id: Int) : RouteNavigation
-
-    @Serializable
-    class Camara(val id: Int) : RouteNavigation
-
-    @Serializable
-    class PerfilUsuario(val id: Int) : RouteNavigation
-
-    @Serializable
-    class PerfilSeries(val id: Int) : RouteNavigation
+    @Serializable class VideoClubPeliculas(val userId: String) : RouteNavigation
+    @Serializable class VideoClubSeries(val userId: String) : RouteNavigation
+    @Serializable class SearchPeliculas(val userId: String) : RouteNavigation
+    @Serializable class SearchSeries(val userId: String) : RouteNavigation
+    @Serializable class QR(val userId: String) : RouteNavigation
+    @Serializable class Camara(val userId: String) : RouteNavigation
+    @Serializable class PerfilUsuario(val userId: String) : RouteNavigation
+    @Serializable class PerfilSeries(val userId: String) : RouteNavigation
 
     @Serializable
     class AlquilerDevolverPeliculas(
-        val userId: Int,
+        val userId: String,
         val nombrePelicula: Int
     ) : RouteNavigation
 
     @Serializable
     class AlquilerDevolverSeries(
-        val userId: Int,
+        val userId: String,
         val nombreSerie: Int
     ) : RouteNavigation
 

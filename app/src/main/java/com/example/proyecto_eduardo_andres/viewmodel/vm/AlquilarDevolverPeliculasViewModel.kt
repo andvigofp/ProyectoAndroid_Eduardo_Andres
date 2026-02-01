@@ -14,9 +14,9 @@ import kotlinx.coroutines.flow.update
 import java.util.Date
 
 class AlquilarDevolverPeliculasViewModel(
-    private val userId: Int,
+    private val userId: String,
     private val nombrePelicula: Int,
-    private val repository: com.example.proyecto_eduardo_andres.data.repository.alquilerPeliculasRepository.IAlquilerPeliculasRepository
+    private val repository: IAlquilerPeliculasRepository
 ) : ViewModel() {
 
     private val peliculaSeleccionada: VideoClubOnlinePeliculasData =
@@ -36,7 +36,7 @@ class AlquilarDevolverPeliculasViewModel(
 
     fun cargarDatosIniciales() {
         repository.obtenerEstadoAlquiler(
-            userId,
+            userId.toString(),
             peliculaSeleccionada,
             onError = { Log.e("ViewModel", "Error al cargar estado de alquiler", it) },
             onSuccess = { estado ->
@@ -56,7 +56,7 @@ class AlquilarDevolverPeliculasViewModel(
         val fechaDevolucion = Date(fechaAlquiler.time + 7 * 24 * 60 * 60 * 1000L)
 
         repository.alquilarPelicula(
-            userId = userId,
+            userId = userId.toString(),
             pelicula = peliculaSeleccionada,
             onError = { Log.e("Alquiler", "Error al alquilar", it) },
             onSuccess = {
@@ -73,7 +73,7 @@ class AlquilarDevolverPeliculasViewModel(
 
     fun devolverPelicula() {
         repository.devolverPelicula(
-            userId = userId,
+            userId = userId.toString(),
             pelicula = peliculaSeleccionada,
             onError = { Log.e("Devolucion", "Error al devolver", it) },
             onSuccess = {
@@ -92,9 +92,9 @@ class AlquilarDevolverPeliculasViewModel(
 
 // Factory para pasar userId y repository al ViewModel
 class AlquilarDevolverPeliculasViewModelFactory(
-    private val userId: Int,
+    private val userId: String,
     private val nombrePelicula: Int,
-    private val repository: com.example.proyecto_eduardo_andres.data.repository.alquilerPeliculasRepository.IAlquilerPeliculasRepository
+    private val repository: IAlquilerPeliculasRepository
 ) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(AlquilarDevolverPeliculasViewModel::class.java)) {

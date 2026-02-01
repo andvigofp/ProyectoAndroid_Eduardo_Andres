@@ -28,8 +28,8 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.compose.colorAzulOscurso
 import com.example.compose.colorVioleta
 import com.example.proyecto_eduardo_andres.R
+import com.example.proyecto_eduardo_andres.data.repository.loginRepository.UserRepositoryInMemory
 import com.example.proyecto_eduardo_andres.remote.RetrofitClient
-import com.example.proyecto_eduardo_andres.repository.loginRepository.UserRepositoryInMemory
 import com.example.proyecto_eduardo_andres.modelo.ButtonData
 import com.example.proyecto_eduardo_andres.modelo.ButtonType
 import com.example.proyecto_eduardo_andres.viewmodel.vm.LoginViewModel

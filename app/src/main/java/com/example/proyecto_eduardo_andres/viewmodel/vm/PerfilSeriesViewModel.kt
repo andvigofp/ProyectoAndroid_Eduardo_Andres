@@ -13,42 +13,39 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 
 class PerfilSeriesViewModel(
-    private val repository: com.example.proyecto_eduardo_andres.data.repository.perfilRepositorio.IPerfilUsuarioRepository,
-    private val alquilerRepository: com.example.proyecto_eduardo_andres.data.repository.alquilerSeriesRepository.IAlquilerSeriesRepository? = null
+    private val repository: IPerfilUsuarioRepository,
+    private val alquilerRepository: IAlquilerSeriesRepository? = null
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(PerfilSeriesUiState())
     val uiState: StateFlow<PerfilSeriesUiState> = _uiState.asStateFlow()
 
-    // Cargar usuario
+    // Cargar usuario por ID (UUID)
     fun cargarUsuario(id: String) {
-        repository.getUsuario(
+        repository.getUsuarioPorId(
             id = id,
             onError = { error ->
-                // Manejar error, por ejemplo mostrar log
-                Log.e("PerfilViewModel", "Error al cargar usuario", error)
+                Log.e("PerfilSeriesViewModel", "Error al cargar usuario", error)
             },
             onSuccess = { usuario ->
-                // Actualizamos directamente el uiState sin necesidad de buscar en lista
                 _uiState.value = PerfilSeriesUiState(
                     nombreUsuario = usuario.name,
                     email = usuario.email,
                     password = usuario.password,
                     isEditing = false,
-                    userId = usuario.id ?: id // usamos el id del API si existe
+                    userId = usuario.id.toString() // UUID como String
                 )
-                // Cargar series alquiladas si aplica
-                cargarSeriesAlquiladas(usuario.id ?: id)
+                // Ahora cargamos las series alquiladas
+                cargarSeriesAlquiladas(usuario.id.toString())
             }
         )
     }
 
-    // Cargar series alquiladas
+    // Cargar series alquiladas usando String UUID
     private fun cargarSeriesAlquiladas(userId: String) {
-        val userIdInt = userId.toIntOrNull() ?: return
         alquilerRepository?.obtenerSeriesAlquiladas(
-            userId = userIdInt,
-            onError = { /* manejar error */ },
+            userId = userId,
+            onError = { error -> Log.e("PerfilSeriesViewModel", "Error al cargar series", error) },
             onSuccess = { series ->
                 _uiState.update { it.copy(seriesAlquiladas = series) }
             }
@@ -91,7 +88,7 @@ class PerfilSeriesViewModel(
 
         repository.actualizarUsuario(
             usuario = usuario,
-            onError = { error -> Log.e("PerfilViewModel", "Error al actualizar", error) },
+            onError = { error -> Log.e("PerfilSeriesViewModel", "Error al actualizar", error) },
             onSuccess = {
                 _uiState.update {
                     it.copy(
@@ -108,16 +105,17 @@ class PerfilSeriesViewModel(
     }
 }
 
+
 class PerfilSeriesViewModelFactory(
-    private val userId: String,
-    private val repository: com.example.proyecto_eduardo_andres.data.repository.perfilRepositorio.IPerfilUsuarioRepository,
-    private val alquilerRepository: com.example.proyecto_eduardo_andres.data.repository.alquilerSeriesRepository.IAlquilerSeriesRepository? = null
+    private val userId: String, // UUID como String
+    private val repository: IPerfilUsuarioRepository,
+    private val alquilerRepository: IAlquilerSeriesRepository? = null
 ) : ViewModelProvider.Factory {
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(PerfilSeriesViewModel::class.java)) {
             val viewModel = PerfilSeriesViewModel(repository, alquilerRepository)
-            viewModel.cargarUsuario(userId)
+            viewModel.cargarUsuario(userId) // pasamos UUID directamente
             return viewModel as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")

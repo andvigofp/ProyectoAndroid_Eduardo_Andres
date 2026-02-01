@@ -29,7 +29,6 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.compose.colorAzulOscurso
 import com.example.compose.colorVioleta
 import com.example.proyecto_eduardo_andres.R
-import com.example.proyecto_eduardo_andres.data.repository.alquilerPeliculasRepository.AlquilerPeliculasRepositoryInMemory
 import com.example.proyecto_eduardo_andres.data.repository.alquilerPeliculasRepository.IAlquilerPeliculasRepository
 import com.example.proyecto_eduardo_andres.modelo.ButtonData
 import com.example.proyecto_eduardo_andres.modelo.ButtonType
@@ -42,9 +41,9 @@ import com.example.proyecto_eduardo_andres.vista.componente.componenteToolbar.to
 
 @Composable
 fun AlquilarDevolverPeliculasScreen(
-    userId: Int,
+    userId: String,
     nombrePelicula: Int,
-    repository: com.example.proyecto_eduardo_andres.data.repository.alquilerPeliculasRepository.IAlquilerPeliculasRepository,
+    repository: IAlquilerPeliculasRepository,
     viewModel: AlquilarDevolverPeliculasViewModel = viewModel(
         factory = AlquilarDevolverPeliculasViewModelFactory(userId, nombrePelicula, repository)
     ),
@@ -152,7 +151,7 @@ fun AlquilarDevolverPeliculasScreenPreview() {
     // Simular ViewModel para el preview
     val viewModel = remember {
         AlquilarDevolverPeliculasViewModel(
-            userId = userId,
+            userId = userId.toString(),
             nombrePelicula = nombrePelicula,
             repository = repository
         )
@@ -160,7 +159,7 @@ fun AlquilarDevolverPeliculasScreenPreview() {
 
     MaterialTheme {
         AlquilarDevolverPeliculasScreen(
-            userId = userId,
+            userId = userId.toString(),
             nombrePelicula = nombrePelicula,
             repository = repository,
             viewModel = viewModel,

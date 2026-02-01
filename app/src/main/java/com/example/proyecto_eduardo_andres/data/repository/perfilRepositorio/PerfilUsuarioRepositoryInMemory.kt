@@ -9,43 +9,38 @@ import kotlinx.coroutines.withContext
 
 class PerfilUsuarioRepositoryInMemory(
     private val apiService: UsuarioApiService
-) : com.example.proyecto_eduardo_andres.data.repository.perfilRepositorio.IPerfilUsuarioRepository {
+) : IPerfilUsuarioRepository {
 
-    override fun getUsuario(
+    override fun getUsuarioPorId(
         id: String,
         onError: (Throwable) -> Unit,
         onSuccess: (UserDTO) -> Unit
     ) {
         CoroutineScope(Dispatchers.IO).launch {
             try {
-                val response = apiService.obtenerUsuarios() // Llamada a la API
+                val response = apiService.obtenerUsuarios()
                 if (response.isSuccessful) {
-                    val usuarioDto = response.body() // UsuarioDto
+                    val usuarios = response.body() ?: emptyList()
+                    val usuarioDto = usuarios.find { it.id == id } // <-- buscar por id
+
                     if (usuarioDto != null) {
-                        // Convertimos a nuestro UserDTO
                         val usuario = UserDTO(
                             id = usuarioDto.id,
                             name = usuarioDto.name,
                             email = usuarioDto.email,
-                            password = usuarioDto.passwd // mapeamos passwd a password
+                            password = usuarioDto.passwd
                         )
-                        withContext(Dispatchers.Main) {
-                            onSuccess(usuario)
-                        }
+                        withContext(Dispatchers.Main) { onSuccess(usuario) }
                     } else {
-                        withContext(Dispatchers.Main) {
-                            onError(Throwable("Usuario no encontrado"))
-                        }
+                        withContext(Dispatchers.Main) { onError(Throwable("Usuario no encontrado")) }
                     }
                 } else {
                     withContext(Dispatchers.Main) {
-                        onError(Throwable("Error al obtener usuario: ${response.code()}"))
+                        onError(Throwable("Error al obtener usuarios: ${response.code()}"))
                     }
                 }
             } catch (e: Exception) {
-                withContext(Dispatchers.Main) {
-                    onError(e)
-                }
+                withContext(Dispatchers.Main) { onError(e) }
             }
         }
     }

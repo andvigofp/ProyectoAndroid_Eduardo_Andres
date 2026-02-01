@@ -14,7 +14,7 @@ import kotlinx.coroutines.withContext
  */
 class UserRepositoryInMemory(
 private val authApi: AuthApiService
-) : com.example.proyecto_eduardo_andres.data.repository.loginRepository.IUserRepository {
+) : IUserRepository {
 
     override fun getUser(
         id: Int,

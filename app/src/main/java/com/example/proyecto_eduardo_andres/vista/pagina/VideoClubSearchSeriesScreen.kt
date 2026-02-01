@@ -29,8 +29,8 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.compose.colorAzulOscurso
 import com.example.compose.colorAzulSuave
 import com.example.compose.colorVioleta
-import com.example.proyecto_eduardo_andres.repository.seriesRepository.ISeriesRepository
-import com.example.proyecto_eduardo_andres.repository.seriesRepository.SeriesRepositoryInMemory
+import com.example.proyecto_eduardo_andres.data.repository.seriesRepository.ISeriesRepository
+import com.example.proyecto_eduardo_andres.data.repository.seriesRepository.SeriesRepositoryInMemory
 import com.example.proyecto_eduardo_andres.viewmodel.vm.VideoClubOnlineSearchSeriesViewModel
 import com.example.proyecto_eduardo_andres.viewmodel.vm.VideoClubOnlineSearchSeriesViewModelFactory
 import com.example.proyecto_eduardo_andres.vista.componente.componenteSearchSeries.SearchBar
@@ -40,7 +40,7 @@ import com.example.proyecto_eduardo_andres.vista.componente.componenteToolbar.to
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun VideoClubSearchSeriesScreen(
-    userId: Int,
+    userId: String,
     repository: ISeriesRepository,
     viewModel: VideoClubOnlineSearchSeriesViewModel = viewModel(
         factory = VideoClubOnlineSearchSeriesViewModelFactory(repository)
@@ -130,7 +130,7 @@ fun VideoClubSearchSeriesScreen(
 fun VideoClubSearchScreenSeriePreview() {
     val repository = SeriesRepositoryInMemory()
     VideoClubSearchSeriesScreen(
-        userId = 1,
+        userId = 1.toString(),
         repository = repository,
         onBackClick = {},
         onHomeClick = {},

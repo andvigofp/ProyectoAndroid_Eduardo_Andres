@@ -2,7 +2,7 @@ package com.example.proyecto_eduardo_andres.data.repository.qrRepository
 
 interface IQRRepository {
     fun obtenerQRData(
-        userId: Int,
+        userId: String,
         onError: (Throwable) -> Unit,
         onSuccess: (String) -> Unit
     )

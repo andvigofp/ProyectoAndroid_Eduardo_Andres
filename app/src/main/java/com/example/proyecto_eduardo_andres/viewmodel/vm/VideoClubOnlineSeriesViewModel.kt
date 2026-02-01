@@ -5,7 +5,6 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.example.proyecto_eduardo_andres.naveHost.RouteNavigation
 import com.example.proyecto_eduardo_andres.naveHost.SessionEvents
-import com.example.proyecto_eduardo_andres.data.repository.seriesRepository.ISeriesRepository
 import com.example.proyecto_eduardo_andres.modelo.VideoClubOnlineSeriesData
 import com.example.proyecto_eduardo_andres.viewmodel.ustate.VideoClubOnlineSeriesUiState
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -55,7 +54,7 @@ class VideoClubOnlineSeriesViewModel(
     // =========================
     // NUEVA FUNCIÓN: cuando el usuario toca una serie
     // =========================
-    fun onSerieClick(userId: Int, serie: VideoClubOnlineSeriesData) {
+    fun onSerieClick(userId: String, serie: VideoClubOnlineSeriesData) {
         // Emitimos la navegación usando SessionEvents
         viewModelScope.launch {
             sessionEvents.emitNavigation(

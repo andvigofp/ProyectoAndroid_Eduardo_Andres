@@ -44,9 +44,9 @@ import com.example.proyecto_eduardo_andres.vista.componente.componenteToolbar.to
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AlquilerDevolverSeriesScreen(
-    userId: Int,
+    userId: String,
     nombreSerie: Int,
-    repository: com.example.proyecto_eduardo_andres.data.repository.alquilerSeriesRepository.IAlquilerSeriesRepository,
+    repository: IAlquilerSeriesRepository,
     viewModel: AlquilarDevolverSeriesViewModel = viewModel(
         factory = AlquilarDevolverSeriesViewModelFactory (userId, nombreSerie, repository)
     ),
@@ -152,10 +152,10 @@ fun AlquilerDevolverSeriesScreenPreview() {
         val userId = 1
         val nombreSerie = R.string.mad_men
         val viewModel: AlquilarDevolverSeriesViewModel = viewModel(
-            factory = AlquilarDevolverSeriesViewModelFactory(userId, nombreSerie, repository)
+            factory = AlquilarDevolverSeriesViewModelFactory(userId.toString(), nombreSerie, repository)
         )
         AlquilerDevolverSeriesScreen(
-            userId = userId,
+            userId = userId.toString(),
             nombreSerie = nombreSerie,
             repository = repository,
             viewModel = viewModel,

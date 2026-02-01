@@ -38,9 +38,9 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.compose.colorAzulOscurso
 import com.example.compose.colorVioleta
+import com.example.proyecto_eduardo_andres.data.repository.peliculasRepository.IPeliculasRepository
+import com.example.proyecto_eduardo_andres.data.repository.peliculasRepository.PeliculasRepositoryInMemory
 import com.example.proyecto_eduardo_andres.modelo.VideoClubOnlinePeliculasData
-import com.example.proyecto_eduardo_andres.repository.peliculasRepository.IPeliculasRepository
-import com.example.proyecto_eduardo_andres.repository.peliculasRepository.PeliculasRepositoryInMemory
 import com.example.proyecto_eduardo_andres.viewmodel.vm.VideoClubOnlinePeliculasViewModel
 import com.example.proyecto_eduardo_andres.viewmodel.vm.VideoClubOnlinePeliculasViewModelFactory
 import com.example.proyecto_eduardo_andres.vista.componente.componenteMenu.VideoClubMenuDrawer
