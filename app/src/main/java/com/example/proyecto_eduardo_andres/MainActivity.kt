@@ -11,7 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.compose.Proyecto_Eduardo_AndresTheme
-import com.example.proyecto_eduardo_andres.ui.page.AppNavigation
+import com.example.proyecto_eduardo_andres.vista.pagina.AppNavigation
 
 
 class MainActivity : ComponentActivity() {
@@ -44,7 +44,7 @@ class MainActivity : ComponentActivity() {
                         //AlquilarDevolverPeliculasScreen()
 
                         /**QRScreen(
-                        qrData = QRData("https://ejemplo.com"),
+                        qrData = QRDto("https://ejemplo.com"),
                         onBackClick = {},
                         onHomeClick = {},
                         onCameraClick = {},
@@ -84,7 +84,7 @@ class MainActivity : ComponentActivity() {
             //AlquilarDevolverPeliculasScreen()
 
             /**QRScreen(
-                qrData = QRData("https://ejemplo.com"),
+                qrData = QRDto("https://ejemplo.com"),
                 onBackClick = {},
                 onHomeClick = {},
                 onCameraClick = {},
