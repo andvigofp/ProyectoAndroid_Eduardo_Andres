@@ -5,13 +5,15 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-
+import androidx.lifecycle.viewModelScope
 import com.example.proyecto_eduardo_andres.data.repository.loginRepository.UserRepositoryInMemory
 import com.example.proyecto_eduardo_andres.viewmodel.ustate.LoginUiState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
+
 
 class LoginViewModel(
     private val userRepository: UserRepositoryInMemory
@@ -20,16 +22,20 @@ class LoginViewModel(
     private val _uiState = MutableStateFlow(LoginUiState())
     val uiState: StateFlow<LoginUiState> = _uiState.asStateFlow()
 
+    // Variables para el diálogo
     var loginMessage by mutableStateOf("")
         private set
 
     var showLoginDialog by mutableStateOf(false)
         private set
 
+    var dialogTitle by mutableStateOf("Login")
+        private set
+
     var loggedInUserId: String? by mutableStateOf(null)
         private set
 
-
+    // Cambios en los campos
     fun onEmailChange(newEmail: String) {
         _uiState.update { it.copy(email = newEmail) }
     }
@@ -42,26 +48,61 @@ class LoginViewModel(
         _uiState.update { it.copy(passwordVisible = !it.passwordVisible) }
     }
 
+    // Función de login
     fun logging(onSuccess: () -> Unit = {}) {
+        val email = _uiState.value.email.trim()
+        val password = _uiState.value.password
+
+        // Validación básica
+        if (email.isEmpty() || password.isEmpty()) {
+            showErrorDialog("Error", "Por favor, completa todos los campos")
+            return
+        }
+
         userRepository.login(
-            email = _uiState.value.email,
-            password = _uiState.value.password,
+            email = email,
+            password = password,
             onError = { throwable ->
-                loginMessage = "Login fallido: ${throwable.message}"
-                showLoginDialog = true
+                showErrorDialog("Login fallido", "Error: ${throwable.message ?: "Credenciales incorrectas"}")
             },
             onSuccess = { user ->
-                loginMessage = "¡Bienvenido ${user.name}!"
-                showLoginDialog = true
-                loggedInUserId = user.id  // <-- guardamos el userId aquí
-                onSuccess()
+                showSuccessDialog("¡Bienvenido!", "¡Bienvenido ${user.name}!")
+                loggedInUserId = user.id
+                // Ejecutar callback de éxito después de un breve retraso
+                viewModelScope.launch {
+                    kotlinx.coroutines.delay(1500) // Esperar 1.5 segundos
+                    onSuccess()
+                }
             }
         )
     }
 
+    // Funciones auxiliares para mostrar diálogos
+    private fun showErrorDialog(title: String, message: String) {
+        dialogTitle = title
+        loginMessage = message
+        showLoginDialog = true
+    }
 
+    private fun showSuccessDialog(title: String, message: String) {
+        dialogTitle = title
+        loginMessage = message
+        showLoginDialog = true
+    }
+
+    // Cerrar diálogo
     fun dismissDialog() {
         showLoginDialog = false
+        // Opcional: limpiar mensaje después de cerrar
+        loginMessage = ""
+    }
+
+    // Resetear estado (para logout o limpiar)
+    fun resetState() {
+        _uiState.value = LoginUiState()
+        loginMessage = ""
+        showLoginDialog = false
+        loggedInUserId = null
     }
 }
 

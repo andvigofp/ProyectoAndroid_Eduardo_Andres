@@ -3,6 +3,7 @@ package com.example.proyecto_eduardo_andres.viewmodel.vm
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import com.example.proyecto_eduardo_andres.data.repository.peliculasRepository.IPeliculasRepository
 import com.example.proyecto_eduardo_andres.naveHost.RouteNavigation
 import com.example.proyecto_eduardo_andres.naveHost.SessionEvents
 import com.example.proyecto_eduardo_andres.modelo.VideoClubOnlinePeliculasData
@@ -14,7 +15,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class VideoClubOnlinePeliculasViewModel(
-    private val repository: com.example.proyecto_eduardo_andres.data.repository.peliculasRepository.IPeliculasRepository,
+    private val repository: IPeliculasRepository,
     private val sessionEvents: SessionEvents = SessionEvents
 ) : ViewModel() {
 
@@ -59,8 +60,8 @@ class VideoClubOnlinePeliculasViewModel(
         viewModelScope.launch {
             sessionEvents.emitNavigation(
                 RouteNavigation.AlquilerDevolverPeliculas(
-                    userId = userId.toString(),
-                    nombrePelicula = pelicula.nombre,
+                    userId = userId,
+                    peliculaId = pelicula.id,
                 )
             )
         }
@@ -68,7 +69,7 @@ class VideoClubOnlinePeliculasViewModel(
 }
 
 class VideoClubOnlinePeliculasViewModelFactory(
-    private val repository: com.example.proyecto_eduardo_andres.data.repository.peliculasRepository.IPeliculasRepository
+    private val repository: IPeliculasRepository
 ) : ViewModelProvider.Factory {
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(modelClass: Class<T>): T {

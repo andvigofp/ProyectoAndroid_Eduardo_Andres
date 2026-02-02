@@ -15,13 +15,13 @@ import java.util.Date
 
 class AlquilarDevolverSeriesViewModel(
     private val userId: String,
-    private val nombreSerie: Int,
+    private val serieId: String,
     private val repository: IAlquilerSeriesRepository
 ) : ViewModel() {
 
     private val serieSeleccionada: VideoClubOnlineSeriesData =
-        SeriesDto().series.firstOrNull { it.nombre == nombreSerie }
-            ?: error("Serie no encontrada con nombre=$nombreSerie")
+        SeriesDto().series.firstOrNull { it.id == serieId }
+            ?: error("Serie no encontrada con nombre=$serieId")
 
     private val _uiState = MutableStateFlow(
         AlquilarDevolverSeriesUiState(
@@ -74,7 +74,7 @@ class AlquilarDevolverSeriesViewModel(
 // Factory para pasar userId y repository al ViewModel
 class AlquilarDevolverSeriesViewModelFactory(
     private val userId: String,
-    private val nombreSerie: Int,
+    private val serieId: String,
     private val repository: IAlquilerSeriesRepository
 ) : ViewModelProvider.Factory {
 
@@ -83,7 +83,7 @@ class AlquilarDevolverSeriesViewModelFactory(
             @Suppress("UNCHECKED_CAST")
             return AlquilarDevolverSeriesViewModel(
                 userId = userId,
-                nombreSerie = nombreSerie,
+                serieId = serieId,
                 repository = repository
             ) as T
         }

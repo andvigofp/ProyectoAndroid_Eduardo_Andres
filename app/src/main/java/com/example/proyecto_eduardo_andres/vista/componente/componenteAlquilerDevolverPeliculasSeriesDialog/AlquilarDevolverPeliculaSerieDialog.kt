@@ -1,4 +1,4 @@
-package com.example.proyecto_eduardo_andres.vista.pagina
+package com.example.proyecto_eduardo_andres.vista.componente.componenteAlquilerDevolverPeliculasSeriesDialog
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer

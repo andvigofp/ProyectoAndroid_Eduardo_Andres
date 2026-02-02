@@ -36,6 +36,7 @@ import com.example.proyecto_eduardo_andres.modelo.ButtonData
 import com.example.proyecto_eduardo_andres.modelo.ButtonType
 import com.example.proyecto_eduardo_andres.viewmodel.vm.AlquilarDevolverSeriesViewModel
 import com.example.proyecto_eduardo_andres.viewmodel.vm.AlquilarDevolverSeriesViewModelFactory
+import com.example.proyecto_eduardo_andres.vista.componente.componenteAlquilerDevolverPeliculasSeriesDialog.AlquilarDevolverDialog
 import com.example.proyecto_eduardo_andres.vista.componente.componenteAquilarDevolverSeries.AlquilarDevolverSerie
 import com.example.proyecto_eduardo_andres.vista.componente.componenteAquilarDevolverSeries.BotonAlquilarSeries
 import com.example.proyecto_eduardo_andres.vista.componente.componenteCustomScreenPeliculasSeries.CustomScreenWithoutScaffold
@@ -45,10 +46,10 @@ import com.example.proyecto_eduardo_andres.vista.componente.componenteToolbar.to
 @Composable
 fun AlquilerDevolverSeriesScreen(
     userId: String,
-    nombreSerie: Int,
+    seriesId: String,
     repository: IAlquilerSeriesRepository,
     viewModel: AlquilarDevolverSeriesViewModel = viewModel(
-        factory = AlquilarDevolverSeriesViewModelFactory (userId, nombreSerie, repository)
+        factory = AlquilarDevolverSeriesViewModelFactory (userId, seriesId, repository)
     ),
     onBackClick: () -> Unit,
     onHomeClick: () -> Unit,
@@ -144,26 +145,177 @@ fun AlquilerDevolverSeriesScreen(
 }
 
 
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun AlquilerDevolverSeriesScreen(
+    userId: String,
+    serieId: String,  // Cambiado de seriesId a serieId (consistente)
+    repository: IAlquilerSeriesRepository,
+    onBackClick: () -> Unit,
+    onHomeClick: () -> Unit,
+    onCameraClick: () -> Unit,
+    onProfileClick: () -> Unit,
+    onLogoutClick: () -> Unit
+) {
+    // ViewModel creado internamente, NO como parámetro
+    val viewModel: AlquilarDevolverSeriesViewModel = viewModel(
+        factory = AlquilarDevolverSeriesViewModelFactory(
+            userId = userId,
+            serieId = serieId,  // Usar serieId
+            repository = repository
+        )
+    )
+
+    _AlquilerDevolverSeriesScreenContent(
+        viewModel = viewModel,
+        onBackClick = onBackClick,
+        onHomeClick = onHomeClick,
+        onCameraClick = onCameraClick,
+        onProfileClick = onProfileClick,
+        onLogoutClick = onLogoutClick
+    )
+}
+
+// Función interna compartida para la app real y el Preview
+@Composable
+private fun _AlquilerDevolverSeriesScreenContent(
+    viewModel: AlquilarDevolverSeriesViewModel,
+    onBackClick: () -> Unit,
+    onHomeClick: () -> Unit,
+    onCameraClick: () -> Unit,
+    onProfileClick: () -> Unit,
+    onLogoutClick: () -> Unit
+) {
+    val uiState by viewModel.uiState.collectAsState()
+    val colors = MaterialTheme.colorScheme
+    val typography = MaterialTheme.typography
+    var showDialog by remember { mutableStateOf(false) }
+
+    val toolbarBackGround = Brush.linearGradient(
+        colors = listOf(colorVioleta, colorAzulOscurso),
+        start = Offset(0f, 0f),
+        end = Offset(1000f, 1000f)
+    )
+
+    CustomScreenWithoutScaffold(
+        topBar = {
+            Box(modifier = Modifier.fillMaxWidth().background(toolbarBackGround)) {
+                Column(modifier = Modifier.statusBarsPadding()) {
+                    Spacer(modifier = Modifier.height(8.dp))
+                    toolBar(
+                        onBackClick = onBackClick,
+                        onHomeClick = onHomeClick,
+                        onCameraClick = onCameraClick,
+                        onProfileClick = onProfileClick,
+                        onLogoutClick = onLogoutClick
+                    )
+                }
+            }
+        },
+        bottomBar = {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(56.dp)
+                    .background(toolbarBackGround)
+            )
+        }
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp)
+                .align(Alignment.TopCenter),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Spacer(modifier = Modifier.height(24.dp))
+
+            Text(
+                text = stringResource(R.string.alquiler_serie),
+                style = typography.headlineLarge.copy(color = colors.primary),
+                modifier = Modifier.padding(bottom = 24.dp)
+            )
+
+            AlquilarDevolverSerie(series = uiState)
+        }
+
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp, vertical = 8.dp)
+                .align(Alignment.BottomCenter)
+        ) {
+            BotonAlquilarSeries(
+                botonAlquilar = ButtonData(nombre = R.string.alquilar, type = ButtonType.PRIMARY),
+                botonDevolver = ButtonData(nombre = R.string.devolver, type = ButtonType.SECONDARY),
+                onAlquilarClick = {
+                    viewModel.alquilarSerie()
+                    showDialog = true
+                },
+                onDevolverClick = {
+                    viewModel.devolverSerie()
+                    showDialog = true
+                },
+                isAlquilarButtonEnabled = uiState.isAlquilarButtonEnabled,
+                isDevolverButtonEnabled = uiState.isDevolverButtonEnabled
+            )
+        }
+
+        if (showDialog) {
+            AlquilarDevolverDialog(
+                isAlquiler = uiState.serieAlquilada,
+                fechaAlquiler = uiState.fechaAlquiler,
+                fechaDevolucion = uiState.fechaDevolucion,
+                onConfirmClick = { showDialog = false }
+            )
+        }
+    }
+}
+
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun AlquilerDevolverSeriesScreenPreview() {
-    MaterialTheme {
-        val repository = AlquilerSeriesRepositoryInMemory()
-        val userId = 1
-        val nombreSerie = R.string.mad_men
-        val viewModel: AlquilarDevolverSeriesViewModel = viewModel(
-            factory = AlquilarDevolverSeriesViewModelFactory(userId.toString(), nombreSerie, repository)
+    val repository = AlquilerSeriesRepositoryInMemory()
+    val userId = "user123"
+    val serieId = "serie_001"  // ID String correcto, NO resource ID
+
+    // Crear ViewModel manualmente para el Preview
+    val viewModel = remember {
+        AlquilarDevolverSeriesViewModel(
+            userId = userId,
+            serieId = serieId,  // Usar serieId (String)
+            repository = repository
         )
-        AlquilerDevolverSeriesScreen(
-            userId = userId.toString(),
-            nombreSerie = nombreSerie,
-            repository = repository,
+    }
+
+    MaterialTheme {
+        _AlquilerDevolverSeriesScreenContent(
             viewModel = viewModel,
             onBackClick = {},
             onHomeClick = {},
             onCameraClick = {},
             onProfileClick = {},
-            onLogoutClick = {},
+            onLogoutClick = {}
+        )
+    }
+}
+
+// Versión alternativa del Preview que prueba la pantalla completa
+@Preview(showBackground = true, showSystemUi = true)
+@Composable
+fun AlquilerDevolverSeriesScreenFullPreview() {
+    val repository = AlquilerSeriesRepositoryInMemory()
+
+    MaterialTheme {
+        AlquilerDevolverSeriesScreen(
+            userId = "user123",
+            serieId = "serie_001",  // ID String
+            repository = repository,
+            onBackClick = {},
+            onHomeClick = {},
+            onCameraClick = {},
+            onProfileClick = {},
+            onLogoutClick = {}
         )
     }
 }

@@ -108,7 +108,7 @@ fun AlquilerDevolverPeliculas(
 fun AlquilarDevolverPeliculasPreview() {
     val peliculaDemo = AlquilarDevolverPeliculasUiState(
         pelicula = VideoClubOnlinePeliculasData(
-            id = 1,
+            id = "peli_001",
             categoria = R.string.drama,
             imagen = R.drawable.ic_cadena_perpetua,
             nombre = R.string.cadena_perpetua,
