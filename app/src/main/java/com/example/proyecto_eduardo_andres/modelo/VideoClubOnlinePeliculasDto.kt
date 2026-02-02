@@ -3,7 +3,7 @@ package com.example.proyecto_eduardo_andres.modelo
 import com.example.proyecto_eduardo_andres.data.repository.mediaItemRepository.MediaItemData
 
 data class VideoClubOnlinePeliculasData(
-    val id: Int,
+    val id: String,
     override val nombre: Int,
     override val categoria: Int,
     override val imagen: Int?,
@@ -11,7 +11,7 @@ data class VideoClubOnlinePeliculasData(
 ) :MediaItemData
 
 
-fun pelicula(id: Int, categoria: Int, imagen: Int?, nombre: Int, descripcion: Int) =
+fun pelicula(id: String, categoria: Int, imagen: Int?, nombre: Int, descripcion: Int) =
     VideoClubOnlinePeliculasData(
         id = id,
         nombre = nombre,

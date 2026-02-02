@@ -3,6 +3,7 @@ package com.example.proyecto_eduardo_andres.viewmodel.vm
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import com.example.proyecto_eduardo_andres.data.repository.seriesRepository.ISeriesRepository
 import com.example.proyecto_eduardo_andres.naveHost.RouteNavigation
 import com.example.proyecto_eduardo_andres.naveHost.SessionEvents
 import com.example.proyecto_eduardo_andres.modelo.VideoClubOnlineSeriesData
@@ -14,7 +15,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class VideoClubOnlineSeriesViewModel(
-    private val repository: com.example.proyecto_eduardo_andres.data.repository.seriesRepository.ISeriesRepository,
+    private val repository: ISeriesRepository,
     private val sessionEvents: SessionEvents = SessionEvents // Inyectable para testing
 ) : ViewModel() {
 
@@ -60,7 +61,7 @@ class VideoClubOnlineSeriesViewModel(
             sessionEvents.emitNavigation(
                 RouteNavigation.AlquilerDevolverSeries(
                     userId = userId,
-                    nombreSerie = serie.nombre,
+                    serieId = serie.id,
                 )
             )
         }
@@ -68,7 +69,7 @@ class VideoClubOnlineSeriesViewModel(
 }
 
 class VideoClubOnlineSeriesViewModelFactory(
-    private val repository: com.example.proyecto_eduardo_andres.data.repository.seriesRepository.ISeriesRepository
+    private val repository: ISeriesRepository
 ) : ViewModelProvider.Factory {
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(modelClass: Class<T>): T {

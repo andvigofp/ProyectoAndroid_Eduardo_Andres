@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
@@ -61,7 +62,11 @@ fun CampoPerfilUsuario(
                 onValueChange = { onPerfilUsuarioData(perfilUsarioData.copy(nombreUsuaro = it)) },
                 singleLine = true,
                 enabled = isEditing, // <- controla edición
-                modifier = Modifier.weight(2f)
+                modifier = Modifier.weight(2f),
+                colors = OutlinedTextFieldDefaults.colors(
+                    focusedContainerColor = MaterialTheme.colorScheme.surfaceVariant,
+                    unfocusedContainerColor = MaterialTheme.colorScheme.surfaceVariant
+                )
             )
         }
 
@@ -80,7 +85,11 @@ fun CampoPerfilUsuario(
                 onValueChange = { onPerfilUsuarioData(perfilUsarioData.copy(email = it)) },
                 singleLine = true,
                 enabled = isEditing, // <- controla edición
-                modifier = Modifier.weight(2f)
+                modifier = Modifier.weight(2f),
+                colors = OutlinedTextFieldDefaults.colors(
+                    focusedContainerColor = MaterialTheme.colorScheme.surfaceVariant,
+                    unfocusedContainerColor = MaterialTheme.colorScheme.surfaceVariant
+                )
             )
         }
 
@@ -100,7 +109,11 @@ fun CampoPerfilUsuario(
                 singleLine = true,
                 visualTransformation = PasswordVisualTransformation(),
                 enabled = isEditing, // <- controla edición
-                modifier = Modifier.weight(2f)
+                modifier = Modifier.weight(2f),
+                colors = OutlinedTextFieldDefaults.colors(
+                    focusedContainerColor = MaterialTheme.colorScheme.surfaceVariant,
+                    unfocusedContainerColor = MaterialTheme.colorScheme.surfaceVariant
+                )
             )
         }
     }

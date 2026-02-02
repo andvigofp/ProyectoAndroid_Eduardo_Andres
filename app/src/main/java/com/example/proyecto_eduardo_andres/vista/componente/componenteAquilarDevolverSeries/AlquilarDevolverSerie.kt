@@ -112,7 +112,7 @@ fun AlquilarDevolverSeriePreview() {
 
     val serieDemo = AlquilarDevolverSeriesUiState(
         serie = VideoClubOnlineSeriesData(
-            id = 1,
+            id = "serie_001",
             categoria = R.string.drama,
             imagen = R.drawable.ic_mad_men,
             nombre = R.string.mad_men,

@@ -149,7 +149,11 @@ fun AppNavigation() {
                 onSearchClick = { navigate(RouteNavigation.SearchPeliculas(route.userId)) },
                 onCameraClick = { navigate(RouteNavigation.Camara(route.userId)) },
                 onProfileClick = { navigate(RouteNavigation.PerfilUsuario(route.userId)) },
-                onLogoutClick = { navigate(RouteNavigation.Login) },
+                onLogoutClick = {
+                    // IMPORTANTE: Resetear estado del login antes de navegar
+                    loginViewModel.resetState()
+                    navigate(RouteNavigation.Login)
+                },
                 onDrawerPeliculasClick = { navigate(RouteNavigation.VideoClubPeliculas(route.userId)) },
                 onDrawerSeriesClick = { navigate(RouteNavigation.VideoClubSeries(route.userId)) },
                 onPeliculaClick = { pelicula ->
@@ -173,7 +177,11 @@ fun AppNavigation() {
                 onSearchClick = { navigate(RouteNavigation.SearchSeries(route.userId)) },
                 onCameraClick = { navigate(RouteNavigation.Camara(route.userId)) },
                 onProfileClick = { navigate(RouteNavigation.PerfilSeries(route.userId)) },
-                onLogoutClick = { navigate(RouteNavigation.Login) },
+                onLogoutClick = {
+                    // IMPORTANTE: Resetear estado del login antes de navegar
+                    loginViewModel.resetState()
+                    navigate(RouteNavigation.Login)
+                },
                 onDrawerPeliculasClick = { navigate(RouteNavigation.VideoClubPeliculas(route.userId)) },
                 onDrawerSeriesClick = { navigate(RouteNavigation.VideoClubSeries(route.userId)) },
                 onSerieClick = { serie ->
@@ -194,9 +202,13 @@ fun AppNavigation() {
                 onHomeClick = { navigate(RouteNavigation.VideoClubPeliculas(route.userId)) },
                 onCameraClick = { navigate(RouteNavigation.Camara(route.userId)) },
                 onProfileClick = { navigate(RouteNavigation.PerfilUsuario(route.userId)) },
-                onLogoutClick = { navigate(RouteNavigation.Login) },
+                onLogoutClick = {
+                    // IMPORTANTE: Resetear estado del login antes de navegar
+                    loginViewModel.resetState()
+                    navigate(RouteNavigation.Login)
+                },
                 onPeliculaClick = { nombrePelicula ->
-                    navigate(RouteNavigation.AlquilerDevolverPeliculas(route.userId, nombrePelicula))
+                    navigate(RouteNavigation.AlquilerDevolverPeliculas(route.userId, nombrePelicula.toString()))
                 }
             )
         }
@@ -211,9 +223,13 @@ fun AppNavigation() {
                 onHomeClick = { navigate(RouteNavigation.VideoClubSeries(route.userId)) },
                 onCameraClick = { navigate(RouteNavigation.Camara(route.userId)) },
                 onProfileClick = { navigate(RouteNavigation.PerfilSeries(route.userId)) },
-                onLogoutClick = { navigate(RouteNavigation.Login) },
+                onLogoutClick = {
+                    // IMPORTANTE: Resetear estado del login antes de navegar
+                    loginViewModel.resetState()
+                    navigate(RouteNavigation.Login)
+                },
                 onSerieClick = { nombreSerie ->
-                    navigate(RouteNavigation.AlquilerDevolverSeries(route.userId, nombreSerie))
+                    navigate(RouteNavigation.AlquilerDevolverSeries(route.userId, nombreSerie.toString()))
                 }
             )
         }
@@ -227,7 +243,11 @@ fun AppNavigation() {
                 onHomeClick = { navigate(RouteNavigation.VideoClubPeliculas(route.userId)) },
                 onCameraClick = { navigate(RouteNavigation.Camara(route.userId)) },
                 onProfileClick = { navigate(RouteNavigation.PerfilUsuario(route.userId)) },
-                onLogoutClick = { navigate(RouteNavigation.Login) },
+                onLogoutClick = {
+                    // IMPORTANTE: Resetear estado del login antes de navegar
+                    loginViewModel.resetState()
+                    navigate(RouteNavigation.Login)
+                },
             )
         }
 
@@ -250,7 +270,11 @@ fun AppNavigation() {
                 onHomeClick = { navigate(RouteNavigation.VideoClubPeliculas(route.userId)) },
                 onCameraClick = { navigate(RouteNavigation.Camara(route.userId)) },
                 onProfileClick = { navigate(RouteNavigation.PerfilUsuario(route.userId)) },
-                onLogoutClick = { navigate(RouteNavigation.Login) },
+                onLogoutClick = {
+                    // IMPORTANTE: Resetear estado del login antes de navegar
+                    loginViewModel.resetState()
+                    navigate(RouteNavigation.Login)
+                },
                 viewModel = viewModel
             )
         }
@@ -274,38 +298,51 @@ fun AppNavigation() {
                 onHomeClick = { navigate(RouteNavigation.VideoClubSeries(route.userId)) },
                 onCameraClick = { navigate(RouteNavigation.Camara(route.userId)) },
                 onProfileClick = { navigate(RouteNavigation.PerfilSeries(route.userId)) },
-                onLogoutClick = { navigate(RouteNavigation.Login) },
+                onLogoutClick = {
+                    // IMPORTANTE: Resetear estado del login antes de navegar
+                    loginViewModel.resetState()
+                    navigate(RouteNavigation.Login)
+                },
                 viewModel = viewModel
             )
         }
 
         // ---------- ALQUILER / DEVOLVER PELÍCULAS ----------
-        composable<RouteNavigation.AlquilerDevolverPeliculas> { route ->
-            val route = route.toRoute<RouteNavigation.AlquilerDevolverPeliculas>()
+        composable<RouteNavigation.AlquilerDevolverPeliculas> { navBackStackEntry ->
+            val args = navBackStackEntry.toRoute<RouteNavigation.AlquilerDevolverPeliculas>()
             AlquilarDevolverPeliculasScreen(
-                userId = route.userId,
+                userId = args.userId,
                 repository = repositoryPeliculas,
-                nombrePelicula = route.nombrePelicula,
+                peliculaId = args.peliculaId,  // <-- CORREGIDO: "peliculaId" con 'u'
                 onBackClick = { navController.popBackStack() },
-                onHomeClick = { navigate(RouteNavigation.VideoClubPeliculas(route.userId)) },
-                onCameraClick = { navigate(RouteNavigation.Camara(route.userId)) },
-                onProfileClick = { navigate(RouteNavigation.PerfilUsuario(route.userId.toString())) },
-                onLogoutClick = { navigate(RouteNavigation.Login) }
+                onHomeClick = { navigate(RouteNavigation.VideoClubPeliculas(args.userId)) },
+                onCameraClick = { navigate(RouteNavigation.Camara(args.userId)) },
+                onProfileClick = { navigate(RouteNavigation.PerfilUsuario(args.userId)) }, // <-- Ya es String, no .toString()
+                onLogoutClick = {
+                    // IMPORTANTE: Resetear estado del login antes de navegar
+                    loginViewModel.resetState()
+                    navigate(RouteNavigation.Login)
+                },
             )
         }
 
         // ---------- ALQUILER / DEVOLVER SERIES ----------
-        composable<RouteNavigation.AlquilerDevolverSeries> { route ->
-            val route = route.toRoute<RouteNavigation.AlquilerDevolverSeries>()
+        // ---------- ALQUILER / DEVOLVER SERIES ----------
+        composable<RouteNavigation.AlquilerDevolverSeries> { navBackStackEntry ->
+            val args = navBackStackEntry.toRoute<RouteNavigation.AlquilerDevolverSeries>()
             AlquilerDevolverSeriesScreen(
-                userId = route.userId,
+                userId = args.userId,
                 repository = repositorySeries,
-                nombreSerie = route.nombreSerie,
+                serieId = args.serieId,  // <-- Asegúrate que coincida con RouteNavigation
                 onBackClick = { navController.popBackStack() },
-                onHomeClick = { navigate(RouteNavigation.VideoClubSeries(route.userId)) },
-                onCameraClick = { navigate(RouteNavigation.Camara(route.userId)) },
-                onProfileClick = { navigate(RouteNavigation.PerfilSeries(route.userId)) },
-                onLogoutClick = { navigate(RouteNavigation.Login) },
+                onHomeClick = { navigate(RouteNavigation.VideoClubSeries(args.userId)) },
+                onCameraClick = { navigate(RouteNavigation.Camara(args.userId)) },
+                onProfileClick = { navigate(RouteNavigation.PerfilSeries(args.userId)) },
+                onLogoutClick = {
+                    // IMPORTANTE: Resetear estado del login antes de navegar
+                    loginViewModel.resetState()
+                    navigate(RouteNavigation.Login)
+                },
             )
         }
 
@@ -319,7 +356,11 @@ fun AppNavigation() {
                 onHomeClick = { navigate(RouteNavigation.VideoClubPeliculas(route.userId)) },
                 onCameraClick = { navigate(RouteNavigation.Camara(route.userId)) },
                 onProfileClick = { navigate(RouteNavigation.PerfilUsuario(route.userId)) },
-                onLogoutClick = { navigate(RouteNavigation.Login) },
+                onLogoutClick = {
+                    // IMPORTANTE: Resetear estado del login antes de navegar
+                    loginViewModel.resetState()
+                    navigate(RouteNavigation.Login)
+                },
             )
         }
     }

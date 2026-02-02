@@ -10,6 +10,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
+import androidx.compose.material3.MaterialTheme.typography
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -36,6 +37,9 @@ import com.example.proyecto_eduardo_andres.viewmodel.vm.LoginViewModel
 import com.example.proyecto_eduardo_andres.viewmodel.vm.LoginViewModelFactory
 import com.example.proyecto_eduardo_andres.vista.componente.componenteLogin.CamposLogin
 import com.example.proyecto_eduardo_andres.vista.componente.componenteLogin.LoginButtons
+import androidx.compose.material3.MaterialTheme
+import com.example.proyecto_eduardo_andres.vista.componente.componenteAlertDialog.InfoDialog
+
 
 @Composable
 fun LogingScreen(
@@ -48,6 +52,7 @@ fun LogingScreen(
 ) {
     val uiState by loginViewModel.uiState.collectAsState()
     val scrollState = rememberScrollState()
+
 
     Box(
         modifier = Modifier
@@ -146,19 +151,16 @@ fun LogingScreen(
         }
     }
 
-    if (loginViewModel.showLoginDialog) {
-        AlertDialog(
-            onDismissRequest = { loginViewModel.dismissDialog() },
-            title = { Text(text = "Login") },
-            text = { Text(text = loginViewModel.loginMessage) },
-            confirmButton = {
-                Button(onClick = { loginViewModel.dismissDialog() }) {
-                    Text("OK")
-                }
-            }
-        )
-    }
+
+    // Diálogo de información general
+    InfoDialog(
+        showDialog = loginViewModel.showLoginDialog,
+        onDismissRequest = { loginViewModel.dismissDialog() },
+        title = loginViewModel.dialogTitle,
+        message = loginViewModel.loginMessage
+    )
 }
+
 
 
 

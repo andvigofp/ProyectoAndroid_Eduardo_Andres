@@ -15,13 +15,13 @@ import java.util.Date
 
 class AlquilarDevolverPeliculasViewModel(
     private val userId: String,
-    private val nombrePelicula: Int,
+    private val peliculaId: String,
     private val repository: IAlquilerPeliculasRepository
 ) : ViewModel() {
 
     private val peliculaSeleccionada: VideoClubOnlinePeliculasData =
-        PeliculasDto().peliculas.firstOrNull { it.nombre == nombrePelicula }
-            ?: error("Pelicula no encontrada con nombre=$nombrePelicula")
+        PeliculasDto().peliculas.firstOrNull { it.id == peliculaId }
+            ?: error("Pelicula no encontrada con nombre=$peliculaId")
 
     private val _uiState = MutableStateFlow(
         AlquilarDevolverPeliculasUiState(
@@ -93,7 +93,7 @@ class AlquilarDevolverPeliculasViewModel(
 // Factory para pasar userId y repository al ViewModel
 class AlquilarDevolverPeliculasViewModelFactory(
     private val userId: String,
-    private val nombrePelicula: Int,
+    private val peliculaId: String,
     private val repository: IAlquilerPeliculasRepository
 ) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
@@ -101,7 +101,7 @@ class AlquilarDevolverPeliculasViewModelFactory(
             @Suppress("UNCHECKED_CAST")
             return AlquilarDevolverPeliculasViewModel(
                 userId = userId,
-                nombrePelicula = nombrePelicula,
+                peliculaId = peliculaId,
                 repository = repository
             ) as T
         }
