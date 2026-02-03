@@ -1,10 +1,12 @@
-package com.example.proyecto_eduardo_andres.vista.pagina
+﻿package com.example.proyecto_eduardo_andres.vista.pagina
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.compose.ui.platform.LocalContext
+import com.example.proyecto_eduardo_andres.data.repository.seriesRepository.SeriesRepositoryRetrofit
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -42,13 +44,14 @@ fun AppNavigation() {
 
     val navController = rememberNavController()
     val scope = rememberCoroutineScope()
+    val context = LocalContext.current
     val repositoryPeliculas = remember { AlquilerPeliculasRepositoryInMemory() }
     val repositorySeries = remember { AlquilerSeriesRepositoryInMemory() }
     val repositoryCamara = remember { CamaraRepositoryInMemory() }
     val repositoryQR = remember { QRRepositoryInMemory() }
     val repositoryRecuperarPassword = remember { RecuperarPasswordRepositoryInMemory() }
     val repositoryPeliculasData = remember { PeliculasRepositoryInMemory() }
-    val repositorySeriesData = remember { SeriesRepositoryInMemory() }
+    val repositorySeriesData = remember { SeriesRepositoryRetrofit(context) }
     val authRepository = remember {
         UserRepositoryInMemory(RetrofitClient.authApiService)
     }
@@ -63,19 +66,19 @@ fun AppNavigation() {
         )
     )
 
-    // Helper para emitir navegación
+    // Helper para emitir navegaciÃ³n
     fun navigate(route: RouteNavigation) {
         scope.launch { SessionEvents.emitNavigation(route) }
     }
 
-    // FORBIDDEN → LOGIN
+    // FORBIDDEN â†’ LOGIN
     LaunchedEffect(Unit) {
         SessionEvents.forbidden.collect {
             navigate(RouteNavigation.Login)
         }
     }
 
-    // NAVEGACIÓN GLOBAL
+    // NAVEGACIÃ“N GLOBAL
     LaunchedEffect(Unit) {
         SessionEvents.navigation.collectLatest { route ->
             when (route) {
@@ -135,7 +138,7 @@ fun AppNavigation() {
             )
         }
 
-        // ---------- VIDEOCLUB PELÍCULAS ----------
+        // ---------- VIDEOCLUB PELÃCULAS ----------
         composable<RouteNavigation.VideoClubPeliculas> { route ->
             val route = route.toRoute<RouteNavigation.VideoClubPeliculas>()
             val viewModel: VideoClubOnlinePeliculasViewModel = viewModel(
@@ -192,7 +195,7 @@ fun AppNavigation() {
         }
 
 
-        // ---------- SEARCH PELÍCULAS ----------
+        // ---------- SEARCH PELÃCULAS ----------
         composable<RouteNavigation.SearchPeliculas> { route ->
             val route = route.toRoute<RouteNavigation.SearchPeliculas>()
             VideoClubSearchPeliculasScreen(
@@ -234,7 +237,7 @@ fun AppNavigation() {
             )
         }
 
-        // ---------- CÁMARA ----------
+        // ---------- CÃMARA ----------
         composable<RouteNavigation.Camara> { route ->
             val route = route.toRoute<RouteNavigation.Camara>()
             CamaraScreen(
@@ -251,7 +254,7 @@ fun AppNavigation() {
             )
         }
 
-        // ---------- PERFIL USUARIO (PELÍCULAS) ----------
+        // ---------- PERFIL USUARIO (PELÃCULAS) ----------
         composable<RouteNavigation.PerfilUsuario> { route ->
             val route = route.toRoute<RouteNavigation.PerfilUsuario>()
             val viewModel: PerfilUsuarioViewModel = viewModel(
@@ -307,7 +310,7 @@ fun AppNavigation() {
             )
         }
 
-        // ---------- ALQUILER / DEVOLVER PELÍCULAS ----------
+        // ---------- ALQUILER / DEVOLVER PELÃCULAS ----------
         composable<RouteNavigation.AlquilerDevolverPeliculas> { navBackStackEntry ->
             val args = navBackStackEntry.toRoute<RouteNavigation.AlquilerDevolverPeliculas>()
             AlquilarDevolverPeliculasScreen(
@@ -333,7 +336,7 @@ fun AppNavigation() {
             AlquilerDevolverSeriesScreen(
                 userId = args.userId,
                 repository = repositorySeries,
-                serieId = args.serieId,  // <-- Asegúrate que coincida con RouteNavigation
+                serieId = args.serieId,  // <-- AsegÃºrate que coincida con RouteNavigation
                 onBackClick = { navController.popBackStack() },
                 onHomeClick = { navigate(RouteNavigation.VideoClubSeries(args.userId)) },
                 onCameraClick = { navigate(RouteNavigation.Camara(args.userId)) },
