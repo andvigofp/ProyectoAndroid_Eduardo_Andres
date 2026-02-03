@@ -4,7 +4,7 @@ import com.example.proyecto_eduardo_andres.modelo.SeriesDto
 import com.example.proyecto_eduardo_andres.modelo.VideoClubOnlineSeriesData
 
 class SeriesRepositoryInMemory :
-    com.example.proyecto_eduardo_andres.data.repository.seriesRepository.ISeriesRepository {
+    ISeriesRepository {
     override fun obtenerSeries(
         onError: (Throwable) -> Unit,
         onSuccess: (List<VideoClubOnlineSeriesData>) -> Unit
