@@ -1,6 +1,8 @@
 package com.example.proyecto_eduardo_andres.remote
 
 import com.example.proyecto_eduardo_andres.remote.api.AuthApiService
+import com.example.proyecto_eduardo_andres.remote.api.PeliApiService
+import com.example.proyecto_eduardo_andres.remote.api.RecuperarPasswordApiService
 import com.example.proyecto_eduardo_andres.remote.api.SerieApiService
 import com.example.proyecto_eduardo_andres.remote.api.UsuarioApiService
 import okhttp3.OkHttpClient
@@ -12,7 +14,8 @@ import java.util.concurrent.TimeUnit
 object RetrofitClient {
     private const val BASE_URL = "http://10.0.2.2:5131"
 
-    private val okHttpClient: OkHttpClient by lazy {
+    // Use lazy without synchronization to avoid possible contention during startup
+    private val okHttpClient: OkHttpClient by lazy(LazyThreadSafetyMode.NONE) {
         val loggingInterceptor = HttpLoggingInterceptor().apply {
             level = HttpLoggingInterceptor.Level.BODY
         }
@@ -25,7 +28,7 @@ object RetrofitClient {
             .build()
     }
 
-    private val retrofit: Retrofit by lazy {
+    private val retrofit: Retrofit by lazy(LazyThreadSafetyMode.NONE) {
         Retrofit.Builder()
             .baseUrl(BASE_URL)
             .client(okHttpClient)
@@ -33,8 +36,9 @@ object RetrofitClient {
             .build()
     }
 
-    val usuarioApiService: UsuarioApiService = retrofit.create(UsuarioApiService::class.java)
-    val authApiService: AuthApiService = retrofit.create(AuthApiService::class.java)
-
-    val serieApiService: SerieApiService = retrofit.create(SerieApiService::class.java)
+    val usuarioApiService: UsuarioApiService by lazy(LazyThreadSafetyMode.NONE) { retrofit.create(UsuarioApiService::class.java) }
+    val authApiService: AuthApiService by lazy(LazyThreadSafetyMode.NONE) { retrofit.create(AuthApiService::class.java) }
+    val serieApiService: SerieApiService by lazy(LazyThreadSafetyMode.NONE) { retrofit.create(SerieApiService::class.java) }
+    val peliApiService: PeliApiService by lazy(LazyThreadSafetyMode.NONE) { retrofit.create(PeliApiService::class.java) }
+    val recuperarPasswordApiExterna: RecuperarPasswordApiService by lazy(LazyThreadSafetyMode.NONE) { retrofit.create(RecuperarPasswordApiService::class.java) }
 }

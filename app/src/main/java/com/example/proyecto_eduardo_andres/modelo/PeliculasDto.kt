@@ -119,7 +119,7 @@ data class PeliculasDto(
             categoria = R.string.terror,
             imagen = R.drawable.ic_la_monja,
             nombre = R.string.la_monja,
-            descripcion = R.string.monja_ivestiga_aparcion_demoniaca
+            descripcion = R.string.monja_ivestiga_aparicion_demoniaca
         ),
         pelicula(
             id = "peli_017",

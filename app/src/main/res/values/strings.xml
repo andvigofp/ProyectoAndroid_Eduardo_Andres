@@ -38,7 +38,7 @@
     <string name="siniestro">Siniestro</string>
     <string name="escritor_encuentra_videos_perturbados">"Un escritor encuentra videos perturbadores en su nueva casa."</string>
     <string name="la_monja">La Monja</string>
-    <string name="monja_ivestiga_aparcion_demoniaca">Un sacerdote investiga la aparición demoníaca de una monja.</string>
+    <string name="monja_ivestiga_aparicion_demoniaca">Un sacerdote investiga la aparición demoníaca de una monja.</string>
     <string name="viernes_trece">Vierenes 13</string>
     <string name="asesino_acecha_jovenes_campamento">Un asesino acecha a jóvenes en un campamento.</string>
     <string name="pesadilla_en_elm_street">Pesadilla en Elm Street</string>
@@ -82,7 +82,7 @@
     <string name="strike_back">Strike Back</string>
     <string name="dos_agentes_elite_enfrentan_peligrosas_misiones">Dos agentes de élite se enfrentan a peligrosas misiones alrededor del mundo para detener amenazas globales.</string>
     <string name="the_haunting_of_hill_house">The Haunting of Hill House</string>
-    <string name="una_familia_se_enfrentra_traumas">Una familia se enfrenta a los traumas y fantasmas de su pasado en una casa maldita.</string>
+    <string name="una_familia_se_enfrenta_traumas">Una familia se enfrenta a los traumas y fantasmas de su pasado en una casa maldita.</string>
     <string name="american_horror_story">American Horror Story</string>
     <string name="cada_temporada_presenta_una_historia_terror">Cada temporada presenta una historia diferente llena de terror, misterio y oscuridad.</string>
     <string name="the_walking_dead">The Walking Dead</string>
@@ -137,6 +137,7 @@
     <string name="img">Img</string>
     <string name="buscar_peliculas">Buscar película...</string>
     <string name="buscar_series">Buscar serie...</string>
+    <string name="confirm_recuperar_password_message">¿Estás seguro de que deseas actualizar la contraseña para este email?</string>
     <string name="volver">Volver</string>
     <string name="inicio">Inicio</string>
     <string name="camara">Cámara</string>

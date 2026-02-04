@@ -99,7 +99,7 @@ data class SeriesDto(
             categoria = R.string.terror,
             imagen = R.drawable.ic_the_haunting_of_hill_house,
             nombre = R.string.the_haunting_of_hill_house,
-            descripcion = R.string.una_familia_se_enfrentra_traumas
+            descripcion = R.string.una_familia_se_enfrenta_traumas
         ),
         serie(
             id = "serie_014",

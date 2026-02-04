@@ -1,19 +1,24 @@
-﻿package com.example.proyecto_eduardo_andres.data.repository.seriesRepository
+package com.example.proyecto_eduardo_andres.data.repository.peliculasRepository
+
 import android.content.Context
 import com.example.proyecto_eduardo_andres.R
-import com.example.proyecto_eduardo_andres.modelo.VideoClubOnlineSeriesData
+import com.example.proyecto_eduardo_andres.modelo.VideoClubOnlinePeliculasData
 import com.example.proyecto_eduardo_andres.remote.RetrofitClient
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class SeriesRepositoryRetrofit(private val context: Context) : ISeriesRepository {
-    private val api = RetrofitClient.serieApiService
-    override fun obtenerSeries(onError: (Throwable) -> Unit, onSuccess: (List<VideoClubOnlineSeriesData>) -> Unit) {
+class PeliculasRepositoryRetrofit(private val context: Context) : IPeliculasRepository {
+    private val api = RetrofitClient.peliApiService
+
+    override fun obtenerPeliculas(
+        onError: (Throwable) -> Unit,
+        onSuccess: (List<VideoClubOnlinePeliculasData>) -> Unit
+    ) {
         CoroutineScope(Dispatchers.IO).launch {
             try {
-                val response = api.obtenerSeries()
+                val response = api.obtenerPeliculas()
                 if (response.isSuccessful) {
                     val body = response.body() ?: emptyList()
                     val mapped = body.map { dto ->
@@ -21,7 +26,8 @@ class SeriesRepositoryRetrofit(private val context: Context) : ISeriesRepository
                         val nombreRes = resolveStringResource(dto.nombre)
                         val categoriaRes = resolveStringResource(dto.categoria)
                         val descripcionRes = resolveStringResource(dto.descripcion)
-                        VideoClubOnlineSeriesData(
+
+                        VideoClubOnlinePeliculasData(
                             id = dto.id,
                             nombre = nombreRes,
                             categoria = categoriaRes,
@@ -31,14 +37,12 @@ class SeriesRepositoryRetrofit(private val context: Context) : ISeriesRepository
                     }
                     withContext(Dispatchers.Main) { onSuccess(mapped) }
                 } else {
-                    // Error HTTP: notificar que no se pudieron obtener las series
                     withContext(Dispatchers.Main) {
-                        onError(Throwable("No se pudo obtener las series desde el servidor (HTTP ${response.code()} ${response.message()})."))
+                        onError(Throwable("No se pudo obtener las películas desde el servidor (HTTP ${response.code()} ${response.message()})."))
                     }
                 }
             } catch (e: Exception) {
-                // Excepción (ej. fallo de red): notificar el error
-                withContext(Dispatchers.Main) { onError(Throwable("No se pudo obtener las series desde el servidor: ${e.message}")) }
+                withContext(Dispatchers.Main) { onError(Throwable("No se pudo obtener las películas desde el servidor: ${e.message}")) }
             }
         }
     }
