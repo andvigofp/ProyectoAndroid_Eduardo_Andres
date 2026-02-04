@@ -4,7 +4,7 @@ import com.example.proyecto_eduardo_andres.modelo.PeliculasDto
 import com.example.proyecto_eduardo_andres.modelo.VideoClubOnlinePeliculasData
 
 class PeliculasRepositoryInMemory :
-    com.example.proyecto_eduardo_andres.data.repository.peliculasRepository.IPeliculasRepository {
+    IPeliculasRepository {
     override fun obtenerPeliculas(
         onError: (Throwable) -> Unit,
         onSuccess: (List<VideoClubOnlinePeliculasData>) -> Unit

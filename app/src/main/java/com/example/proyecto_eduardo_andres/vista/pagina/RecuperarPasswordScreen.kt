@@ -43,6 +43,8 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.proyecto_eduardo_andres.R
 import com.example.proyecto_eduardo_andres.data.repository.recuperarPasswordRepository.IRecuperarPasswordRepository
+import com.example.proyecto_eduardo_andres.vista.componente.componenteAlertDialog.ConfirmationDialog
+import com.example.proyecto_eduardo_andres.vista.componente.componenteAlertDialog.InfoDialog
 import com.example.proyecto_eduardo_andres.data.repository.recuperarPasswordRepository.RecuperarPasswordRepositoryInMemory
 import com.example.proyecto_eduardo_andres.modelo.RecuperarPasswordButtonDto
 import com.example.proyecto_eduardo_andres.viewmodel.vm.RecuperarPasswordViewModel
@@ -68,6 +70,9 @@ fun RecuperarPasswordScreen(
     LaunchedEffect(uiState) {
         recuperarPasswordData = uiState
     }
+
+    // Estado local para mostrar diálogo de confirmación antes de ejecutar la acción
+    var showConfirmDialog by remember { mutableStateOf(false) }
 
     val colors = MaterialTheme.colorScheme
     val scrollState = rememberScrollState()
@@ -165,15 +170,39 @@ fun RecuperarPasswordScreen(
                     ),
                     enabled = uiState.isLoginButtonEnabled,
                     onRecuperarClick = {
-                        recuperarPasswordViewModel.recuperarPassword(
-                            onSuccess = onRecuperarClick,
-                            onError = { /* manejar error */ }
-                        )
+                        // Mostrar diálogo de confirmación antes de realizar la acción
+                        showConfirmDialog = true
                     },
                     onCancelarClick = onCancelarClick
                 )
             }
         }
+
+        // Diálogo de confirmación: si el usuario confirma se llama al ViewModel
+        ConfirmationDialog(
+            showDialog = showConfirmDialog,
+            onDismissRequest = { showConfirmDialog = false },
+            title = stringResource(R.string.recuperar_contrasenha),
+            message = stringResource(R.string.confirm_recuperar_password_message),
+            confirmButtonText = stringResource(R.string.recuperar),
+            dismissButtonText = stringResource(R.string.cancelar),
+            onConfirmClick = {
+                showConfirmDialog = false
+                recuperarPasswordViewModel.recuperarPassword(
+                    onSuccess = onRecuperarClick,
+                    onError = { /* manejar error si quieres */ }
+                )
+            },
+            onDismissClick = { showConfirmDialog = false }
+        )
+
+        // Diálogo informativo/respuesta (igual que en LogingScreen)
+        InfoDialog(
+            showDialog = recuperarPasswordViewModel.showLoginDialog,
+            onDismissRequest = { recuperarPasswordViewModel.dismissDialog() },
+            title = recuperarPasswordViewModel.dialogTitle,
+            message = recuperarPasswordViewModel.loginMessage
+        )
     }
 }
 

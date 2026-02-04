@@ -17,9 +17,10 @@ import com.example.proyecto_eduardo_andres.data.repository.camaraRepository.Cama
 import com.example.proyecto_eduardo_andres.data.repository.crearUsuario.CrearUsuarioRepositoryInMemory
 import com.example.proyecto_eduardo_andres.data.repository.loginRepository.UserRepositoryInMemory
 import com.example.proyecto_eduardo_andres.data.repository.peliculasRepository.PeliculasRepositoryInMemory
+import com.example.proyecto_eduardo_andres.data.repository.peliculasRepository.PeliculasRepositoryRetrofit
 import com.example.proyecto_eduardo_andres.data.repository.perfilRepositorio.PerfilUsuarioRepositoryInMemory
 import com.example.proyecto_eduardo_andres.data.repository.qrRepository.QRRepositoryInMemory
-import com.example.proyecto_eduardo_andres.data.repository.recuperarPasswordRepository.RecuperarPasswordRepositoryInMemory
+import com.example.proyecto_eduardo_andres.data.repository.recuperarPasswordRepository.RecuperarPasswordRepositoryRetrofit
 import com.example.proyecto_eduardo_andres.data.repository.seriesRepository.SeriesRepositoryInMemory
 import com.example.proyecto_eduardo_andres.naveHost.RouteNavigation
 import com.example.proyecto_eduardo_andres.naveHost.SessionEvents
@@ -49,8 +50,9 @@ fun AppNavigation() {
     val repositorySeries = remember { AlquilerSeriesRepositoryInMemory() }
     val repositoryCamara = remember { CamaraRepositoryInMemory() }
     val repositoryQR = remember { QRRepositoryInMemory() }
-    val repositoryRecuperarPassword = remember { RecuperarPasswordRepositoryInMemory() }
-    val repositoryPeliculasData = remember { PeliculasRepositoryInMemory() }
+    // Usar el repositorio Retrofit real para recuperación de contraseña
+    val repositoryRecuperarPassword = remember { RecuperarPasswordRepositoryRetrofit() }
+    val repositoryPeliculasData = remember { PeliculasRepositoryRetrofit(context) }
     val repositorySeriesData = remember { SeriesRepositoryRetrofit(context) }
     val authRepository = remember {
         UserRepositoryInMemory(RetrofitClient.authApiService)
