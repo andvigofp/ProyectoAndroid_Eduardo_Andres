@@ -81,6 +81,10 @@ dependencies {
     implementation(libs.retrofit2.converter.gson)
     implementation(libs.okhttp.logging)
 
+    //Room
+    implementation(libs.androidx.room.runtime)
+    implementation(libs.androidx.room.ktx)
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
