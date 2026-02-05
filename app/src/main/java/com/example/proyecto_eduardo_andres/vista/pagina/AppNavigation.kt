@@ -11,6 +11,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
+import com.example.proyecto_eduardo_andres.data.repository.alquilerPeliculasRepository.AlquilerPeliculaRepositoryRetrofit
 import com.example.proyecto_eduardo_andres.data.repository.alquilerPeliculasRepository.AlquilerPeliculasRepositoryInMemory
 import com.example.proyecto_eduardo_andres.data.repository.alquilerSeriesRepository.AlquilerSeriesRepositoryInMemory
 import com.example.proyecto_eduardo_andres.data.repository.camaraRepository.CamaraRepositoryInMemory
@@ -46,7 +47,7 @@ fun AppNavigation() {
     val navController = rememberNavController()
     val scope = rememberCoroutineScope()
     val context = LocalContext.current
-    val repositoryPeliculas = remember { AlquilerPeliculasRepositoryInMemory() }
+    val repositoryPeliculas = remember { AlquilerPeliculaRepositoryRetrofit(context) }
     val repositorySeries = remember { AlquilerSeriesRepositoryInMemory() }
     val repositoryCamara = remember { CamaraRepositoryInMemory() }
     val repositoryQR = remember { QRRepositoryInMemory() }

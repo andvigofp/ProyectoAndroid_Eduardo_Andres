@@ -23,27 +23,25 @@ fun AlquilarDevolverDialog(
     isAlquiler: Boolean,
     fechaAlquiler: Date?,
     fechaDevolucion: Date?,
+    fechaLimiteDevolucion: Date?,
+    esMulta: Boolean,
     onConfirmClick: () -> Unit
 ) {
-    // Formateador de fecha
     val dateFormat = SimpleDateFormat(stringResource(R.string.fecha), Locale.getDefault())
     val fechaAlquilerFormatted = fechaAlquiler?.let { dateFormat.format(it) }
     val fechaDevolucionFormatted = fechaDevolucion?.let { dateFormat.format(it) }
+    val fechaLimiteFormatted = fechaLimiteDevolucion?.let { dateFormat.format(it) }
 
-    // Multa
-    val fechaActual = Date()
-    val esMulta = fechaDevolucion != null && fechaActual.after(fechaDevolucion)
-
-    // Texto del estado de la película
     val estadoPelicula = stringResource(
         id = R.string.estado_pelicula,
         if (isAlquiler) "Película Alquilada" else "Película Devuelta"
     )
 
-    // Textos para fechas y multa
     val fechaAlquilerText = stringResource(id = R.string.fecha_alquiler, fechaAlquilerFormatted ?: "")
     val fechaDevolucionText = stringResource(id = R.string.fecha_devolucion, fechaDevolucionFormatted ?: "")
+    val fechaLimiteText = stringResource(id = R.string.fecha_limite_devolucion, fechaLimiteFormatted ?: "")
     val multaText = stringResource(id = R.string.multa_devolucion_tarde)
+    val devueltoATiempoText = stringResource(id = R.string.devuelto_a_tiempo)
     val aceptarText = stringResource(id = R.string.boton_aceptar)
 
     AlertDialog(
@@ -54,7 +52,9 @@ fun AlquilarDevolverDialog(
                 Text(fechaAlquilerText)
                 if (!isAlquiler) {
                     Text(fechaDevolucionText)
+                    Text(fechaLimiteText)
                     if (esMulta) Text(multaText, color = MaterialTheme.colorScheme.error)
+                    else Text(devueltoATiempoText, color = MaterialTheme.colorScheme.primary)
                 }
             }
         },
@@ -66,6 +66,7 @@ fun AlquilarDevolverDialog(
     )
 }
 
+
 // Preview mostrando alquiler y devolución con multa
 @Preview(showBackground = true)
 @Composable
@@ -73,25 +74,36 @@ fun AlquilarDevolverDialogPreview() {
     val fechaAlquiler = Calendar.getInstance().apply { add(Calendar.DAY_OF_MONTH, -10) }.time
     val fechaDevolucion = Calendar.getInstance().apply { add(Calendar.DAY_OF_MONTH, -3) }.time
 
+    // Fecha límite de devolución = fechaAlquiler + 7 días
+    val fechaLimiteDevolucion = Calendar.getInstance().apply {
+        time = fechaAlquiler
+        add(Calendar.DAY_OF_MONTH, 7)
+    }.time
+
+    // Multa si fechaDevolucion es después de fechaLimiteDevolucion
+    val esMulta = fechaDevolucion.after(fechaLimiteDevolucion)
+
     Column {
         // Diálogo de alquiler
         AlquilarDevolverDialog(
             isAlquiler = true,
             fechaAlquiler = fechaAlquiler,
             fechaDevolucion = null,
-            onConfirmClick = {}
+            onConfirmClick = {},
+            fechaLimiteDevolucion = fechaLimiteDevolucion,
+            esMulta = false // al alquilar no hay multa
         )
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        // Diálogo de devolución (con multa)
+        // Diálogo de devolución (con multa si corresponde)
         AlquilarDevolverDialog(
             isAlquiler = false,
             fechaAlquiler = fechaAlquiler,
             fechaDevolucion = fechaDevolucion,
-            onConfirmClick = {}
+            onConfirmClick = {},
+            fechaLimiteDevolucion = fechaLimiteDevolucion,
+            esMulta = esMulta
         )
     }
 }
-
-

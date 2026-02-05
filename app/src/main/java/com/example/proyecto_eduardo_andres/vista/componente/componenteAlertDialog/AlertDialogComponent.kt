@@ -11,7 +11,7 @@ import androidx.compose.ui.unit.dp
 
 /**
  * Componente de AlertDialog reutilizable para toda la aplicación
- * 
+ * @author Andrés
  * @param showDialog Booleano que controla si mostrar el diálogo
  * @param onDismissRequest Función llamada cuando se descarta el diálogo
  * @param title Título del diálogo

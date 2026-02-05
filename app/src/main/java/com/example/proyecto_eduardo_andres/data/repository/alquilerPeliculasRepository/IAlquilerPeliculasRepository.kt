@@ -30,4 +30,9 @@ interface IAlquilerPeliculasRepository {
         onError: (Throwable) -> Unit,
         onSuccess: (List<VideoClubOnlinePeliculasData>) -> Unit
     )
+
+    fun obtenerPeliculas(
+        onError: (Throwable) -> Unit,
+        onSuccess: (List<VideoClubOnlinePeliculasData>) -> Unit
+    )
 }

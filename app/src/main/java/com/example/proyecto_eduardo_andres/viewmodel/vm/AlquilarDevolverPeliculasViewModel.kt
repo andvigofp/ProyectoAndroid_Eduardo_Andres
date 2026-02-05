@@ -28,6 +28,7 @@ class AlquilarDevolverPeliculasViewModel(
             pelicula = peliculaSeleccionada
         )
     )
+
     val uiState: StateFlow<AlquilarDevolverPeliculasUiState> = _uiState.asStateFlow()
 
     init {
@@ -36,15 +37,19 @@ class AlquilarDevolverPeliculasViewModel(
 
     fun cargarDatosIniciales() {
         repository.obtenerEstadoAlquiler(
-            userId.toString(),
+            userId,
             peliculaSeleccionada,
             onError = { Log.e("ViewModel", "Error al cargar estado de alquiler", it) },
             onSuccess = { estado ->
+                val fechaLimite = estado.fechaAlquiler?.let {
+                    Date(it.time + 7 * 24 * 60 * 60 * 1000L)
+                }
                 _uiState.update {
                     it.copy(
                         peliculaAlquilada = estado.estaAlquilada,
                         fechaAlquiler = estado.fechaAlquiler,
-                        fechaDevolucion = estado.fechaDevolucion
+                        fechaDevolucion = estado.fechaDevolucion,
+                        fechaLimiteDevolucion = fechaLimite
                     )
                 }
             }
@@ -53,10 +58,10 @@ class AlquilarDevolverPeliculasViewModel(
 
     fun alquilarPelicula() {
         val fechaAlquiler = Date()
-        val fechaDevolucion = Date(fechaAlquiler.time + 7 * 24 * 60 * 60 * 1000L)
+        val fechaLimiteDevolucion = Date(fechaAlquiler.time + 7 * 24 * 60 * 60 * 1000L)
 
         repository.alquilarPelicula(
-            userId = userId.toString(),
+            userId = userId,
             pelicula = peliculaSeleccionada,
             onError = { Log.e("Alquiler", "Error al alquilar", it) },
             onSuccess = {
@@ -64,7 +69,9 @@ class AlquilarDevolverPeliculasViewModel(
                     it.copy(
                         peliculaAlquilada = true,
                         fechaAlquiler = fechaAlquiler,
-                        fechaDevolucion = fechaDevolucion
+                        fechaDevolucion = null,
+                        fechaLimiteDevolucion = fechaLimiteDevolucion,
+                        esMulta = false
                     )
                 }
             }
@@ -72,23 +79,25 @@ class AlquilarDevolverPeliculasViewModel(
     }
 
     fun devolverPelicula() {
+        val fechaRealDevolucion = Date()
+        val esMulta = _uiState.value.fechaLimiteDevolucion?.before(fechaRealDevolucion) ?: false
+
         repository.devolverPelicula(
-            userId = userId.toString(),
+            userId = userId,
             pelicula = peliculaSeleccionada,
             onError = { Log.e("Devolucion", "Error al devolver", it) },
             onSuccess = {
                 _uiState.update {
                     it.copy(
                         peliculaAlquilada = false,
-                        fechaDevolucion = Date()
+                        fechaDevolucion = fechaRealDevolucion,
+                        esMulta = esMulta
                     )
                 }
             }
         )
     }
 }
-
-
 
 // Factory para pasar userId y repository al ViewModel
 class AlquilarDevolverPeliculasViewModelFactory(
