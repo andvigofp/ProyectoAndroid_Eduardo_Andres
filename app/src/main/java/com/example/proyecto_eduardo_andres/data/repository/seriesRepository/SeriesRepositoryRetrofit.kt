@@ -9,7 +9,9 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class SeriesRepositoryRetrofit(private val context: Context) : ISeriesRepository {
+
     private val api = RetrofitClient.serieApiService
+
     override fun obtenerSeries(onError: (Throwable) -> Unit, onSuccess: (List<VideoClubOnlineSeriesData>) -> Unit) {
         CoroutineScope(Dispatchers.IO).launch {
             try {

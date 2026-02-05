@@ -15,8 +15,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -29,10 +29,10 @@ import java.util.Date
 import java.util.Locale
 
 /**
- * @author Andrés
- * @see Componenente Bottóns para Alquilar y Devolver Peliculas
+ * @author Eduardo
+ * @see Componenente Bottóns para Alquilar y Devolver Series
  * @param botonAlquilar: Al cliclar el botón Alquilar llama la funcion Alquilar
- * @param botonAlquilar: Al ciclar Botón Devolver te aparecerá una pantalla emergente, con la fecha actual
+ * @param botonAlquilar: Al ciclar Botón Devolver te aparecerá una pantalla emergente
  */
 @Composable
 fun BotonAlquilarSeries(
@@ -52,37 +52,39 @@ fun BotonAlquilarSeries(
 
     Row(
         horizontalArrangement = Arrangement.spacedBy(16.dp),
-        verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier
             .fillMaxWidth()
             .padding(16.dp)
     ) {
 
-        // ---- Botón Alquilar ----
+        // Botón Alquilar (usa tu botón atómico)
         AppButton(
             data = botonAlquilar,
             onClick = onAlquilarClick,
-            modifier = Modifier.weight(1f)
+            modifier = Modifier
+                .weight(1f)
+                .then(Modifier.alpha(if (isAlquilarButtonEnabled) 1f else 0.5f)) // Hacer que se vea deshabilitado
         )
 
-        // ---- Botón Devolver ----
+        // Botón Devolver (usa tu botón atómico)
         AppButton(
             data = botonDevolver,
             onClick = {
                 onDevolverClick()
                 showDialog = true
             },
-            modifier = Modifier.weight(1f)
+            modifier = Modifier
+                .weight(1f)
+                .then(Modifier.alpha(if (isDevolverButtonEnabled) 1f else 0.5f)) // Hacer que se vea deshabilitado
         )
     }
 
-    // ---- Diálogo ----
     if (showDialog) {
         AlertDialog(
             onDismissRequest = { showDialog = false },
             title = { Text(stringResource(R.string.devolucion_completada)) },
             text = {
-                Text("${stringResource(R.string.devolver_serie)} $fechaActual")
+                Text("${stringResource(R.string.devolver_pelicula)} $fechaActual")
             },
             confirmButton = {
                 TextButton(onClick = { showDialog = false }) {
@@ -94,10 +96,12 @@ fun BotonAlquilarSeries(
 }
 
 
+
 @Preview(showBackground = true)
 @Composable
 fun BotonAlquilarSeriesPreview() {
     MaterialTheme {
+        // Aquí definimos los valores de enabled para los botones
         BotonAlquilarSeries(
             botonAlquilar = ButtonData(
                 nombre = R.string.alquilar,

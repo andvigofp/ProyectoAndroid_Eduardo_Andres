@@ -4,10 +4,12 @@ import com.example.proyecto_eduardo_andres.modelo.VideoClubOnlinePeliculasData
 import java.util.Date
 
 data class AlquilarDevolverPeliculasUiState(
-    val pelicula: VideoClubOnlinePeliculasData, // Serie seleccionada
-    val peliculaAlquilada: Boolean = false, // Si está alquilada o no
-    val fechaAlquiler: Date? = null, // Fecha de alquiler
-    val fechaDevolucion: Date? = null // Fecha de devolución
+    val pelicula: VideoClubOnlinePeliculasData,
+    val peliculaAlquilada: Boolean = false,
+    val fechaAlquiler: Date? = null,
+    val fechaDevolucion: Date? = null,
+    val fechaLimiteDevolucion: Date? = null, // NUEVO: fecha límite para devolver
+    val esMulta: Boolean = false              // NUEVO: si la devolución tiene multa
 ) {
     val isAlquilarButtonEnabled: Boolean
         get() = !peliculaAlquilada

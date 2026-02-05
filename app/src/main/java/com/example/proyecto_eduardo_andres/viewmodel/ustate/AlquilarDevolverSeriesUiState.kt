@@ -7,7 +7,9 @@ data class AlquilarDevolverSeriesUiState(
     val serie: VideoClubOnlineSeriesData, // Serie seleccionada
     val serieAlquilada: Boolean = false, // Si está alquilada o no
     val fechaAlquiler: Date? = null, // Fecha de alquiler
-    val fechaDevolucion: Date? = null // Fecha de devolución
+    val fechaDevolucion: Date? = null, // Fecha de devolución
+    val fechaLimiteDevolucion: Date? = null, // NUEVO: fecha límite para devolver
+    val esMulta: Boolean = false
 ) {
     val isAlquilarButtonEnabled: Boolean
         get() = !serieAlquilada

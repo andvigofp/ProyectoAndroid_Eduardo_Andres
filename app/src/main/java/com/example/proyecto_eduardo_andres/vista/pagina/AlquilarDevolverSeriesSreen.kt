@@ -41,115 +41,15 @@ import com.example.proyecto_eduardo_andres.vista.componente.componenteAquilarDev
 import com.example.proyecto_eduardo_andres.vista.componente.componenteAquilarDevolverSeries.BotonAlquilarSeries
 import com.example.proyecto_eduardo_andres.vista.componente.componenteCustomScreenPeliculasSeries.CustomScreenWithoutScaffold
 import com.example.proyecto_eduardo_andres.vista.componente.componenteToolbar.toolBar
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun AlquilerDevolverSeriesScreen(
-    userId: String,
-    seriesId: String,
-    repository: IAlquilerSeriesRepository,
-    viewModel: AlquilarDevolverSeriesViewModel = viewModel(
-        factory = AlquilarDevolverSeriesViewModelFactory (userId, seriesId, repository)
-    ),
-    onBackClick: () -> Unit,
-    onHomeClick: () -> Unit,
-    onCameraClick: () -> Unit,
-    onProfileClick: () -> Unit,
-    onLogoutClick: () -> Unit
-) {
-
-    val uiState by viewModel.uiState.collectAsState() // Observamos el estado
-    val colors = MaterialTheme.colorScheme
-    val typography = MaterialTheme.typography
-    var showDialog by remember { mutableStateOf(false) }
-
-    val toolbarBackGround = Brush.linearGradient(
-        colors = listOf(colorVioleta, colorAzulOscurso),
-        start = Offset(0f, 0f),
-        end = Offset(1000f, 1000f)
-    )
-
-    CustomScreenWithoutScaffold(
-        topBar = {
-            Box(modifier = Modifier.fillMaxWidth().background(toolbarBackGround)) {
-                Column(modifier = Modifier.statusBarsPadding()) {
-                    Spacer(modifier = Modifier.height(8.dp))
-                    toolBar(
-                        onBackClick = onBackClick,
-                        onHomeClick = onHomeClick,
-                        onCameraClick = onCameraClick,
-                        onProfileClick = onProfileClick,
-                        onLogoutClick = onLogoutClick
-                    )
-                }
-            }
-        },
-        bottomBar = {
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(56.dp)
-                    .background(toolbarBackGround)
-            )
-        }
-    ) {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp)
-                .align(Alignment.TopCenter),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Spacer(modifier = Modifier.height(24.dp))
-
-            Text(
-                text = stringResource(R.string.alquiler_serie),
-                style = typography.headlineLarge.copy(color = colors.primary),
-                modifier = Modifier.padding(bottom = 24.dp)
-            )
-
-            AlquilarDevolverSerie(series = uiState)
-        }
-
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp, vertical = 8.dp)
-                .align(Alignment.BottomCenter)
-        ) {
-            BotonAlquilarSeries(
-                botonAlquilar = ButtonData(nombre = R.string.alquilar, type = ButtonType.PRIMARY),
-                botonDevolver = ButtonData(nombre = R.string.devolver, type = ButtonType.SECONDARY),
-                onAlquilarClick = {
-                    viewModel.alquilarSerie()
-                    showDialog = true
-                },
-                onDevolverClick = {
-                    viewModel.devolverSerie()
-                    showDialog = true
-                },
-                isAlquilarButtonEnabled = uiState.isAlquilarButtonEnabled,
-                isDevolverButtonEnabled = uiState.isDevolverButtonEnabled
-            )
-        }
-
-        if (showDialog) {
-            AlquilarDevolverDialog(
-                isAlquiler = uiState.serieAlquilada,
-                fechaAlquiler = uiState.fechaAlquiler,
-                fechaDevolucion = uiState.fechaDevolucion,
-                onConfirmClick = { showDialog = false }
-            )
-        }
-    }
-}
+import java.util.Calendar
+import java.util.Date
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AlquilerDevolverSeriesScreen(
     userId: String,
-    serieId: String,  // Cambiado de seriesId a serieId (consistente)
+    serieId: String,
     repository: IAlquilerSeriesRepository,
     onBackClick: () -> Unit,
     onHomeClick: () -> Unit,
@@ -262,11 +162,26 @@ private fun _AlquilerDevolverSeriesScreenContent(
         }
 
         if (showDialog) {
+            val fechaLimiteDevolucion = uiState.fechaAlquiler?.let {
+                Calendar.getInstance().apply {
+                    time = it
+                    add(Calendar.DAY_OF_MONTH, 7)
+                }.time
+            }
+
+            val esMulta = if (!uiState.serieAlquilada && fechaLimiteDevolucion != null) {
+                uiState.fechaDevolucion?.after(fechaLimiteDevolucion) ?: Date().after(fechaLimiteDevolucion)
+            } else {
+                false
+            }
+
             AlquilarDevolverDialog(
                 isAlquiler = uiState.serieAlquilada,
                 fechaAlquiler = uiState.fechaAlquiler,
                 fechaDevolucion = uiState.fechaDevolucion,
-                onConfirmClick = { showDialog = false }
+                onConfirmClick = { showDialog = false },
+                fechaLimiteDevolucion = fechaLimiteDevolucion,
+                esMulta = esMulta
             )
         }
     }
@@ -277,7 +192,7 @@ private fun _AlquilerDevolverSeriesScreenContent(
 fun AlquilerDevolverSeriesScreenPreview() {
     val repository = AlquilerSeriesRepositoryInMemory()
     val userId = "user123"
-    val serieId = "serie_001"  // ID String correcto, NO resource ID
+    val serieId = "serie_001"
 
     // Crear ViewModel manualmente para el Preview
     val viewModel = remember {
@@ -291,26 +206,6 @@ fun AlquilerDevolverSeriesScreenPreview() {
     MaterialTheme {
         _AlquilerDevolverSeriesScreenContent(
             viewModel = viewModel,
-            onBackClick = {},
-            onHomeClick = {},
-            onCameraClick = {},
-            onProfileClick = {},
-            onLogoutClick = {}
-        )
-    }
-}
-
-// Versión alternativa del Preview que prueba la pantalla completa
-@Preview(showBackground = true, showSystemUi = true)
-@Composable
-fun AlquilerDevolverSeriesScreenFullPreview() {
-    val repository = AlquilerSeriesRepositoryInMemory()
-
-    MaterialTheme {
-        AlquilerDevolverSeriesScreen(
-            userId = "user123",
-            serieId = "serie_001",  // ID String
-            repository = repository,
             onBackClick = {},
             onHomeClick = {},
             onCameraClick = {},

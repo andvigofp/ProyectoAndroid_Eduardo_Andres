@@ -89,4 +89,16 @@ class AlquilerPeliculasRepositoryInMemory : IAlquilerPeliculasRepository {
             onError(e)
         }
     }
+
+    override fun obtenerPeliculas(
+        onError: (Throwable) -> Unit,
+        onSuccess: (List<VideoClubOnlinePeliculasData>) -> Unit
+    ) {
+        try {
+            val peliculas = PeliculasDto().peliculas
+            onSuccess(peliculas)
+        } catch (e: Throwable) {
+            onError(e)
+        }
+    }
 }
