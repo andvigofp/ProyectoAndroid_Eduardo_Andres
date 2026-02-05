@@ -13,6 +13,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
 import com.example.proyecto_eduardo_andres.data.repository.alquilerPeliculasRepository.AlquilerPeliculaRepositoryRetrofit
 import com.example.proyecto_eduardo_andres.data.repository.alquilerPeliculasRepository.AlquilerPeliculasRepositoryInMemory
+import com.example.proyecto_eduardo_andres.data.repository.alquilerSeriesRepository.AlquilerSerieRepositoryRetrofit
 import com.example.proyecto_eduardo_andres.data.repository.alquilerSeriesRepository.AlquilerSeriesRepositoryInMemory
 import com.example.proyecto_eduardo_andres.data.repository.camaraRepository.CamaraRepositoryInMemory
 import com.example.proyecto_eduardo_andres.data.repository.crearUsuario.CrearUsuarioRepositoryInMemory
@@ -48,7 +49,7 @@ fun AppNavigation() {
     val scope = rememberCoroutineScope()
     val context = LocalContext.current
     val repositoryPeliculas = remember { AlquilerPeliculaRepositoryRetrofit(context) }
-    val repositorySeries = remember { AlquilerSeriesRepositoryInMemory() }
+    val repositorySeries = remember { AlquilerSerieRepositoryRetrofit(context) }
     val repositoryCamara = remember { CamaraRepositoryInMemory() }
     val repositoryQR = remember { QRRepositoryInMemory() }
     // Usar el repositorio Retrofit real para recuperación de contraseña

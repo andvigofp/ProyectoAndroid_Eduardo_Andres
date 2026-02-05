@@ -1,14 +1,18 @@
 package com.example.proyecto_eduardo_andres.data.repository.alquilerSeriesRepository
 
 import com.example.proyecto_eduardo_andres.modelo.EstadoAlquilerDto
-import com.example.proyecto_eduardo_andres.modelo.PeliculasDto
 import com.example.proyecto_eduardo_andres.modelo.SeriesDto
+import com.example.proyecto_eduardo_andres.modelo.VideoClubOnlinePeliculasData
 import com.example.proyecto_eduardo_andres.modelo.VideoClubOnlineSeriesData
+import com.example.proyecto_eduardo_andres.modelo.serie
+import java.util.Date
+import kotlin.collections.set
 
 
 class AlquilerSeriesRepositoryInMemory : IAlquilerSeriesRepository {
 
-    private val alquileres = mutableMapOf<String, MutableList<VideoClubOnlineSeriesData>>() // <-- String
+    private val alquileres =
+        mutableMapOf<String, MutableList<VideoClubOnlineSeriesData>>()
 
     override fun alquilarSerie(
         userId: String,
@@ -18,7 +22,12 @@ class AlquilerSeriesRepositoryInMemory : IAlquilerSeriesRepository {
     ) {
         try {
             val seriesUsuario = alquileres.getOrPut(userId) { mutableListOf() }
-            seriesUsuario.add(serie)
+
+            // Evitar duplicados
+            if (!seriesUsuario.any { it.nombre == serie.nombre }) {
+                seriesUsuario.add(serie)
+            }
+
             onSuccess()
         } catch (e: Throwable) {
             onError(e)
@@ -32,7 +41,7 @@ class AlquilerSeriesRepositoryInMemory : IAlquilerSeriesRepository {
         onSuccess: () -> Unit
     ) {
         try {
-            alquileres[userId]?.remove(serie)
+            alquileres[userId]?.removeIf { it.nombre == serie.nombre }
             onSuccess()
         } catch (e: Throwable) {
             onError(e)
@@ -43,9 +52,23 @@ class AlquilerSeriesRepositoryInMemory : IAlquilerSeriesRepository {
         userId: String,
         serie: VideoClubOnlineSeriesData,
         onError: (Throwable) -> Unit,
-        onSuccess: (EstadoAlquilerDto) -> Unit,
+        onSuccess: (EstadoAlquilerDto) -> Unit
     ) {
-        TODO("Not yet implemented")
+        try {
+            val estaAlquilada = alquileres[userId]
+                ?.any { it.nombre == serie.nombre }
+                ?: false
+
+            onSuccess(
+                EstadoAlquilerDto(
+                    estaAlquilada = estaAlquilada,
+                    fechaAlquiler = null,
+                    fechaDevolucion = null
+                )
+            )
+        } catch (e: Throwable) {
+            onError(e)
+        }
     }
 
     override fun obtenerSeriesAlquiladas(
@@ -54,8 +77,7 @@ class AlquilerSeriesRepositoryInMemory : IAlquilerSeriesRepository {
         onSuccess: (List<VideoClubOnlineSeriesData>) -> Unit
     ) {
         try {
-            val seriesUsuario = alquileres[userId] ?: emptyList()
-            onSuccess(seriesUsuario)
+            onSuccess(alquileres[userId] ?: emptyList())
         } catch (e: Throwable) {
             onError(e)
         }
@@ -63,15 +85,12 @@ class AlquilerSeriesRepositoryInMemory : IAlquilerSeriesRepository {
 
     override fun obtenerSeries(
         onError: (Throwable) -> Unit,
-        onSuccess: (List<VideoClubOnlineSeriesData>) -> Unit,
+        onSuccess: (List<VideoClubOnlineSeriesData>) -> Unit
     ) {
         try {
-            val series = SeriesDto().series
-            onSuccess(series)
+            onSuccess(SeriesDto().series)
         } catch (e: Throwable) {
             onError(e)
         }
     }
-
-
 }
