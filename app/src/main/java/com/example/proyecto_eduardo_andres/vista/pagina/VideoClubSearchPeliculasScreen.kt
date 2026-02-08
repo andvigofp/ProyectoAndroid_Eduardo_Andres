@@ -29,7 +29,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.compose.colorAzulOscurso
 import com.example.compose.colorAzulSuave
 import com.example.compose.colorVioleta
-import com.example.proyecto_eduardo_andres.data.repository.peliculasRepository.IPeliculasRepository
+import com.example.proyecto_eduardo_andres.data.repository.alquilerPeliculasSearchRepository.AlquilerSearchPeliculasRepository
 import com.example.proyecto_eduardo_andres.data.repository.peliculasRepository.PeliculasRepositoryInMemory
 import com.example.proyecto_eduardo_andres.modelo.VideoClubOnlinePeliculasData
 import com.example.proyecto_eduardo_andres.viewmodel.vm.VideoClubOnlineSearchPeliculasViewModel
@@ -42,7 +42,7 @@ import com.example.proyecto_eduardo_andres.vista.componente.componenteToolbar.to
 @Composable
 fun VideoClubSearchPeliculasScreen(
     userId: String,
-    repository: IPeliculasRepository,
+    repository: AlquilerSearchPeliculasRepository,
     viewModel: VideoClubOnlineSearchPeliculasViewModel = viewModel(
         factory = VideoClubOnlineSearchPeliculasViewModelFactory(repository)
     ),
@@ -129,7 +129,9 @@ fun VideoClubSearchPeliculasScreen(
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun VideoClubSearchScreenPeliculasPreview() {
-    val repository = PeliculasRepositoryInMemory()
+    val context = LocalContext.current
+    val repository = AlquilerSearchPeliculasRepository(context)
+
     VideoClubSearchPeliculasScreen(
         userId = 1.toString(),
         repository = repository,
