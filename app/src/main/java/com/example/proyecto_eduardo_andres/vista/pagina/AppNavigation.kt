@@ -1,9 +1,16 @@
 ﻿package com.example.proyecto_eduardo_andres.vista.pagina
 
+import android.app.Application
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.compose.ui.platform.LocalContext
 import com.example.proyecto_eduardo_andres.data.repository.seriesRepository.SeriesRepositoryRetrofit
@@ -27,6 +34,8 @@ import com.example.proyecto_eduardo_andres.data.repository.seriesRepository.Seri
 import com.example.proyecto_eduardo_andres.naveHost.RouteNavigation
 import com.example.proyecto_eduardo_andres.naveHost.SessionEvents
 import com.example.proyecto_eduardo_andres.remote.RetrofitClient
+import com.example.proyecto_eduardo_andres.viewmodel.vm.AppNavigationViewModel
+import com.example.proyecto_eduardo_andres.viewmodel.vm.AppNavigationViewModelFactory
 import com.example.proyecto_eduardo_andres.viewmodel.vm.CrearUsuarioViewModel
 import com.example.proyecto_eduardo_andres.viewmodel.vm.CrearUsuarioViewModelFactory
 import com.example.proyecto_eduardo_andres.viewmodel.vm.LoginViewModel
@@ -46,7 +55,6 @@ import kotlinx.coroutines.launch
 fun AppNavigation() {
 
     val navController = rememberNavController()
-    val scope = rememberCoroutineScope()
     val context = LocalContext.current
     val repositoryPeliculas = remember { AlquilerPeliculaRepositoryRetrofit(context) }
     val repositorySeries = remember { AlquilerSerieRepositoryRetrofit(context) }
@@ -59,6 +67,27 @@ fun AppNavigation() {
         UserRepositoryInMemory(RetrofitClient.authApiService)
     }
 
+    // --- NUEVO: AppNavigationViewModel ---
+    val appNavigationViewModel: AppNavigationViewModel = viewModel(
+        factory = AppNavigationViewModelFactory(
+            application = context.applicationContext as Application,
+            userRepository = authRepository
+        )
+    )
+
+    val uiState by appNavigationViewModel.uiState.collectAsState()
+
+    // --- Mostrar loader mientras se chequea la sesión ---
+    if (uiState.isCheckingSession) {
+        Box(
+            modifier = Modifier.fillMaxSize(),
+            contentAlignment = Alignment.Center
+        ) {
+            CircularProgressIndicator()
+        }
+        return
+    }
+
     val loginViewModel: LoginViewModel = viewModel(
         factory = LoginViewModelFactory(authRepository)
     )
@@ -69,9 +98,9 @@ fun AppNavigation() {
         )
     )
 
-    //Para emitir la navegación
+    // --- Navegación ---
     fun navigate(route: RouteNavigation) {
-        scope.launch { SessionEvents.emitNavigation(route) }
+        navController.navigate(route)
     }
 
     // Página LOGIN
