@@ -13,6 +13,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
 import com.example.proyecto_eduardo_andres.data.repository.alquilerPeliculasRepository.AlquilerPeliculaRepositoryRetrofit
 import com.example.proyecto_eduardo_andres.data.repository.alquilerPeliculasRepository.AlquilerPeliculasRepositoryInMemory
+import com.example.proyecto_eduardo_andres.data.repository.alquilerSeriesRepository.AlquilerSerieRepositoryRetrofit
 import com.example.proyecto_eduardo_andres.data.repository.alquilerSeriesRepository.AlquilerSeriesRepositoryInMemory
 import com.example.proyecto_eduardo_andres.data.repository.camaraRepository.CamaraRepositoryInMemory
 import com.example.proyecto_eduardo_andres.data.repository.crearUsuario.CrearUsuarioRepositoryInMemory
@@ -48,10 +49,9 @@ fun AppNavigation() {
     val scope = rememberCoroutineScope()
     val context = LocalContext.current
     val repositoryPeliculas = remember { AlquilerPeliculaRepositoryRetrofit(context) }
-    val repositorySeries = remember { AlquilerSeriesRepositoryInMemory() }
+    val repositorySeries = remember { AlquilerSerieRepositoryRetrofit(context) }
     val repositoryCamara = remember { CamaraRepositoryInMemory() }
     val repositoryQR = remember { QRRepositoryInMemory() }
-    // Usar el repositorio Retrofit real para recuperación de contraseña
     val repositoryRecuperarPassword = remember { RecuperarPasswordRepositoryRetrofit() }
     val repositoryPeliculasData = remember { PeliculasRepositoryRetrofit(context) }
     val repositorySeriesData = remember { SeriesRepositoryRetrofit(context) }
@@ -69,19 +69,19 @@ fun AppNavigation() {
         )
     )
 
-    // Helper para emitir navegaciÃ³n
+    //Para emitir la navegación
     fun navigate(route: RouteNavigation) {
         scope.launch { SessionEvents.emitNavigation(route) }
     }
 
-    // FORBIDDEN â†’ LOGIN
+    // Página LOGIN
     LaunchedEffect(Unit) {
         SessionEvents.forbidden.collect {
             navigate(RouteNavigation.Login)
         }
     }
 
-    // NAVEGACIÃ“N GLOBAL
+    // Navegación global GLOBAL
     LaunchedEffect(Unit) {
         SessionEvents.navigation.collectLatest { route ->
             when (route) {
@@ -141,7 +141,7 @@ fun AppNavigation() {
             )
         }
 
-        // ---------- VIDEOCLUB PELÃCULAS ----------
+        // ---------- VIDEOCLUB PELICULAS ----------
         composable<RouteNavigation.VideoClubPeliculas> { route ->
             val route = route.toRoute<RouteNavigation.VideoClubPeliculas>()
             val viewModel: VideoClubOnlinePeliculasViewModel = viewModel(
@@ -213,8 +213,8 @@ fun AppNavigation() {
                     loginViewModel.resetState()
                     navigate(RouteNavigation.Login)
                 },
-                onPeliculaClick = { nombrePelicula ->
-                    navigate(RouteNavigation.AlquilerDevolverPeliculas(route.userId, nombrePelicula.toString()))
+                onPeliculaClick = { pelicula ->
+                    navigate(RouteNavigation.AlquilerDevolverPeliculas(route.userId, pelicula.id))
                 }
             )
         }
@@ -234,8 +234,8 @@ fun AppNavigation() {
                     loginViewModel.resetState()
                     navigate(RouteNavigation.Login)
                 },
-                onSerieClick = { nombreSerie ->
-                    navigate(RouteNavigation.AlquilerDevolverSeries(route.userId, nombreSerie.toString()))
+                onSerieClick = { serie ->
+                    navigate(RouteNavigation.AlquilerDevolverSeries(route.userId, serie.id))
                 }
             )
         }
@@ -257,7 +257,7 @@ fun AppNavigation() {
             )
         }
 
-        // ---------- PERFIL USUARIO (PELÃCULAS) ----------
+        // ---------- PERFIL USUARIO ----------
         composable<RouteNavigation.PerfilUsuario> { route ->
             val route = route.toRoute<RouteNavigation.PerfilUsuario>()
             val viewModel: PerfilUsuarioViewModel = viewModel(
@@ -332,7 +332,6 @@ fun AppNavigation() {
             )
         }
 
-        // ---------- ALQUILER / DEVOLVER SERIES ----------
         // ---------- ALQUILER / DEVOLVER SERIES ----------
         composable<RouteNavigation.AlquilerDevolverSeries> { navBackStackEntry ->
             val args = navBackStackEntry.toRoute<RouteNavigation.AlquilerDevolverSeries>()

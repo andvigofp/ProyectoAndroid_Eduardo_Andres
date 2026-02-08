@@ -31,9 +31,10 @@ import com.example.compose.colorAzulSuave
 import com.example.compose.colorVioleta
 import com.example.proyecto_eduardo_andres.data.repository.peliculasRepository.IPeliculasRepository
 import com.example.proyecto_eduardo_andres.data.repository.peliculasRepository.PeliculasRepositoryInMemory
+import com.example.proyecto_eduardo_andres.modelo.VideoClubOnlinePeliculasData
 import com.example.proyecto_eduardo_andres.viewmodel.vm.VideoClubOnlineSearchPeliculasViewModel
 import com.example.proyecto_eduardo_andres.viewmodel.vm.VideoClubOnlineSearchPeliculasViewModelFactory
-import com.example.proyecto_eduardo_andres.vista.componente.componenteSearchSeries.SearchBar
+import com.example.proyecto_eduardo_andres.vista.componente.componenteSearchPeliculas.SearchBar
 import com.example.proyecto_eduardo_andres.vista.componente.componenteSearchSeriesPeliculas.MediaItem
 import com.example.proyecto_eduardo_andres.vista.componente.componenteToolbar.toolBar
 
@@ -50,7 +51,7 @@ fun VideoClubSearchPeliculasScreen(
     onCameraClick: () -> Unit,
     onProfileClick: () -> Unit,
     onLogoutClick: () -> Unit,
-    onPeliculaClick: (Int) -> Unit
+    onPeliculaClick: (VideoClubOnlinePeliculasData) -> Unit,
 ) {
     val uiState by viewModel.uiState.collectAsState()
     val context = LocalContext.current
@@ -102,7 +103,7 @@ fun VideoClubSearchPeliculasScreen(
                 .padding(16.dp)
         ) {
             // Barra de búsqueda
-            SearchBar(
+            SearchBar (
                 searchQuery = uiState.query,
                 onQueryChange = { viewModel.onQueryChange(it) }
             )
@@ -114,10 +115,10 @@ fun VideoClubSearchPeliculasScreen(
                 verticalArrangement = Arrangement.spacedBy(12.dp),
                 modifier = Modifier.fillMaxSize()
             ) {
-                items(peliculasFiltradas) { movie ->
+                items(peliculasFiltradas) { pelicula ->
                     MediaItem(
-                        item = movie,
-                        onClick = { onPeliculaClick(movie.nombre) }
+                        item = pelicula,
+                        onClick = { onPeliculaClick(pelicula) }
                     )
                 }
             }

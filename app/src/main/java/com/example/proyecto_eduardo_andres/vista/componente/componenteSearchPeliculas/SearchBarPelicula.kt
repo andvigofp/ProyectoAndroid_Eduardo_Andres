@@ -1,6 +1,6 @@
 @file:Suppress("ALL")
 
-package com.example.proyecto_eduardo_andres.vista.componente.componenteSearchSeries
+package com.example.proyecto_eduardo_andres.vista.componente.componenteSearchPeliculas
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -14,9 +14,9 @@ import androidx.compose.ui.unit.dp
 import com.example.proyecto_eduardo_andres.R
 
 /**
- * @author Andrés
- * @see Componenente Lista Series
- * @param peliculas: Llama a lista de las series
+ * @author Eduardo
+ * @see Componenente Barra de busqueda
+ * @param peliculas: Introduce el nombre de la pelicula
  */
 @Composable
 fun SearchBar(
@@ -26,7 +26,7 @@ fun SearchBar(
     OutlinedTextField(
         value = searchQuery,
         onValueChange = onQueryChange,
-        placeholder = { Text(stringResource(R.string.buscar_series)) },
+        placeholder = { Text(stringResource( R.string.buscar_peliculas))},
         modifier = Modifier
             .fillMaxWidth()
             .padding(vertical = 8.dp)
