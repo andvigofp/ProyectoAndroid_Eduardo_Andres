@@ -54,6 +54,8 @@ import com.example.proyecto_eduardo_andres.modelo.PerfilUsuarioDto
 import com.example.proyecto_eduardo_andres.remote.RetrofitClient
 import com.example.proyecto_eduardo_andres.viewmodel.vm.PerfilUsuarioViewModel
 import com.example.proyecto_eduardo_andres.viewmodel.vm.PerfilUsuarioViewModelFactory
+import com.example.proyecto_eduardo_andres.vista.componente.componenteAlertDialog.ConfirmationDialog
+import com.example.proyecto_eduardo_andres.vista.componente.componenteAlertDialog.InfoDialog
 import com.example.proyecto_eduardo_andres.vista.componente.componentePerfilUsuario.CampoPerfilUsuario
 import com.example.proyecto_eduardo_andres.vista.componente.componentePerfilUsuario.PerfilUsuarioButtons
 import com.example.proyecto_eduardo_andres.vista.componente.componenteToolbar.toolBar
@@ -294,31 +296,30 @@ fun PerfilUsuarioScreen(
             }
         }
 
+        ConfirmationDialog(
+            showDialog = uiState.showConfirmacionDialog,
+            onDismissRequest = { viewModel.cerrarConfirmacionDialog() },
+            title = stringResource(R.string.confirmacion),
+            message = stringResource(R.string.confirmacion_datos_guardados),
+            confirmButtonText = stringResource(R.string.aceptar),
+            dismissButtonText = stringResource(R.string.cancelar),
+            onConfirmClick = {
+                viewModel.cerrarConfirmacionDialog()
+                // Aquí podrías agregar alguna acción extra si quieres
+            },
+            onDismissClick = { viewModel.cerrarConfirmacionDialog() }
+        )
+
+
         // --- AlertDialog de confirmación ---
-        if (uiState.showConfirmacionDialog) {
-            AlertDialog(
-                onDismissRequest = { viewModel.cerrarConfirmacionDialog() },
-                title = {
-                    Text(
-                        text = "Cambios guardados",
-                        style = MaterialTheme.typography.titleLarge
-                    )
-                },
-                text = {
-                    Text(
-                        text = "Los datos del usuario se han modificado correctamente.",
-                        style = MaterialTheme.typography.bodyMedium
-                    )
-                },
-                confirmButton = {
-                    TextButton(onClick = { viewModel.cerrarConfirmacionDialog() }) {
-                        Text(stringResource(R.string.aceptar))
-                    }
-                }
-            )
-        }
+        InfoDialog(
+            showDialog = uiState.showInfoDialog,
+            onDismissRequest = { viewModel.cerrarInfoDialog() },
+            title = uiState.infoDialogTitle,
+            message = uiState.infoDialogMessage
+        )
     }
-}
+    }
 
 @Preview(showBackground = true, showSystemUi = true)
 @Composable

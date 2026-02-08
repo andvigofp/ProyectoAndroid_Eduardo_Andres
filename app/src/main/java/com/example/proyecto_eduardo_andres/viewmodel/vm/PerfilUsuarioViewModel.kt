@@ -73,6 +73,22 @@ private val alquilerRepository: IAlquilerPeliculasRepository? = null
         _uiState.update { it.copy(isEditing = !it.isEditing) }
     }
 
+    // PerfilUsuarioViewModel.kt
+    fun mostrarInfoDialog(title: String, message: String) {
+        _uiState.update {
+            it.copy(
+                showInfoDialog = true,
+                infoDialogTitle = title,
+                infoDialogMessage = message
+            )
+        }
+    }
+
+    fun cerrarInfoDialog() {
+        _uiState.update { it.copy(showInfoDialog = false) }
+    }
+
+
     // Guardar cambios
     fun guardarCambios() {
         val state = _uiState.value
