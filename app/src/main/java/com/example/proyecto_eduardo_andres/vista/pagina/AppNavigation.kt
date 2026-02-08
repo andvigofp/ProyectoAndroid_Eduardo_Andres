@@ -27,6 +27,7 @@ import com.example.proyecto_eduardo_andres.data.repository.crearUsuario.CrearUsu
 import com.example.proyecto_eduardo_andres.data.repository.loginRepository.UserRepositoryInMemory
 import com.example.proyecto_eduardo_andres.data.repository.peliculasRepository.PeliculasRepositoryRetrofit
 import com.example.proyecto_eduardo_andres.data.repository.perfilRepositorio.PerfilUsuarioRepositoryInMemory
+import com.example.proyecto_eduardo_andres.data.repository.perfilRepositorio.PerfilUsuarioRepositoryRetrofit
 import com.example.proyecto_eduardo_andres.data.repository.qrRepository.QRRepositoryInMemory
 import com.example.proyecto_eduardo_andres.data.repository.recuperarPasswordRepository.RecuperarPasswordRepositoryRetrofit
 import com.example.proyecto_eduardo_andres.naveHost.RouteNavigation
@@ -62,6 +63,8 @@ fun AppNavigation() {
     val repositorySeriesData = remember { SeriesRepositoryRetrofit(context) }
     val repositorySearchPeliculas = remember { AlquilerSearchPeliculasRepository(context) }
     val repositorySearchSeries = remember { AlquilerSearchSeriesRepository(context) }
+    val repositoryPerfilUsuario = remember { PerfilUsuarioRepositoryRetrofit() }
+
     val authRepository = remember {
         UserRepositoryInMemory(RetrofitClient.authApiService)
     }
@@ -293,11 +296,8 @@ fun AppNavigation() {
             val viewModel: PerfilUsuarioViewModel = viewModel(
                 factory = PerfilUsuarioViewModelFactory(
                     userId = route.userId,
-                    repository = PerfilUsuarioRepositoryInMemory(
-                        apiService = RetrofitClient.usuarioApiService
-                    ),
-                    alquilerRepository = repositoryPeliculas,
-
+                    repository = repositoryPerfilUsuario,
+                    alquilerRepository = repositoryPeliculas
                 )
             )
             PerfilUsuarioScreen(

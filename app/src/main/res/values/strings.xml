@@ -173,4 +173,6 @@
     <string name="guardar">Guardar</string>
     <string name="fecha_limite_devolucion">Fecha límite de devolución: %1$s</string>
     <string name="devuelto_a_tiempo">¡Devuelto a tiempo!</string>
+    <string name="confirmacion">Confirmación</string>
+    <string name="confirmacion_datos_guardados">Los datos del usuario se han modificado correctamente.</string>
 </resources>

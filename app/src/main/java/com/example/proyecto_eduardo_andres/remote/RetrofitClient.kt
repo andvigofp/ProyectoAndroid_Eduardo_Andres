@@ -6,6 +6,7 @@ import com.example.proyecto_eduardo_andres.remote.api.AlquilerSearchSerieApiServ
 import com.example.proyecto_eduardo_andres.remote.api.AlquilerSeriApiService
 import com.example.proyecto_eduardo_andres.remote.api.AuthApiService
 import com.example.proyecto_eduardo_andres.remote.api.PeliApiService
+import com.example.proyecto_eduardo_andres.remote.api.PerfilUsuarioApiService
 import com.example.proyecto_eduardo_andres.remote.api.RecuperarPasswordApiService
 import com.example.proyecto_eduardo_andres.remote.api.SerieApiService
 import com.example.proyecto_eduardo_andres.remote.api.UsuarioApiService
@@ -49,4 +50,5 @@ object RetrofitClient {
     val aquilerSerieApiService: AlquilerSeriApiService by lazy(LazyThreadSafetyMode.NONE) { retrofit.create(AlquilerSeriApiService::class.java) }
     val alquilerSearchPeliculas: AlquilerSearchPeliculasApiService by lazy(LazyThreadSafetyMode.NONE) { retrofit.create(AlquilerSearchPeliculasApiService::class.java) }
     val alquilerSearchSeries: AlquilerSearchSerieApiService by lazy(LazyThreadSafetyMode.NONE) { retrofit.create(AlquilerSearchSerieApiService::class.java) }
+    val perfilUsuario: PerfilUsuarioApiService by lazy(LazyThreadSafetyMode.NONE) { retrofit.create(PerfilUsuarioApiService::class.java) }
 }
