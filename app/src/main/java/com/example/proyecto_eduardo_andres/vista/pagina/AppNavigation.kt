@@ -21,6 +21,7 @@ import androidx.navigation.toRoute
 import com.example.proyecto_eduardo_andres.data.repository.alquilerPeliculasRepository.AlquilerPeliculaRepositoryRetrofit
 import com.example.proyecto_eduardo_andres.data.repository.alquilerPeliculasSearchRepository.AlquilerSearchPeliculasRepository
 import com.example.proyecto_eduardo_andres.data.repository.alquilerSeriesRepository.AlquilerSerieRepositoryRetrofit
+import com.example.proyecto_eduardo_andres.data.repository.alquilerSeriesSearchRepository.AlquilerSearchSeriesRepository
 import com.example.proyecto_eduardo_andres.data.repository.camaraRepository.CamaraRepositoryInMemory
 import com.example.proyecto_eduardo_andres.data.repository.crearUsuario.CrearUsuarioRepositoryInMemory
 import com.example.proyecto_eduardo_andres.data.repository.loginRepository.UserRepositoryInMemory
@@ -60,6 +61,7 @@ fun AppNavigation() {
     val repositoryPeliculasData = remember { PeliculasRepositoryRetrofit(context) }
     val repositorySeriesData = remember { SeriesRepositoryRetrofit(context) }
     val repositorySearchPeliculas = remember { AlquilerSearchPeliculasRepository(context) }
+    val repositorySearchSeries = remember { AlquilerSearchSeriesRepository(context) }
     val authRepository = remember {
         UserRepositoryInMemory(RetrofitClient.authApiService)
     }
@@ -252,7 +254,7 @@ fun AppNavigation() {
             val route = route.toRoute<RouteNavigation.SearchSeries>()
             VideoClubSearchSeriesScreen(
                 userId = route.userId,
-                repository = repositorySeriesData,
+                repository = repositorySearchSeries,
                 onBackClick = { navController.popBackStack() },
                 onHomeClick = { navigate(RouteNavigation.VideoClubSeries(route.userId)) },
                 onCameraClick = { navigate(RouteNavigation.Camara(route.userId)) },
