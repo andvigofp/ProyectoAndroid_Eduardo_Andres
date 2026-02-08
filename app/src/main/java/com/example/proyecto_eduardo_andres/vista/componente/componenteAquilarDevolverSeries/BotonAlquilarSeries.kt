@@ -17,6 +17,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -82,13 +83,19 @@ fun BotonAlquilarSeries(
     if (showDialog) {
         AlertDialog(
             onDismissRequest = { showDialog = false },
-            title = { Text(stringResource(R.string.devolucion_completada)) },
+            containerColor = MaterialTheme.colorScheme.primary, // Fondo azul como en AlquilarDevolverDialog
+            title = {
+                Text(
+                    text = stringResource(R.string.devolucion_completada),
+                    color = Color.White // Asegura que el título sea blanco
+                )
+            },
             text = {
-                Text("${stringResource(R.string.devolver_pelicula)} $fechaActual")
+                Text("${stringResource(R.string.devolver_serie)} $fechaActual", color = Color.White)
             },
             confirmButton = {
                 TextButton(onClick = { showDialog = false }) {
-                    Text(stringResource(R.string.aceptar))
+                    Text(stringResource(R.string.aceptar), color = Color.White) // Color blanco para el botón
                 }
             }
         )

@@ -9,6 +9,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -37,34 +38,67 @@ fun AlquilarDevolverDialog(
         if (isAlquiler) "Película Alquilada" else "Película Devuelta"
     )
 
-    val fechaAlquilerText = stringResource(id = R.string.fecha_alquiler, fechaAlquilerFormatted ?: "")
-    val fechaDevolucionText = stringResource(id = R.string.fecha_devolucion, fechaDevolucionFormatted ?: "")
-    val fechaLimiteText = stringResource(id = R.string.fecha_limite_devolucion, fechaLimiteFormatted ?: "")
+    val fechaAlquilerText =
+        stringResource(id = R.string.fecha_alquiler, fechaAlquilerFormatted ?: "")
+    val fechaDevolucionText =
+        stringResource(id = R.string.fecha_devolucion, fechaDevolucionFormatted ?: "")
+    val fechaLimiteText =
+        stringResource(id = R.string.fecha_limite_devolucion, fechaLimiteFormatted ?: "")
     val multaText = stringResource(id = R.string.multa_devolucion_tarde)
     val devueltoATiempoText = stringResource(id = R.string.devuelto_a_tiempo)
     val aceptarText = stringResource(id = R.string.boton_aceptar)
 
     AlertDialog(
         onDismissRequest = onConfirmClick,
-        title = { Text(text = estadoPelicula, style = MaterialTheme.typography.bodyLarge) },
+        containerColor = MaterialTheme.colorScheme.primary, // Fondo azul menos saturado
+        title = {
+            Text(
+                text = estadoPelicula,
+                style = MaterialTheme.typography.titleLarge,
+                color = Color.White // Asegurarse de que el título tenga color blanco
+            )
+        },
         text = {
             Column {
-                Text(fechaAlquilerText)
+                Text(
+                    fechaAlquilerText,
+                    color = Color.White // Cambiar color de texto a blanco
+                )
+
                 if (!isAlquiler) {
-                    Text(fechaDevolucionText)
-                    Text(fechaLimiteText)
-                    if (esMulta) Text(multaText, color = MaterialTheme.colorScheme.error)
-                    else Text(devueltoATiempoText, color = MaterialTheme.colorScheme.primary)
+                    Text(
+                        fechaDevolucionText,
+                        color = Color.White // Cambiar color de texto a blanco
+                    )
+                    Text(
+                        fechaLimiteText,
+                        color = Color.White // Cambiar color de texto a blanco
+                    )
+
+                    if (esMulta) {
+                        Text(
+                            multaText,
+                            color = MaterialTheme.colorScheme.error
+                        )
+                    } else {
+                        Text(
+                            devueltoATiempoText,
+                            color = Color.White // Cambiar color de texto a blanco
+                        )
+                    }
                 }
             }
         },
         confirmButton = {
             TextButton(onClick = onConfirmClick) {
-                Text(aceptarText)
+                Text(aceptarText, color = Color.White) // Color blanco para el botón
             }
         }
     )
 }
+
+
+
 
 
 // Preview mostrando alquiler y devolución con multa
