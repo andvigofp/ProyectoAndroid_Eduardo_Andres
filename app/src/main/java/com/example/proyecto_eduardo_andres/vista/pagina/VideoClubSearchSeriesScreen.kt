@@ -31,6 +31,7 @@ import com.example.compose.colorAzulSuave
 import com.example.compose.colorVioleta
 import com.example.proyecto_eduardo_andres.data.repository.seriesRepository.ISeriesRepository
 import com.example.proyecto_eduardo_andres.data.repository.seriesRepository.SeriesRepositoryInMemory
+import com.example.proyecto_eduardo_andres.modelo.VideoClubOnlineSeriesData
 import com.example.proyecto_eduardo_andres.viewmodel.vm.VideoClubOnlineSearchSeriesViewModel
 import com.example.proyecto_eduardo_andres.viewmodel.vm.VideoClubOnlineSearchSeriesViewModelFactory
 import com.example.proyecto_eduardo_andres.vista.componente.componenteSearchSeries.SearchBar
@@ -50,7 +51,7 @@ fun VideoClubSearchSeriesScreen(
     onCameraClick: () -> Unit,
     onProfileClick: () -> Unit,
     onLogoutClick: () -> Unit,
-    onSerieClick: (Int) -> Unit
+    onSerieClick: (VideoClubOnlineSeriesData) -> Unit,
 ) {
     val uiState by viewModel.uiState.collectAsState()
     val context = LocalContext.current
@@ -102,7 +103,7 @@ fun VideoClubSearchSeriesScreen(
                 .padding(16.dp)
         ) {
             // Barra de búsqueda
-            SearchBar(
+            SearchBar (
                 searchQuery = uiState.query,
                 onQueryChange = { viewModel.onQueryChange(it) }
             )
@@ -117,7 +118,7 @@ fun VideoClubSearchSeriesScreen(
                 items(seriesFiltradas) { serie ->
                     MediaItem(
                         item = serie,
-                        onClick = { onSerieClick(serie.nombre) }
+                        onClick = { onSerieClick(serie) }
                     )
                 }
             }

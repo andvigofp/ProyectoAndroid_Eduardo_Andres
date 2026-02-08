@@ -10,7 +10,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 
 class VideoClubOnlineSearchSeriesViewModel(
-    private val repository: com.example.proyecto_eduardo_andres.data.repository.seriesRepository.ISeriesRepository
+    private val repository: ISeriesRepository
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(VideoClubOnlineSearchSeriesUiState())
@@ -43,7 +43,7 @@ class VideoClubOnlineSearchSeriesViewModel(
 }
 
 class VideoClubOnlineSearchSeriesViewModelFactory(
-    private val repository: com.example.proyecto_eduardo_andres.data.repository.seriesRepository.ISeriesRepository
+    private val repository: ISeriesRepository
 ) : ViewModelProvider.Factory {
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(modelClass: Class<T>): T {

@@ -28,9 +28,10 @@ import com.example.compose.coloAuzlClaro
 import com.example.proyecto_eduardo_andres.R
 import com.example.proyecto_eduardo_andres.data.repository.mediaItemRepository.MediaItemData
 
+
 @Composable
 fun MediaItem(
-    item: com.example.proyecto_eduardo_andres.data.repository.mediaItemRepository.MediaItemData,
+    item: MediaItemData,
     onClick: (() -> Unit)? = null
 ) {
     Row(
