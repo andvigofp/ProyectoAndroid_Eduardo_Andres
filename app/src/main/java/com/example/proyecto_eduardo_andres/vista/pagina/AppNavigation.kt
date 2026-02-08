@@ -19,18 +19,15 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
 import com.example.proyecto_eduardo_andres.data.repository.alquilerPeliculasRepository.AlquilerPeliculaRepositoryRetrofit
-import com.example.proyecto_eduardo_andres.data.repository.alquilerPeliculasRepository.AlquilerPeliculasRepositoryInMemory
+import com.example.proyecto_eduardo_andres.data.repository.alquilerPeliculasSearchRepository.AlquilerSearchPeliculasRepository
 import com.example.proyecto_eduardo_andres.data.repository.alquilerSeriesRepository.AlquilerSerieRepositoryRetrofit
-import com.example.proyecto_eduardo_andres.data.repository.alquilerSeriesRepository.AlquilerSeriesRepositoryInMemory
 import com.example.proyecto_eduardo_andres.data.repository.camaraRepository.CamaraRepositoryInMemory
 import com.example.proyecto_eduardo_andres.data.repository.crearUsuario.CrearUsuarioRepositoryInMemory
 import com.example.proyecto_eduardo_andres.data.repository.loginRepository.UserRepositoryInMemory
-import com.example.proyecto_eduardo_andres.data.repository.peliculasRepository.PeliculasRepositoryInMemory
 import com.example.proyecto_eduardo_andres.data.repository.peliculasRepository.PeliculasRepositoryRetrofit
 import com.example.proyecto_eduardo_andres.data.repository.perfilRepositorio.PerfilUsuarioRepositoryInMemory
 import com.example.proyecto_eduardo_andres.data.repository.qrRepository.QRRepositoryInMemory
 import com.example.proyecto_eduardo_andres.data.repository.recuperarPasswordRepository.RecuperarPasswordRepositoryRetrofit
-import com.example.proyecto_eduardo_andres.data.repository.seriesRepository.SeriesRepositoryInMemory
 import com.example.proyecto_eduardo_andres.naveHost.RouteNavigation
 import com.example.proyecto_eduardo_andres.naveHost.SessionEvents
 import com.example.proyecto_eduardo_andres.remote.RetrofitClient
@@ -49,7 +46,6 @@ import com.example.proyecto_eduardo_andres.viewmodel.vm.VideoClubOnlinePeliculas
 import com.example.proyecto_eduardo_andres.viewmodel.vm.VideoClubOnlineSeriesViewModel
 import com.example.proyecto_eduardo_andres.viewmodel.vm.VideoClubOnlineSeriesViewModelFactory
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.launch
 
 @Composable
 fun AppNavigation() {
@@ -63,6 +59,7 @@ fun AppNavigation() {
     val repositoryRecuperarPassword = remember { RecuperarPasswordRepositoryRetrofit() }
     val repositoryPeliculasData = remember { PeliculasRepositoryRetrofit(context) }
     val repositorySeriesData = remember { SeriesRepositoryRetrofit(context) }
+    val repositorySearchPeliculas = remember { AlquilerSearchPeliculasRepository(context) }
     val authRepository = remember {
         UserRepositoryInMemory(RetrofitClient.authApiService)
     }
@@ -227,18 +224,19 @@ fun AppNavigation() {
         }
 
 
-        // ---------- SEARCH PELÃCULAS ----------
+        // ---------- SEARCH PELÍCULAS ----------
         composable<RouteNavigation.SearchPeliculas> { route ->
             val route = route.toRoute<RouteNavigation.SearchPeliculas>()
+            // Aquí pasamos el repositorySearchPeliculas al Screen de búsqueda de películas
             VideoClubSearchPeliculasScreen(
                 userId = route.userId,
-                repository = repositoryPeliculasData,
+                repository = repositorySearchPeliculas, // Pasamos el nuevo repository
                 onBackClick = { navController.popBackStack() },
                 onHomeClick = { navigate(RouteNavigation.VideoClubPeliculas(route.userId)) },
                 onCameraClick = { navigate(RouteNavigation.Camara(route.userId)) },
                 onProfileClick = { navigate(RouteNavigation.PerfilUsuario(route.userId)) },
                 onLogoutClick = {
-                    // IMPORTANTE: Resetear estado del login antes de navegar
+                    // Resetear estado del login antes de navegar
                     loginViewModel.resetState()
                     navigate(RouteNavigation.Login)
                 },
@@ -247,6 +245,7 @@ fun AppNavigation() {
                 }
             )
         }
+
 
         // ---------- SEARCH SERIES ----------
         composable<RouteNavigation.SearchSeries> { route ->
@@ -269,7 +268,7 @@ fun AppNavigation() {
             )
         }
 
-        // ---------- CÃMARA ----------
+        // ---------- CÁMARA ----------
         composable<RouteNavigation.Camara> { route ->
             val route = route.toRoute<RouteNavigation.Camara>()
             CamaraScreen(
