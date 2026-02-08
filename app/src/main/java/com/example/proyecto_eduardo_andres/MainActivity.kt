@@ -55,10 +55,10 @@ class MainActivity : ComponentActivity() {
                         //CamaraScreen()
                     }
                 }
-
             }
         }
     }
+
 
 
     @Preview(showBackground = true)
