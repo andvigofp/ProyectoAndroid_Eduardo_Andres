@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.example.proyecto_eduardo_andres.data.repository.loginRepository.UserRepositoryInMemory
 import com.example.proyecto_eduardo_andres.viewmodel.ustate.LoginUiState
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -44,6 +45,10 @@ class LoginViewModel(
         _uiState.update { it.copy(password = newPassword) }
     }
 
+    fun onKeepLoggedChange(keepLogged: Boolean) {
+        _uiState.value = _uiState.value.copy(keepLogged = keepLogged)
+    }
+
     fun togglePasswordVisibility() {
         _uiState.update { it.copy(passwordVisible = !it.passwordVisible) }
     }
@@ -53,29 +58,66 @@ class LoginViewModel(
         val email = _uiState.value.email.trim()
         val password = _uiState.value.password
 
-        // Validación básica
-        if (email.isEmpty() || password.isEmpty()) {
-            showErrorDialog("Error", "Por favor, completa todos los campos")
+        if (email.isEmpty()) {
+            _uiState.value = _uiState.value.copy(
+                errorMessage = "El email no puede estar vacío",
+                isLoading = false
+            )
+            showErrorDialog("Error", "El email no puede estar vacío")
             return
         }
+
+        if (password.isEmpty()) {
+            _uiState.value = _uiState.value.copy(
+                errorMessage = "La contraseña no puede estar vacía",
+                isLoading = false
+            )
+            showErrorDialog("Error", "La contraseña no puede estar vacía")
+            return
+        }
+
+        // activar loading
+        _uiState.value = _uiState.value.copy(
+            isLoading = true,
+            errorMessage = null
+        )
 
         userRepository.login(
             email = email,
             password = password,
             onError = { throwable ->
-                showErrorDialog("Login fallido", "Error: ${throwable.message ?: "Credenciales incorrectas"}")
+                _uiState.value = _uiState.value.copy(
+                    isLoading = false,
+                    errorMessage = throwable.message
+                )
+
+                showErrorDialog(
+                    "Login fallido",
+                    "Error: ${throwable.message ?: "Credenciales incorrectas"}"
+                )
             },
             onSuccess = { user ->
-                showSuccessDialog("¡Bienvenido!", "¡Bienvenido ${user.name}!")
                 loggedInUserId = user.id
-                // Ejecutar callback de éxito después de un breve retraso
+
+                _uiState.value = _uiState.value.copy(
+                    isLoading = false,
+                    isLoginSuccessful = true,
+                    errorMessage = null
+                )
+
+                showSuccessDialog(
+                    "¡Bienvenido!",
+                    "¡Bienvenido ${user.name}!"
+                )
+
                 viewModelScope.launch {
-                    kotlinx.coroutines.delay(1500) // Esperar 1.5 segundos
+                    delay(1500)
                     onSuccess()
                 }
             }
         )
     }
+
 
     // Funciones auxiliares para mostrar diálogos
     private fun showErrorDialog(title: String, message: String) {

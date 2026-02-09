@@ -47,11 +47,17 @@ fun LogingScreen(
     ),
     onAccederClick: () -> Unit,
     onCrearUsuarioClick: () -> Unit,
-    onRecuperarPasswordClick: () -> Unit
+    onRecuperarPasswordClick: () -> Unit,
+    onLoginSuccess: () -> Unit = {},
 ) {
     val uiState by loginViewModel.uiState.collectAsState()
-    val scrollState = rememberScrollState()
 
+    // Navegación después de login exitoso
+    if (uiState.isLoginSuccessful) {
+        onLoginSuccess()
+    }
+
+    val scrollState = rememberScrollState()
 
     Box(
         modifier = Modifier
@@ -130,7 +136,26 @@ fun LogingScreen(
                     onTogglePasswordVisibility = { loginViewModel.togglePasswordVisibility() }
                 )
 
-                Spacer(modifier = Modifier.height(16.dp))
+
+                // CheckBox mantener sesión iniciada
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 8.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Checkbox(
+                        checked = uiState.keepLogged,
+                        onCheckedChange = { loginViewModel.onKeepLoggedChange(it) },
+                        enabled = !uiState.isLoading
+                    )
+                    Text(
+                        text = "Mantener sesión iniciada",
+                        style = MaterialTheme.typography.bodyMedium
+                    )
+                }
+
+
 
                 // Botones
                 LoginButtons(

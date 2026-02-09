@@ -11,7 +11,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 
 class CamaraViewModel(
-private val repository: com.example.proyecto_eduardo_andres.data.repository.camaraRepository.ICamaraRepository
+private val repository: ICamaraRepository
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(
@@ -47,7 +47,7 @@ private val repository: com.example.proyecto_eduardo_andres.data.repository.cama
     }
 }
 class CamaraViewModelFactory(
-    private val repository: com.example.proyecto_eduardo_andres.data.repository.camaraRepository.ICamaraRepository
+    private val repository: ICamaraRepository
 ) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(CamaraViewModel::class.java)) {
