@@ -287,6 +287,7 @@ fun AppNavigation() {
                     loginViewModel.resetState()
                     navigate(RouteNavigation.Login)
                 },
+                onQrClick = { navigate(RouteNavigation.QR(route.userId)) }
             )
         }
 
