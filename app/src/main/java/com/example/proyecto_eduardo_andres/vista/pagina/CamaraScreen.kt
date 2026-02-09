@@ -47,7 +47,8 @@ fun CamaraScreen(
     onHomeClick: () -> Unit,
     onCameraClick: () -> Unit,
     onProfileClick: () -> Unit,
-    onLogoutClick: () -> Unit
+    onLogoutClick: () -> Unit,
+    onQrClick: () -> Unit = { viewModel.onLeerQrClick() }
 ) {
     val uiState by viewModel.uiState.collectAsState()
     val colors = MaterialTheme.colorScheme
@@ -103,7 +104,7 @@ fun CamaraScreen(
                 hacerFotoButton = ButtonData(R.string.hacer_foto, ButtonType.PRIMARY),
                 qrButton = ButtonData(R.string.qr, ButtonType.SECONDARY),
                 onHacerFotoClick = { viewModel.onHacerFotoClick() },
-                onQrClick = { viewModel.onLeerQrClick() }
+                onQrClick = onQrClick
             )
         }
     }
@@ -123,7 +124,8 @@ fun CamaraScreenPreview() {
             onHomeClick = {},
             onCameraClick = {},
             onProfileClick = {},
-            onLogoutClick = {}
+            onLogoutClick = {},
+            onQrClick = {}
         )
     }
 }
