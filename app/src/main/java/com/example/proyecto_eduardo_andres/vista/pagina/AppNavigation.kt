@@ -19,7 +19,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
 import com.example.proyecto_eduardo_andres.data.repository.alquilerPeliculasRepository.AlquilerPeliculaRepositoryRetrofit
-import com.example.proyecto_eduardo_andres.data.repository.alquilerPeliculasSearchRepository.AlquilerSearchPeliculasRepository
+import com.example.proyecto_eduardo_andres.data.repository.alquilerPeliculasSearchRepository.AlquilerSearchPeliculasRepositoryRetrofit
 import com.example.proyecto_eduardo_andres.data.repository.alquilerSeriesRepository.AlquilerSerieRepositoryRetrofit
 import com.example.proyecto_eduardo_andres.data.repository.alquilerSeriesSearchRepository.AlquilerSearchSeriesRepository
 import com.example.proyecto_eduardo_andres.data.repository.camaraRepository.CamaraRepositoryInMemory
@@ -61,7 +61,7 @@ fun AppNavigation() {
     val repositoryRecuperarPassword = remember { RecuperarPasswordRepositoryRetrofit() }
     val repositoryPeliculasData = remember { PeliculasRepositoryRetrofit(context) }
     val repositorySeriesData = remember { SeriesRepositoryRetrofit(context) }
-    val repositorySearchPeliculas = remember { AlquilerSearchPeliculasRepository(context) }
+    val repositorySearchPeliculas = remember { AlquilerSearchPeliculasRepositoryRetrofit(context) }
     val repositorySearchSeries = remember { AlquilerSearchSeriesRepository(context) }
     val repositoryPerfilUsuario = remember { PerfilUsuarioRepositoryRetrofit() }
 

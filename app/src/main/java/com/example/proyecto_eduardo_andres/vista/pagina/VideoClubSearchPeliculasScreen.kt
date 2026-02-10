@@ -29,8 +29,8 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.compose.colorAzulOscurso
 import com.example.compose.colorAzulSuave
 import com.example.compose.colorVioleta
-import com.example.proyecto_eduardo_andres.data.repository.alquilerPeliculasSearchRepository.AlquilerSearchPeliculasRepository
-import com.example.proyecto_eduardo_andres.data.repository.peliculasRepository.PeliculasRepositoryInMemory
+import com.example.proyecto_eduardo_andres.data.repository.alquilerPeliculasSearchRepository.AlquilerSearchPeliculasRepositoryInMemory
+import com.example.proyecto_eduardo_andres.data.repository.alquilerPeliculasSearchRepository.IAlquilerSearchPeliculasRepository
 import com.example.proyecto_eduardo_andres.modelo.VideoClubOnlinePeliculasData
 import com.example.proyecto_eduardo_andres.viewmodel.vm.VideoClubOnlineSearchPeliculasViewModel
 import com.example.proyecto_eduardo_andres.viewmodel.vm.VideoClubOnlineSearchPeliculasViewModelFactory
@@ -42,7 +42,7 @@ import com.example.proyecto_eduardo_andres.vista.componente.componenteToolbar.to
 @Composable
 fun VideoClubSearchPeliculasScreen(
     userId: String,
-    repository: AlquilerSearchPeliculasRepository,
+    repository: IAlquilerSearchPeliculasRepository,
     viewModel: VideoClubOnlineSearchPeliculasViewModel = viewModel(
         factory = VideoClubOnlineSearchPeliculasViewModelFactory(repository)
     ),
@@ -129,8 +129,8 @@ fun VideoClubSearchPeliculasScreen(
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun VideoClubSearchScreenPeliculasPreview() {
-    val context = LocalContext.current
-    val repository = AlquilerSearchPeliculasRepository(context)
+    // Usamos la implementación in-memory "lite" que no requiere Context
+    val repository = AlquilerSearchPeliculasRepositoryInMemory()
 
     VideoClubSearchPeliculasScreen(
         userId = 1.toString(),

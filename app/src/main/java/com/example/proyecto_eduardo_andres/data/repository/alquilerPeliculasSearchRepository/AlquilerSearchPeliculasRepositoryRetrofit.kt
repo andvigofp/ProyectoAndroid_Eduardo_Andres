@@ -9,14 +9,14 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class AlquilerSearchPeliculasRepository(private val context: Context) {
+class AlquilerSearchPeliculasRepositoryRetrofit(private val context: Context) : IAlquilerSearchPeliculasRepository {
 
     private val api = RetrofitClient.alquilerSearchPeliculas
 
     // ----------------------------------------------------
     // Obtener películas desde la búsqueda
     // ----------------------------------------------------
-    fun obtenerPeliculasSearch(
+    override  fun obtenerPeliculasSearch(
         onError: (Throwable) -> Unit,
         onSuccess: (List<VideoClubOnlinePeliculasData>) -> Unit
     ) {
