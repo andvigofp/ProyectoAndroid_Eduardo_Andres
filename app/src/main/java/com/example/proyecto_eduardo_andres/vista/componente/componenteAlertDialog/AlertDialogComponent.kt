@@ -7,6 +7,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 
 /**
@@ -29,7 +30,7 @@ fun AlertDialogComponent(
     onDismissRequest: () -> Unit,
     title: String,
     message: String,
-    confirmButtonText: String = "OK",
+    confirmButtonText: String? = null,
     dismissButtonText: String? = null,
     onConfirmClick: () -> Unit = {},
     onDismissClick: () -> Unit = {},
@@ -39,7 +40,28 @@ fun AlertDialogComponent(
     if (showDialog) {
         val colors = MaterialTheme.colorScheme
         val typography = MaterialTheme.typography
-        
+
+
+        var confirmComponent: @androidx.compose.runtime.Composable (() -> Unit)? = {}
+
+        if(confirmButtonText != null)
+            confirmComponent = @androidx.compose.runtime.Composable {
+                Button(
+                    onClick = {
+                        onConfirmClick()
+                        onDismissRequest()
+                    },
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = if (isDestructive) colors.error else colors.primary
+                    )
+                ) {
+                    Text(
+                        text = confirmButtonText,
+                        style = typography.labelLarge,
+                        color = colors.onPrimary
+                    )
+                }
+            }
         AlertDialog(
             onDismissRequest = onDismissRequest,
             title = {
@@ -57,23 +79,7 @@ fun AlertDialogComponent(
                     color = colors.onSurfaceVariant
                 )
             },
-            confirmButton = {
-                Button(
-                    onClick = {
-                        onConfirmClick()
-                        onDismissRequest()
-                    },
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = if (isDestructive) colors.error else colors.primary
-                    )
-                ) {
-                    Text(
-                        text = confirmButtonText,
-                        style = typography.labelLarge,
-                        color = colors.onPrimary
-                    )
-                }
-            },
+            confirmButton = confirmComponent as @Composable (() -> Unit),
             dismissButton = if (dismissButtonText != null) {
                 {
                     TextButton(
@@ -108,14 +114,14 @@ fun InfoDialog(
     onDismissRequest: () -> Unit,
     title: String,
     message: String,
-    confirmButtonText: String = "OK"
+
 ) {
     AlertDialogComponent(
         showDialog = showDialog,
         onDismissRequest = onDismissRequest,
         title = title,
         message = message,
-        confirmButtonText = confirmButtonText,
+
         dismissButtonText = null
     )
 }
@@ -185,5 +191,19 @@ fun ErrorDialog(
         title = title,
         message = message,
         confirmButtonText = confirmButtonText
+    )
+}
+
+@Preview
+@Composable
+fun AlertDialogPreview() {
+    AlertDialogComponent(
+        showDialog = true,
+        onDismissRequest = {},
+        title = "Título del Diálogo",
+        message = "Este es un mensaje de ejemplo para mostrar cómo se ve el AlertDialogComponent en la aplicación.",
+        onConfirmClick = { /* Acción al confirmar */ },
+        onDismissClick = { /* Acción al cancelar */ },
+        isDestructive = false
     )
 }
