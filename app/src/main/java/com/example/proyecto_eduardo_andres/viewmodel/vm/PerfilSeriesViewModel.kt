@@ -74,6 +74,10 @@ class PerfilSeriesViewModel(
         _uiState.update { it.copy(isEditing = !it.isEditing) }
     }
 
+    fun cerrarInfoDialog() {
+        _uiState.update { it.copy(showInfoDialog = false) }
+    }
+
     // Guardar cambios
     fun guardarCambios() {
         val state = _uiState.value
@@ -88,7 +92,7 @@ class PerfilSeriesViewModel(
 
         repository.actualizarUsuario(
             usuario = usuario,
-            onError = { error -> Log.e("PerfilSeriesViewModel", "Error al actualizar", error) },
+            onError = { error -> Log.e("PerfilViewModel", "Error al actualizar", error) },
             onSuccess = {
                 _uiState.update {
                     it.copy(

@@ -9,7 +9,10 @@ data class PerfilSeriesUiState(
     val isEditing: Boolean = false,
     val userId: String = "",
     val seriesAlquiladas: List<VideoClubOnlineSeriesData> = emptyList(),
-    val showConfirmacionDialog: Boolean = false
+    val showConfirmacionDialog: Boolean = false,
+    val showInfoDialog: Boolean = false,
+    val infoDialogTitle: String = "",
+    val infoDialogMessage: String = ""
 ) {
     val isModificarButtonEnabled: Boolean
         get() = nombreUsuario.isNotBlank() &&

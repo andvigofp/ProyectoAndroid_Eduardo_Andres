@@ -322,9 +322,7 @@ fun AppNavigation() {
             val viewModel: PerfilSeriesViewModel = viewModel(
                 factory = PerfilSeriesViewModelFactory(
                     userId = route.userId,
-                    repository = PerfilUsuarioRepositoryInMemory(
-                        apiService = RetrofitClient.usuarioApiService
-                    ),
+                    repository = repositoryPerfilUsuario,
                     alquilerRepository = repositorySeries
                 )
             )
