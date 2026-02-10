@@ -2,6 +2,7 @@ package com.example.proyecto_eduardo_andres.data.repository.alquilerSeriesSearch
 
 import android.content.Context
 import com.example.proyecto_eduardo_andres.R
+import com.example.proyecto_eduardo_andres.modelo.VideoClubOnlinePeliculasData
 import com.example.proyecto_eduardo_andres.modelo.VideoClubOnlineSeriesData
 import com.example.proyecto_eduardo_andres.remote.RetrofitClient
 import kotlinx.coroutines.CoroutineScope
@@ -9,14 +10,14 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class AlquilerSearchSeriesRepository(private val context: Context) {
+class AlquilerSearchSeriesRepository(private val context: Context) : IAlquilerSearchSeriesRepository {
 
     private val api = RetrofitClient.alquilerSearchSeries
 
     // ----------------------------------------------------
     // Obtener series desde la búsqueda
     // ----------------------------------------------------
-    fun obtenerSeriesSearch(
+    override fun obtenerSeriesSearch(
         onError: (Throwable) -> Unit,
         onSuccess: (List<VideoClubOnlineSeriesData>) -> Unit
     ) {
