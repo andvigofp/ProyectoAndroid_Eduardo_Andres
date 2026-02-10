@@ -138,6 +138,7 @@
     <string name="buscar_peliculas">Buscar película...</string>
     <string name="buscar_series">Buscar serie...</string>
     <string name="confirm_recuperar_password_message">¿Estás seguro de que deseas actualizar la contraseña para este email?</string>
+    <string name="confirm_crear_usuario_message">¿Estás seguro de que crear el usuario?</string>
     <string name="volver">Volver</string>
     <string name="inicio">Inicio</string>
     <string name="camara">Cámara</string>

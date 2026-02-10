@@ -20,8 +20,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -49,6 +47,13 @@ import com.example.proyecto_eduardo_andres.modelo.ButtonType
 import com.example.proyecto_eduardo_andres.viewmodel.vm.CrearUsuarioViewModel
 import com.example.proyecto_eduardo_andres.viewmodel.vm.CrearUsuarioViewModelFactory
 import com.example.proyecto_eduardo_andres.vista.componente.componenteButtons.AppButton
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import com.example.proyecto_eduardo_andres.vista.componente.componenteAlertDialog.ConfirmationDialog
+import com.example.proyecto_eduardo_andres.vista.componente.componenteAlertDialog.InfoDialog
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.rememberUpdatedState
 
 @Composable
 fun CrearUsuarioScreen(
@@ -63,9 +68,12 @@ fun CrearUsuarioScreen(
     // --- Estado del ViewModel ---
     val uiState by crearUsuarioViewModel.uiState.collectAsState()
 
+    // Estado local para mostrar el diálogo de confirmación
+    var showConfirmDialog by remember { mutableStateOf(false) }
+
     val scrollState = rememberScrollState()
     val colors = MaterialTheme.colorScheme
-    val typography = MaterialTheme.typography
+    // val typography = MaterialTheme.typography // no utilizado aquí
 
     Box(
         modifier = Modifier
@@ -191,13 +199,8 @@ fun CrearUsuarioScreen(
                             enabled = uiState.isLoginButtonEnabled
                         ),
                         onClick = {
-                            crearUsuarioViewModel.crearUsuario(
-                                onSuccess = {
-                                },
-                                onError = { error ->
-                                    Log.e("CrearUsuario", error.message ?: "Error desconocido")
-                                }
-                            )
+                            // Mostrar diálogo de confirmación antes de crear usuario
+                            showConfirmDialog = true
                         },
                         modifier = Modifier
                             .weight(1f)
@@ -207,31 +210,45 @@ fun CrearUsuarioScreen(
             }
         }
     }
-    // --- AlertDialog Crear Usuario ---
-    if (crearUsuarioViewModel.showCrearUsuarioDialog) {
-        AlertDialog(
-            onDismissRequest = {
-                crearUsuarioViewModel.dismissDialog()
-                // Solo navegar si el mensaje indica éxito
-                if (crearUsuarioViewModel.crearUsuarioMessage.contains("correctamente")) {
-                    onCrearUsuarioClick()
+    // --- ConfirmationDialog: preguntar antes de crear usuario ---
+    ConfirmationDialog(
+        showDialog = showConfirmDialog,
+        onDismissRequest = { showConfirmDialog = false },
+        title = stringResource(R.string.crear_usuario),
+        message = stringResource(R.string.confirm_crear_usuario_message),
+        confirmButtonText = stringResource(R.string.crear),
+        dismissButtonText = stringResource(R.string.cancelar),
+        onConfirmClick = {
+            showConfirmDialog = false
+            crearUsuarioViewModel.crearUsuario(
+                onSuccess = { user ->
+
+                },
+                onError = { error ->
+                    Log.e("CrearUsuario", error.message ?: "Error desconocido")
                 }
-            },
-            title = { Text(text = "Crear Usuario") },
-            text = { Text(text = crearUsuarioViewModel.crearUsuarioMessage) },
-            confirmButton = {
-                Button(
-                    onClick = {
-                        crearUsuarioViewModel.dismissDialog()
-                        if (crearUsuarioViewModel.crearUsuarioMessage.contains("correctamente")) {
-                            onCrearUsuarioClick()
-                        }
-                    }
-                ) {
-                    Text("OK")
-                }
-            }
-        )
+            )
+        },
+        onDismissClick = { showConfirmDialog = false }
+    )
+
+    // --- InfoDialog Crear Usuario (reutiliza el componente) ---
+    InfoDialog(
+        showDialog = crearUsuarioViewModel.showCrearUsuarioDialog,
+        onDismissRequest = {
+            crearUsuarioViewModel.dismissDialog()
+        },
+        title = crearUsuarioViewModel.dialogTitle,
+        message = crearUsuarioViewModel.crearUsuarioMessage
+    )
+
+    // Navegación cuando el InfoDialog se cierra (auto-dismiss o manual)
+    val currentOnCrear = rememberUpdatedState(onCrearUsuarioClick)
+    LaunchedEffect(crearUsuarioViewModel.showCrearUsuarioDialog) {
+        // Si el diálogo acabó de cerrarse y el último mensaje fue éxito, navegar
+        if (!crearUsuarioViewModel.showCrearUsuarioDialog && crearUsuarioViewModel.crearUsuarioMessage.contains("correctamente")) {
+            currentOnCrear.value()
+        }
     }
 }
 
