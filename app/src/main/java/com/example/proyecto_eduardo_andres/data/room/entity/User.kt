@@ -4,10 +4,11 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
-@Entity
+@Entity(tableName = "user")
 data class User(
-    @PrimaryKey val uid: String,
-    @ColumnInfo(name = "name") val user: String?,
-    @ColumnInfo(name = "email") val email: String?,
-    @ColumnInfo(name = "keep_logged") val keepLogged: Boolean
+    @PrimaryKey val id: String,
+    val name: String,
+    val email: String,
+    val passwd: String,
+    @ColumnInfo(name = "keep_logged") val keepLogged: Boolean = false
 )
