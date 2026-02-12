@@ -144,11 +144,8 @@ fun AppNavigation() {
         composable<RouteNavigation.Login> {
 
             LogingScreen(
-                onAccederClick = {
-                    loginViewModel.logging {
-                        val userId = loginViewModel.loggedInUserId ?: return@logging
-                        navigate(RouteNavigation.VideoClubPeliculas(userId))
-                    }
+                onLoginSuccess = {
+                    navigate(RouteNavigation.VideoClubPeliculas(it))
                 },
                 onCrearUsuarioClick = { navigate(RouteNavigation.CrearUsuario) },
                 onRecuperarPasswordClick = { navigate(RouteNavigation.RecuperarPassword) }
@@ -158,8 +155,7 @@ fun AppNavigation() {
         // ---------- CREAR USUARIO ----------
         composable<RouteNavigation.CrearUsuario> {
             CrearUsuarioScreen(
-                crearUsuarioViewModel = crearUsuarioViewModel,
-                onCrearUsuarioClick = { navigate(RouteNavigation.Login) },
+                onCrearUsuarioSucess = { navigate(RouteNavigation.Login) },
                 onCancelarClick = { navigate(RouteNavigation.Login) }
             )
         }

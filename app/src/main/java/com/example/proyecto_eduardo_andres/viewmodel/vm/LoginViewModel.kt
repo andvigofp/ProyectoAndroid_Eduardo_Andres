@@ -55,7 +55,7 @@ class LoginViewModel(
     }
 
     // Función de login
-    fun logging(onSuccess: () -> Unit = {}) {
+    fun logging(onSuccess: (String) -> Unit = {}) {
         val email = _uiState.value.email.trim()
         val password = _uiState.value.password
 
@@ -111,7 +111,7 @@ class LoginViewModel(
                         "¡Bienvenido ${user.name}!"
                     )
                     delay(1500)
-                    onSuccess()
+                    onSuccess(user.id!!)
                 }
             }
         )

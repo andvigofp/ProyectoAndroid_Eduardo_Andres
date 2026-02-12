@@ -40,16 +40,16 @@ import com.example.proyecto_eduardo_andres.vista.componente.componenteToolbar.to
 @Composable
 fun CamaraScreen(
     repository: ICamaraRepository,
-    viewModel: CamaraViewModel = viewModel(
-        factory = CamaraViewModelFactory(repository)
-    ),
     onBackClick: () -> Unit,
     onHomeClick: () -> Unit,
     onCameraClick: () -> Unit,
     onProfileClick: () -> Unit,
     onLogoutClick: () -> Unit,
-    onQrClick: () -> Unit = { viewModel.onLeerQrClick() }
+    onQrClick: () -> Unit = { }
 ) {
+
+    val viewModel: CamaraViewModel = viewModel( factory = CamaraViewModelFactory(repository) )
+
     val uiState by viewModel.uiState.collectAsState()
     val colors = MaterialTheme.colorScheme
 

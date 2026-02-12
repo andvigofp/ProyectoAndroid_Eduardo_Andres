@@ -43,10 +43,10 @@ import com.example.proyecto_eduardo_andres.remote.RetrofitClient
 
 @Composable
 fun LogingScreen(
-    onAccederClick: () -> Unit,
     onCrearUsuarioClick: () -> Unit,
     onRecuperarPasswordClick: () -> Unit,
-) {
+    onLoginSuccess: (String) -> Unit
+    ) {
 
     val loginViewModel: LoginViewModel = viewModel(
         factory = LoginViewModelFactory(
@@ -60,13 +60,13 @@ fun LogingScreen(
 
     val uiState by loginViewModel.uiState.collectAsState()
 
-    // --- Navegación después de login exitoso ---
-    LaunchedEffect(uiState.isLoginSuccessful) {
-        if (uiState.isLoginSuccessful) {
-            loginViewModel.loggedInUserId ?: return@LaunchedEffect
-            onAccederClick() // navegación segura
-        }
-    }
+//    // --- Navegación después de login exitoso ---
+//    LaunchedEffect(uiState.isLoginSuccessful) {
+//        if (uiState.isLoginSuccessful) {
+//            loginViewModel.loggedInUserId ?: return@LaunchedEffect
+//            onAccederClick() // navegación segura
+//        }
+//    }
 
     val scrollState = rememberScrollState()
 
@@ -173,7 +173,10 @@ fun LogingScreen(
                     enabledAcceder = uiState.isLoginButtonEnabled,
                     onAccederClick = {
                         // Solo ejecuta login, no navegación directa
-                        loginViewModel.logging()
+                        loginViewModel.logging {
+                            onLoginSuccess(it)
+                        }
+
                     },
                     onCrearUsuarioClick = onCrearUsuarioClick,
                     onRecuperarPasswordClick = onRecuperarPasswordClick
@@ -199,7 +202,7 @@ fun LogingScreen(
 fun LoginScreenPreview() {
     MaterialTheme {
         LogingScreen(
-            onAccederClick = { println("Acceder clic - login con usuario de ejemplo") },
+            onLoginSuccess = { println("Acceder clic - login con usuario de ejemplo") },
             onCrearUsuarioClick = {},
             onRecuperarPasswordClick = {}
         )
