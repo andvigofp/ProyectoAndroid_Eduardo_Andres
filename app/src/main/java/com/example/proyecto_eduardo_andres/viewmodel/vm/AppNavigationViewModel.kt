@@ -5,7 +5,7 @@ import android.content.Context
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.example.proyecto_eduardo_andres.data.repository.loginRepository.UserRepositoryInMemory
+import com.example.proyecto_eduardo_andres.data.repository.loginRepository.IUserRepository
 import com.example.proyecto_eduardo_andres.naveHost.RouteNavigation
 import com.example.proyecto_eduardo_andres.viewmodel.ustate.AppNavigationUiState
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -14,7 +14,7 @@ import kotlinx.coroutines.flow.asStateFlow
 
 class AppNavigationViewModel(
     application: Application,
-    private val userRepository: UserRepositoryInMemory
+    private val userRepository: IUserRepository
 ) : AndroidViewModel(application) {
 
     private val _uiState = MutableStateFlow(AppNavigationUiState())
@@ -77,7 +77,7 @@ class AppNavigationViewModel(
 
 class AppNavigationViewModelFactory(
     private val application: Application,
-    private val userRepository: UserRepositoryInMemory
+    private val userRepository: IUserRepository
 ) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(AppNavigationViewModel::class.java)) {

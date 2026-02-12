@@ -16,14 +16,29 @@ class UserRepositoryInMemory(
 private val authApi: AuthApiService
 ) : IUserRepository {
 
+    // Guardamos el usuario actual en memoria
+    private var currentUser: UserRepo.UserConfig? = null
+    // --------------------
+    // getUser por ID (no implementado con memoria real, puedes simular)
+    // --------------------
     override fun getUser(
         id: Int,
         onError: (Throwable) -> Unit,
         onSuccess: (UserDTO) -> Unit
     ) {
-        onError(Throwable("No implementado"))
+        currentUser?.let {
+            if (it.id == id) {
+                onSuccess(UserDTO(it.id.toString(), it.name, it.email, ""))
+            } else {
+                onError(Throwable("Usuario no encontrado en memoria"))
+            }
+        } ?: onError(Throwable("No hay usuario en memoria"))
     }
 
+
+    // --------------------
+    // login con API y guardamos en memoria
+    // --------------------
     override fun login(
         email: String,
         password: String,
@@ -38,12 +53,19 @@ private val authApi: AuthApiService
                 if (response.isSuccessful) {
                     val body = response.body()
                     if (body != null) {
+                        // Creamos UserDTO y UserConfig en memoria
                         val user = UserDTO(
                             id = body.id,
                             name = body.name,
                             email = body.email,
-                            password = password,
-
+                            password = password
+                        )
+                        currentUser = UserRepo.UserConfig(
+                            id = body.id.toIntOrNull() ?: 0,
+                            name = body.name,
+                            email = body.email,
+                            password= password,
+                            keepLogged = true
                         )
                         withContext(Dispatchers.Main) { onSuccess(user) }
                     } else {
@@ -52,11 +74,36 @@ private val authApi: AuthApiService
                 } else {
                     withContext(Dispatchers.Main) { onError(Throwable("Login fallido: ${response.code()}")) }
                 }
-
             } catch (e: Exception) {
                 withContext(Dispatchers.Main) { onError(e) }
             }
         }
     }
 
+    // --------------------
+    // Guardar sesión en memoria
+    // --------------------
+    override fun loginUser(
+        user: UserRepo.UserConfig,
+        onSuccess: (UserRepo.UserConfig) -> Unit,
+        onError: () -> Unit
+    ) {
+        currentUser = user
+        onSuccess(user)
+    }
+
+    // --------------------
+    // Cerrar sesión
+    // --------------------
+    override fun loggoutUser(onSuccess: () -> Unit, onError: () -> Unit) {
+        currentUser = null
+        onSuccess()
+    }
+
+    // --------------------
+    // Obtener usuario actual
+    // --------------------
+    override fun getCurrentUser(): UserRepo.UserConfig? {
+        return currentUser
+    }
 }

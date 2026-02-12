@@ -1,4 +1,4 @@
-﻿package com.example.proyecto_eduardo_andres.data.repository.seriesRepository
+package com.example.proyecto_eduardo_andres.data.repository.seriesRepository
 import android.content.Context
 import com.example.proyecto_eduardo_andres.R
 import com.example.proyecto_eduardo_andres.modelo.VideoClubOnlineSeriesData

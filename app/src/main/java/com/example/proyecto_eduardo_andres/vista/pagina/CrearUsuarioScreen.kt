@@ -57,16 +57,15 @@ import androidx.compose.runtime.rememberUpdatedState
 
 @Composable
 fun CrearUsuarioScreen(
-    crearUsuarioViewModel: CrearUsuarioViewModel = viewModel(
-        factory = CrearUsuarioViewModelFactory(
-            CrearUsuarioRepositoryInMemory(RetrofitClient.authApiService)
-        )
-    ),
-    onCrearUsuarioClick: () -> Unit = {},
+    onCrearUsuarioSucess: () -> Unit = {},
     onCancelarClick: () -> Unit = {}
 ) {
+    val viewModel: CrearUsuarioViewModel = viewModel(
+        factory = CrearUsuarioViewModelFactory( CrearUsuarioRepositoryInMemory(
+            RetrofitClient.authApiService) ) )
+
     // --- Estado del ViewModel ---
-    val uiState by crearUsuarioViewModel.uiState.collectAsState()
+    val uiState by viewModel.uiState.collectAsState()
 
     // Estado local para mostrar el diálogo de confirmación
     var showConfirmDialog by remember { mutableStateOf(false) }
@@ -156,17 +155,17 @@ fun CrearUsuarioScreen(
                 CampoCrearUsuario(
                     crearUsuarioData = uiState,
                     onCrearUsuarioData = { data ->
-                        crearUsuarioViewModel.onNameChange(data.nombre)
-                        crearUsuarioViewModel.onPasswordChange(data.password)
-                        crearUsuarioViewModel.onRepeatPasswordChange(data.repeatPassword)
-                        crearUsuarioViewModel.onEmailChange(data.email)
-                        crearUsuarioViewModel.onRepeatEmailChange(data.repeatEmail)
+                        viewModel.onNameChange(data.nombre)
+                        viewModel.onPasswordChange(data.password)
+                        viewModel.onRepeatPasswordChange(data.repeatPassword)
+                        viewModel.onEmailChange(data.email)
+                        viewModel.onRepeatEmailChange(data.repeatEmail)
                     },
                     onTogglePasswordVisibility = {
-                        crearUsuarioViewModel.togglePasswordVisibility()
+                        viewModel.togglePasswordVisibility()
                     },
                     onToggleRepeatPasswordVisibility = {
-                        crearUsuarioViewModel.toggleRepeatPasswordVisibility()
+                        viewModel.toggleRepeatPasswordVisibility()
                     }
                 )
 
@@ -220,7 +219,7 @@ fun CrearUsuarioScreen(
         dismissButtonText = stringResource(R.string.cancelar),
         onConfirmClick = {
             showConfirmDialog = false
-            crearUsuarioViewModel.crearUsuario(
+            viewModel.crearUsuario(
                 onSuccess = { user ->
 
                 },
@@ -234,19 +233,19 @@ fun CrearUsuarioScreen(
 
     // --- InfoDialog Crear Usuario (reutiliza el componente) ---
     InfoDialog(
-        showDialog = crearUsuarioViewModel.showCrearUsuarioDialog,
+        showDialog = viewModel.showCrearUsuarioDialog,
         onDismissRequest = {
-            crearUsuarioViewModel.dismissDialog()
+            viewModel.dismissDialog()
         },
-        title = crearUsuarioViewModel.dialogTitle,
-        message = crearUsuarioViewModel.crearUsuarioMessage
+        title = viewModel.dialogTitle,
+        message = viewModel.crearUsuarioMessage
     )
 
     // Navegación cuando el InfoDialog se cierra (auto-dismiss o manual)
-    val currentOnCrear = rememberUpdatedState(onCrearUsuarioClick)
-    LaunchedEffect(crearUsuarioViewModel.showCrearUsuarioDialog) {
+    val currentOnCrear = rememberUpdatedState(onCrearUsuarioSucess)
+    LaunchedEffect(viewModel.showCrearUsuarioDialog) {
         // Si el diálogo acabó de cerrarse y el último mensaje fue éxito, navegar
-        if (!crearUsuarioViewModel.showCrearUsuarioDialog && crearUsuarioViewModel.crearUsuarioMessage.contains("correctamente")) {
+        if (!viewModel.showCrearUsuarioDialog && viewModel.crearUsuarioMessage.contains("correctamente")) {
             currentOnCrear.value()
         }
     }

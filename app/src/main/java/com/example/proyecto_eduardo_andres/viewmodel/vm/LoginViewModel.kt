@@ -6,8 +6,9 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import com.example.proyecto_eduardo_andres.data.repository.loginRepository.UserRepositoryInMemory
+import com.example.proyecto_eduardo_andres.data.repository.loginRepository.IUserRepository
 import com.example.proyecto_eduardo_andres.viewmodel.ustate.LoginUiState
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -17,7 +18,7 @@ import kotlinx.coroutines.launch
 
 
 class LoginViewModel(
-    private val userRepository: UserRepositoryInMemory
+    private val userRepository: IUserRepository
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(LoginUiState())
@@ -54,7 +55,7 @@ class LoginViewModel(
     }
 
     // Función de login
-    fun logging(onSuccess: () -> Unit = {}) {
+    fun logging(onSuccess: (String) -> Unit = {}) {
         val email = _uiState.value.email.trim()
         val password = _uiState.value.password
 
@@ -76,7 +77,7 @@ class LoginViewModel(
             return
         }
 
-        // activar loading
+        // Activar loading
         _uiState.value = _uiState.value.copy(
             isLoading = true,
             errorMessage = null
@@ -86,33 +87,31 @@ class LoginViewModel(
             email = email,
             password = password,
             onError = { throwable ->
-                _uiState.value = _uiState.value.copy(
-                    isLoading = false,
-                    errorMessage = throwable.message
-                )
-
-                showErrorDialog(
-                    "Login fallido",
-                    "Error: ${throwable.message ?: "Credenciales incorrectas"}"
-                )
+                viewModelScope.launch(Dispatchers.Main) {
+                    _uiState.value = _uiState.value.copy(
+                        isLoading = false,
+                        errorMessage = throwable.message
+                    )
+                    showErrorDialog(
+                        "Login fallido",
+                        "Error: ${throwable.message ?: "Credenciales incorrectas"}"
+                    )
+                }
             },
             onSuccess = { user ->
-                loggedInUserId = user.id
-
-                _uiState.value = _uiState.value.copy(
-                    isLoading = false,
-                    isLoginSuccessful = true,
-                    errorMessage = null
-                )
-
-                showSuccessDialog(
-                    "¡Bienvenido!",
-                    "¡Bienvenido ${user.name}!"
-                )
-
-                viewModelScope.launch {
+                viewModelScope.launch(Dispatchers.Main) {
+                    loggedInUserId = user.id
+                    _uiState.value = _uiState.value.copy(
+                        isLoading = false,
+                        isLoginSuccessful = true,
+                        errorMessage = null
+                    )
+                    showSuccessDialog(
+                        "¡Bienvenido!",
+                        "¡Bienvenido ${user.name}!"
+                    )
                     delay(1500)
-                    onSuccess()
+                    onSuccess(user.id!!)
                 }
             }
         )
@@ -149,7 +148,7 @@ class LoginViewModel(
 }
 
 class LoginViewModelFactory(
-    private val repository: UserRepositoryInMemory
+    private val repository: IUserRepository
 ) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(LoginViewModel::class.java)) {

@@ -28,8 +28,6 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.compose.colorAzulOscurso
 import com.example.compose.colorVioleta
 import com.example.proyecto_eduardo_andres.R
-import com.example.proyecto_eduardo_andres.data.repository.loginRepository.UserRepositoryInMemory
-import com.example.proyecto_eduardo_andres.remote.RetrofitClient
 import com.example.proyecto_eduardo_andres.modelo.ButtonData
 import com.example.proyecto_eduardo_andres.modelo.ButtonType
 import com.example.proyecto_eduardo_andres.viewmodel.vm.LoginViewModel
@@ -38,24 +36,37 @@ import com.example.proyecto_eduardo_andres.vista.componente.componenteLogin.Camp
 import com.example.proyecto_eduardo_andres.vista.componente.componenteLogin.LoginButtons
 import androidx.compose.material3.MaterialTheme
 import com.example.proyecto_eduardo_andres.vista.componente.componenteAlertDialog.InfoDialog
-
+import com.example.proyecto_eduardo_andres.data.room.AppDatabase
+import androidx.compose.ui.platform.LocalContext
+import com.example.proyecto_eduardo_andres.data.repository.loginRepository.UserRepositoryHibridoLogin
+import com.example.proyecto_eduardo_andres.remote.RetrofitClient
 
 @Composable
 fun LogingScreen(
-    loginViewModel: LoginViewModel = viewModel(
-        factory = LoginViewModelFactory(UserRepositoryInMemory(RetrofitClient.authApiService))
-    ),
-    onAccederClick: () -> Unit,
     onCrearUsuarioClick: () -> Unit,
     onRecuperarPasswordClick: () -> Unit,
-    onLoginSuccess: () -> Unit = {},
-) {
+    onLoginSuccess: (String) -> Unit
+    ) {
+
+    val loginViewModel: LoginViewModel = viewModel(
+        factory = LoginViewModelFactory(
+            UserRepositoryHibridoLogin(
+                context = LocalContext.current,
+                userDao = AppDatabase.getDatabase(LocalContext.current).userDao(),
+                usuarioApi = RetrofitClient.usuarioApiService
+            )
+        )
+    )
+
     val uiState by loginViewModel.uiState.collectAsState()
 
-    // Navegación después de login exitoso
-    if (uiState.isLoginSuccessful) {
-        onLoginSuccess()
-    }
+//    // --- Navegación después de login exitoso ---
+//    LaunchedEffect(uiState.isLoginSuccessful) {
+//        if (uiState.isLoginSuccessful) {
+//            loginViewModel.loggedInUserId ?: return@LaunchedEffect
+//            onAccederClick() // navegación segura
+//        }
+//    }
 
     val scrollState = rememberScrollState()
 
@@ -136,7 +147,6 @@ fun LogingScreen(
                     onTogglePasswordVisibility = { loginViewModel.togglePasswordVisibility() }
                 )
 
-
                 // CheckBox mantener sesión iniciada
                 Row(
                     modifier = Modifier
@@ -155,18 +165,18 @@ fun LogingScreen(
                     )
                 }
 
-
-
-                // Botones
+                // --- Botones ---
                 LoginButtons(
                     accederButton = ButtonData(nombre = R.string.acceder, type = ButtonType.PRIMARY),
                     crearUsuarioButton = ButtonData(nombre = R.string.crear_usuario, type = ButtonType.SECONDARY),
                     recuperarButton = ButtonData(nombre = R.string.recuperar_contrasenha, type = ButtonType.DANGER),
                     enabledAcceder = uiState.isLoginButtonEnabled,
                     onAccederClick = {
+                        // Solo ejecuta login, no navegación directa
                         loginViewModel.logging {
-                            onAccederClick() // navegación
+                            onLoginSuccess(it)
                         }
+
                     },
                     onCrearUsuarioClick = onCrearUsuarioClick,
                     onRecuperarPasswordClick = onRecuperarPasswordClick
@@ -174,7 +184,6 @@ fun LogingScreen(
             }
         }
     }
-
 
     // Diálogo de información general
     InfoDialog(
@@ -193,7 +202,7 @@ fun LogingScreen(
 fun LoginScreenPreview() {
     MaterialTheme {
         LogingScreen(
-            onAccederClick = { println("Acceder clic - login con usuario de ejemplo") },
+            onLoginSuccess = { println("Acceder clic - login con usuario de ejemplo") },
             onCrearUsuarioClick = {},
             onRecuperarPasswordClick = {}
         )
