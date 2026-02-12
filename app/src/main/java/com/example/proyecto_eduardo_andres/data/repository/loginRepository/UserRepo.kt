@@ -2,23 +2,27 @@ package com.example.proyecto_eduardo_andres.data.repository.loginRepository
 
 import android.content.Context
 import android.content.SharedPreferences
+import android.util.Log
 
 import com.example.proyecto_eduardo_andres.R
 import com.example.proyecto_eduardo_andres.data.room.AppDatabase
 import com.example.proyecto_eduardo_andres.modelo.UserDTO
-import com.example.proyecto_eduardo_andres.remote.api.UsuarioApiService
+import com.example.proyecto_eduardo_andres.remote.RetrofitClient
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 class UserRepo(
     private val context: Context,
-    private val api: UsuarioApiService,
     private val db: AppDatabase
 ) : IUserRepository {
 
     private val userDao = db.userDao()
+    private val repositorioHibrido = UserRepositoryHibridoLogin(
+        context = context,
+        userDao = userDao,
+        usuarioApi = RetrofitClient.usuarioApiService // <-- Pasamos la API real de Retrofit
+    )
 
     companion object {
         private const val NAME_KEY = "name_key"
@@ -26,17 +30,17 @@ class UserRepo(
         private const val ID_KEY = "id_key"
         private const val PASSWORD_KEY = "password_key"
         private const val KEEP_LOGGED_KEY = "keep_logged_key"
+        private const val TAG = "UserRepo"
     }
 
     // --------------------
     // SharedPreferences
     // --------------------
-    private fun getSharedPref(): SharedPreferences {
-        return context.getSharedPreferences(
+    private fun getSharedPref(): SharedPreferences =
+        context.getSharedPreferences(
             context.getString(R.string.preferences_file),
             Context.MODE_PRIVATE
         )
-    }
 
     override fun loginUser(
         user: UserConfig,
@@ -53,7 +57,7 @@ class UserRepo(
                 putBoolean(KEEP_LOGGED_KEY, user.keepLogged)
                 if (commit()) onSuccess(user) else onError()
             }
-        } catch (e: Exception) {
+        } catch (_: Exception) {
             onError()
         }
     }
@@ -84,7 +88,7 @@ class UserRepo(
     }
 
     // --------------------
-    // Login Online + Offline
+    // Login Online + Offline (Repositorio Híbrido)
     // --------------------
     override fun login(
         email: String,
@@ -92,65 +96,7 @@ class UserRepo(
         onError: (Throwable) -> Unit,
         onSuccess: (UserDTO) -> Unit
     ) {
-        CoroutineScope(Dispatchers.IO).launch {
-            try {
-                val response = api.obtenerUsuarios()
-                if (response.isSuccessful) {
-                    val usersDto = response.body() ?: emptyList()
-
-                    // Guardar en Room
-                    val entities = usersDto.map { it.toEntity() }
-                    userDao.insertAll(entities)
-
-                    // Buscar usuario
-                    val user = userDao.login(email, password)
-                    if (user != null) {
-                        // Guardar en SharedPreferences
-                        loginUser(
-                            UserConfig(
-                                id = user.id.toIntOrNull() ?: 0,
-                                name = user.name,
-                                email = user.email,
-                                password = user.passwd,
-                                keepLogged = true
-                            ),
-                            onSuccess = { /* ya guardado */ },
-                            onError = { /* ignorar */ }
-                        )
-
-                        withContext(Dispatchers.Main) {
-                            onSuccess(UserDTO(user.id, user.name, user.email, user.passwd))
-                        }
-                    } else {
-                        withContext(Dispatchers.Main) {
-                            onError(Throwable("Usuario o contraseña incorrectos"))
-                        }
-                    }
-                } else {
-                    // API falla → usar Room offline
-                    val user = userDao.login(email, password)
-                    if (user != null) {
-                        withContext(Dispatchers.Main) {
-                            onSuccess(UserDTO(user.id, user.name, user.email, user.passwd))
-                        }
-                    } else {
-                        withContext(Dispatchers.Main) {
-                            onError(Throwable("Login fallido"))
-                        }
-                    }
-                }
-            } catch (e: Exception) {
-                // Offline → usar Room
-                val user = userDao.login(email, password)
-                if (user != null) {
-                    withContext(Dispatchers.Main) {
-                        onSuccess(UserDTO(user.id, user.name, user.email, user.passwd))
-                    }
-                } else {
-                    withContext(Dispatchers.Main) { onError(e) }
-                }
-            }
-        }
+        repositorioHibrido.login(email, password, onError, onSuccess)
     }
 
     override fun getUser(
@@ -158,20 +104,7 @@ class UserRepo(
         onError: (Throwable) -> Unit,
         onSuccess: (UserDTO) -> Unit
     ) {
-        CoroutineScope(Dispatchers.IO).launch {
-            try {
-                val user = userDao.getById(id.toString())
-                if (user != null) {
-                    withContext(Dispatchers.Main) {
-                        onSuccess(UserDTO(user.id, user.name, user.email, user.passwd))
-                    }
-                } else {
-                    withContext(Dispatchers.Main) { onError(Throwable("Usuario no encontrado")) }
-                }
-            } catch (e: Exception) {
-                withContext(Dispatchers.Main) { onError(e) }
-            }
-        }
+        repositorioHibrido.getUser(id, onError, onSuccess)
     }
 
     // --------------------
@@ -184,5 +117,18 @@ class UserRepo(
         val password: String,
         val keepLogged: Boolean
     )
-}
 
+    // Helper de depuración
+    @Suppress("unused")
+    fun logUsuariosLocal() {
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                val list = userDao.getAll()
+                Log.d(TAG, "Usuarios en Room: ${list.size}")
+                list.forEach { Log.d(TAG, "User in DB: ${it.id} ${it.email}") }
+            } catch (_: Exception) {
+                Log.w(TAG, "Error leyendo usuarios locales")
+            }
+        }
+    }
+}

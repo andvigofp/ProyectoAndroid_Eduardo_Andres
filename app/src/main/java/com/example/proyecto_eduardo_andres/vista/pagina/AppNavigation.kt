@@ -24,9 +24,9 @@ import com.example.proyecto_eduardo_andres.data.repository.alquilerSeriesReposit
 import com.example.proyecto_eduardo_andres.data.repository.alquilerSeriesSearchRepository.AlquilerSearchSeriesRepository
 import com.example.proyecto_eduardo_andres.data.repository.camaraRepository.CamaraRepositoryInMemory
 import com.example.proyecto_eduardo_andres.data.repository.crearUsuario.CrearUsuarioRepositoryInMemory
-import com.example.proyecto_eduardo_andres.data.repository.loginRepository.UserRepositoryInMemory
+import com.example.proyecto_eduardo_andres.data.repository.loginRepository.UserRepo
+import com.example.proyecto_eduardo_andres.data.room.AppDatabase
 import com.example.proyecto_eduardo_andres.data.repository.peliculasRepository.PeliculasRepositoryRetrofit
-import com.example.proyecto_eduardo_andres.data.repository.perfilRepositorio.PerfilUsuarioRepositoryInMemory
 import com.example.proyecto_eduardo_andres.data.repository.perfilRepositorio.PerfilUsuarioRepositoryRetrofit
 import com.example.proyecto_eduardo_andres.data.repository.qrRepository.QRRepositoryInMemory
 import com.example.proyecto_eduardo_andres.data.repository.recuperarPasswordRepository.RecuperarPasswordRepositoryRetrofit
@@ -66,7 +66,9 @@ fun AppNavigation() {
     val repositoryPerfilUsuario = remember { PerfilUsuarioRepositoryRetrofit() }
 
     val authRepository = remember {
-        UserRepositoryInMemory(RetrofitClient.authApiService)
+        // Crear UserRepo con AppDatabase para soporte offline-first
+        val db = AppDatabase.getDatabase(context)
+        UserRepo(context, db)
     }
 
     // --- NUEVO: AppNavigationViewModel ---
@@ -142,7 +144,6 @@ fun AppNavigation() {
         composable<RouteNavigation.Login> {
 
             LogingScreen(
-                loginViewModel = loginViewModel,
                 onAccederClick = {
                     loginViewModel.logging {
                         val userId = loginViewModel.loggedInUserId ?: return@logging
