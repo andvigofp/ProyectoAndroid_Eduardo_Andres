@@ -37,6 +37,7 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -77,6 +78,8 @@ fun PerfilSeriesScreen(
     onProfileClick: () -> Unit,
     onLogoutClick: () -> Unit
 ) {
+
+
     // Llamamos a cargar los datos del usuario cuando se inicia el Composable
     LaunchedEffect(userId) {
         viewModel.cargarUsuario(userId)
