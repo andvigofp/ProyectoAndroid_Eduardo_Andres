@@ -4,6 +4,7 @@ package com.example.proyecto_eduardo_andres.vista.pagina
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -48,6 +49,8 @@ import com.example.compose.colorAzulOscurso
 import com.example.compose.colorVioleta
 import com.example.proyecto_eduardo_andres.R
 import com.example.proyecto_eduardo_andres.data.repository.alquilerPeliculasRepository.AlquilerPeliculasRepositoryInMemory
+import com.example.proyecto_eduardo_andres.data.repository.alquilerPeliculasRepository.IAlquilerPeliculasRepository
+import com.example.proyecto_eduardo_andres.data.repository.perfilRepositorio.IPerfilUsuarioRepository
 import com.example.proyecto_eduardo_andres.data.repository.perfilRepositorio.PerfilUsuarioRepositoryInMemory
 import com.example.proyecto_eduardo_andres.modelo.PerfilUsuarioButtonTextsDto
 import com.example.proyecto_eduardo_andres.modelo.PerfilUsuarioDto
@@ -62,31 +65,40 @@ import com.example.proyecto_eduardo_andres.vista.componente.componenteToolbar.to
 
 @Composable
 fun PerfilUsuarioScreen(
-    userId: String, // Ahora necesitamos el id del usuario
-    viewModel: PerfilUsuarioViewModel = viewModel(factory = PerfilUsuarioViewModelFactory(
-        userId,
-        repository = PerfilUsuarioRepositoryInMemory(
-            apiService = RetrofitClient.usuarioApiService
-        ),
-        alquilerRepository = AlquilerPeliculasRepositoryInMemory()
-    )),
+    userId: String,
+    alquilerRepository: IAlquilerPeliculasRepository,
+    repository: IPerfilUsuarioRepository,
     onBackClick: () -> Unit,
     onHomeClick: () -> Unit,
     onCameraClick: () -> Unit,
     onProfileClick: () -> Unit,
-    onLogoutClick: () -> Unit
+    onLogoutClick: () -> Unit,
+    onPeliculaClick: (String) -> Unit
 ) {
+
+
+    val viewModel: PerfilUsuarioViewModel = viewModel(
+        factory = PerfilUsuarioViewModelFactory(
+            userId = userId,
+            repository = repository,
+            alquilerRepository = alquilerRepository
+        )
+    )
+
+
+    val uiState by viewModel.uiState.collectAsState()
+
     // Llamamos a cargar los datos del usuario cuando se inicia el Composable
     LaunchedEffect(userId) {
         viewModel.cargarUsuario(userId)
     }
 
     // Recargar películas alquiladas cuando se vuelve a la pantalla
-    LaunchedEffect(Unit) {
+    LaunchedEffect(userId) {
         viewModel.recargarPeliculasAlquiladas(userId)
     }
 
-    val uiState by viewModel.uiState.collectAsState()
+
 
     Box(
         modifier = Modifier
@@ -208,6 +220,9 @@ fun PerfilUsuarioScreen(
                                         Color.LightGray.copy(alpha = 0.3f),
                                         RoundedCornerShape(8.dp)
                                     )
+                                    .clickable {
+                                        onPeliculaClick(pelicula.id)
+                                    }
                                     .padding(8.dp),
                                 verticalAlignment = Alignment.CenterVertically
                             ) {
@@ -324,24 +339,25 @@ fun PerfilUsuarioScreen(
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun PerfilUsuarioScreenPreview() {
+
+    val alquilerRepository = AlquilerPeliculasRepositoryInMemory()
+
     val repository = PerfilUsuarioRepositoryInMemory(
         apiService = RetrofitClient.usuarioApiService
     )
-    val viewModel = PerfilUsuarioViewModel(repository)
-    // Para preview cargamos un usuario de prueba
-    LaunchedEffect(Unit) {
-        viewModel.cargarUsuario("1")
-    }
 
     MaterialTheme {
         PerfilUsuarioScreen(
             userId = "1",
-            viewModel = viewModel,
+            repository = repository,
+            alquilerRepository = alquilerRepository,
             onBackClick = {},
             onHomeClick = {},
             onCameraClick = {},
             onProfileClick = {},
-            onLogoutClick = {}
+            onLogoutClick = {},
+            onPeliculaClick = {}
         )
     }
 }
+

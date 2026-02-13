@@ -221,7 +221,7 @@ fun CrearUsuarioScreen(
             showConfirmDialog = false
             viewModel.crearUsuario(
                 onSuccess = { user ->
-
+                    Log.d("CrearUsuario", "Usuario creado: ${user.name} (ID: ${user.id})")
                 },
                 onError = { error ->
                     Log.e("CrearUsuario", error.message ?: "Error desconocido")
