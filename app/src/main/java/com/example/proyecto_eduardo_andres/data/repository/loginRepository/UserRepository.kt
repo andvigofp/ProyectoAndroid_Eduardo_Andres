@@ -21,10 +21,11 @@ private val authApi: AuthApiService
     // --------------------
     // getUser por ID (no implementado con memoria real, puedes simular)
     // --------------------
+
     override fun getUser(
-        id: Int,
+        id: String,
         onError: (Throwable) -> Unit,
-        onSuccess: (UserDTO) -> Unit
+        onSuccess: (UserDTO) -> Unit,
     ) {
         currentUser?.let {
             if (it.id == id) {
@@ -34,6 +35,7 @@ private val authApi: AuthApiService
             }
         } ?: onError(Throwable("No hay usuario en memoria"))
     }
+
 
 
     // --------------------
@@ -61,7 +63,7 @@ private val authApi: AuthApiService
                             password = password
                         )
                         currentUser = UserRepo.UserConfig(
-                            id = body.id.toIntOrNull() ?: 0,
+                            id = body.id,
                             name = body.name,
                             email = body.email,
                             password= password,

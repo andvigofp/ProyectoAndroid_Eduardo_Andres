@@ -15,12 +15,12 @@ import com.example.proyecto_eduardo_andres.data.room.dao.UserDao
 @Database(entities = [User::class], version = 1)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun userDao(): UserDao
-    abstract fun loginDao(): UserDao
-    abstract fun perfilDao(): UserDao
-    abstract fun  alquilerPeliculaDao(): AlquilerPeliculaDao
-    abstract fun alquilerSerieDao(): AlquilerSerieDao
-    abstract fun peliculaDao(): SerieDao
-    abstract fun serieDao(): PeliculaDao
+    //abstract fun loginDao(): UserDao
+    //abstract fun perfilDao(): UserDao
+    //abstract fun  alquilerPeliculaDao(): AlquilerPeliculaDao
+    //abstract fun alquilerSerieDao(): AlquilerSerieDao
+    //abstract fun peliculaDao(): SerieDao
+    //abstract fun serieDao(): PeliculaDao
     
     companion object {
         @Volatile

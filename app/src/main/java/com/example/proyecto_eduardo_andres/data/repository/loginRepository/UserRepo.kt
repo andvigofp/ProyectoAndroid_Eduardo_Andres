@@ -14,14 +14,14 @@ import kotlinx.coroutines.launch
 
 class UserRepo(
     private val context: Context,
-    private val db: AppDatabase
 ) : IUserRepository {
+
+    val db = AppDatabase.getDatabase(context)
 
     private val userDao = db.userDao()
     private val repositorioHibrido = UserRepositoryHibridoLogin(
-        context = context,
         userDao = userDao,
-        usuarioApi = RetrofitClient.usuarioApiService // <-- Pasamos la API real de Retrofit
+        usuarioApi = RetrofitClient.usuarioApiService
     )
 
     companion object {
@@ -83,7 +83,7 @@ class UserRepo(
         val keepLogged = sp.getBoolean(KEEP_LOGGED_KEY, false)
 
         return if (id != null && name != null && email != null) {
-            UserConfig(id.toInt(), name, email, password, keepLogged)
+            UserConfig(id, name, email, password, keepLogged)
         } else null
     }
 
@@ -96,11 +96,32 @@ class UserRepo(
         onError: (Throwable) -> Unit,
         onSuccess: (UserDTO) -> Unit
     ) {
-        repositorioHibrido.login(email, password, onError, onSuccess)
+        repositorioHibrido.login(
+            email,
+            password,
+            onError = onError,
+            onSuccess = { userDto ->
+
+                val userConfig = UserConfig(
+                    id = userDto.id ?: "",
+                    name = userDto.name,
+                    email = userDto.email,
+                    password = userDto.password,
+                    keepLogged = true
+                )
+
+                loginUser(
+                    userConfig,
+                    onSuccess = { onSuccess(userDto) },
+                    onError = { onError(Throwable("No se pudo guardar la sesión")) }
+                )
+            }
+        )
     }
 
+
     override fun getUser(
-        id: Int,
+        id: String,
         onError: (Throwable) -> Unit,
         onSuccess: (UserDTO) -> Unit
     ) {
@@ -111,7 +132,7 @@ class UserRepo(
     // Modelos
     // --------------------
     data class UserConfig(
-        val id: Int,
+        val id: String,
         val name: String,
         val email: String,
         val password: String,

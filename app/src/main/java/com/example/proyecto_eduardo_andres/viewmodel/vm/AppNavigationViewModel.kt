@@ -36,7 +36,7 @@ class AppNavigationViewModel(
         if (userId != -1) {
             // Intentamos recuperar info del usuario
             userRepository.getUser(
-                id = userId,
+                id = userId.toString(),
                 onError = {
                     _uiState.value = AppNavigationUiState(
                         isCheckingSession = false,

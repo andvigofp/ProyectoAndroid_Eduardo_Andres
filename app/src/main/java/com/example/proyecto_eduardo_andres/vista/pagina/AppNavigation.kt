@@ -25,6 +25,7 @@ import com.example.proyecto_eduardo_andres.data.repository.alquilerSeriesSearchR
 import com.example.proyecto_eduardo_andres.data.repository.camaraRepository.CamaraRepositoryInMemory
 import com.example.proyecto_eduardo_andres.data.repository.crearUsuario.CrearUsuarioRepositoryInMemory
 import com.example.proyecto_eduardo_andres.data.repository.loginRepository.UserRepo
+import com.example.proyecto_eduardo_andres.data.repository.loginRepository.UserRepositoryHibridoLogin
 import com.example.proyecto_eduardo_andres.data.room.AppDatabase
 import com.example.proyecto_eduardo_andres.data.repository.peliculasRepository.PeliculasRepositoryRetrofit
 import com.example.proyecto_eduardo_andres.data.repository.perfilRepositorio.PerfilUsuarioRepositoryRetrofit
@@ -66,10 +67,16 @@ fun AppNavigation() {
     val repositoryPerfilUsuario = remember { PerfilUsuarioRepositoryRetrofit() }
 
     val authRepository = remember {
-        // Crear UserRepo con AppDatabase para soporte offline-first
+
         val db = AppDatabase.getDatabase(context)
-        UserRepo(context, db)
+
+        UserRepositoryHibridoLogin(
+            userDao = db.userDao(),
+            usuarioApi = RetrofitClient.usuarioApiService
+        )
     }
+
+
 
     // --- NUEVO: AppNavigationViewModel ---
     val appNavigationViewModel: AppNavigationViewModel = viewModel(

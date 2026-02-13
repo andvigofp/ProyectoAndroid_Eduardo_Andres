@@ -7,8 +7,8 @@ import androidx.room.PrimaryKey
 @Entity(tableName = "user")
 data class User(
     @PrimaryKey val id: String,
-    val name: String,
-    val email: String,
-    val passwd: String,
+    @ColumnInfo(name = "name") val name: String,
+    @ColumnInfo(name = "email") val email: String,
+    @ColumnInfo(name = "passwd") val passwd: String,
     @ColumnInfo(name = "keep_logged") val keepLogged: Boolean = false
 )

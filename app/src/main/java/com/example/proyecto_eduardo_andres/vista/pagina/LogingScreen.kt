@@ -51,7 +51,6 @@ fun LogingScreen(
     val loginViewModel: LoginViewModel = viewModel(
         factory = LoginViewModelFactory(
             UserRepositoryHibridoLogin(
-                context = LocalContext.current,
                 userDao = AppDatabase.getDatabase(LocalContext.current).userDao(),
                 usuarioApi = RetrofitClient.usuarioApiService
             )
