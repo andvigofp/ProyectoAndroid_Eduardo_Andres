@@ -52,9 +52,6 @@ import com.example.proyecto_eduardo_andres.vista.componente.componenteVideoClubL
 @Composable
 fun VideoClubOnlinePeliculasScreen(
     repository: IPeliculasRepository,
-    viewModel: VideoClubOnlinePeliculasViewModel = viewModel(
-        factory = VideoClubOnlinePeliculasViewModelFactory(repository)
-    ),
     onHomeClick: () -> Unit = {},
     onSearchClick: () -> Unit = {},
     onCameraClick: () -> Unit = {},
@@ -64,6 +61,11 @@ fun VideoClubOnlinePeliculasScreen(
     onDrawerSeriesClick: () -> Unit = {},
     onPeliculaClick: (VideoClubOnlinePeliculasData) -> Unit,
 ) {
+
+    val viewModel: VideoClubOnlinePeliculasViewModel = viewModel(
+        factory = VideoClubOnlinePeliculasViewModelFactory(repository)
+    )
+
     val drawerState = rememberDrawerState(DrawerValue.Closed)
 
     val toolbarHeight = 56.dp + WindowInsets.statusBars.asPaddingValues().calculateTopPadding()
@@ -185,14 +187,11 @@ fun VideoClubOnlinePeliculasScreen(
 @Composable
 fun VideoClubOnlineScreenPreview() {
     val repository = PeliculasRepositoryInMemory()
-    val viewModel: VideoClubOnlinePeliculasViewModel = viewModel(
-        factory = VideoClubOnlinePeliculasViewModelFactory(repository)
-    )
+
 
     MaterialTheme {
         VideoClubOnlinePeliculasScreen(
             repository = repository,
-            viewModel = viewModel,
             onPeliculaClick = {}
         )
     }

@@ -1,4 +1,4 @@
-﻿package com.example.proyecto_eduardo_andres.vista.pagina
+﻿package com.example.proyecto_eduardo_andres.naveHost
 
 import android.app.Application
 import androidx.compose.foundation.layout.Box
@@ -19,35 +19,42 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
 import com.example.proyecto_eduardo_andres.data.repository.alquilerPeliculasRepository.AlquilerPeliculaRepositoryRetrofit
+import com.example.proyecto_eduardo_andres.data.repository.alquilerPeliculasRepository.AlquilerPeliculasRepositoryInMemory
 import com.example.proyecto_eduardo_andres.data.repository.alquilerPeliculasSearchRepository.AlquilerSearchPeliculasRepositoryRetrofit
 import com.example.proyecto_eduardo_andres.data.repository.alquilerSeriesRepository.AlquilerSerieRepositoryRetrofit
+import com.example.proyecto_eduardo_andres.data.repository.alquilerSeriesRepository.AlquilerSeriesRepositoryInMemory
 import com.example.proyecto_eduardo_andres.data.repository.alquilerSeriesSearchRepository.AlquilerSearchSeriesRepository
 import com.example.proyecto_eduardo_andres.data.repository.camaraRepository.CamaraRepositoryInMemory
-import com.example.proyecto_eduardo_andres.data.repository.crearUsuario.CrearUsuarioRepositoryInMemory
-import com.example.proyecto_eduardo_andres.data.repository.loginRepository.UserRepo
 import com.example.proyecto_eduardo_andres.data.repository.loginRepository.UserRepositoryHibridoLogin
 import com.example.proyecto_eduardo_andres.data.room.AppDatabase
 import com.example.proyecto_eduardo_andres.data.repository.peliculasRepository.PeliculasRepositoryRetrofit
 import com.example.proyecto_eduardo_andres.data.repository.perfilRepositorio.PerfilUsuarioRepositoryRetrofit
 import com.example.proyecto_eduardo_andres.data.repository.qrRepository.QRRepositoryInMemory
 import com.example.proyecto_eduardo_andres.data.repository.recuperarPasswordRepository.RecuperarPasswordRepositoryRetrofit
-import com.example.proyecto_eduardo_andres.naveHost.RouteNavigation
-import com.example.proyecto_eduardo_andres.naveHost.SessionEvents
 import com.example.proyecto_eduardo_andres.remote.RetrofitClient
 import com.example.proyecto_eduardo_andres.viewmodel.vm.AppNavigationViewModel
 import com.example.proyecto_eduardo_andres.viewmodel.vm.AppNavigationViewModelFactory
-import com.example.proyecto_eduardo_andres.viewmodel.vm.CrearUsuarioViewModel
-import com.example.proyecto_eduardo_andres.viewmodel.vm.CrearUsuarioViewModelFactory
 import com.example.proyecto_eduardo_andres.viewmodel.vm.LoginViewModel
 import com.example.proyecto_eduardo_andres.viewmodel.vm.LoginViewModelFactory
 import com.example.proyecto_eduardo_andres.viewmodel.vm.PerfilSeriesViewModel
 import com.example.proyecto_eduardo_andres.viewmodel.vm.PerfilSeriesViewModelFactory
-import com.example.proyecto_eduardo_andres.viewmodel.vm.PerfilUsuarioViewModel
-import com.example.proyecto_eduardo_andres.viewmodel.vm.PerfilUsuarioViewModelFactory
 import com.example.proyecto_eduardo_andres.viewmodel.vm.VideoClubOnlinePeliculasViewModel
 import com.example.proyecto_eduardo_andres.viewmodel.vm.VideoClubOnlinePeliculasViewModelFactory
 import com.example.proyecto_eduardo_andres.viewmodel.vm.VideoClubOnlineSeriesViewModel
 import com.example.proyecto_eduardo_andres.viewmodel.vm.VideoClubOnlineSeriesViewModelFactory
+import com.example.proyecto_eduardo_andres.vista.pagina.AlquilarDevolverPeliculasScreen
+import com.example.proyecto_eduardo_andres.vista.pagina.AlquilerDevolverSeriesScreen
+import com.example.proyecto_eduardo_andres.vista.pagina.CamaraScreen
+import com.example.proyecto_eduardo_andres.vista.pagina.CrearUsuarioScreen
+import com.example.proyecto_eduardo_andres.vista.pagina.LogingScreen
+import com.example.proyecto_eduardo_andres.vista.pagina.PerfilSeriesScreen
+import com.example.proyecto_eduardo_andres.vista.pagina.PerfilUsuarioScreen
+import com.example.proyecto_eduardo_andres.vista.pagina.QRScreen
+import com.example.proyecto_eduardo_andres.vista.pagina.RecuperarPasswordScreen
+import com.example.proyecto_eduardo_andres.vista.pagina.VideoClubOnlinePeliculasScreen
+import com.example.proyecto_eduardo_andres.vista.pagina.VideoClubOnlineSeriesScreen
+import com.example.proyecto_eduardo_andres.vista.pagina.VideoClubSearchPeliculasScreen
+import com.example.proyecto_eduardo_andres.vista.pagina.VideoClubSearchSeriesScreen
 import kotlinx.coroutines.flow.collectLatest
 
 @Composable
@@ -76,7 +83,13 @@ fun AppNavigation() {
         )
     }
 
+    val alquilerRepositoryPelicula = remember {
+        AlquilerPeliculasRepositoryInMemory()
+    }
 
+    val alquilerRepositorioSerie = remember { 
+        AlquilerSeriesRepositoryInMemory()
+    }
 
     // --- NUEVO: AppNavigationViewModel ---
     val appNavigationViewModel: AppNavigationViewModel = viewModel(
@@ -103,11 +116,6 @@ fun AppNavigation() {
         factory = LoginViewModelFactory(authRepository)
     )
 
-    val crearUsuarioViewModel: CrearUsuarioViewModel = viewModel(
-        factory = CrearUsuarioViewModelFactory(
-            CrearUsuarioRepositoryInMemory(RetrofitClient.authApiService)
-        )
-    )
 
     // --- Navegación ---
     fun navigate(route: RouteNavigation) {
@@ -179,11 +187,6 @@ fun AppNavigation() {
         // ---------- VIDEOCLUB PELICULAS ----------
         composable<RouteNavigation.VideoClubPeliculas> { route ->
             val route = route.toRoute<RouteNavigation.VideoClubPeliculas>()
-            val viewModel: VideoClubOnlinePeliculasViewModel = viewModel(
-                factory = VideoClubOnlinePeliculasViewModelFactory(
-                    repositoryPeliculasData
-                )
-            )
             VideoClubOnlinePeliculasScreen(
                 repository = repositoryPeliculasData,
                 onHomeClick = { navigate(RouteNavigation.VideoClubPeliculas(route.userId)) },
@@ -198,20 +201,14 @@ fun AppNavigation() {
                 onDrawerPeliculasClick = { navigate(RouteNavigation.VideoClubPeliculas(route.userId)) },
                 onDrawerSeriesClick = { navigate(RouteNavigation.VideoClubSeries(route.userId)) },
                 onPeliculaClick = { pelicula ->
-                    viewModel.onPeliculaClick(route.userId, pelicula)
+                    navigate(RouteNavigation.AlquilerDevolverPeliculas(route.userId, pelicula.id))
                 },
-                viewModel = viewModel
             )
         }
 
         // ---------- VIDEOCLUB SERIES ----------
         composable<RouteNavigation.VideoClubSeries> { route ->
             val route = route.toRoute<RouteNavigation.VideoClubSeries>()
-            val viewModel: VideoClubOnlineSeriesViewModel = viewModel(
-                factory = VideoClubOnlineSeriesViewModelFactory(
-                    repositorySeriesData
-                )
-            )
             VideoClubOnlineSeriesScreen(
                 repository = repositorySeriesData,
                 onHomeClick = { navigate(RouteNavigation.VideoClubPeliculas(route.userId)) },
@@ -226,9 +223,9 @@ fun AppNavigation() {
                 onDrawerPeliculasClick = { navigate(RouteNavigation.VideoClubPeliculas(route.userId)) },
                 onDrawerSeriesClick = { navigate(RouteNavigation.VideoClubSeries(route.userId)) },
                 onSerieClick = { serie ->
-                    viewModel.onSerieClick(route.userId, serie)
+                    navigate(RouteNavigation.AlquilerDevolverSeries(route.userId, serie.id))
                 },
-                viewModel = viewModel
+
             )
         }
 
@@ -298,13 +295,6 @@ fun AppNavigation() {
         // ---------- PERFIL USUARIO ----------
         composable<RouteNavigation.PerfilUsuario> { route ->
             val route = route.toRoute<RouteNavigation.PerfilUsuario>()
-            val viewModel: PerfilUsuarioViewModel = viewModel(
-                factory = PerfilUsuarioViewModelFactory(
-                    userId = route.userId,
-                    repository = repositoryPerfilUsuario,
-                    alquilerRepository = repositoryPeliculas
-                )
-            )
             PerfilUsuarioScreen(
                 userId = route.userId,
                 onBackClick = { navController.popBackStack() },
@@ -316,21 +306,17 @@ fun AppNavigation() {
                     loginViewModel.resetState()
                     navigate(RouteNavigation.Login)
                 },
-                viewModel = viewModel
+                alquilerRepository = alquilerRepositoryPelicula,
+                onPeliculaClick = { pelicula ->
+                    navigate(RouteNavigation.AlquilerDevolverPeliculas(route.userId, pelicula))
+                },
+                repository = repositoryPerfilUsuario,
             )
         }
 
         // ---------- PERFIL SERIES ----------
         composable<RouteNavigation.PerfilSeries> { route ->
             val route = route.toRoute<RouteNavigation.PerfilSeries>()
-            val viewModel: PerfilSeriesViewModel = viewModel(
-                factory = PerfilSeriesViewModelFactory(
-                    userId = route.userId,
-                    repository = repositoryPerfilUsuario,
-                    alquilerRepository = repositorySeries
-                )
-            )
-
             PerfilSeriesScreen(
                 userId = route.userId,
                 onBackClick = { navController.popBackStack() },
@@ -342,7 +328,11 @@ fun AppNavigation() {
                     loginViewModel.resetState()
                     navigate(RouteNavigation.Login)
                 },
-                viewModel = viewModel
+                alquilerRepository = alquilerRepositorioSerie,
+                onSerieClieck = { serie ->
+                    navigate(RouteNavigation.AlquilerDevolverSeries(route.userId, serie))
+                },
+                repository = repositoryPerfilUsuario,
             )
         }
 
@@ -351,7 +341,7 @@ fun AppNavigation() {
             val args = navBackStackEntry.toRoute<RouteNavigation.AlquilerDevolverPeliculas>()
             AlquilarDevolverPeliculasScreen(
                 userId = args.userId,
-                repository = repositoryPeliculas,
+                repository = alquilerRepositoryPelicula,
                 peliculaId = args.peliculaId,  // <-- CORREGIDO: "peliculaId" con 'u'
                 onBackClick = { navController.popBackStack() },
                 onHomeClick = { navigate(RouteNavigation.VideoClubPeliculas(args.userId)) },
@@ -370,7 +360,7 @@ fun AppNavigation() {
             val args = navBackStackEntry.toRoute<RouteNavigation.AlquilerDevolverSeries>()
             AlquilerDevolverSeriesScreen(
                 userId = args.userId,
-                repository = repositorySeries,
+                repository = alquilerRepositorioSerie,
                 serieId = args.serieId,  // <-- AsegÃºrate que coincida con RouteNavigation
                 onBackClick = { navController.popBackStack() },
                 onHomeClick = { navigate(RouteNavigation.VideoClubSeries(args.userId)) },

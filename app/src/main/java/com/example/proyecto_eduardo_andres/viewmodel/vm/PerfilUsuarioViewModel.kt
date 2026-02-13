@@ -103,7 +103,15 @@ private val alquilerRepository: IAlquilerPeliculasRepository? = null
 
         repository.actualizarUsuario(
             usuario = usuario,
-            onError = { error -> Log.e("PerfilViewModel", "Error al actualizar", error) },
+            onError = { error ->
+                _uiState.update {
+                    it.copy(
+                        showInfoDialog = true,
+                        infoDialogTitle = "Error",
+                        infoDialogMessage = error.message ?: "Error desconocido"
+                    )
+                }
+            },
             onSuccess = {
                 _uiState.update {
                     it.copy(
@@ -115,10 +123,10 @@ private val alquilerRepository: IAlquilerPeliculasRepository? = null
         )
     }
 
-    fun cerrarConfirmacionDialog() {
-        _uiState.update { it.copy(showConfirmacionDialog = false) }
+        fun cerrarConfirmacionDialog() {
+            _uiState.update { it.copy(showConfirmacionDialog = false) }
+        }
     }
-}
 
 // Factory actualizado para usar email en lugar de userId
 class PerfilUsuarioViewModelFactory(

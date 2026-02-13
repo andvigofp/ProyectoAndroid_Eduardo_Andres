@@ -11,7 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.compose.Proyecto_Eduardo_AndresTheme
-import com.example.proyecto_eduardo_andres.vista.pagina.AppNavigation
+import com.example.proyecto_eduardo_andres.naveHost.AppNavigation
 
 
 class MainActivity : ComponentActivity() {

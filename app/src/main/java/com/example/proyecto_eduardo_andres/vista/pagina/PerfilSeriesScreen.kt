@@ -4,6 +4,7 @@ package com.example.proyecto_eduardo_andres.vista.pagina
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -49,6 +50,8 @@ import com.example.compose.colorAzulOscurso
 import com.example.compose.colorVioleta
 import com.example.proyecto_eduardo_andres.R
 import com.example.proyecto_eduardo_andres.data.repository.alquilerSeriesRepository.AlquilerSeriesRepositoryInMemory
+import com.example.proyecto_eduardo_andres.data.repository.alquilerSeriesRepository.IAlquilerSeriesRepository
+import com.example.proyecto_eduardo_andres.data.repository.perfilRepositorio.IPerfilUsuarioRepository
 import com.example.proyecto_eduardo_andres.data.repository.perfilRepositorio.PerfilUsuarioRepositoryInMemory
 import com.example.proyecto_eduardo_andres.modelo.PerfilUsuarioButtonTextsDto
 import com.example.proyecto_eduardo_andres.modelo.PerfilUsuarioDto
@@ -64,21 +67,23 @@ import com.example.proyecto_eduardo_andres.vista.componente.componenteToolbar.to
 @Composable
 fun PerfilSeriesScreen(
     userId: String,
-    viewModel: PerfilSeriesViewModel = viewModel(factory = PerfilSeriesViewModelFactory(
-        userId,
-        repository = PerfilUsuarioRepositoryInMemory(
-            apiService = RetrofitClient.usuarioApiService
-        ),
-        alquilerRepository = AlquilerSeriesRepositoryInMemory()
-
-    )),
+    alquilerRepository: IAlquilerSeriesRepository,
+    repository: IPerfilUsuarioRepository,
     onBackClick: () -> Unit,
     onHomeClick: () -> Unit,
     onCameraClick: () -> Unit,
     onProfileClick: () -> Unit,
-    onLogoutClick: () -> Unit
+    onLogoutClick: () -> Unit,
+    onSerieClieck: (String) -> Unit
 ) {
 
+    val viewModel: PerfilSeriesViewModel = viewModel(factory = PerfilSeriesViewModelFactory(
+        userId,
+        repository = repository,
+        alquilerRepository = alquilerRepository
+    ))
+
+    val uiState by viewModel.uiState.collectAsState()
 
     // Llamamos a cargar los datos del usuario cuando se inicia el Composable
     LaunchedEffect(userId) {
@@ -90,7 +95,7 @@ fun PerfilSeriesScreen(
         viewModel.recargarSeriesAlquiladas(userId)
     }
 
-    val uiState by viewModel.uiState.collectAsState()
+
 
     Box(
         modifier = Modifier
@@ -212,6 +217,9 @@ fun PerfilSeriesScreen(
                                         Color.LightGray.copy(alpha = 0.3f),
                                         RoundedCornerShape(8.dp)
                                     )
+                                    .clickable {
+                                        onSerieClieck(serie.id)
+                                    }
                                     .padding(8.dp),
                                 verticalAlignment = Alignment.CenterVertically
                             ) {
@@ -329,24 +337,21 @@ fun PerfilSeriesScreen(
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun PerfilSeriesScreenPreview() {
+    val alquilerRepository = AlquilerSeriesRepositoryInMemory()
     val repository = PerfilUsuarioRepositoryInMemory(
         apiService = RetrofitClient.usuarioApiService
     )
-    val viewModel = PerfilSeriesViewModel(repository)
-    // Para preview cargamos un usuario de prueba
-    LaunchedEffect(Unit) {
-        viewModel.cargarUsuario("1")
-    }
-
     MaterialTheme {
         PerfilSeriesScreen(
             userId = "1",
-            viewModel = viewModel,
+            alquilerRepository = alquilerRepository,
+            repository = repository,
             onBackClick = {},
             onHomeClick = {},
             onCameraClick = {},
             onProfileClick = {},
-            onLogoutClick = {}
+            onLogoutClick = {},
+            onSerieClieck = {}
         )
     }
 }
