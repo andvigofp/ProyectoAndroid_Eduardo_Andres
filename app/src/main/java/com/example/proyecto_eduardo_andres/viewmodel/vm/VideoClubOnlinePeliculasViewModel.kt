@@ -27,19 +27,28 @@ class VideoClubOnlinePeliculasViewModel(
     }
 
     private fun cargarPeliculas() {
+
+        _uiState.update { it.copy(isLoading = true) }
+
         repository.obtenerPeliculas(
-            onError = { /* manejar error */ },
+            onError = {
+                _uiState.update { it.copy(isLoading = false) }
+            },
             onSuccess = { peliculas ->
+
                 val agrupadas = peliculas.groupBy { it.categoria }
+
                 _uiState.update {
                     it.copy(
                         peliculas = peliculas,
-                        peliculasPorCategoria = agrupadas
+                        peliculasPorCategoria = agrupadas,
+                        isLoading = false
                     )
                 }
             }
         )
     }
+
 
     fun filtrarPorCategoria(categoria: Int) {
         val filtradas = _uiState.value.peliculas

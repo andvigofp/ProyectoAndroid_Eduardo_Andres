@@ -26,4 +26,8 @@ interface UserDao {
 
     @Query("DELETE FROM user")
     suspend fun deleteAll()
+
+    @Query("SELECT * FROM user WHERE keep_logged = 1 LIMIT 1")
+    fun getLoggedUser(): User?
+
 }

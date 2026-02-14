@@ -60,12 +60,21 @@ fun LogingScreen(
     val uiState by loginViewModel.uiState.collectAsState()
 
 //    // --- Navegación después de login exitoso ---
-//    LaunchedEffect(uiState.isLoginSuccessful) {
-//        if (uiState.isLoginSuccessful) {
-//            loginViewModel.loggedInUserId ?: return@LaunchedEffect
-//            onAccederClick() // navegación segura
-//        }
-//    }
+    if (uiState.isLoading) {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(Color.Black.copy(alpha = 0.4f)),
+            contentAlignment = Alignment.Center
+        ) {
+            CircularProgressIndicator()
+        }
+        loginViewModel.logging {
+            onLoginSuccess(it)
+        }
+    }
+
+
 
     val scrollState = rememberScrollState()
 
@@ -169,7 +178,7 @@ fun LogingScreen(
                     accederButton = ButtonData(nombre = R.string.acceder, type = ButtonType.PRIMARY),
                     crearUsuarioButton = ButtonData(nombre = R.string.crear_usuario, type = ButtonType.SECONDARY),
                     recuperarButton = ButtonData(nombre = R.string.recuperar_contrasenha, type = ButtonType.DANGER),
-                    enabledAcceder = uiState.isLoginButtonEnabled,
+                    enabledAcceder = uiState.isLoginButtonEnabled && !uiState.isLoading,
                     onAccederClick = {
                         // Solo ejecuta login, no navegación directa
                         loginViewModel.logging {

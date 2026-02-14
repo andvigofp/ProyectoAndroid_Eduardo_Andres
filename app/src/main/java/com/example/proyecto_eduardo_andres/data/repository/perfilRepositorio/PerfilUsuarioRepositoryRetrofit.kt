@@ -1,6 +1,5 @@
 package com.example.proyecto_eduardo_andres.data.repository.perfilRepositorio
 
-import android.content.Context
 import android.util.Log
 import com.example.proyecto_eduardo_andres.modelo.UserDTO
 import com.example.proyecto_eduardo_andres.remote.RetrofitClient
@@ -48,7 +47,8 @@ class PerfilUsuarioRepositoryRetrofit(
                     id = found.id,
                     name = found.name,
                     email = found.email,
-                    password = found.passwd
+                    password = found.passwd,
+                    keepLogged =found.keepLogged
                 )
 
                 withContext(Dispatchers.Main) { onSuccess(usuario) }
@@ -72,7 +72,8 @@ class PerfilUsuarioRepositoryRetrofit(
                     id = usuario.id.toString(),
                     name = usuario.name,
                     email = usuario.email,
-                    passwd = usuario.password
+                    passwd = usuario.password,
+                    keepLogged = false
                 )
 
                 val updateResponse = api.actualizarUsuario(usuario.id.toString(), updated) // POST a /json/user/{id}

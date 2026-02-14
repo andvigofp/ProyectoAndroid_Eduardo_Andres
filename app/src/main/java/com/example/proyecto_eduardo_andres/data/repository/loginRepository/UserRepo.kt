@@ -93,12 +93,14 @@ class UserRepo(
     override fun login(
         email: String,
         password: String,
+        keepLogged: Boolean,
         onError: (Throwable) -> Unit,
         onSuccess: (UserDTO) -> Unit
     ) {
         repositorioHibrido.login(
             email,
             password,
+            keepLogged = keepLogged,
             onError = onError,
             onSuccess = { userDto ->
 
@@ -107,7 +109,7 @@ class UserRepo(
                     name = userDto.name,
                     email = userDto.email,
                     password = userDto.password,
-                    keepLogged = true
+                    keepLogged = keepLogged
                 )
 
                 loginUser(
@@ -115,7 +117,8 @@ class UserRepo(
                     onSuccess = { onSuccess(userDto) },
                     onError = { onError(Throwable("No se pudo guardar la sesión")) }
                 )
-            }
+            },
+
         )
     }
 

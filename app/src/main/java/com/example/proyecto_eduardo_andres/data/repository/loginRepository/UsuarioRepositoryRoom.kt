@@ -1,12 +1,8 @@
 package com.example.proyecto_eduardo_andres.data.repository.loginRepository
 
-import android.content.Context
-import android.net.ConnectivityManager
-import android.net.NetworkCapabilities
 import com.example.proyecto_eduardo_andres.data.room.dao.UserDao
 import com.example.proyecto_eduardo_andres.modelo.UserDTO
 import com.example.proyecto_eduardo_andres.remote.api.UsuarioApiService
-import com.example.proyecto_eduardo_andres.remote.dto.UsuarioDto
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -28,6 +24,7 @@ class UserRepositoryHibridoLogin(
     override fun login(
         email: String,
         password: String,
+        keepLogged: Boolean,
         onError: (Throwable) -> Unit,
         onSuccess: (UserDTO) -> Unit
     ) {
@@ -46,9 +43,10 @@ class UserRepositoryHibridoLogin(
                     val remoteUser = response.body()!!
                         .firstOrNull { it.email == email && it.passwd == password }
 
+
                     remoteUser?.let { dto ->
 
-                        val roomUser = dto.toUser().copy(keepLogged = true)
+                        val roomUser = dto.toUser().copy(keepLogged = keepLogged)
                         userDao.insert(roomUser)
 
                         currentUser = UserRepo.UserConfig(
@@ -56,10 +54,10 @@ class UserRepositoryHibridoLogin(
                             name = dto.name,
                             email = dto.email,
                             password = dto.passwd,
-                            keepLogged = true
+                            keepLogged = keepLogged,
                         )
 
-                        userFound = UserDTO(dto.id, dto.name, dto.email, dto.passwd)
+                        userFound = UserDTO(dto.id, dto.name, dto.email, dto.passwd, keepLogged)
                     }
                 }
 
@@ -77,15 +75,18 @@ class UserRepositoryHibridoLogin(
 
                 localUser?.let {
 
+                    val updatedUser = it.copy(keepLogged = keepLogged)
+                    userDao.insert(updatedUser)
+
                     currentUser = UserRepo.UserConfig(
                         id = it.id,
                         name = it.name,
                         email = it.email,
                         password = it.passwd,
-                        keepLogged = true
+                        keepLogged = it.keepLogged
                     )
 
-                    userFound = UserDTO(it.id, it.name, it.email, it.passwd)
+                    userFound = UserDTO(it.id, it.name, it.email, it.passwd, keepLogged)
                 }
             }
 
@@ -110,7 +111,7 @@ class UserRepositoryHibridoLogin(
     ) {
         currentUser?.let {
             if (it.id == id) {
-                onSuccess(UserDTO(it.id, it.name, it.email, it.password))
+                onSuccess(UserDTO(it.id, it.name, it.email, it.password, it.keepLogged))
             } else onError(Throwable("Usuario no encontrado"))
         } ?: onError(Throwable("No hay usuario en memoria"))
     }
@@ -130,5 +131,18 @@ class UserRepositoryHibridoLogin(
         onSuccess()
     }
 
-    override fun getCurrentUser(): UserRepo.UserConfig? = currentUser
+    override fun getCurrentUser(): UserRepo.UserConfig? {
+
+        val user = userDao.getLoggedUser()
+
+        return user?.let {
+            UserRepo.UserConfig(
+                id = it.id,
+                name = it.name,
+                email = it.email,
+                password = it.passwd,
+                keepLogged = it.keepLogged
+            )
+        }
+    }
 }

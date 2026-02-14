@@ -28,13 +28,16 @@ class VideoClubOnlineSeriesViewModel(
 
     private fun cargarSeries() {
         repository.obtenerSeries(
-            onError = { /* manejar error */ },
+            onError = {
+                _uiState.update { it.copy(isLoading = false) }
+            },
             onSuccess = { series ->
                 val agrupadas = series.groupBy { it.categoria }
                 _uiState.update {
                     it.copy(
                         series = series,
-                        seriesPorCategoria = agrupadas
+                        seriesPorCategoria = agrupadas,
+                        isLoading = false
                     )
                 }
             }

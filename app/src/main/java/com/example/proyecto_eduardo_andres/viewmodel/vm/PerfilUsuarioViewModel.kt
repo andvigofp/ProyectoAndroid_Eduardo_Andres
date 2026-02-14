@@ -98,7 +98,8 @@ private val alquilerRepository: IAlquilerPeliculasRepository? = null
             id = state.userId,
             name = state.nombreUsuario,
             email = state.email,
-            password = state.password
+            password = state.password,
+            keepLogged = false
         )
 
         repository.actualizarUsuario(

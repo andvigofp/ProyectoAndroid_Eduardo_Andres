@@ -28,7 +28,8 @@ class PerfilUsuarioRepositoryInMemory(
                             id = usuarioDto.id,
                             name = usuarioDto.name,
                             email = usuarioDto.email,
-                            password = usuarioDto.passwd
+                            password = usuarioDto.passwd,
+                            keepLogged = usuarioDto.keepLogged
                         )
                         withContext(Dispatchers.Main) { onSuccess(usuario) }
                     } else {

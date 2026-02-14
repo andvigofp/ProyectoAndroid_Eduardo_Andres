@@ -29,7 +29,7 @@ private val authApi: AuthApiService
     ) {
         currentUser?.let {
             if (it.id == id) {
-                onSuccess(UserDTO(it.id.toString(), it.name, it.email, ""))
+                onSuccess(UserDTO(it.id.toString(), it.name, it.email, "", it.keepLogged))
             } else {
                 onError(Throwable("Usuario no encontrado en memoria"))
             }
@@ -44,6 +44,7 @@ private val authApi: AuthApiService
     override fun login(
         email: String,
         password: String,
+        keepLogged: Boolean,
         onError: (Throwable) -> Unit,
         onSuccess: (UserDTO) -> Unit
     ) {
@@ -60,14 +61,15 @@ private val authApi: AuthApiService
                             id = body.id,
                             name = body.name,
                             email = body.email,
-                            password = password
+                            password = password,
+                            keepLogged = keepLogged
                         )
                         currentUser = UserRepo.UserConfig(
                             id = body.id,
                             name = body.name,
                             email = body.email,
                             password= password,
-                            keepLogged = true
+                            keepLogged = keepLogged
                         )
                         withContext(Dispatchers.Main) { onSuccess(user) }
                     } else {

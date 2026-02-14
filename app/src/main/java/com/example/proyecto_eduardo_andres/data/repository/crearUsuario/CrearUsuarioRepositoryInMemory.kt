@@ -30,7 +30,8 @@ class CrearUsuarioRepositoryInMemory(private val authApi: AuthApiService) :
                             id = body.id,
                             name = body.name,
                             email = body.email,
-                            password = password // guardamos la misma que se usó
+                            password = password,
+                            keepLogged = false
                         )
                         withContext(Dispatchers.Main) {
                             onSuccess(user)

@@ -58,6 +58,7 @@ class LoginViewModel(
     fun logging(onSuccess: (String) -> Unit = {}) {
         val email = _uiState.value.email.trim()
         val password = _uiState.value.password
+        val keepLogged = _uiState.value.keepLogged
 
         if (email.isEmpty()) {
             _uiState.value = _uiState.value.copy(
@@ -86,6 +87,7 @@ class LoginViewModel(
         userRepository.login(
             email = email,
             password = password,
+            keepLogged = keepLogged,
             onError = { throwable ->
                 viewModelScope.launch(Dispatchers.Main) {
                     _uiState.value = _uiState.value.copy(
@@ -110,12 +112,15 @@ class LoginViewModel(
                         "¡Bienvenido!",
                         "¡Bienvenido ${user.name}!"
                     )
-                    delay(1500)
+                    delay(1000)
                     onSuccess(user.id!!)
                 }
-            }
+            },
+
         )
     }
+
+
 
 
     // Funciones auxiliares para mostrar diálogos

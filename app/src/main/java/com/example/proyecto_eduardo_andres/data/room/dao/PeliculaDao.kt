@@ -18,7 +18,7 @@ interface PeliculaDao {
     fun getById(id: String): Pelicula?
 
     @Query("SELECT * FROM peliculas WHERE categoria = :categoria")
-    fun getByCategoria(categoria: Int): List<Pelicula>
+    fun getByCategoria(categoria: String): List<Pelicula>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(pelicula: Pelicula)

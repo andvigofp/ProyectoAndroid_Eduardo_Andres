@@ -7,7 +7,7 @@ import com.example.proyecto_eduardo_andres.remote.dto.UsuarioDto
 interface IUserRepository {
 
     fun getUser(id: String, onError: (Throwable) -> Unit, onSuccess: (UserDTO) -> Unit)
-    fun login(email: String, password: String, onError: (Throwable) -> Unit, onSuccess: (UserDTO) -> Unit)
+    fun login(email: String, password: String, keepLogged: Boolean,  onError: (Throwable) -> Unit, onSuccess: (UserDTO) -> Unit)
 
     fun loginUser(user: UserRepo.UserConfig, onSuccess: (UserRepo.UserConfig) -> Unit, onError: () -> Unit)
 
