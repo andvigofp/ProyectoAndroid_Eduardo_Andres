@@ -25,6 +25,7 @@ import com.example.proyecto_eduardo_andres.data.repository.alquilerSeriesReposit
 import com.example.proyecto_eduardo_andres.data.repository.alquilerSeriesRepository.AlquilerSeriesRepositoryInMemory
 import com.example.proyecto_eduardo_andres.data.repository.alquilerSeriesSearchRepository.AlquilerSearchSeriesRepository
 import com.example.proyecto_eduardo_andres.data.repository.camaraRepository.CamaraRepositoryInMemory
+import com.example.proyecto_eduardo_andres.data.repository.loginRepository.UserRepo
 import com.example.proyecto_eduardo_andres.data.repository.loginRepository.UserRepositoryHibridoLogin
 import com.example.proyecto_eduardo_andres.data.repository.peliculasRepository.PeliculasRepositoryHibrido
 import com.example.proyecto_eduardo_andres.data.room.AppDatabase
@@ -96,25 +97,21 @@ fun AppNavigation() {
         AlquilerSeriesRepositoryInMemory()
     }
 
-    val authRepository = remember {
 
-        val db = AppDatabase.getDatabase(context)
 
-        UserRepositoryHibridoLogin(
-            userDao = db.userDao(),
-            usuarioApi = RetrofitClient.usuarioApiService
-        )
+    val application = context.applicationContext as Application
+
+    val userRepository = remember {
+        UserRepo(application)
     }
 
-
-
-    // --- NUEVO: AppNavigationViewModel ---
     val appNavigationViewModel: AppNavigationViewModel = viewModel(
         factory = AppNavigationViewModelFactory(
-            application = context.applicationContext as Application,
-            userRepository = authRepository
+            application = application,
+            userRepository = userRepository
         )
     )
+
 
     val uiState by appNavigationViewModel.uiState.collectAsState()
 
@@ -130,7 +127,7 @@ fun AppNavigation() {
     }
 
     val loginViewModel: LoginViewModel = viewModel(
-        factory = LoginViewModelFactory(authRepository)
+        factory = LoginViewModelFactory(userRepository)
     )
 
 
@@ -169,10 +166,12 @@ fun AppNavigation() {
 
     NavHost(
         navController = navController,
-        startDestination = RouteNavigation.Login
-    ) {
+        startDestination = uiState.initialRoute
+    ){
 
-        // ---------- LOGIN ----------
+
+
+    // ---------- LOGIN ----------
         composable<RouteNavigation.Login> {
 
             LogingScreen(
@@ -180,7 +179,8 @@ fun AppNavigation() {
                     navigate(RouteNavigation.VideoClubPeliculas(it))
                 },
                 onCrearUsuarioClick = { navigate(RouteNavigation.CrearUsuario) },
-                onRecuperarPasswordClick = { navigate(RouteNavigation.RecuperarPassword) }
+                onRecuperarPasswordClick = { navigate(RouteNavigation.RecuperarPassword) },
+                loginViewModel = loginViewModel
             )
         }
 

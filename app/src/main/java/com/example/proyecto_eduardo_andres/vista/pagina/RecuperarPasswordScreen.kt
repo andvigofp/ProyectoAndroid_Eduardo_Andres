@@ -56,12 +56,14 @@ import com.example.proyecto_eduardo_andres.vista.componente.componenteRecuperarP
 @Composable
 fun RecuperarPasswordScreen(
     repository: IRecuperarPasswordRepository,
-    recuperarPasswordViewModel: RecuperarPasswordViewModel = viewModel(
-        factory = RecuperarPasswordViewModelFactory(repository)
-    ),
     onRecuperarClick: () -> Unit = {},
     onCancelarClick: () -> Unit = {}
 ) {
+
+    val recuperarPasswordViewModel: RecuperarPasswordViewModel = viewModel(
+        factory = RecuperarPasswordViewModelFactory(repository)
+    )
+
     val uiState by recuperarPasswordViewModel.uiState.collectAsState()
 
     // Local state para formularios y sincronización

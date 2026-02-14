@@ -9,7 +9,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class CrearUsuarioRepositoryInMemory(private val authApi: AuthApiService) :
-    com.example.proyecto_eduardo_andres.data.repository.crearUsuario.ICrearUsuarioRepository {
+   ICrearUsuarioRepository {
 
     override fun crearUsuario(
         nombre: String,
