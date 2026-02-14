@@ -15,13 +15,17 @@ data class UsuarioDto(
 
     @SerializedName("passwd")
     val passwd: String,
+
+    @SerializedName("keepLogged")
+    val keepLogged: Boolean
 ) {
     fun toUser(): User {
         return User(
             id = id,
             name = name,
             email = email,
-            passwd = passwd
+            passwd = passwd,
+            keepLogged = keepLogged
         )
     }
 }

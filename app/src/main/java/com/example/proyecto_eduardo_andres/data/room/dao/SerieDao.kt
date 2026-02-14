@@ -17,7 +17,7 @@ interface SerieDao {
     @Query("SELECT * FROM series WHERE id = :id")
     fun getById(id: String): Serie?
 
-    @Query("SELECT * FROM series WHERE categoria = :categoria")
+    @Query("SELECT * FROM peliculas WHERE categoria = :categoria")
     fun getByCategoria(categoria: Int): List<Serie>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)

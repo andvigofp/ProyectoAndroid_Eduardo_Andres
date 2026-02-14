@@ -38,34 +38,35 @@ import androidx.compose.material3.MaterialTheme
 import com.example.proyecto_eduardo_andres.vista.componente.componenteAlertDialog.InfoDialog
 import com.example.proyecto_eduardo_andres.data.room.AppDatabase
 import androidx.compose.ui.platform.LocalContext
+import com.example.proyecto_eduardo_andres.data.repository.loginRepository.IUserRepository
 import com.example.proyecto_eduardo_andres.data.repository.loginRepository.UserRepositoryHibridoLogin
+import com.example.proyecto_eduardo_andres.data.repository.loginRepository.UserRepositoryInMemory
 import com.example.proyecto_eduardo_andres.remote.RetrofitClient
 
 @Composable
 fun LogingScreen(
+    loginViewModel: LoginViewModel,
     onCrearUsuarioClick: () -> Unit,
     onRecuperarPasswordClick: () -> Unit,
-    onLoginSuccess: (String) -> Unit
+    onLoginSuccess: (String) -> Unit,
     ) {
 
-    val loginViewModel: LoginViewModel = viewModel(
-        factory = LoginViewModelFactory(
-            UserRepositoryHibridoLogin(
-                userDao = AppDatabase.getDatabase(LocalContext.current).userDao(),
-                usuarioApi = RetrofitClient.usuarioApiService
-            )
-        )
-    )
+
+
 
     val uiState by loginViewModel.uiState.collectAsState()
 
 //    // --- Navegación después de login exitoso ---
-//    LaunchedEffect(uiState.isLoginSuccessful) {
-//        if (uiState.isLoginSuccessful) {
-//            loginViewModel.loggedInUserId ?: return@LaunchedEffect
-//            onAccederClick() // navegación segura
-//        }
-//    }
+    LaunchedEffect(uiState.isLoginSuccessful) {
+        if (uiState.isLoginSuccessful) {
+            loginViewModel.loggedInUserId?.let {
+                onLoginSuccess(it)
+            }
+        }
+    }
+
+
+
 
     val scrollState = rememberScrollState()
 
@@ -169,7 +170,7 @@ fun LogingScreen(
                     accederButton = ButtonData(nombre = R.string.acceder, type = ButtonType.PRIMARY),
                     crearUsuarioButton = ButtonData(nombre = R.string.crear_usuario, type = ButtonType.SECONDARY),
                     recuperarButton = ButtonData(nombre = R.string.recuperar_contrasenha, type = ButtonType.DANGER),
-                    enabledAcceder = uiState.isLoginButtonEnabled,
+                    enabledAcceder = uiState.isLoginButtonEnabled && !uiState.isLoading,
                     onAccederClick = {
                         // Solo ejecuta login, no navegación directa
                         loginViewModel.logging {
@@ -199,11 +200,19 @@ fun LogingScreen(
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun LoginScreenPreview() {
+    val fakeRepository = UserRepositoryInMemory(
+        authApi = RetrofitClient.authApiService
+    )
+
+    val previewViewModel = LoginViewModel(fakeRepository)
+
     MaterialTheme {
         LogingScreen(
+           loginViewModel = previewViewModel,
             onLoginSuccess = { println("Acceder clic - login con usuario de ejemplo") },
             onCrearUsuarioClick = {},
-            onRecuperarPasswordClick = {}
+            onRecuperarPasswordClick = {},
+
         )
     }
 }

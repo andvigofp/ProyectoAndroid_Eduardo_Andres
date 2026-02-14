@@ -9,7 +9,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class CrearUsuarioRepositoryInMemory(private val authApi: AuthApiService) :
-    com.example.proyecto_eduardo_andres.data.repository.crearUsuario.ICrearUsuarioRepository {
+   ICrearUsuarioRepository {
 
     override fun crearUsuario(
         nombre: String,
@@ -30,7 +30,8 @@ class CrearUsuarioRepositoryInMemory(private val authApi: AuthApiService) :
                             id = body.id,
                             name = body.name,
                             email = body.email,
-                            password = password // guardamos la misma que se usó
+                            password = password,
+                            keepLogged = false
                         )
                         withContext(Dispatchers.Main) {
                             onSuccess(user)

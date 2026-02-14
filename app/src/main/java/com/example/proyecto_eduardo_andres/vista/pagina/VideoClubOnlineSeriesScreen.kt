@@ -18,6 +18,7 @@ import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalNavigationDrawer
@@ -36,6 +37,7 @@ import kotlin.collections.component2
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.compose.colorAzulOscurso
@@ -74,100 +76,113 @@ fun VideoClubOnlineSeriesScreen(
     // Observar estado UI del ViewModel
     val uiState by viewModel.uiState.collectAsState()
 
-    ModalNavigationDrawer(
-        drawerState = drawerState,
-        drawerContent = {
-            VideoClubMenuDrawer(
-                drawerState = drawerState,
-                scope = scope,
-                onPeliculasClick = onDrawerPeliculasClick,
-                onSeriesClick = onDrawerSeriesClick
-            )
-        }
-    ) {
+    if (uiState.isLoading) {
         Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(MaterialTheme.colorScheme.background)
+            modifier = Modifier.fillMaxSize(),
+            contentAlignment = Alignment.Center
         ) {
-            // ---------- TOOLBAR ----------
+            CircularProgressIndicator()
+        }
+    } else {
+        ModalNavigationDrawer(
+            drawerState = drawerState,
+            drawerContent = {
+                VideoClubMenuDrawer(
+                    drawerState = drawerState,
+                    scope = scope,
+                    onPeliculasClick = onDrawerPeliculasClick,
+                    onSeriesClick = onDrawerSeriesClick
+                )
+            }
+        ) {
             Box(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .height(toolbarHeight)
-                    .background(
-                        Brush.verticalGradient(
-                            colors = listOf(colorVioleta, colorAzulOscurso)
-                        )
-                    )
-            ) {
-                Column(modifier = Modifier.statusBarsPadding()) {
-                    val scope = rememberCoroutineScope()
-
-                    toolBarVideoClubOnline(
-                        drawerState = drawerState,
-                        scope = scope,
-                        onHomeClick = onHomeClick,
-                        onSearchClick = onSearchClick,
-                        onCameraClick = onCameraClick,
-                        onProfileClick = onProfileClick,
-                        onLogoutClick = onLogoutClick
-                    )
-                }
-            }
-
-            // ---------- CONTENIDO ----------
-            LazyColumn(
-                modifier = Modifier
                     .fillMaxSize()
-                    .padding(top = toolbarHeight)
-                    .background(MaterialTheme.colorScheme.background),
-                verticalArrangement = Arrangement.spacedBy(24.dp)
+                    .background(MaterialTheme.colorScheme.background)
             ) {
-                item { Spacer(modifier = Modifier.height(2.dp)) }
+                // ---------- TOOLBAR ----------
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(toolbarHeight)
+                        .background(
+                            Brush.verticalGradient(
+                                colors = listOf(colorVioleta, colorAzulOscurso)
+                            )
+                        )
+                ) {
+                    Column(modifier = Modifier.statusBarsPadding()) {
+                        val scope = rememberCoroutineScope()
 
-                // Botones de categorías con callback
-                item {
-                    VideoClubCategoriasBotones(
-                        onCategoriaClick = { categoriaId -> viewModel.filtrarPorCategoria(categoriaId) },
-                        modifier = Modifier.statusBarsPadding()
-                    )
+                        toolBarVideoClubOnline(
+                            drawerState = drawerState,
+                            scope = scope,
+                            onHomeClick = onHomeClick,
+                            onSearchClick = onSearchClick,
+                            onCameraClick = onCameraClick,
+                            onProfileClick = onProfileClick,
+                            onLogoutClick = onLogoutClick
+                        )
+                    }
                 }
 
-                item { Spacer(modifier = Modifier.height(8.dp)) }
+                // ---------- CONTENIDO ----------
+                LazyColumn(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(top = toolbarHeight)
+                        .background(MaterialTheme.colorScheme.background),
+                    verticalArrangement = Arrangement.spacedBy(24.dp)
+                ) {
+                    item { Spacer(modifier = Modifier.height(2.dp)) }
 
-                // Series agrupadas por categoría desde el ViewModel
-                uiState.seriesPorCategoria.forEach { (categoria, series) ->
-                    item(key = categoria) {
-                        Column(
-                            verticalArrangement = Arrangement.spacedBy(16.dp),
-                            modifier = Modifier.fillMaxWidth()
-                        ) {
-                            Text(
-                                text = stringResource(categoria),
-                                fontSize = 22.sp,
-                                fontWeight = FontWeight.Bold,
-                                color = MaterialTheme.colorScheme.primary,
-                                modifier = Modifier.padding(start = 4.dp, bottom = 8.dp)
-                            )
-                            LazyRow(
-                                horizontalArrangement = Arrangement.spacedBy(16.dp),
+                    // Botones de categorías con callback
+                    item {
+                        VideoClubCategoriasBotones(
+                            onCategoriaClick = { categoriaId ->
+                                viewModel.filtrarPorCategoria(
+                                    categoriaId
+                                )
+                            },
+                            modifier = Modifier.statusBarsPadding()
+                        )
+                    }
+
+                    item { Spacer(modifier = Modifier.height(8.dp)) }
+
+                    // Series agrupadas por categoría desde el ViewModel
+                    uiState.seriesPorCategoria.forEach { (categoria, series) ->
+                        item(key = categoria) {
+                            Column(
+                                verticalArrangement = Arrangement.spacedBy(16.dp),
                                 modifier = Modifier.fillMaxWidth()
                             ) {
-                                items(series) { serie ->
-                                    SerieItem(
-                                        serie = serie,
-                                        onClick = {
-                                            onSerieClick(serie)
-                                        }
-                                    )
+                                Text(
+                                    text = stringResource(categoria),
+                                    fontSize = 22.sp,
+                                    fontWeight = FontWeight.Bold,
+                                    color = MaterialTheme.colorScheme.primary,
+                                    modifier = Modifier.padding(start = 4.dp, bottom = 8.dp)
+                                )
+                                LazyRow(
+                                    horizontalArrangement = Arrangement.spacedBy(16.dp),
+                                    modifier = Modifier.fillMaxWidth()
+                                ) {
+                                    items(series) { serie ->
+                                        SerieItem(
+                                            serie = serie,
+                                            onClick = {
+                                                onSerieClick(serie)
+                                            }
+                                        )
+                                    }
                                 }
                             }
                         }
                     }
-                }
 
-                item { Spacer(modifier = Modifier.height(16.dp)) }
+                    item { Spacer(modifier = Modifier.height(16.dp)) }
+                }
             }
         }
     }

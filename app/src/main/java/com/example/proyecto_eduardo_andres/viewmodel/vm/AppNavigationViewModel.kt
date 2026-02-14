@@ -2,15 +2,21 @@ package com.example.proyecto_eduardo_andres.viewmodel.vm
 
 import android.app.Application
 import android.content.Context
+import androidx.compose.runtime.key
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewModelScope
 import com.example.proyecto_eduardo_andres.data.repository.loginRepository.IUserRepository
+import com.example.proyecto_eduardo_andres.modelo.UserDTO
 import com.example.proyecto_eduardo_andres.naveHost.RouteNavigation
 import com.example.proyecto_eduardo_andres.viewmodel.ustate.AppNavigationUiState
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class AppNavigationViewModel(
     application: Application,
@@ -27,39 +33,35 @@ class AppNavigationViewModel(
     fun checkUserSession() {
         _uiState.value = _uiState.value.copy(isCheckingSession = true)
 
-        // Para este ejemplo, asumimos que guardas un usuario en SharedPreferences
-        val sharedPref = getApplication<Application>()
-            .getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
+        viewModelScope.launch(Dispatchers.IO) {
 
-        val userId = sharedPref.getInt("user_id", -1)
+            val currentUser = userRepository.getCurrentUser()
 
-        if (userId != -1) {
-            // Intentamos recuperar info del usuario
-            userRepository.getUser(
-                id = userId.toString(),
-                onError = {
+            withContext(Dispatchers.Main) {
+                if (currentUser != null && currentUser.keepLogged) {
+                    _uiState.value = AppNavigationUiState(
+                        isCheckingSession = false,
+                        currentUser = UserDTO(
+                            currentUser.id,
+                            currentUser.name,
+                            currentUser.email,
+                            currentUser.password,
+                            currentUser.keepLogged
+                        ),
+                        initialRoute = RouteNavigation.VideoClubPeliculas(currentUser.id)
+                    )
+                } else {
                     _uiState.value = AppNavigationUiState(
                         isCheckingSession = false,
                         currentUser = null,
                         initialRoute = RouteNavigation.Login
                     )
-                },
-                onSuccess = { user ->
-                    _uiState.value = AppNavigationUiState(
-                        isCheckingSession = false,
-                        currentUser = user,
-                        initialRoute = RouteNavigation.VideoClubPeliculas(user.id.toString())
-                    )
                 }
-            )
-        } else {
-            _uiState.value = AppNavigationUiState(
-                isCheckingSession = false,
-                currentUser = null,
-                initialRoute = RouteNavigation.Login
-            )
+            }
         }
     }
+
+
 
     fun logout() {
         // Limpiar SharedPreferences

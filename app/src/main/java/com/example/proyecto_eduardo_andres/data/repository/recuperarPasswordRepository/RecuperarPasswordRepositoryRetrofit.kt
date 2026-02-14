@@ -42,7 +42,8 @@ class RecuperarPasswordRepositoryRetrofit : IRecuperarPasswordRepository {
                     id = found.id,
                     name = found.name,
                     email = found.email,
-                    passwd = newPassword
+                    passwd = newPassword,
+                    keepLogged = false
                 )
 
                 val updateResponse = try {

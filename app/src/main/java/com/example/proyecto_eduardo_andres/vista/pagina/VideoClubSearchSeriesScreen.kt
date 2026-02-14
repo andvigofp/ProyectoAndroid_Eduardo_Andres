@@ -41,11 +41,7 @@ import com.example.proyecto_eduardo_andres.vista.componente.componenteToolbar.to
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun VideoClubSearchSeriesScreen(
-    userId: String,
     repository: IAlquilerSearchSeriesRepository,
-    viewModel: VideoClubOnlineSearchSeriesViewModel = viewModel(
-        factory = VideoClubOnlineSearchSeriesViewModelFactory(repository)
-    ),
     onBackClick: () -> Unit,
     onHomeClick: () -> Unit,
     onCameraClick: () -> Unit,
@@ -53,6 +49,11 @@ fun VideoClubSearchSeriesScreen(
     onLogoutClick: () -> Unit,
     onSerieClick: (VideoClubOnlineSeriesData) -> Unit,
 ) {
+
+    val viewModel: VideoClubOnlineSearchSeriesViewModel = viewModel(
+        factory = VideoClubOnlineSearchSeriesViewModelFactory(repository)
+    )
+
     val uiState by viewModel.uiState.collectAsState()
     val context = LocalContext.current
 
@@ -71,6 +72,8 @@ fun VideoClubSearchSeriesScreen(
         start = Offset(0f, 0f),
         end = Offset(1000f, 1000f)
     )
+
+
 
     Column(
         modifier = Modifier
@@ -133,7 +136,6 @@ fun VideoClubSearchScreenSeriePreview() {
     val repository = AlquilerSearchSeriesRepositoryInMemory()
 
     VideoClubSearchSeriesScreen(
-        userId = 1.toString(),
         repository = repository,
         onBackClick = {},
         onHomeClick = {},

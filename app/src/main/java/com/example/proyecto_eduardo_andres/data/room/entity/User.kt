@@ -10,5 +10,5 @@ data class User(
     @ColumnInfo(name = "name") val name: String,
     @ColumnInfo(name = "email") val email: String,
     @ColumnInfo(name = "passwd") val passwd: String,
-    @ColumnInfo(name = "keep_logged") val keepLogged: Boolean = false
+    @ColumnInfo(name = "keep_logged") val keepLogged: Boolean
 )

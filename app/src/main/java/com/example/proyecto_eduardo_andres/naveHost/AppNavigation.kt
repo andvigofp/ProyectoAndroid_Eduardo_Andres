@@ -25,12 +25,15 @@ import com.example.proyecto_eduardo_andres.data.repository.alquilerSeriesReposit
 import com.example.proyecto_eduardo_andres.data.repository.alquilerSeriesRepository.AlquilerSeriesRepositoryInMemory
 import com.example.proyecto_eduardo_andres.data.repository.alquilerSeriesSearchRepository.AlquilerSearchSeriesRepository
 import com.example.proyecto_eduardo_andres.data.repository.camaraRepository.CamaraRepositoryInMemory
+import com.example.proyecto_eduardo_andres.data.repository.loginRepository.UserRepo
 import com.example.proyecto_eduardo_andres.data.repository.loginRepository.UserRepositoryHibridoLogin
+import com.example.proyecto_eduardo_andres.data.repository.peliculasRepository.PeliculasRepositoryHibrido
 import com.example.proyecto_eduardo_andres.data.room.AppDatabase
 import com.example.proyecto_eduardo_andres.data.repository.peliculasRepository.PeliculasRepositoryRetrofit
 import com.example.proyecto_eduardo_andres.data.repository.perfilRepositorio.PerfilUsuarioRepositoryRetrofit
 import com.example.proyecto_eduardo_andres.data.repository.qrRepository.QRRepositoryInMemory
 import com.example.proyecto_eduardo_andres.data.repository.recuperarPasswordRepository.RecuperarPasswordRepositoryRetrofit
+import com.example.proyecto_eduardo_andres.data.repository.seriesRepository.SeriesRepositoryHibrido
 import com.example.proyecto_eduardo_andres.remote.RetrofitClient
 import com.example.proyecto_eduardo_andres.viewmodel.vm.AppNavigationViewModel
 import com.example.proyecto_eduardo_andres.viewmodel.vm.AppNavigationViewModelFactory
@@ -67,19 +70,22 @@ fun AppNavigation() {
     val repositoryCamara = remember { CamaraRepositoryInMemory() }
     val repositoryQR = remember { QRRepositoryInMemory() }
     val repositoryRecuperarPassword = remember { RecuperarPasswordRepositoryRetrofit() }
-    val repositoryPeliculasData = remember { PeliculasRepositoryRetrofit(context) }
-    val repositorySeriesData = remember { SeriesRepositoryRetrofit(context) }
     val repositorySearchPeliculas = remember { AlquilerSearchPeliculasRepositoryRetrofit(context) }
     val repositorySearchSeries = remember { AlquilerSearchSeriesRepository(context) }
     val repositoryPerfilUsuario = remember { PerfilUsuarioRepositoryRetrofit() }
+    val repositoryPeliculasData = remember {
+        PeliculasRepositoryHibrido(
+            api = RetrofitClient.peliApiService,
+            peliculaDao = AppDatabase.getDatabase(context).peliculaDao(),
+            context = context
+        )
+    }
 
-    val authRepository = remember {
-
-        val db = AppDatabase.getDatabase(context)
-
-        UserRepositoryHibridoLogin(
-            userDao = db.userDao(),
-            usuarioApi = RetrofitClient.usuarioApiService
+    val repositorySeriesData = remember {
+        SeriesRepositoryHibrido(
+            api = RetrofitClient.serieApiService,
+            serieDao = AppDatabase.getDatabase(context).serieDao(),
+            context = context
         )
     }
 
@@ -87,17 +93,25 @@ fun AppNavigation() {
         AlquilerPeliculasRepositoryInMemory()
     }
 
-    val alquilerRepositorioSerie = remember { 
+    val alquilerRepositorioSerie = remember {
         AlquilerSeriesRepositoryInMemory()
     }
 
-    // --- NUEVO: AppNavigationViewModel ---
+
+
+    val application = context.applicationContext as Application
+
+    val userRepository = remember {
+        UserRepo(application)
+    }
+
     val appNavigationViewModel: AppNavigationViewModel = viewModel(
         factory = AppNavigationViewModelFactory(
-            application = context.applicationContext as Application,
-            userRepository = authRepository
+            application = application,
+            userRepository = userRepository
         )
     )
+
 
     val uiState by appNavigationViewModel.uiState.collectAsState()
 
@@ -113,7 +127,7 @@ fun AppNavigation() {
     }
 
     val loginViewModel: LoginViewModel = viewModel(
-        factory = LoginViewModelFactory(authRepository)
+        factory = LoginViewModelFactory(userRepository)
     )
 
 
@@ -152,10 +166,12 @@ fun AppNavigation() {
 
     NavHost(
         navController = navController,
-        startDestination = RouteNavigation.Login
-    ) {
+        startDestination = uiState.initialRoute
+    ){
 
-        // ---------- LOGIN ----------
+
+
+    // ---------- LOGIN ----------
         composable<RouteNavigation.Login> {
 
             LogingScreen(
@@ -163,7 +179,8 @@ fun AppNavigation() {
                     navigate(RouteNavigation.VideoClubPeliculas(it))
                 },
                 onCrearUsuarioClick = { navigate(RouteNavigation.CrearUsuario) },
-                onRecuperarPasswordClick = { navigate(RouteNavigation.RecuperarPassword) }
+                onRecuperarPasswordClick = { navigate(RouteNavigation.RecuperarPassword) },
+                loginViewModel = loginViewModel
             )
         }
 
@@ -257,7 +274,6 @@ fun AppNavigation() {
         composable<RouteNavigation.SearchSeries> { route ->
             val route = route.toRoute<RouteNavigation.SearchSeries>()
             VideoClubSearchSeriesScreen(
-                userId = route.userId,
                 repository = repositorySearchSeries,
                 onBackClick = { navController.popBackStack() },
                 onHomeClick = { navigate(RouteNavigation.VideoClubSeries(route.userId)) },

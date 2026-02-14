@@ -18,6 +18,7 @@ import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
@@ -28,6 +29,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.res.stringResource
@@ -75,111 +77,124 @@ fun VideoClubOnlinePeliculasScreen(
 
     val scope = rememberCoroutineScope()
 
-    ModalNavigationDrawer(
-        drawerState = drawerState,
-        drawerContent = {
-            VideoClubMenuDrawer(
-                drawerState = drawerState,
-                scope = scope,
-                onPeliculasClick =  onDrawerPeliculasClick,
-                onSeriesClick = onDrawerSeriesClick
-            )
-        }
-    ) {
+    if (uiState.isLoading) {
         Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(MaterialTheme.colorScheme.background)
+            modifier = Modifier.fillMaxSize(),
+            contentAlignment = Alignment.Center
         ) {
-            // ---------- TOOLBAR ----------
+            CircularProgressIndicator()
+        }
+    } else {
+
+
+        ModalNavigationDrawer(
+            drawerState = drawerState,
+            drawerContent = {
+                VideoClubMenuDrawer(
+                    drawerState = drawerState,
+                    scope = scope,
+                    onPeliculasClick =  onDrawerPeliculasClick,
+                    onSeriesClick = onDrawerSeriesClick
+                )
+            }
+        ) {
             Box(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .height(toolbarHeight)
-                    .background(
-                        Brush.verticalGradient(
-                            colors = listOf(
-                                colorVioleta, colorAzulOscurso
+                    .fillMaxSize()
+                    .background(MaterialTheme.colorScheme.background)
+            ) {
+                // ---------- TOOLBAR ----------
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(toolbarHeight)
+                        .background(
+                            Brush.verticalGradient(
+                                colors = listOf(
+                                    colorVioleta, colorAzulOscurso
+                                )
                             )
                         )
-                    )
-            ) {
-                Column(
-                    modifier = Modifier.statusBarsPadding() // para no tapar status bar
                 ) {
+                    Column(
+                        modifier = Modifier.statusBarsPadding() // para no tapar status bar
+                    ) {
 
 
-                    toolBarVideoClubOnline(
-                        drawerState = drawerState,
-                        scope = scope,
-                        onHomeClick = onHomeClick,
-                        onSearchClick = onSearchClick,
-                        onCameraClick = onCameraClick,
-                        onProfileClick = onProfileClick,
-                        onLogoutClick = onLogoutClick
-                    )
+                        toolBarVideoClubOnline(
+                            drawerState = drawerState,
+                            scope = scope,
+                            onHomeClick = onHomeClick,
+                            onSearchClick = onSearchClick,
+                            onCameraClick = onCameraClick,
+                            onProfileClick = onProfileClick,
+                            onLogoutClick = onLogoutClick
+                        )
 
-                }
-            }
-
-            // ---------- CONTENIDO ----------
-            LazyColumn(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(top = toolbarHeight) // debajo toolbar
-                    .background(MaterialTheme.colorScheme.background),
-                verticalArrangement = Arrangement.spacedBy(24.dp)
-            ) {
-                item { Spacer(modifier = Modifier.height(2.dp)) }
-
-                // Botones de categorías, ahora con callback para filtrar
-                item {
-                    VideoClubCategoriasBotones(
-                        onCategoriaClick = { categoriaId ->
-                            viewModel.filtrarPorCategoria(categoriaId)
-                        },
-                        modifier = Modifier.statusBarsPadding() // separa del status bar si quieres
-                    )
+                    }
                 }
 
-                item { Spacer(modifier = Modifier.height(8.dp)) }
+                // ---------- CONTENIDO ----------
+                LazyColumn(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(top = toolbarHeight) // debajo toolbar
+                        .background(MaterialTheme.colorScheme.background),
+                    verticalArrangement = Arrangement.spacedBy(24.dp)
+                ) {
+                    item { Spacer(modifier = Modifier.height(2.dp)) }
 
-                // Mostrar películas desde el ViewModel, que ya están filtradas/agrupadas
-                uiState.peliculasPorCategoria.forEach { (categoria, peliculas) ->
-                    item(key = categoria) {
-                        Column(
-                            verticalArrangement = Arrangement.spacedBy(16.dp),
-                            modifier = Modifier.fillMaxWidth()
-                        ) {
-                            Text(
-                                text = stringResource(categoria),
-                                fontSize = 22.sp,
-                                fontWeight = FontWeight.Bold,
-                                color = MaterialTheme.colorScheme.primary,
-                                modifier = Modifier.padding(start = 4.dp, bottom = 8.dp)
-                            )
-                            LazyRow(
-                                horizontalArrangement = Arrangement.spacedBy(16.dp),
+                    // Botones de categorías, ahora con callback para filtrar
+                    item {
+                        VideoClubCategoriasBotones(
+                            onCategoriaClick = { categoriaId ->
+                                viewModel.filtrarPorCategoria(categoriaId)
+                            },
+                            modifier = Modifier.statusBarsPadding() // separa del status bar si quieres
+                        )
+                    }
+
+                    item { Spacer(modifier = Modifier.height(8.dp)) }
+
+                    // Mostrar películas desde el ViewModel, que ya están filtradas/agrupadas
+                    uiState.peliculasPorCategoria.forEach { (categoria, peliculas) ->
+                        item(key = categoria) {
+                            Column(
+                                verticalArrangement = Arrangement.spacedBy(16.dp),
                                 modifier = Modifier.fillMaxWidth()
                             ) {
-                                items(peliculas) { pelicula ->
-                                    PeliculaItem(
-                                      pelicula = pelicula,
-                                        onClick = {
-                                            onPeliculaClick(pelicula)
-                                        }
-                                    )
+                                Text(
+                                    text = stringResource(categoria),
+                                    fontSize = 22.sp,
+                                    fontWeight = FontWeight.Bold,
+                                    color = MaterialTheme.colorScheme.primary,
+                                    modifier = Modifier.padding(start = 4.dp, bottom = 8.dp)
+                                )
+                                LazyRow(
+                                    horizontalArrangement = Arrangement.spacedBy(16.dp),
+                                    modifier = Modifier.fillMaxWidth()
+                                ) {
+                                    items(peliculas) { pelicula ->
+                                        PeliculaItem(
+                                            pelicula = pelicula,
+                                            onClick = {
+                                                onPeliculaClick(pelicula)
+                                            }
+                                        )
+                                    }
                                 }
                             }
                         }
                     }
-                }
 
-                item { Spacer(modifier = Modifier.height(16.dp)) }
+                    item { Spacer(modifier = Modifier.height(16.dp)) }
+                }
             }
         }
     }
 }
+
+
 
 
 
