@@ -6,13 +6,20 @@ import androidx.room.Room
 import com.example.proyecto_eduardo_andres.data.room.entity.User
 import androidx.room.RoomDatabase
 import com.example.proyecto_eduardo_andres.data.room.dao.PeliculaDao
+import com.example.proyecto_eduardo_andres.data.room.dao.SearchPeliculaDao
 import com.example.proyecto_eduardo_andres.data.room.dao.SerieDao
 import com.example.proyecto_eduardo_andres.data.room.dao.UserDao
 import com.example.proyecto_eduardo_andres.data.room.entity.Pelicula
+import com.example.proyecto_eduardo_andres.data.room.entity.SearchPelicula
 import com.example.proyecto_eduardo_andres.data.room.entity.Serie
 
 @Database(
-    entities = [User::class, Pelicula::class, Serie::class],
+    entities = [
+        User::class,
+        Pelicula::class,
+        Serie::class,
+        SearchPelicula::class
+    ],
     version = 1,
     exportSchema = false
 )
@@ -21,19 +28,22 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun userDao(): UserDao
     abstract fun peliculaDao(): PeliculaDao
     abstract fun serieDao(): SerieDao
+    abstract fun searchPeliculaDao(): SearchPeliculaDao
+
 
     companion object {
+
         @Volatile
         private var INSTANCE: AppDatabase? = null
 
         fun getDatabase(context: Context): AppDatabase {
             return INSTANCE ?: synchronized(this) {
+
                 val instance = Room.databaseBuilder(
                     context.applicationContext,
                     AppDatabase::class.java,
                     "app_database"
                 )
-                    .fallbackToDestructiveMigration() // SOLO desarrollo
                     .build()
 
                 INSTANCE = instance

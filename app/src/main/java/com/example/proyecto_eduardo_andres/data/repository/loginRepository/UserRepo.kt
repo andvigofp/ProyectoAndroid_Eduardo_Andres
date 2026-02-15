@@ -1,10 +1,8 @@
 package com.example.proyecto_eduardo_andres.data.repository.loginRepository
 
 import android.content.Context
-import android.content.SharedPreferences
-
-import com.example.proyecto_eduardo_andres.R
 import com.example.proyecto_eduardo_andres.data.room.AppDatabase
+import com.example.proyecto_eduardo_andres.data.room.entity.User
 import com.example.proyecto_eduardo_andres.modelo.UserDTO
 import com.example.proyecto_eduardo_andres.remote.RetrofitClient
 import kotlinx.coroutines.CoroutineScope
@@ -13,30 +11,17 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class UserRepo(
-    private val context: Context
+    context: Context
 ) : IUserRepository {
 
-    private val db = AppDatabase.getDatabase(context)
-    private val userDao = db.userDao()
+    private val userDao = AppDatabase
+        .getDatabase(context)
+        .userDao()
 
     private val repositorioHibrido = UserRepositoryHibridoLogin(
         usuarioApi = RetrofitClient.usuarioApiService,
         userDao = userDao
     )
-
-    companion object {
-        private const val NAME_KEY = "name_key"
-        private const val EMAIL_KEY = "email_key"
-        private const val ID_KEY = "id_key"
-        private const val PASSWORD_KEY = "password_key"
-        private const val KEEP_LOGGED_KEY = "keep_logged_key"
-    }
-
-    private fun getSharedPref(): SharedPreferences =
-        context.getSharedPreferences(
-            context.getString(R.string.preferences_file),
-            Context.MODE_PRIVATE
-        )
 
     // ================= LOGIN =================
 
@@ -47,30 +32,28 @@ class UserRepo(
         onError: (Throwable) -> Unit,
         onSuccess: (UserDTO) -> Unit
     ) {
-
         CoroutineScope(Dispatchers.IO).launch {
 
             val userDto = repositorioHibrido.login(email, password, keepLogged)
 
-            withContext(Dispatchers.Main) {
+            if (userDto != null) {
 
-                if (userDto != null) {
+                // Eliminamos sesión anterior
+                userDao.deleteAll()
 
-                    val userConfig = UserConfig(
-                        id = userDto.id ?: "",
-                        name = userDto.name,
-                        email = userDto.email,
-                        password = userDto.password,
-                        keepLogged = keepLogged
-                    )
+                // Guardamos usuario como sesión activa
+                val userEntity = userDto.toUser().copy(
+                    keepLogged = keepLogged
+                )
 
-                    loginUser(
-                        userConfig,
-                        onSuccess = { onSuccess(userDto) },
-                        onError = { onError(Throwable("Error guardando sesión")) }
-                    )
+                userDao.insert(userEntity)
 
-                } else {
+                withContext(Dispatchers.Main) {
+                    onSuccess(userDto)
+                }
+
+            } else {
+                withContext(Dispatchers.Main) {
                     onError(Throwable("Usuario no encontrado"))
                 }
             }
@@ -84,16 +67,29 @@ class UserRepo(
         onSuccess: (UserConfig) -> Unit,
         onError: () -> Unit
     ) {
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                userDao.deleteAll()
 
-        val sp = getSharedPref()
+                userDao.insert(
+                    User(
+                        id = user.id,
+                        name = user.name,
+                        email = user.email,
+                        passwd = "", // no guardamos password
+                        keepLogged = user.keepLogged
+                    )
+                )
 
-        with(sp.edit()) {
-            putString(ID_KEY, user.id)
-            putString(NAME_KEY, user.name)
-            putString(EMAIL_KEY, user.email)
-            putString(PASSWORD_KEY, user.password)
-            putBoolean(KEEP_LOGGED_KEY, user.keepLogged)
-            if (commit()) onSuccess(user) else onError()
+                withContext(Dispatchers.Main) {
+                    onSuccess(user)
+                }
+
+            } catch (e: Exception) {
+                withContext(Dispatchers.Main) {
+                    onError()
+                }
+            }
         }
     }
 
@@ -101,32 +97,42 @@ class UserRepo(
 
     override fun getCurrentUser(): UserConfig? {
 
-        val sp = getSharedPref()
+        val user = userDao.getLoggedUser()
 
-        val id = sp.getString(ID_KEY, null)
-        val name = sp.getString(NAME_KEY, null)
-        val email = sp.getString(EMAIL_KEY, null)
-        val password = sp.getString(PASSWORD_KEY, null) ?: ""
-        val keepLogged = sp.getBoolean(KEEP_LOGGED_KEY, false)
-
-        return if (id != null && name != null && email != null && keepLogged) {
-            UserConfig(id, name, email, password, keepLogged)
-        } else null
+        return user?.let {
+            UserConfig(
+                id = it.id,
+                name = it.name,
+                email = it.email,
+                password = "",
+                keepLogged = it.keepLogged
+            )
+        }
     }
 
-    override fun loggoutUser(onSuccess: () -> Unit, onError: () -> Unit) {
+    // ================= LOGOUT =================
 
-        val sp = getSharedPref()
-
-        with(sp.edit()) {
-            clear()
-            if (commit()) onSuccess() else onError()
-        }
-
+    override fun loggoutUser(
+        onSuccess: () -> Unit,
+        onError: () -> Unit
+    ) {
         CoroutineScope(Dispatchers.IO).launch {
-            userDao.deleteAll()
+            try {
+                userDao.deleteAll()
+
+                withContext(Dispatchers.Main) {
+                    onSuccess()
+                }
+
+            } catch (e: Exception) {
+                withContext(Dispatchers.Main) {
+                    onError()
+                }
+            }
         }
     }
+
+    // ================= GET USER =================
 
     override fun getUser(
         id: String,

@@ -13,38 +13,28 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.compose.ui.platform.LocalContext
-import com.example.proyecto_eduardo_andres.data.repository.seriesRepository.SeriesRepositoryRetrofit
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
-import com.example.proyecto_eduardo_andres.data.repository.alquilerPeliculasRepository.AlquilerPeliculaRepositoryRetrofit
 import com.example.proyecto_eduardo_andres.data.repository.alquilerPeliculasRepository.AlquilerPeliculasRepositoryInMemory
 import com.example.proyecto_eduardo_andres.data.repository.alquilerPeliculasSearchRepository.AlquilerSearchPeliculasRepositoryRetrofit
-import com.example.proyecto_eduardo_andres.data.repository.alquilerSeriesRepository.AlquilerSerieRepositoryRetrofit
+import com.example.proyecto_eduardo_andres.data.repository.alquilerPeliculasSearchRepository.AlquilerSearchPeliculasRepositoryRoom
 import com.example.proyecto_eduardo_andres.data.repository.alquilerSeriesRepository.AlquilerSeriesRepositoryInMemory
 import com.example.proyecto_eduardo_andres.data.repository.alquilerSeriesSearchRepository.AlquilerSearchSeriesRepository
 import com.example.proyecto_eduardo_andres.data.repository.camaraRepository.CamaraRepositoryInMemory
 import com.example.proyecto_eduardo_andres.data.repository.loginRepository.UserRepo
-import com.example.proyecto_eduardo_andres.data.repository.loginRepository.UserRepositoryHibridoLogin
-import com.example.proyecto_eduardo_andres.data.repository.peliculasRepository.PeliculasRepositoryHibrido
+import com.example.proyecto_eduardo_andres.data.repository.peliculasRepository.PeliculasRepositoryRoom
 import com.example.proyecto_eduardo_andres.data.room.AppDatabase
-import com.example.proyecto_eduardo_andres.data.repository.peliculasRepository.PeliculasRepositoryRetrofit
 import com.example.proyecto_eduardo_andres.data.repository.perfilRepositorio.PerfilUsuarioRepositoryRetrofit
 import com.example.proyecto_eduardo_andres.data.repository.qrRepository.QRRepositoryInMemory
 import com.example.proyecto_eduardo_andres.data.repository.recuperarPasswordRepository.RecuperarPasswordRepositoryRetrofit
-import com.example.proyecto_eduardo_andres.data.repository.seriesRepository.SeriesRepositoryHibrido
+import com.example.proyecto_eduardo_andres.data.repository.seriesRepository.SeriesRepositoryRoom
 import com.example.proyecto_eduardo_andres.remote.RetrofitClient
 import com.example.proyecto_eduardo_andres.viewmodel.vm.AppNavigationViewModel
 import com.example.proyecto_eduardo_andres.viewmodel.vm.AppNavigationViewModelFactory
 import com.example.proyecto_eduardo_andres.viewmodel.vm.LoginViewModel
 import com.example.proyecto_eduardo_andres.viewmodel.vm.LoginViewModelFactory
-import com.example.proyecto_eduardo_andres.viewmodel.vm.PerfilSeriesViewModel
-import com.example.proyecto_eduardo_andres.viewmodel.vm.PerfilSeriesViewModelFactory
-import com.example.proyecto_eduardo_andres.viewmodel.vm.VideoClubOnlinePeliculasViewModel
-import com.example.proyecto_eduardo_andres.viewmodel.vm.VideoClubOnlinePeliculasViewModelFactory
-import com.example.proyecto_eduardo_andres.viewmodel.vm.VideoClubOnlineSeriesViewModel
-import com.example.proyecto_eduardo_andres.viewmodel.vm.VideoClubOnlineSeriesViewModelFactory
 import com.example.proyecto_eduardo_andres.vista.pagina.AlquilarDevolverPeliculasScreen
 import com.example.proyecto_eduardo_andres.vista.pagina.AlquilerDevolverSeriesScreen
 import com.example.proyecto_eduardo_andres.vista.pagina.CamaraScreen
@@ -65,16 +55,22 @@ fun AppNavigation() {
 
     val navController = rememberNavController()
     val context = LocalContext.current
-    val repositoryPeliculas = remember { AlquilerPeliculaRepositoryRetrofit(context) }
-    val repositorySeries = remember { AlquilerSerieRepositoryRetrofit(context) }
     val repositoryCamara = remember { CamaraRepositoryInMemory() }
     val repositoryQR = remember { QRRepositoryInMemory() }
     val repositoryRecuperarPassword = remember { RecuperarPasswordRepositoryRetrofit() }
-    val repositorySearchPeliculas = remember { AlquilerSearchPeliculasRepositoryRetrofit(context) }
+    val repositorySearchPeliculas = remember {
+        AlquilerSearchPeliculasRepositoryRoom(
+            context,
+            api = RetrofitClient.alquilerSearchPeliculas,
+            searchDao = AppDatabase.getDatabase(context).searchPeliculaDao()
+        )
+    }
+
+
     val repositorySearchSeries = remember { AlquilerSearchSeriesRepository(context) }
     val repositoryPerfilUsuario = remember { PerfilUsuarioRepositoryRetrofit() }
     val repositoryPeliculasData = remember {
-        PeliculasRepositoryHibrido(
+        PeliculasRepositoryRoom(
             api = RetrofitClient.peliApiService,
             peliculaDao = AppDatabase.getDatabase(context).peliculaDao(),
             context = context
@@ -82,7 +78,7 @@ fun AppNavigation() {
     }
 
     val repositorySeriesData = remember {
-        SeriesRepositoryHibrido(
+        SeriesRepositoryRoom(
             api = RetrofitClient.serieApiService,
             serieDao = AppDatabase.getDatabase(context).serieDao(),
             context = context

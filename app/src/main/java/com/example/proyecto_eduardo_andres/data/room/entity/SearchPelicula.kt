@@ -7,22 +7,22 @@ import androidx.room.PrimaryKey
 import com.example.proyecto_eduardo_andres.R
 import com.example.proyecto_eduardo_andres.modelo.VideoClubOnlinePeliculasData
 
-@Entity(tableName = "peliculas")
-data class Pelicula(
+@Entity(tableName = "search_peliculas")
+data class SearchPelicula(
     @PrimaryKey
     val id: String,
     @ColumnInfo(name = "nombre") val nombre: String,
     @ColumnInfo(name = "categoria") val categoria: String,
-    @ColumnInfo(name = "imagen") val imagen: String,
-    @ColumnInfo(name = "descripcion") val descripcion: String
+    @ColumnInfo(name = "imagen") val imagen: String
 ) {
+
     fun toUiModel(context: Context): VideoClubOnlinePeliculasData {
         return VideoClubOnlinePeliculasData(
             id = id,
             nombre = resolveStringResource(context, nombre),
             categoria = resolveStringResource(context, categoria),
             imagen = resolveDrawableResource(context, imagen),
-            descripcion = resolveStringResource(context, descripcion)
+            descripcion = 0
         )
     }
 
@@ -40,4 +40,3 @@ data class Pelicula(
         return if (resId != 0) resId else null
     }
 }
-
