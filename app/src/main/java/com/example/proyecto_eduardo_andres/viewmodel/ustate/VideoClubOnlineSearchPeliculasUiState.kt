@@ -6,5 +6,5 @@ data class VideoClubOnlineSearchPeliculasUiState(
     val query: String = "",
     val peliculas: List<VideoClubOnlinePeliculasData> = emptyList(),
     val peliculasFiltradas: List<VideoClubOnlinePeliculasData> = emptyList(),
-    val error: String? = null
+    val isLoading: Boolean = true
 )

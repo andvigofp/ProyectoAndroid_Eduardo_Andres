@@ -25,17 +25,15 @@ class VideoClubOnlineSearchPeliculasViewModel(
 
     private fun cargarPeliculas() {
         repository.obtenerPeliculasSearch(
-            onError = { error ->
-                _uiState.update {
-                    it.copy(error = error.message ?: "Error desconocido")
-                }
+            onError = {
+                _uiState.update { it.copy(isLoading = false) }
             },
             onSuccess = { peliculas ->
                 _uiState.update {
                     it.copy(
                         peliculas = peliculas,
                         peliculasFiltradas = peliculas,
-                        error = null
+                        isLoading = false
                     )
                 }
             }

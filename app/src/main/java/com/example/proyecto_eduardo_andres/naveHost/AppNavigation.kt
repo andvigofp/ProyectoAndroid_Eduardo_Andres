@@ -18,10 +18,13 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
 import com.example.proyecto_eduardo_andres.data.repository.alquilerPeliculasRepository.AlquilerPeliculasRepositoryInMemory
+import com.example.proyecto_eduardo_andres.data.repository.alquilerPeliculasRepository.AlquilerPeliculasRepositoryRoom
 import com.example.proyecto_eduardo_andres.data.repository.alquilerPeliculasSearchRepository.AlquilerSearchPeliculasRepositoryRetrofit
 import com.example.proyecto_eduardo_andres.data.repository.alquilerPeliculasSearchRepository.AlquilerSearchPeliculasRepositoryRoom
 import com.example.proyecto_eduardo_andres.data.repository.alquilerSeriesRepository.AlquilerSeriesRepositoryInMemory
+import com.example.proyecto_eduardo_andres.data.repository.alquilerSeriesRepository.AlquilerSeriesRepositoryRoom
 import com.example.proyecto_eduardo_andres.data.repository.alquilerSeriesSearchRepository.AlquilerSearchSeriesRepository
+import com.example.proyecto_eduardo_andres.data.repository.alquilerSeriesSearchRepository.AlquilerSearchSeriesRepositoryRoom
 import com.example.proyecto_eduardo_andres.data.repository.camaraRepository.CamaraRepositoryInMemory
 import com.example.proyecto_eduardo_andres.data.repository.loginRepository.UserRepo
 import com.example.proyecto_eduardo_andres.data.repository.peliculasRepository.PeliculasRepositoryRoom
@@ -58,6 +61,7 @@ fun AppNavigation() {
     val repositoryCamara = remember { CamaraRepositoryInMemory() }
     val repositoryQR = remember { QRRepositoryInMemory() }
     val repositoryRecuperarPassword = remember { RecuperarPasswordRepositoryRetrofit() }
+
     val repositorySearchPeliculas = remember {
         AlquilerSearchPeliculasRepositoryRoom(
             context,
@@ -67,8 +71,16 @@ fun AppNavigation() {
     }
 
 
-    val repositorySearchSeries = remember { AlquilerSearchSeriesRepository(context) }
+    val repositorySearchSeries = remember {
+        AlquilerSearchSeriesRepositoryRoom(
+            context,
+            api = RetrofitClient.alquilerSearchSeries,
+            searchDao = AppDatabase.getDatabase(context).searchSerieDao()
+        )
+    }
+
     val repositoryPerfilUsuario = remember { PerfilUsuarioRepositoryRetrofit() }
+
     val repositoryPeliculasData = remember {
         PeliculasRepositoryRoom(
             api = RetrofitClient.peliApiService,
@@ -86,11 +98,17 @@ fun AppNavigation() {
     }
 
     val alquilerRepositoryPelicula = remember {
-        AlquilerPeliculasRepositoryInMemory()
+        AlquilerPeliculasRepositoryRoom(
+            alquilerDao = AppDatabase.getDatabase(context).alquilerPeliculaDao(),
+            peliculasRepository = repositoryPeliculasData
+        )
     }
 
     val alquilerRepositorioSerie = remember {
-        AlquilerSeriesRepositoryInMemory()
+        AlquilerSeriesRepositoryRoom(
+            alquilerDao = AppDatabase.getDatabase(context).alquilerSerieDao(),
+            seriesRepository = repositorySeriesData
+        )
     }
 
 
@@ -248,7 +266,6 @@ fun AppNavigation() {
             val route = route.toRoute<RouteNavigation.SearchPeliculas>()
             // Aquí pasamos el repositorySearchPeliculas al Screen de búsqueda de películas
             VideoClubSearchPeliculasScreen(
-                userId = route.userId,
                 repository = repositorySearchPeliculas, // Pasamos el nuevo repository
                 onBackClick = { navController.popBackStack() },
                 onHomeClick = { navigate(RouteNavigation.VideoClubPeliculas(route.userId)) },

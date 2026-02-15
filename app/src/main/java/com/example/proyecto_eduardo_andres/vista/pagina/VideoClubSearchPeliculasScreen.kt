@@ -14,11 +14,13 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
@@ -41,7 +43,6 @@ import com.example.proyecto_eduardo_andres.vista.componente.componenteToolbar.to
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun VideoClubSearchPeliculasScreen(
-    userId: String,
     repository: IAlquilerSearchPeliculasRepository,
     onBackClick: () -> Unit,
     onHomeClick: () -> Unit,
@@ -76,54 +77,63 @@ fun VideoClubSearchPeliculasScreen(
         end = Offset(1000f, 1000f)
     )
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(colorAzulSuave)
-    ) {
-        // ---------- TOOLBAR ----------
+    if (uiState.isLoading) {
         Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .background(toolbarBackGround)
-                .statusBarsPadding()
+            modifier = Modifier.fillMaxSize(),
+            contentAlignment = Alignment.Center
         ) {
-            Column {
-                Spacer(modifier = Modifier.height(24.dp))
-                toolBar(
-                    onBackClick = onBackClick,
-                    onHomeClick = onHomeClick,
-                    onCameraClick = onCameraClick,
-                    onProfileClick = onProfileClick,
-                    onLogoutClick = onLogoutClick
-                )
-            }
+            CircularProgressIndicator()
         }
-
-        // ---------- CONTENIDO ----------
+    } else {
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(16.dp)
+                .background(colorAzulSuave)
         ) {
-            // Barra de búsqueda
-            SearchBar (
-                searchQuery = uiState.query,
-                onQueryChange = { viewModel.onQueryChange(it) }
-            )
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            // Lista de películas
-            LazyColumn(
-                verticalArrangement = Arrangement.spacedBy(12.dp),
-                modifier = Modifier.fillMaxSize()
+            // ---------- TOOLBAR ----------
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(toolbarBackGround)
+                    .statusBarsPadding()
             ) {
-                items(peliculasFiltradas) { pelicula ->
-                    MediaItem(
-                        item = pelicula,
-                        onClick = { onPeliculaClick(pelicula) }
+                Column {
+                    Spacer(modifier = Modifier.height(24.dp))
+                    toolBar(
+                        onBackClick = onBackClick,
+                        onHomeClick = onHomeClick,
+                        onCameraClick = onCameraClick,
+                        onProfileClick = onProfileClick,
+                        onLogoutClick = onLogoutClick
                     )
+                }
+            }
+
+            // ---------- CONTENIDO ----------
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(16.dp)
+            ) {
+                // Barra de búsqueda
+                SearchBar(
+                    searchQuery = uiState.query,
+                    onQueryChange = { viewModel.onQueryChange(it) }
+                )
+
+                Spacer(modifier = Modifier.height(16.dp))
+
+                // Lista de películas
+                LazyColumn(
+                    verticalArrangement = Arrangement.spacedBy(12.dp),
+                    modifier = Modifier.fillMaxSize()
+                ) {
+                    items(peliculasFiltradas) { pelicula ->
+                        MediaItem(
+                            item = pelicula,
+                            onClick = { onPeliculaClick(pelicula) }
+                        )
+                    }
                 }
             }
         }
@@ -137,7 +147,6 @@ fun VideoClubSearchScreenPeliculasPreview() {
     val repository = AlquilerSearchPeliculasRepositoryInMemory()
 
     VideoClubSearchPeliculasScreen(
-        userId = 1.toString(),
         repository = repository,
         onBackClick = {},
         onHomeClick = {},
