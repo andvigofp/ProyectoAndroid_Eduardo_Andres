@@ -12,12 +12,14 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import androidx.lifecycle.viewModelScope
+import com.example.proyecto_eduardo_andres.data.repository.crearUsuario.CrearUsuarioRepositoryInMemory
+import com.example.proyecto_eduardo_andres.data.repository.crearUsuario.ICrearUsuarioRepository
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class CrearUsuarioViewModel(
-    private val repositoryInMemory: com.example.proyecto_eduardo_andres.data.repository.crearUsuario.CrearUsuarioRepositoryInMemory
+    private val repository: ICrearUsuarioRepository
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(CrearUsuarioUiState())
@@ -113,7 +115,7 @@ class CrearUsuarioViewModel(
             return
         }
 
-        repositoryInMemory.crearUsuario(
+        repository.crearUsuario(
             nombre = state.nombre,
             email = state.email,
             password = state.password,
@@ -133,12 +135,12 @@ class CrearUsuarioViewModel(
 
 
 class CrearUsuarioViewModelFactory(
-    private val repositoryInMemory: com.example.proyecto_eduardo_andres.data.repository.crearUsuario.CrearUsuarioRepositoryInMemory
+    private val repository: ICrearUsuarioRepository
 ) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(CrearUsuarioViewModel::class.java)) {
             @Suppress("UNCHECKED_CAST")
-            return CrearUsuarioViewModel(repositoryInMemory) as T
+            return CrearUsuarioViewModel(repository) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")
     }

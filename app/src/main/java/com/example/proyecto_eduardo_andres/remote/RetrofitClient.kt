@@ -7,7 +7,6 @@ import com.example.proyecto_eduardo_andres.remote.api.AlquilerSeriApiService
 import com.example.proyecto_eduardo_andres.remote.api.AuthApiService
 import com.example.proyecto_eduardo_andres.remote.api.PeliApiService
 import com.example.proyecto_eduardo_andres.remote.api.PerfilUsuarioApiService
-import com.example.proyecto_eduardo_andres.remote.api.PerlfilSerieApiService
 import com.example.proyecto_eduardo_andres.remote.api.RecuperarPasswordApiService
 import com.example.proyecto_eduardo_andres.remote.api.SerieApiService
 import com.example.proyecto_eduardo_andres.remote.api.UsuarioApiService
