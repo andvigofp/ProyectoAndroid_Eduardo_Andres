@@ -17,19 +17,16 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
-import com.example.proyecto_eduardo_andres.data.repository.alquilerPeliculasRepository.AlquilerPeliculasRepositoryInMemory
 import com.example.proyecto_eduardo_andres.data.repository.alquilerPeliculasRepository.AlquilerPeliculasRepositoryRoom
-import com.example.proyecto_eduardo_andres.data.repository.alquilerPeliculasSearchRepository.AlquilerSearchPeliculasRepositoryRetrofit
 import com.example.proyecto_eduardo_andres.data.repository.alquilerPeliculasSearchRepository.AlquilerSearchPeliculasRepositoryRoom
-import com.example.proyecto_eduardo_andres.data.repository.alquilerSeriesRepository.AlquilerSeriesRepositoryInMemory
 import com.example.proyecto_eduardo_andres.data.repository.alquilerSeriesRepository.AlquilerSeriesRepositoryRoom
-import com.example.proyecto_eduardo_andres.data.repository.alquilerSeriesSearchRepository.AlquilerSearchSeriesRepository
 import com.example.proyecto_eduardo_andres.data.repository.alquilerSeriesSearchRepository.AlquilerSearchSeriesRepositoryRoom
 import com.example.proyecto_eduardo_andres.data.repository.camaraRepository.CamaraRepositoryInMemory
+import com.example.proyecto_eduardo_andres.data.repository.crearUsuario.CrearUsuarioRepositoryRoom
 import com.example.proyecto_eduardo_andres.data.repository.loginRepository.UserRepo
 import com.example.proyecto_eduardo_andres.data.repository.peliculasRepository.PeliculasRepositoryRoom
+import com.example.proyecto_eduardo_andres.data.repository.perfilRepositorio.PerfilUsuarioRepositoryRoom
 import com.example.proyecto_eduardo_andres.data.room.AppDatabase
-import com.example.proyecto_eduardo_andres.data.repository.perfilRepositorio.PerfilUsuarioRepositoryRetrofit
 import com.example.proyecto_eduardo_andres.data.repository.qrRepository.QRRepositoryInMemory
 import com.example.proyecto_eduardo_andres.data.repository.recuperarPasswordRepository.RecuperarPasswordRepositoryRetrofit
 import com.example.proyecto_eduardo_andres.data.repository.seriesRepository.SeriesRepositoryRoom
@@ -79,7 +76,12 @@ fun AppNavigation() {
         )
     }
 
-    val repositoryPerfilUsuario = remember { PerfilUsuarioRepositoryRetrofit() }
+    val repositoryPerfilUsuario = remember {
+        PerfilUsuarioRepositoryRoom(
+            api = RetrofitClient.perfilUsuario,
+            userDao = AppDatabase.getDatabase(context).userDao()
+        )
+    }
 
     val repositoryPeliculasData = remember {
         PeliculasRepositoryRoom(
@@ -108,6 +110,13 @@ fun AppNavigation() {
         AlquilerSeriesRepositoryRoom(
             alquilerDao = AppDatabase.getDatabase(context).alquilerSerieDao(),
             seriesRepository = repositorySeriesData
+        )
+    }
+
+    val repositoryCrearUsuario = remember {
+        CrearUsuarioRepositoryRoom(
+            authApi = RetrofitClient.authApiService,
+            userDao = AppDatabase.getDatabase(context).userDao()
         )
     }
 
@@ -201,6 +210,7 @@ fun AppNavigation() {
         // ---------- CREAR USUARIO ----------
         composable<RouteNavigation.CrearUsuario> {
             CrearUsuarioScreen(
+                repository = repositoryCrearUsuario,
                 onCrearUsuarioSucess = { navigate(RouteNavigation.Login) },
                 onCancelarClick = { navigate(RouteNavigation.Login) }
             )

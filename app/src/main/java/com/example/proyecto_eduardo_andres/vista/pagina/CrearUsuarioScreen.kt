@@ -54,15 +54,17 @@ import com.example.proyecto_eduardo_andres.vista.componente.componenteAlertDialo
 import com.example.proyecto_eduardo_andres.vista.componente.componenteAlertDialog.InfoDialog
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberUpdatedState
+import com.example.proyecto_eduardo_andres.data.repository.crearUsuario.ICrearUsuarioRepository
+import com.example.proyecto_eduardo_andres.remote.api.AuthApiService
 
 @Composable
 fun CrearUsuarioScreen(
+    repository: ICrearUsuarioRepository,
     onCrearUsuarioSucess: () -> Unit = {},
     onCancelarClick: () -> Unit = {}
 ) {
     val viewModel: CrearUsuarioViewModel = viewModel(
-        factory = CrearUsuarioViewModelFactory( CrearUsuarioRepositoryInMemory(
-            RetrofitClient.authApiService) ) )
+        factory = CrearUsuarioViewModelFactory( repository) )
 
     // --- Estado del ViewModel ---
     val uiState by viewModel.uiState.collectAsState()
@@ -147,7 +149,9 @@ fun CrearUsuarioScreen(
                         painter = painterResource(id = R.drawable.ic_logotipo_team),
                         contentDescription = stringResource(R.string.logo),
                         contentScale = ContentScale.Crop,
-                        modifier = Modifier.size(80.dp).clip(CircleShape)
+                        modifier = Modifier
+                            .size(80.dp)
+                            .clip(CircleShape)
                     )
                 }
 
@@ -256,7 +260,16 @@ fun CrearUsuarioScreen(
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun CrearUsuarioScreenPreview() {
+
+    val repository = CrearUsuarioRepositoryInMemory(
+        authApi = RetrofitClient.authApiService
+    )
+
     MaterialTheme {
-        CrearUsuarioScreen()
+        CrearUsuarioScreen(
+            repository = repository,
+            onCrearUsuarioSucess = {},
+            onCancelarClick = {}
+        )
     }
 }

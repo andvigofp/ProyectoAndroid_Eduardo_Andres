@@ -32,6 +32,7 @@ import com.example.proyecto_eduardo_andres.data.room.entity.Serie
     version = 1,
     exportSchema = false
 )
+
 abstract class AppDatabase : RoomDatabase() {
 
     abstract fun userDao(): UserDao
