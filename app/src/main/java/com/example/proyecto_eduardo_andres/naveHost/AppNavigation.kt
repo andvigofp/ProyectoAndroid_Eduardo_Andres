@@ -21,8 +21,8 @@ import com.example.proyecto_eduardo_andres.data.repository.alquilerPeliculasRepo
 import com.example.proyecto_eduardo_andres.data.repository.alquilerPeliculasSearchRepository.AlquilerSearchPeliculasRepositoryRoom
 import com.example.proyecto_eduardo_andres.data.repository.alquilerSeriesRepository.AlquilerSeriesRepositoryRoom
 import com.example.proyecto_eduardo_andres.data.repository.alquilerSeriesSearchRepository.AlquilerSearchSeriesRepositoryRoom
-import com.example.proyecto_eduardo_andres.data.repository.camaraRepository.CamaraRepositoryInMemory
 import com.example.proyecto_eduardo_andres.data.repository.camaraRepository.CamaraRepositoryReal
+import com.example.proyecto_eduardo_andres.data.repository.contactoRepository.InfoProyectoRepositoryInMemory
 import com.example.proyecto_eduardo_andres.data.repository.crearUsuario.CrearUsuarioRepositoryRoom
 import com.example.proyecto_eduardo_andres.data.repository.loginRepository.UserRepo
 import com.example.proyecto_eduardo_andres.data.repository.peliculasRepository.PeliculasRepositoryRoom
@@ -40,6 +40,7 @@ import com.example.proyecto_eduardo_andres.vista.pagina.AlquilarDevolverPelicula
 import com.example.proyecto_eduardo_andres.vista.pagina.AlquilerDevolverSeriesScreen
 import com.example.proyecto_eduardo_andres.vista.pagina.CamaraScreen
 import com.example.proyecto_eduardo_andres.vista.pagina.CrearUsuarioScreen
+import com.example.proyecto_eduardo_andres.vista.pagina.InfoProyectoScreen
 import com.example.proyecto_eduardo_andres.vista.pagina.LogingScreen
 import com.example.proyecto_eduardo_andres.vista.pagina.PerfilSeriesScreen
 import com.example.proyecto_eduardo_andres.vista.pagina.PerfilUsuarioScreen
@@ -169,6 +170,11 @@ fun AppNavigation() {
         navController.navigate(route)
     }
 
+    val repositoryInfoProyecto = remember {
+        InfoProyectoRepositoryInMemory()
+    }
+
+
     // Página LOGIN
     LaunchedEffect(Unit) {
         SessionEvents.forbidden.collect {
@@ -192,6 +198,7 @@ fun AppNavigation() {
                 is RouteNavigation.PerfilSeries,
                 is RouteNavigation.AlquilerDevolverPeliculas,
                 is RouteNavigation.AlquilerDevolverSeries,
+                is RouteNavigation.InfoProyecto,
                 is RouteNavigation.QR -> navController.navigate(route)
             }
         }
@@ -235,6 +242,23 @@ fun AppNavigation() {
             )
         }
 
+        // ---------- INFO PROYECTO ----------
+        composable<RouteNavigation.InfoProyecto> { route ->
+
+            InfoProyectoScreen(
+                repository = repositoryInfoProyecto,
+                onBackClick = { navController.popBackStack() },
+                onHomeClick = { navigate(RouteNavigation.VideoClubPeliculas(route.id)) },
+                onCameraClick = { navigate(RouteNavigation.Camara(route.id)) },
+                onProfileClick = { navigate(RouteNavigation.PerfilUsuario(route.id)) },
+                onLogoutClick = {
+                    loginViewModel.resetState()
+                    navigate(RouteNavigation.Login)
+                }
+            )
+        }
+
+
         // ---------- VIDEOCLUB PELICULAS ----------
         composable<RouteNavigation.VideoClubPeliculas> { route ->
             val route = route.toRoute<RouteNavigation.VideoClubPeliculas>()
@@ -249,8 +273,8 @@ fun AppNavigation() {
                     loginViewModel.resetState()
                     navigate(RouteNavigation.Login)
                 },
-                onDrawerPeliculasClick = { navigate(RouteNavigation.VideoClubPeliculas(route.userId)) },
                 onDrawerSeriesClick = { navigate(RouteNavigation.VideoClubSeries(route.userId)) },
+                onDrawerInfolick = { navigate(RouteNavigation.InfoProyecto(route.userId)) },
                 onPeliculaClick = { pelicula ->
                     navigate(RouteNavigation.AlquilerDevolverPeliculas(route.userId, pelicula.id))
                 },
@@ -271,8 +295,8 @@ fun AppNavigation() {
                     loginViewModel.resetState()
                     navigate(RouteNavigation.Login)
                 },
+                onDrawerInfolick = { navigate(RouteNavigation.InfoProyecto(route.userId)) },
                 onDrawerPeliculasClick = { navigate(RouteNavigation.VideoClubPeliculas(route.userId)) },
-                onDrawerSeriesClick = { navigate(RouteNavigation.VideoClubSeries(route.userId)) },
                 onSerieClick = { serie ->
                     navigate(RouteNavigation.AlquilerDevolverSeries(route.userId, serie.id))
                 },

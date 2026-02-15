@@ -45,6 +45,7 @@ import com.example.proyecto_eduardo_andres.data.repository.peliculasRepository.P
 import com.example.proyecto_eduardo_andres.modelo.VideoClubOnlinePeliculasData
 import com.example.proyecto_eduardo_andres.viewmodel.vm.VideoClubOnlinePeliculasViewModel
 import com.example.proyecto_eduardo_andres.viewmodel.vm.VideoClubOnlinePeliculasViewModelFactory
+import com.example.proyecto_eduardo_andres.vista.componente.componenteMenu.DrawerScreen
 import com.example.proyecto_eduardo_andres.vista.componente.componenteMenu.VideoClubMenuDrawer
 import com.example.proyecto_eduardo_andres.vista.componente.componenteToolbar.toolBarVideoClubOnline
 import com.example.proyecto_eduardo_andres.vista.componente.componenteVideoClubListaPeliculas.PeliculaItem
@@ -59,7 +60,7 @@ fun VideoClubOnlinePeliculasScreen(
     onCameraClick: () -> Unit = {},
     onProfileClick: () -> Unit = {},
     onLogoutClick: () -> Unit = {},
-    onDrawerPeliculasClick: () -> Unit = {},
+    onDrawerInfolick: () -> Unit = {},
     onDrawerSeriesClick: () -> Unit = {},
     onPeliculaClick: (VideoClubOnlinePeliculasData) -> Unit,
 ) {
@@ -91,10 +92,12 @@ fun VideoClubOnlinePeliculasScreen(
             drawerState = drawerState,
             drawerContent = {
                 VideoClubMenuDrawer(
+                    currentScreen = DrawerScreen.PELICULAS,
                     drawerState = drawerState,
                     scope = scope,
-                    onPeliculasClick =  onDrawerPeliculasClick,
-                    onSeriesClick = onDrawerSeriesClick
+                    onPeliculasClick = {}, // no se mostrará
+                    onSeriesClick = onDrawerSeriesClick,
+                    onInfoClick = onDrawerInfolick
                 )
             }
         ) {

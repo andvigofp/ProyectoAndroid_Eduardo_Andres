@@ -16,6 +16,7 @@ sealed interface RouteNavigation {
     @Serializable class Camara(val userId: String) : RouteNavigation
     @Serializable class PerfilUsuario(val userId: String) : RouteNavigation
     @Serializable class PerfilSeries(val userId: String) : RouteNavigation
+    @Serializable class InfoProyecto(val userId: String) : RouteNavigation
 
     @Serializable
     class AlquilerDevolverPeliculas(

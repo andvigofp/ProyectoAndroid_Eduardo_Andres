@@ -60,21 +60,6 @@ class VideoClubOnlinePeliculasViewModel(
             )
         }
     }
-
-    // =========================
-    // NUEVA FUNCIÓN: cuando el usuario toca una serie
-    // =========================
-    fun onPeliculaClick(userId: String, pelicula: VideoClubOnlinePeliculasData) {
-        // Emitimos la navegación usando SessionEvents
-        viewModelScope.launch {
-            sessionEvents.emitNavigation(
-                RouteNavigation.AlquilerDevolverPeliculas(
-                    userId = userId,
-                    peliculaId = pelicula.id,
-                )
-            )
-        }
-    }
 }
 
 class VideoClubOnlinePeliculasViewModelFactory(

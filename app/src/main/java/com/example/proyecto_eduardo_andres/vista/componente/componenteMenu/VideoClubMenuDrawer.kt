@@ -14,9 +14,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AddToQueue
+import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Movie
-import androidx.compose.material.icons.filled.Tv
 import androidx.compose.material3.DrawerState
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -55,79 +56,113 @@ import com.example.proyecto_eduardo_andres.modelo.MenuItemDto
  */
 @Composable
 fun VideoClubMenuDrawer(
+    currentScreen: DrawerScreen,
     drawerState: DrawerState,
     scope: CoroutineScope,
     onPeliculasClick: () -> Unit,
-    onSeriesClick: () -> Unit
+    onSeriesClick: () -> Unit,
+    onInfoClick: () -> Unit
 ) {
-    val menuItems = listOf(
-        MenuItemDto(stringResource(R.string.peliculas), Icons.Default.Movie, onPeliculasClick),
-        MenuItemDto(stringResource(R.string.series), Icons.Default.Tv, onSeriesClick)
+
+    val colors = MaterialTheme.colorScheme
+
+    val menuItems = mutableListOf<MenuItemDto>()
+
+    if (currentScreen != DrawerScreen.PELICULAS) {
+        menuItems.add(
+            MenuItemDto(
+                title = stringResource(R.string.peliculas),
+                icon = Icons.Default.Movie,
+                onClick = onPeliculasClick
+            )
+        )
+    }
+
+    if (currentScreen != DrawerScreen.SERIES) {
+        menuItems.add(
+            MenuItemDto(
+                title = stringResource(R.string.series),
+                icon = Icons.Default.AddToQueue,
+                onClick = onSeriesClick
+            )
+        )
+    }
+
+    menuItems.add(
+        MenuItemDto(
+            title = stringResource(R.string.info),
+            icon = Icons.Default.Info,
+            onClick = onInfoClick
+        )
     )
 
-    // Fondo azul degradado o de color temático
     ModalDrawerSheet(
         modifier = Modifier
-            .width(260.dp)
+            .width(270.dp)
             .background(
                 brush = Brush.verticalGradient(
                     colors = listOf(
-                        MaterialTheme.colorScheme.primaryContainer,
-                        MaterialTheme.colorScheme.secondaryContainer
+                        colors.primaryContainer,
+                        colors.secondaryContainer
                     )
                 )
-            ), // Fondo degradado
-        drawerContainerColor = Color.Transparent, // deja visible el degradado
-        drawerContentColor = MaterialTheme.colorScheme.onPrimaryFixedVariant
+            ),
+        drawerContainerColor = Color.Transparent,
+        drawerContentColor = colors.onPrimaryContainer
     ) {
+
         Spacer(modifier = Modifier.height(36.dp))
 
-        // --- Título del Drawer ---
+        // --- TÍTULO ---
         Text(
             text = stringResource(R.string.videoclub_online),
-            color = MaterialTheme.colorScheme.onPrimaryContainer,
+            color = colors.onPrimaryContainer,
             fontSize = 20.sp,
             fontWeight = FontWeight.Bold,
-            modifier = Modifier.padding(horizontal = 16.dp)
+            modifier = Modifier.padding(horizontal = 20.dp)
         )
 
         Spacer(modifier = Modifier.height(24.dp))
 
-        // --- Items del menú ---
+        // --- ITEMS ---
         menuItems.forEach { item ->
+
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
+                    .padding(horizontal = 12.dp)
                     .clip(RoundedCornerShape(12.dp))
                     .clickable {
                         scope.launch { drawerState.close() }
                         item.onClick()
                     }
                     .background(
-                        MaterialTheme.colorScheme.surface.copy(alpha = 0.2f)
-                    ) // fondo suave para cada item
-                    .padding(horizontal = 16.dp, vertical = 12.dp),
+                        colors.surface.copy(alpha = 0.25f)
+                    )
+                    .padding(vertical = 14.dp, horizontal = 16.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
+
                 Icon(
                     imageVector = item.icon,
                     contentDescription = item.title,
-                    tint = MaterialTheme.colorScheme.onPrimaryContainer
+                    tint = colors.onPrimaryContainer
                 )
-                Spacer(modifier = Modifier.width(12.dp))
+
+                Spacer(modifier = Modifier.width(16.dp))
+
                 Text(
                     text = item.title,
                     fontSize = 18.sp,
                     fontWeight = FontWeight.Medium,
-                    color = MaterialTheme.colorScheme.onPrimaryContainer
+                    color = colors.onPrimaryContainer
                 )
             }
+
             Spacer(modifier = Modifier.height(12.dp))
         }
     }
 }
-
-
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Preview(showBackground = true, showSystemUi = true)
@@ -144,7 +179,9 @@ fun VideoClubMenuDrawerPreview() {
                     drawerState = drawerState,
                     scope = scope,
                     onPeliculasClick = {},
-                    onSeriesClick = {}
+                    onSeriesClick = {},
+                    currentScreen = DrawerScreen.SERIES,
+                    onInfoClick = {}
                 )
             }
         ) {
