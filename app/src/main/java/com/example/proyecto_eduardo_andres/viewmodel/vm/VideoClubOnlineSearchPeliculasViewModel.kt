@@ -1,5 +1,6 @@
 package com.example.proyecto_eduardo_andres.viewmodel.vm
 
+import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.example.proyecto_eduardo_andres.data.repository.alquilerPeliculasSearchRepository.IAlquilerSearchPeliculasRepository
@@ -10,8 +11,10 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 
 class VideoClubOnlineSearchPeliculasViewModel(
-    private val repository: IAlquilerSearchPeliculasRepository // Usamos el repositorio correcto
+    private val repository: IAlquilerSearchPeliculasRepository,
+    private val context: Context
 ) : ViewModel() {
+
     private val _uiState = MutableStateFlow(VideoClubOnlineSearchPeliculasUiState())
     val uiState: StateFlow<VideoClubOnlineSearchPeliculasUiState> =
         _uiState.asStateFlow()
@@ -22,12 +25,17 @@ class VideoClubOnlineSearchPeliculasViewModel(
 
     private fun cargarPeliculas() {
         repository.obtenerPeliculasSearch(
-            onError = { /* manejar error */ },
+            onError = { error ->
+                _uiState.update {
+                    it.copy(error = error.message ?: "Error desconocido")
+                }
+            },
             onSuccess = { peliculas ->
                 _uiState.update {
                     it.copy(
                         peliculas = peliculas,
-                        peliculasFiltradas = peliculas
+                        peliculasFiltradas = peliculas,
+                        error = null
                     )
                 }
             }
@@ -35,21 +43,34 @@ class VideoClubOnlineSearchPeliculasViewModel(
     }
 
     fun onQueryChange(query: String) {
-        _uiState.update {
-            it.copy(query = query)
+        _uiState.update { state ->
+
+            val filtradas = state.peliculas.filter { pelicula ->
+                val nombreReal = context.getString(pelicula.nombre)
+                nombreReal.contains(query, ignoreCase = true)
+            }
+
+            state.copy(
+                query = query,
+                peliculasFiltradas = filtradas
+            )
         }
     }
 }
 
 
+
 class VideoClubOnlineSearchPeliculasViewModelFactory(
-    private val repository: IAlquilerSearchPeliculasRepository // Usamos el repositorio correcto
+    private val repository: IAlquilerSearchPeliculasRepository,
+    private val context: Context
 ) : ViewModelProvider.Factory {
+
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(VideoClubOnlineSearchPeliculasViewModel::class.java)) {
-            return VideoClubOnlineSearchPeliculasViewModel(repository) as T
+            return VideoClubOnlineSearchPeliculasViewModel(repository, context) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")
     }
 }
+

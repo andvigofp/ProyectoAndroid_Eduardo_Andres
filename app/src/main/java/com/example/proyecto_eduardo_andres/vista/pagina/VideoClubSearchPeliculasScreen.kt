@@ -43,9 +43,6 @@ import com.example.proyecto_eduardo_andres.vista.componente.componenteToolbar.to
 fun VideoClubSearchPeliculasScreen(
     userId: String,
     repository: IAlquilerSearchPeliculasRepository,
-    viewModel: VideoClubOnlineSearchPeliculasViewModel = viewModel(
-        factory = VideoClubOnlineSearchPeliculasViewModelFactory(repository)
-    ),
     onBackClick: () -> Unit,
     onHomeClick: () -> Unit,
     onCameraClick: () -> Unit,
@@ -53,8 +50,15 @@ fun VideoClubSearchPeliculasScreen(
     onLogoutClick: () -> Unit,
     onPeliculaClick: (VideoClubOnlinePeliculasData) -> Unit,
 ) {
-    val uiState by viewModel.uiState.collectAsState()
+
     val context = LocalContext.current
+
+    val viewModel: VideoClubOnlineSearchPeliculasViewModel = viewModel(
+        factory = VideoClubOnlineSearchPeliculasViewModelFactory(repository, context)
+    )
+
+    val uiState by viewModel.uiState.collectAsState()
+
 
     // Lista filtrada según búsqueda
     val peliculasFiltradas = remember(uiState.query, uiState.peliculas) {
