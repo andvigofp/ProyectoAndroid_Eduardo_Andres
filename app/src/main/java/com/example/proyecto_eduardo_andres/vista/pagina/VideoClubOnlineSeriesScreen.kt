@@ -47,6 +47,7 @@ import com.example.proyecto_eduardo_andres.data.repository.seriesRepository.Seri
 import com.example.proyecto_eduardo_andres.modelo.VideoClubOnlineSeriesData
 import com.example.proyecto_eduardo_andres.viewmodel.vm.VideoClubOnlineSeriesViewModel
 import com.example.proyecto_eduardo_andres.viewmodel.vm.VideoClubOnlineSeriesViewModelFactory
+import com.example.proyecto_eduardo_andres.vista.componente.componenteMenu.DrawerScreen
 import com.example.proyecto_eduardo_andres.vista.componente.componenteMenu.VideoClubMenuDrawer
 import com.example.proyecto_eduardo_andres.vista.componente.componenteToolbar.toolBarVideoClubOnline
 import com.example.proyecto_eduardo_andres.vista.componente.componenteVideoClubListaPeliculas.VideoClubCategoriasBotones
@@ -56,22 +57,23 @@ import com.example.proyecto_eduardo_andres.vista.componente.componenteVideoClubO
 @Composable
 fun VideoClubOnlineSeriesScreen(
     repository: ISeriesRepository,
-    viewModel: VideoClubOnlineSeriesViewModel = viewModel(
-        factory = VideoClubOnlineSeriesViewModelFactory(repository)
-    ),
     onHomeClick: () -> Unit = {},
     onSearchClick: () -> Unit = {},
     onCameraClick: () -> Unit = {},
     onProfileClick: () -> Unit = {},
     onLogoutClick: () -> Unit = {},
     onDrawerPeliculasClick: () -> Unit = {},
-    onDrawerSeriesClick: () -> Unit = {},
+    onDrawerInfolick: () -> Unit = {},
     onSerieClick: (VideoClubOnlineSeriesData) -> Unit,
 ) {
     val drawerState = rememberDrawerState(DrawerValue.Closed)
     val scope = rememberCoroutineScope()
 
     val toolbarHeight = 56.dp + WindowInsets.statusBars.asPaddingValues().calculateTopPadding()
+
+    val viewModel: VideoClubOnlineSeriesViewModel = viewModel(
+        factory = VideoClubOnlineSeriesViewModelFactory(repository)
+    )
 
     // Observar estado UI del ViewModel
     val uiState by viewModel.uiState.collectAsState()
@@ -88,10 +90,13 @@ fun VideoClubOnlineSeriesScreen(
             drawerState = drawerState,
             drawerContent = {
                 VideoClubMenuDrawer(
+                    currentScreen = DrawerScreen.SERIES,
                     drawerState = drawerState,
                     scope = scope,
+                    onInfoClick = onDrawerInfolick,
                     onPeliculasClick = onDrawerPeliculasClick,
-                    onSeriesClick = onDrawerSeriesClick
+                    onSeriesClick = {}, // no se mostrará
+
                 )
             }
         ) {
@@ -193,14 +198,10 @@ fun VideoClubOnlineSeriesScreen(
 @Composable
 fun VideoClubOnlineSeriesScreenPreview() {
     val repository = SeriesRepositoryInMemory()
-    val viewModel: VideoClubOnlineSeriesViewModel = viewModel(
-        factory = VideoClubOnlineSeriesViewModelFactory(repository)
-    )
 
     MaterialTheme {
         VideoClubOnlineSeriesScreen(
             repository = repository,
-            viewModel = viewModel,
             onSerieClick = {} // <- obligatorio para navegar
         )
     }
