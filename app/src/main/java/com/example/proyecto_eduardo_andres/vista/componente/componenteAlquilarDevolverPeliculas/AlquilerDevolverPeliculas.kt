@@ -5,6 +5,7 @@ package com.example.proyecto_eduardo_andres.vista.componente.componenteAlquilarD
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -13,6 +14,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Movie
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -44,11 +46,23 @@ fun AlquilerDevolverPeliculas(
     val colors = MaterialTheme.colorScheme
     val typography = MaterialTheme.typography
 
+    //  Si aún no ha cargado la película → mostrar loader
+    if (peliculas.pelicula == null) {
+        Box(
+            modifier = Modifier.fillMaxWidth(),
+            contentAlignment = Alignment.Center
+        ) {
+            CircularProgressIndicator()
+        }
+        return
+    }
+
+    val pelicula = peliculas.pelicula
+
     Column(
         modifier = Modifier
             .fillMaxWidth()
             .padding(16.dp)
-            .padding(8.dp)
     ) {
         Row(
             modifier = Modifier
@@ -58,11 +72,10 @@ fun AlquilerDevolverPeliculas(
             horizontalArrangement = Arrangement.spacedBy(16.dp)
         ) {
 
-            // Imagen
-            if (peliculas.imagen != null) {
+            if (pelicula.imagen != null) {
                 Image(
-                    painter = painterResource(id = peliculas.imagen!!),
-                    contentDescription = stringResource(peliculas.nombrePelicula),
+                    painter = painterResource(id = pelicula.imagen),
+                    contentDescription = stringResource(pelicula.nombre),
                     modifier = Modifier
                         .size(150.dp)
                         .clip(RoundedCornerShape(12.dp))
@@ -73,33 +86,29 @@ fun AlquilerDevolverPeliculas(
                 Icon(
                     imageVector = Icons.Default.Movie,
                     contentDescription = stringResource(R.string.icono_película),
-                    modifier = Modifier
-                        .size(150.dp)
-                        .padding(8.dp),
+                    modifier = Modifier.size(150.dp),
                     tint = colors.onBackground
                 )
             }
 
-            // Nombre y descripción
             Column(
-                modifier = Modifier.weight(1f),
-                verticalArrangement = Arrangement.Center
+                modifier = Modifier.weight(1f)
             ) {
                 Text(
-                    text = stringResource(peliculas.nombrePelicula),
+                    text = stringResource(pelicula.nombre),
                     style = typography.headlineMedium.copy(color = colors.primary),
-                    textAlign = TextAlign.Start,
                     modifier = Modifier.padding(bottom = 8.dp)
                 )
+
                 Text(
-                    text = stringResource(peliculas.descripcion),
-                    style = typography.bodyLarge.copy(color = colors.primary),
-                    textAlign = TextAlign.Start
+                    text = stringResource(pelicula.descripcion),
+                    style = typography.bodyLarge.copy(color = colors.primary)
                 )
             }
         }
     }
 }
+
 
 
 
