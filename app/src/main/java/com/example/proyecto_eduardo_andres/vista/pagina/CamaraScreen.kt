@@ -2,6 +2,11 @@
 
 package com.example.proyecto_eduardo_andres.vista.pagina
 
+import android.Manifest
+import android.content.pm.PackageManager
+import android.net.Uri
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -16,12 +21,17 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.compose.colorAzulOscurso
 import com.example.compose.colorVioleta
@@ -33,6 +43,7 @@ import com.example.proyecto_eduardo_andres.modelo.ButtonType
 import com.example.proyecto_eduardo_andres.modelo.CamaraDto
 import com.example.proyecto_eduardo_andres.viewmodel.vm.CamaraViewModel
 import com.example.proyecto_eduardo_andres.viewmodel.vm.CamaraViewModelFactory
+import com.example.proyecto_eduardo_andres.vista.componente.componenteAlertDialog.InfoDialog
 import com.example.proyecto_eduardo_andres.vista.componente.componenteCamara.CamaraButtonsComponent
 import com.example.proyecto_eduardo_andres.vista.componente.componenteCamara.CamaraComponent
 import com.example.proyecto_eduardo_andres.vista.componente.componenteToolbar.toolBar
@@ -45,10 +56,43 @@ fun CamaraScreen(
     onCameraClick: () -> Unit,
     onProfileClick: () -> Unit,
     onLogoutClick: () -> Unit,
-    onQrClick: () -> Unit = { }
+    onQrClick: () -> Unit = {}
 ) {
 
-    val viewModel: CamaraViewModel = viewModel( factory = CamaraViewModelFactory(repository) )
+    val viewModel: CamaraViewModel = viewModel(
+        factory = CamaraViewModelFactory(repository)
+    )
+
+    val context = LocalContext.current
+
+    var permisoConcedido by remember {
+        mutableStateOf(
+            ContextCompat.checkSelfPermission(
+                context,
+                Manifest.permission.CAMERA
+            ) == PackageManager.PERMISSION_GRANTED
+        )
+    }
+
+    val permisoLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.RequestPermission()
+    ) { granted ->
+        permisoConcedido = granted
+    }
+
+    var photoUri by remember { mutableStateOf<Uri?>(null) }
+    var showErrorDialog by remember { mutableStateOf(false) }
+
+    val cameraLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.TakePicture()
+    ) { success ->
+        if (success && photoUri != null) {
+            viewModel.setImagenUri(photoUri!!)
+        } else {
+            viewModel.setImagenDrawable(R.drawable.fake_camera_image)
+            showErrorDialog = true
+        }
+    }
 
     val uiState by viewModel.uiState.collectAsState()
     val colors = MaterialTheme.colorScheme
@@ -59,10 +103,18 @@ fun CamaraScreen(
         end = Offset(1000f, 1000f)
     )
 
-    Box(modifier = Modifier.fillMaxSize().background(colors.background)) {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(colors.background)
+    ) {
 
-        // TopBar
-        Box(modifier = Modifier.fillMaxWidth().background(toolbarBackGround)) {
+        // ================= TOP BAR =================
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(toolbarBackGround)
+        ) {
             Column(modifier = Modifier.statusBarsPadding()) {
                 Spacer(modifier = Modifier.height(24.dp))
                 toolBar(
@@ -75,24 +127,24 @@ fun CamaraScreen(
             }
         }
 
-        // Contenido central
+        // ================= CONTENIDO CENTRAL =================
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(bottom = 72.dp)
-                .align(Alignment.Center),
+                .padding(top = 120.dp, bottom = 80.dp),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             CamaraComponent(
                 camaraData = CamaraDto(
-                    imagenCamara = uiState.imagenCamara,
+                    imagenUri = uiState.imagenUri,
+                    imagenDrawable = uiState.imagenDrawable,
                     descripcion = R.string.vista_previa_camara
                 )
             )
         }
 
-        // BottomBar con botones
+        // ================= BOTTOM BAR =================
         Box(
             modifier = Modifier
                 .fillMaxWidth()
@@ -101,10 +153,47 @@ fun CamaraScreen(
                 .align(Alignment.BottomCenter)
         ) {
             CamaraButtonsComponent(
-                hacerFotoButton = ButtonData(R.string.hacer_foto, ButtonType.PRIMARY),
-                qrButton = ButtonData(R.string.qr, ButtonType.SECONDARY),
-                onHacerFotoClick = { viewModel.onHacerFotoClick() },
+                hacerFotoButton = ButtonData(
+                    R.string.hacer_foto,
+                    ButtonType.PRIMARY
+                ),
+                qrButton = ButtonData(
+                    R.string.qr,
+                    ButtonType.SECONDARY
+                ),
+                onHacerFotoClick = {
+
+                    if (!permisoConcedido) {
+                        permisoLauncher.launch(Manifest.permission.CAMERA)
+                        return@CamaraButtonsComponent
+                    }
+
+                    repository.hacerFoto(
+                        onSuccessUri = { uri ->
+                            photoUri = uri
+                            cameraLauncher.launch(uri)
+                        },
+                        onSuccessDrawable = { drawable ->
+                            viewModel.setImagenDrawable(drawable)
+                            showErrorDialog = true
+                        },
+                        onError = {
+                            viewModel.setImagenDrawable(R.drawable.fake_camera_image)
+                            showErrorDialog = true
+                        }
+                    )
+                },
                 onQrClick = onQrClick
+            )
+        }
+
+        // ================= ERROR DIALOG =================
+        if (showErrorDialog) {
+            InfoDialog(
+                showDialog = true,
+                onDismissRequest = { showErrorDialog = false },
+                title = "Cámara no disponible",
+                message = "No se pudo abrir la cámara. Se ha cargado imagen simulada."
             )
         }
     }

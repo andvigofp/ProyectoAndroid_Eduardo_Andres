@@ -22,6 +22,7 @@ import com.example.proyecto_eduardo_andres.data.repository.alquilerPeliculasSear
 import com.example.proyecto_eduardo_andres.data.repository.alquilerSeriesRepository.AlquilerSeriesRepositoryRoom
 import com.example.proyecto_eduardo_andres.data.repository.alquilerSeriesSearchRepository.AlquilerSearchSeriesRepositoryRoom
 import com.example.proyecto_eduardo_andres.data.repository.camaraRepository.CamaraRepositoryInMemory
+import com.example.proyecto_eduardo_andres.data.repository.camaraRepository.CamaraRepositoryReal
 import com.example.proyecto_eduardo_andres.data.repository.crearUsuario.CrearUsuarioRepositoryRoom
 import com.example.proyecto_eduardo_andres.data.repository.loginRepository.UserRepo
 import com.example.proyecto_eduardo_andres.data.repository.peliculasRepository.PeliculasRepositoryRoom
@@ -55,7 +56,9 @@ fun AppNavigation() {
 
     val navController = rememberNavController()
     val context = LocalContext.current
-    val repositoryCamara = remember { CamaraRepositoryInMemory() }
+    val repositoryCamara = remember {
+        CamaraRepositoryReal(context)
+    }
     val repositoryQR = remember { QRRepositoryInMemory() }
 
     val repositoryRecuperarPassword = remember {

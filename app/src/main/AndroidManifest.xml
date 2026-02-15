@@ -14,7 +14,7 @@
         android:name="android.hardware.camera.any"
         android:required="false" />
 
-    <!-- 🔹 (Opcional) Si solo usas la cámara trasera -->
+    <!--Cámara trasera -->
     <!-- <uses-feature android:name="android.hardware.camera.autofocus" /> -->
 
     <application
@@ -28,6 +28,17 @@
         android:networkSecurityConfig="@xml/network_security_config"
         android:supportsRtl="true"
         android:theme="@style/Theme.Proyecto_Eduardo_Andres">
+
+        <!-- FILE PROVIDER NECESARIO PARA LA CÁMARA -->
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.provider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
 
         <activity
             android:name=".MainActivity"
