@@ -1,9 +1,12 @@
 package com.example.proyecto_eduardo_andres.data.repository.camaraRepository
 
+import android.net.Uri
+
 interface ICamaraRepository {
 
     fun hacerFoto(
-        onSuccess: (Int) -> Unit, // devuelve un drawable simulado
+        onSuccessUri: (Uri) -> Unit,
+        onSuccessDrawable: (Int) -> Unit,
         onError: (Throwable) -> Unit
     )
 
@@ -12,3 +15,4 @@ interface ICamaraRepository {
         onError: (Throwable) -> Unit
     )
 }
+

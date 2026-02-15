@@ -25,6 +25,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import coil.compose.rememberAsyncImagePainter
 import com.example.proyecto_eduardo_andres.modelo.CamaraDto
 import com.example.proyecto_eduardo_andres.R
 
@@ -35,42 +36,60 @@ import com.example.proyecto_eduardo_andres.R
  */
 @Composable
 fun CamaraComponent(camaraData: CamaraDto) {
+
     val colors = MaterialTheme.colorScheme
 
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .fillMaxHeight(0.75f) // ocupa gran parte de la pantalla
+            .fillMaxHeight(0.75f)
             .padding(16.dp)
             .border(2.dp, colors.outline, RoundedCornerShape(12.dp))
             .clip(RoundedCornerShape(12.dp)),
         contentAlignment = Alignment.Center
     ) {
-        if (camaraData.imagenCamara != null) {
-            Image(
-                painter = painterResource(id = camaraData.imagenCamara),
-                contentDescription = stringResource( camaraData.descripcion),
-                modifier = Modifier.fillMaxSize(),
-                contentScale = ContentScale.Crop
-            )
-        } else {
-            // Simulación de cámara (si no hay imagen real)
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .background(colors.tertiary), // Color agradable del tema
-                contentAlignment = Alignment.Center
-            ) {
-                Icon(
-                    imageVector = Icons.Default.CameraAlt,
-                    contentDescription = stringResource(R.string.camara_simulada),
-                    tint = colors.onTertiaryContainer, // Contraste adecuado
-                    modifier = Modifier.size(64.dp)
+
+        when {
+            //Imagen real tomada con cámara
+            camaraData.imagenUri != null -> {
+                Image(
+                    painter = rememberAsyncImagePainter(camaraData.imagenUri),
+                    contentDescription = stringResource(camaraData.descripcion),
+                    modifier = Modifier.fillMaxSize(),
+                    contentScale = ContentScale.Crop
                 )
+            }
+
+            // Imagen simulada
+            camaraData.imagenDrawable != null -> {
+                Image(
+                    painter = painterResource(id = camaraData.imagenDrawable),
+                    contentDescription = stringResource(camaraData.descripcion),
+                    modifier = Modifier.fillMaxSize(),
+                    contentScale = ContentScale.Crop
+                )
+            }
+
+            // Cámara vacía
+            else -> {
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .background(colors.tertiary),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.CameraAlt,
+                        contentDescription = stringResource(R.string.camara_simulada),
+                        tint = colors.onTertiaryContainer,
+                        modifier = Modifier.size(64.dp)
+                    )
+                }
             }
         }
     }
 }
+
 
 @Preview(showBackground = true, showSystemUi = true)
 @Composable

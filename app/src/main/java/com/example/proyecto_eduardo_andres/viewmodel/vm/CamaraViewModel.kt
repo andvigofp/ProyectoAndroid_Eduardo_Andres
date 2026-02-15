@@ -1,5 +1,6 @@
 package com.example.proyecto_eduardo_andres.viewmodel.vm
 
+import android.net.Uri
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -16,7 +17,7 @@ private val repository: ICamaraRepository
 
     private val _uiState = MutableStateFlow(
         CamaraUiState(
-            imagenCamara = null,
+            imagenUri = null,
             qrLeido = null
         )
     )
@@ -25,28 +26,40 @@ private val repository: ICamaraRepository
     // Función para simular hacer foto
     fun onHacerFotoClick() {
         repository.hacerFoto(
-            onSuccess = { drawableRes ->
-                _uiState.update { it.copy(imagenCamara = drawableRes) }
+            onSuccessUri = { uri ->
+                _uiState.update { it.copy(imagenUri = uri, imagenDrawable = null) }
+            },
+            onSuccessDrawable = { drawable ->
+                _uiState.update { it.copy(imagenDrawable = drawable, imagenUri = null) }
             },
             onError = { error ->
-                Log.e("CamaraViewModel", "Error al hacer foto", error)
+                Log.e("CamaraVM", "Error al hacer foto", error)
             }
         )
     }
 
-    // Función para simular leer QR
-    fun onLeerQrClick() {
-        repository.leerQr(
-            onSuccess = { qr ->
-                _uiState.update { it.copy(qrLeido = qr) }
-            },
-            onError = { error ->
-                Log.e("CamaraViewModel", "Error al leer QR", error)
-            }
-        )
+    // -- Cuando la cámara real devuelve URI
+    fun setImagenUri(photoUri: Uri) {
+        _uiState.update {
+            it.copy(
+                imagenUri = photoUri,
+                imagenDrawable = null
+            )
+        }
+    }
+
+    // -- Cuando usamos imagen fake
+    fun setImagenDrawable(drawable: Int) {
+        _uiState.update {
+            it.copy(
+                imagenDrawable = drawable,
+                imagenUri = null
+            )
+        }
     }
 }
-class CamaraViewModelFactory(
+
+    class CamaraViewModelFactory(
     private val repository: ICamaraRepository
 ) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
