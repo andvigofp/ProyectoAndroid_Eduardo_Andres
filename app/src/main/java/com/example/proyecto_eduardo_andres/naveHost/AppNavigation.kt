@@ -28,7 +28,7 @@ import com.example.proyecto_eduardo_andres.data.repository.peliculasRepository.P
 import com.example.proyecto_eduardo_andres.data.repository.perfilRepositorio.PerfilUsuarioRepositoryRoom
 import com.example.proyecto_eduardo_andres.data.room.AppDatabase
 import com.example.proyecto_eduardo_andres.data.repository.qrRepository.QRRepositoryInMemory
-import com.example.proyecto_eduardo_andres.data.repository.recuperarPasswordRepository.RecuperarPasswordRepositoryRetrofit
+import com.example.proyecto_eduardo_andres.data.repository.recuperarPasswordRepository.RecuperarPasswordRepositoryRoom
 import com.example.proyecto_eduardo_andres.data.repository.seriesRepository.SeriesRepositoryRoom
 import com.example.proyecto_eduardo_andres.remote.RetrofitClient
 import com.example.proyecto_eduardo_andres.viewmodel.vm.AppNavigationViewModel
@@ -57,7 +57,14 @@ fun AppNavigation() {
     val context = LocalContext.current
     val repositoryCamara = remember { CamaraRepositoryInMemory() }
     val repositoryQR = remember { QRRepositoryInMemory() }
-    val repositoryRecuperarPassword = remember { RecuperarPasswordRepositoryRetrofit() }
+
+    val repositoryRecuperarPassword = remember {
+        RecuperarPasswordRepositoryRoom(
+            api = RetrofitClient.recuperarPasswordApiExterna,
+            userDao = AppDatabase.getDatabase(context).userDao()
+        )
+    }
+
 
     val repositorySearchPeliculas = remember {
         AlquilerSearchPeliculasRepositoryRoom(
