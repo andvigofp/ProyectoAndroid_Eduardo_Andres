@@ -11,14 +11,35 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.util.Date
 
+/**
+ *
+ * Repositorio híbrido que gestiona el alquiler de series utilizando
+ * almacenamiento local con Room y delegando el catálogo completo
+ * al repository principal de series.
+ *
+ * @author Andrés
+ * @see Implementación Room para el alquiler de series
+ *
+ * @property alquilerDao DAO encargado de las operaciones
+ * sobre la tabla de alquiler de series.
+ * @property seriesRepository Repository que proporciona
+ * el catálogo completo de series.
+ */
 class AlquilerSeriesRepositoryRoom(
     private val alquilerDao: AlquilerSerieDao,
     private val seriesRepository: ISeriesRepository
 ) : IAlquilerSeriesRepository {
 
-    // ----------------------------------------------------
-    // ALQUILAR
-    // ----------------------------------------------------
+    /**
+     * Registra el alquiler de una serie para un usuario.
+     *
+     * @param userId Identificador único del usuario.
+     * @param serie Serie que se desea alquilar.
+     * @param onError Callback que se ejecuta si ocurre un error
+     * durante el proceso de inserción.
+     * @param onSuccess Callback que se ejecuta cuando el alquiler
+     * se registra correctamente.
+     */
     override fun alquilarSerie(
         userId: String,
         serie: VideoClubOnlineSeriesData,
@@ -52,9 +73,15 @@ class AlquilerSeriesRepositoryRoom(
         }
     }
 
-    // ----------------------------------------------------
-    // DEVOLVER
-    // ----------------------------------------------------
+    /**
+     * Registra la devolución de una serie alquilada.
+     *
+     * @param userId Identificador del usuario.
+     * @param serie Serie que se desea devolver.
+     * @param onError Callback que se ejecuta si ocurre un error.
+     * @param onSuccess Callback que se ejecuta cuando la devolución
+     * se registra correctamente.
+     */
     override fun devolverSerie(
         userId: String,
         serie: VideoClubOnlineSeriesData,
@@ -78,9 +105,15 @@ class AlquilerSeriesRepositoryRoom(
         }
     }
 
-    // ----------------------------------------------------
-    // ESTADO ALQUILER
-    // ----------------------------------------------------
+    /**
+     * Obtiene el estado actual de alquiler de una serie.
+     *
+     * @param userId Identificador del usuario.
+     * @param serie Serie cuya información de alquiler se desea consultar.
+     * @param onError Callback que se ejecuta si ocurre un error.
+     * @param onSuccess Callback que devuelve un EstadoAlquilerDto
+     * con la información del estado.
+     */
     override fun obtenerEstadoAlquiler(
         userId: String,
         serie: VideoClubOnlineSeriesData,
@@ -103,9 +136,13 @@ class AlquilerSeriesRepositoryRoom(
         }
     }
 
-    // ----------------------------------------------------
-    // PELÍCULAS ALQUILADAS
-    // ----------------------------------------------------
+    /**
+     * Obtiene la lista de series actualmente alquiladas por un usuario.
+     *
+     * @param userId Identificador del usuario.
+     * @param onError Callback que se ejecuta si ocurre un error.
+     * @param onSuccess Callback que devuelve la lista de series alquiladas.
+     */
     override fun obtenerSeriesAlquiladas(
         userId: String,
         onError: (Throwable) -> Unit,
@@ -132,9 +169,13 @@ class AlquilerSeriesRepositoryRoom(
         }
     }
 
-    // ----------------------------------------------------
-    // CATÁLOGO (IMPORTANTE - YA NO DEVUELVE EMPTY LIST)
-    // ----------------------------------------------------
+    /**
+     * Obtiene el catálogo completo de series delegando
+     * la responsabilidad al repository principal.
+     *
+     * @param onError Callback que se ejecuta si ocurre un error.
+     * @param onSuccess Callback que devuelve la lista completa de series.
+     */
     override fun obtenerSeries(
         onError: (Throwable) -> Unit,
         onSuccess: (List<VideoClubOnlineSeriesData>) -> Unit

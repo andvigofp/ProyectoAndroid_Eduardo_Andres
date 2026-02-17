@@ -4,8 +4,30 @@ import com.example.proyecto_eduardo_andres.R
 import com.example.proyecto_eduardo_andres.modelo.ContactoDto
 import com.example.proyecto_eduardo_andres.modelo.InfoProyectoDto
 
+/**
+ *
+ * Devuelve datos estáticos definidos en recursos (string.xml)
+ * para mostrar la información del proyecto, integrantes y
+ * correos electrónicos.
+ *
+ *
+ * @author Eduardo
+ *
+ * @description
+ * Implementación en memoria de [IInfoProyectoRepository].
+ */
 class InfoProyectoRepositoryInMemory : IInfoProyectoRepository {
 
+    /**
+     * Obtiene la información general del proyecto.
+     *
+     * @param onSuccess Callback que devuelve un objeto [InfoProyectoDto]
+     * con el título, descripción e integrantes del proyecto.
+     *
+     * @param onError Callback que devuelve un [Throwable]
+     * en caso de producirse un error durante la creación
+     * o devolución de los datos.
+     */
     override fun obtenerInfo(
         onSuccess: (InfoProyectoDto) -> Unit,
         onError: (Throwable) -> Unit

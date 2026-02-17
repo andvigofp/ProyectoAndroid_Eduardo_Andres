@@ -8,9 +8,35 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
+/**
+ * Implementación del repositorio de creación de usuario utilizando Retrofit.
+ *
+ * Esta clase realiza una llamada HTTP al servicio remoto para registrar
+ * un nuevo usuario en el sistema.
+ *
+ * @property authApi Servicio Retrofit encargado de realizar la petición
+ * de registro al backend.
+ *
+ * @author Andrés
+ * @see ICrearUsuarioRepository
+ * @see AuthApiService
+ * @see RegisterDto
+ * @see UserDTO
+ */
 class CrearUsuarioRepositoryInMemory(private val authApi: AuthApiService) :
    ICrearUsuarioRepository {
 
+    /**
+     * Crea un nuevo usuario enviando los datos al servidor mediante Retrofit.
+     *
+     * @param nombre Nombre completo del usuario que se desea registrar.
+     * @param email Correo electrónico del usuario.
+     * @param password Contraseña asociada al nuevo usuario.
+     * @param onError Callback que se ejecuta si ocurre un error durante la
+     * petición (error HTTP, excepción de red o respuesta vacía).
+     * @param onSuccess Callback que se ejecuta cuando el usuario se registra
+     * correctamente. Devuelve un objeto [UserDTO] con los datos del usuario creado.
+     */
     override fun crearUsuario(
         nombre: String,
         email: String,

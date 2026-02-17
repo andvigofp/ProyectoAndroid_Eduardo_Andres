@@ -15,12 +15,44 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
+/**
+ *
+ * Repositorio encargado de obtener las series desde la API remota
+ * y almacenarlas en la base de datos local (Room).
+ *
+ * Si la llamada remota es exitosa:
+ *  - Guarda los resultados en Room
+ *  - Devuelve los datos mapeados a modelo UI
+ *
+ * Si la llamada falla:
+ *  - Recupera los datos almacenados localmente
+ *  - Devuelve los resultados offline
+ *
+ * @author Andrés
+ * @see Implementación híbrida (Retrofit + Room) para búsqueda de series
+ *
+ * @param context Contexto necesario para convertir las entidades
+ * en modelos UI utilizando recursos del sistema.
+ * @param api Servicio Retrofit encargado de obtener las series
+ * desde el endpoint remoto.
+ * @param searchDao DAO de Room utilizado para almacenar y recuperar
+ * las series de búsqueda en modo offline.
+ */
 class AlquilerSearchSeriesRepositoryRoom(
     private val context: Context,
     private val api: AlquilerSearchSerieApiService,
     private val searchDao: SearchSerieDao
 ) : IAlquilerSearchSeriesRepository {
 
+    /**
+     * Obtiene las series desde la API remota.
+     * Si la red falla, utiliza los datos almacenados en Room.
+     *
+     * @param onError Callback ejecutado cuando no hay datos disponibles
+     * (ni remotos ni locales) o ocurre un error crítico.
+     * @param onSuccess Callback que devuelve la lista de series
+     * convertidas a modelo de UI.
+     */
     override fun obtenerSeriesSearch(
         onError: (Throwable) -> Unit,
         onSuccess: (List<VideoClubOnlineSeriesData>) -> Unit
