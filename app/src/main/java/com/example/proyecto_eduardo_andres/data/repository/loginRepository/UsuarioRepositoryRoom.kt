@@ -9,14 +9,43 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 /**
- * Repositorio Híbrido que carga desde Retrofit (API remota) si hay internet,
- * y desde Room (BD local) si no hay internet. Sincroniza automáticamente los datos.
+ * Repositorio híbrido encargado del proceso de autenticación.
+ *
+ * Esta clase combina:
+ * - Retrofit → consulta remota de usuarios.
+ * - Room → persistencia local y login offline.
+ *
+ * Flujo de login:
+ * 1. Intenta autenticar contra API remota.
+ * 2. Si encuentra usuario válido → lo guarda en Room.
+ * 3. Si falla red → intenta login local con Room.
+ *
+ * @property usuarioApi Servicio Retrofit para obtener usuarios remotos.
+ * @property userDao DAO de Room para acceso a base de datos local.
+ *
+ * @author Andrés
+ * @see UsuarioApiService
+ * @see UserDao
  */
 class UserRepositoryHibridoLogin(
     private val usuarioApi: UsuarioApiService,
     private val userDao: UserDao
 ) {
 
+    /**
+     * Realiza login híbrido (remoto + local).
+     *
+     * Primero intenta autenticación remota.
+     * Si falla red o no encuentra usuario válido,
+     * intenta autenticación local en Room.
+     *
+     * @param email Correo electrónico del usuario.
+     * @param password Contraseña introducida.
+     * @param keepLogged Indica si el usuario desea mantener sesión activa.
+     *
+     * @return [UserDTO] si las credenciales son válidas,
+     * o null si no existe el usuario.
+     */
     suspend fun login(
         email: String,
         password: String,
@@ -25,6 +54,7 @@ class UserRepositoryHibridoLogin(
 
         var userFound: UserDTO? = null
 
+        // INTENTO REMOTO (RETROFIT)
         try {
             val response = usuarioApi.obtenerUsuarios()
 
@@ -52,6 +82,7 @@ class UserRepositoryHibridoLogin(
             // Si falla red → seguimos offline
         }
 
+        // INTENTO LOCAL (ROOM)
         if (userFound == null) {
 
             val localUser = userDao.login(email, password)
@@ -74,6 +105,14 @@ class UserRepositoryHibridoLogin(
         return userFound
     }
 
+    /**
+     * Obtiene un usuario específico desde Room por su ID.
+     *
+     * @param id Identificador único del usuario.
+     *
+     * @return [UserDTO] si el usuario existe en base de datos,
+     * o null si no se encuentra.
+     */
     suspend fun getUser(id: String): UserDTO? {
         val user = userDao.getById(id)
         return user?.let {

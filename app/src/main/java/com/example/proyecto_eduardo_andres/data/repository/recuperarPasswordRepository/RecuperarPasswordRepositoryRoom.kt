@@ -9,6 +9,18 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
+/**
+ *
+ * Esta clase gestiona la recuperación de contraseña combinando:
+ *
+ * 1. Intento remoto mediante Retrofit.
+ * 2. Persistencia y fallback local mediante Room.
+ *
+ * Si la red falla, el sistema continúa funcionando en modo offline.
+ *
+ * @author Andrés
+ * @see Implementación híbrida Room + Retrofit para recuperación de contraseña
+ */
 class RecuperarPasswordRepositoryRoom(
     private val api: RecuperarPasswordApiService,
     private val userDao: UserDao

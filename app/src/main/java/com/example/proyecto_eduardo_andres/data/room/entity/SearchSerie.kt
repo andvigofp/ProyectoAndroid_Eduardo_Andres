@@ -7,6 +7,21 @@ import androidx.room.PrimaryKey
 import com.example.proyecto_eduardo_andres.R
 import com.example.proyecto_eduardo_andres.modelo.VideoClubOnlineSeriesData
 
+/**
+ *
+ * Entidad que representa una serie obtenida desde una búsqueda
+ * y almacenada en la base de datos Room.
+ *
+ * Esta tabla ("search_series") se utiliza para guardar
+ * resultados temporales de búsqueda, normalmente obtenidos
+ * desde una API externa o consulta remota.
+ *
+ * A diferencia de la entidad Serie principal, esta versión
+ * no incluye descripción completa, ya que está pensada
+ * para listados rápidos en la interfaz de usuario.
+ *
+ * @author Andrés
+ */
 @Entity(tableName = "search_series")
 data class SearchSerie(
     @PrimaryKey

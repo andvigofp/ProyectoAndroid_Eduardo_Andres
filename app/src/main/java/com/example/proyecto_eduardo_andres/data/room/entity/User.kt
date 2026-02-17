@@ -4,6 +4,17 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
+/**
+ *
+ * Entidad que representa un usuario dentro de la base de datos Room.
+ *
+ * Esta clase modela la información necesaria para:
+ * - Registro de usuario
+ * - Autenticación (login)
+ * - Gestión de sesión persistente ("Recordar sesión")
+ *
+ * @author Andrés
+ */
 @Entity(tableName = "user")
 data class User(
     @PrimaryKey val id: String,
