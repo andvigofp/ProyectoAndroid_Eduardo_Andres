@@ -2,6 +2,22 @@ package com.example.proyecto_eduardo_andres.viewmodel.ustate
 
 import com.example.proyecto_eduardo_andres.modelo.VideoClubOnlinePeliculasData
 
+/**
+ * @author Andrés
+ * @see PerfilUsuarioUiState
+ *
+ * @param UIState para el perfil de usuario.
+ * @param nombreUsuario Nombre del usuario.
+ * @param email Email del usuario.
+ * @param password Contraseña del usuario.
+ * @param isEditing Indica si el usuario está editando su perfil.
+ * @param userId Identificador único del usuario.
+ * @param peliculasAlquiladas Lista de películas alquiladas por el usuario.
+ * @param showConfirmacionDialog Indica si se muestra el diálogo de confirmación.
+ * @param showInfoDialog Indica si se muestra el diálogo de información.
+ * @param infoDialogTitle Título del diálogo de información.
+ * @param infoDialogMessage Mensaje del diálogo de información.
+ */
 data class PerfilUsuarioUiState(
     val nombreUsuario: String = "",
     val email: String = "",
@@ -14,6 +30,9 @@ data class PerfilUsuarioUiState(
     val infoDialogTitle: String = "",
     val infoDialogMessage: String = ""
 ) {
+    /**
+     * Indica si el botón de modificar está habilitado.
+     */
     val isModificarButtonEnabled: Boolean
         get() = nombreUsuario.isNotBlank() &&
                 email.isNotBlank() &&

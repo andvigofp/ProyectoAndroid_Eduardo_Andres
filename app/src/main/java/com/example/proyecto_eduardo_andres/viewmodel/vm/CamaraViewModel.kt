@@ -11,6 +11,37 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 
+/**
+ * @author Andrés
+ * @see CamaraViewModelFactory
+ *
+ * Esta clase:
+ * - Gestiona el estado de la pantalla de cámara.
+ * - Solicita al repositorio la acción de hacer una foto.
+ * - Actualiza el estado reactivo con la imagen obtenida.
+ * - Permite trabajar tanto con URI reales como con imágenes fake (Drawable).
+ *
+ * Sigue la arquitectura MVVM:
+ * - ViewModel → Contiene la lógica de presentación.
+ * - Repository → Se encarga de la lógica de acceso a datos/cámara.
+ *
+ * Utiliza:
+ * - StateFlow para exponer estado observable en Jetpack Compose.
+ * - MutableStateFlow para modificar el estado internamente.
+ * - update {} para modificar el estado de forma inmutable.
+ *
+ *
+ * @param repository Repositorio encargado de gestionar
+ * la lógica de cámara y devolución de imagen.
+ *
+ * @see CamaraUiState
+ * @see ICamaraRepository
+ * @see ViewModel
+ * @see MutableStateFlow
+ * @see StateFlow
+ * @see asStateFlow
+ * @see update
+ */
 class CamaraViewModel(
 private val repository: ICamaraRepository
 ) : ViewModel() {

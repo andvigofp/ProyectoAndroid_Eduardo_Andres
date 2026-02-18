@@ -11,9 +11,11 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 /**
- * ===============================================================
+ * @author Andrés
+ * @see AlquilerPeliculaRepositoryRetrofit
+ * @param Interfaz que define el repositorio de alquiler de películas.
+ *
  * Implementación Retrofit del repositorio de alquiler de películas
- * ===============================================================
  *
  * Esta clase gestiona la comunicación con el servidor remoto
  * utilizando Retrofit para:

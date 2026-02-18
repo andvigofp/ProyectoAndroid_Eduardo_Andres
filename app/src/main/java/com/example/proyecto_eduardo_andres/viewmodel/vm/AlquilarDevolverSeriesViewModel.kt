@@ -13,6 +13,29 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import java.util.Date
 
+/**
+ * @author Eduardo
+ * @see AlquilarDevolverSeriesViewModel
+ *
+ * Esta clase:
+ * - Obtiene el estado actual del alquiler de una serie.
+ * - Permite alquilar una serie.
+ * - Permite devolver una serie.
+ * - Calcula si existe multa por devolución tardía.
+ *
+ * Utiliza:
+ * - StateFlow para exponer el estado reactivo a la UI.
+ * - Un repositorio para acceder a la capa de datos (Room / API).
+ *
+ * @param userId Identificador del usuario que realiza la operación.
+ * @param serieId Identificador de la serie seleccionada.
+ * @param repository Implementación de IAlquilerSeriesRepository
+ * encargada de gestionar el acceso a datos.
+ *
+ * @see AlquilarDevolverSeriesUiState
+ * @see IAlquilerSeriesRepository
+ * @see VideoClubOnlineSeriesData
+ */
 class AlquilarDevolverSeriesViewModel(
     private val userId: String,
     private val serieId: String,

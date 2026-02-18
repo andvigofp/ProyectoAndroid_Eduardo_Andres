@@ -12,6 +12,40 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 
+/**
+ * @author Andrés
+ * @see PerfilUsuarioViewModelFactory
+ *
+ * Esta clase:
+ * - Gestiona el estado de la pantalla de Perfil de Usuario (Películas).
+ * - Carga los datos del usuario a partir de su ID (UUID).
+ * - Carga las películas alquiladas asociadas al usuario.
+ * - Permite editar y actualizar la información del usuario.
+ * - Controla la visualización de diálogos informativos y de confirmación.
+ *
+ * Sigue la arquitectura MVVM:
+ * - ViewModel → Contiene la lógica de presentación.
+ * - Repository → Gestiona operaciones de usuario.
+ * - AlquilerRepository → Gestiona películas alquiladas.
+ *
+ * Utiliza:
+ * - MutableStateFlow para gestionar el estado interno.
+ * - StateFlow para exponer estado inmutable a la UI.
+ * - update {} para mantener inmutabilidad.
+ *
+ *
+ * @param repository Repositorio encargado de operaciones del usuario.
+ * @param alquilerRepository Repositorio encargado de obtener
+ * las películas alquiladas (opcional).
+ *
+ * @see PerfilUsuarioUiState
+ * @see IPerfilUsuarioRepository
+ * @see IAlquilerPeliculasRepository
+ * @see UserDTO
+ * @see ViewModel
+ * @see MutableStateFlow
+ * @see StateFlow
+ */
 class PerfilUsuarioViewModel(
 private val repository: IPerfilUsuarioRepository,
 private val alquilerRepository: IAlquilerPeliculasRepository? = null

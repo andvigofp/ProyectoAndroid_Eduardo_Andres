@@ -18,6 +18,41 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
+/**
+ * @author Eduardo
+ * @see CrearUsuarioViewModelFactory
+ *
+ * Esta clase:
+ * - Gestiona el estado de la pantalla de creación de usuario.
+ * - Controla los campos del formulario (nombre, email, contraseña).
+ * - Maneja la visibilidad de contraseñas.
+ * - Valida datos antes de enviarlos al repositorio.
+ * - Controla la visualización de diálogos informativos.
+ * - Ejecuta la creación de usuario delegando la lógica al repositorio.
+ *
+ * Sigue la arquitectura MVVM:
+ * - ViewModel → Contiene la lógica de presentación y validación.
+ * - Repository → Encargado de la lógica de acceso a datos.
+ *
+ * Utiliza:
+ * - StateFlow para exponer el estado reactivo del formulario.
+ * - MutableStateFlow para modificar el estado internamente.
+ * - mutableStateOf para controlar estados simples de UI
+ *   como la visibilidad del diálogo.
+ * - viewModelScope para manejar corrutinas seguras.
+ *
+ *
+ * @param repository Repositorio encargado de crear
+ * el usuario en base de datos.
+ *
+ * @see CrearUsuarioUiState
+ * @see ICrearUsuarioRepository
+ * @see ViewModel
+ * @see MutableStateFlow
+ * @see StateFlow
+ * @see mutableStateOf
+ * @see viewModelScope
+ */
 class CrearUsuarioViewModel(
     private val repository: ICrearUsuarioRepository
 ) : ViewModel() {

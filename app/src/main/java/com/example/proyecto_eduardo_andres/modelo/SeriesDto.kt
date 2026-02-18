@@ -2,6 +2,15 @@ package com.example.proyecto_eduardo_andres.modelo
 
 import com.example.proyecto_eduardo_andres.R
 
+/**
+ * @author Eduardo
+ * @param representa una lista de series.
+ * @param id Identificador único de la serie.
+ * @param categoria Categoría a la que pertenece la series.
+ * @param imagen Recurso drawable que representa la imagen de la serie.
+ * @param nombre Recurso string que describe el nombre de la serie.
+ * @param descripcion Recurso string que describe la descripción de la serie.
+ */
 data class SeriesDto(
     val series: List<VideoClubOnlineSeriesData> = listOf(
 

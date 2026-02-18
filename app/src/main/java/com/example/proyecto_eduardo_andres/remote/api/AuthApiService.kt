@@ -7,6 +7,12 @@ import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.POST
 
+/**
+ * @author Andrés
+ * @see AuthApiService
+ * @param Interfaz que define la API para autenticación de usuarios (Token para logearse y registrar usuarios).
+ *
+ */
 interface AuthApiService {
 
     @POST("auth/login")

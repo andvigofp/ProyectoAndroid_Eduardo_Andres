@@ -13,6 +13,32 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import java.util.Date
 
+/**
+ * @author Andrés
+ * @see AlquilarDevolverPeliculasViewModel
+ *
+ * - Obtiene el estado actual del alquiler.
+ *  - Permite alquilar una película.
+ *  - Permite devolver una película.
+ *  - Calcula si existe multa por devolución tardía.
+ *
+ *  Utiliza:
+ *  - StateFlow para exponer el estado a la UI.
+ *  - Repository para acceder a la capa de datos.
+ *
+ *  @param userId Identificador del usuario que realiza la operación.
+ *  @param peliculaId Identificador de la película seleccionada.
+ * @param repository Implementación de IAlquilerPeliculasRepository
+ * que gestiona el acceso a datos (Room / API).
+ *
+ *
+ * @see AlquilarDevolverPeliculasUiState
+ * @see IAlquilerPeliculasRepository
+ * @see VideoClubOnlinePeliculasData
+ * @see PeliculasDto
+ * @see Date
+ * @see ViewModel
+ */
 class AlquilarDevolverPeliculasViewModel(
     private val userId: String,
     private val peliculaId: String,

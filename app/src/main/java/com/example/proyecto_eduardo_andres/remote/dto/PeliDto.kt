@@ -2,6 +2,18 @@ package com.example.proyecto_eduardo_andres.remote.dto
 
 import com.google.gson.annotations.SerializedName
 
+/**
+ * @author Andrés
+ * @see PeliDto
+ *
+ * @param DTO para obtener películas.
+ * @param id Identificador único de la película.
+ * @param categoria Categoría de la película.
+ * @param imagen URL de la imagen de la película.
+ * @param nombre Nombre de la película.
+ * @param descripcion Descripción de la película.
+ *
+ */
 data class PeliDto(
     @SerializedName("id")
     val id: String,

@@ -3,12 +3,27 @@ package com.example.proyecto_eduardo_andres.viewmodel.ustate
 import com.example.proyecto_eduardo_andres.modelo.VideoClubOnlineSeriesData
 import java.util.Date
 
+/**
+ * @author Eduardo
+ * @see AlquilarDevolverSeriesUiState
+ *
+ * @param UIState para alquilar y devolver series.
+ *
+ * @param serie Serie que se está alquilando o devolviendo.
+ * @param serieAlquilada Indica si la serie se encuentra alquilada.
+ * @param fechaAlquiler Fecha en la que se alquiló la serie.
+ * @param fechaDevolucion Fecha en la que se devolvió la serie.
+ * @param fechaLimiteDevolucion Fecha límite en la que se puede devolver la serie.
+ * @param esMulta Indica si la serie tiene una multa.
+ * @param isAlquilarButtonEnabled Indica si el botón de alquilar está habilitado.
+ * @param isDevolverButtonEnabled Indica si el botón de devolver está habilitado.
+ */
 data class AlquilarDevolverSeriesUiState(
-    val serie: VideoClubOnlineSeriesData, // Serie seleccionada
-    val serieAlquilada: Boolean = false, // Si está alquilada o no
-    val fechaAlquiler: Date? = null, // Fecha de alquiler
-    val fechaDevolucion: Date? = null, // Fecha de devolución
-    val fechaLimiteDevolucion: Date? = null, // NUEVO: fecha límite para devolver
+    val serie: VideoClubOnlineSeriesData,
+    val serieAlquilada: Boolean = false,
+    val fechaAlquiler: Date? = null,
+    val fechaDevolucion: Date? = null,
+    val fechaLimiteDevolucion: Date? = null,
     val esMulta: Boolean = false
 ) {
     val isAlquilarButtonEnabled: Boolean
