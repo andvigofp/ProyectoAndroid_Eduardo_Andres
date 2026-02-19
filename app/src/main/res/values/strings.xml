@@ -182,9 +182,9 @@
     <string name="descripcion_info_proyecto">Esta aplicación ha sido desarrollada para que podáis alquilar vuestras películas y series favoritas de forma cómoda y sencilla.
         Podréis disfrutarlas durante siete días desde casa, con la mejor calidad y una experiencia pensada para ofrecer comodidad y entretenimiento.
         Nació como una idea que fue creciendo poco a poco, con el objetivo de evolucionar y competir en el sector del entretenimiento digital. Seguimos trabajando para mejorar y continuar creciendo.</string>
-    <string name="nombre_contactoA"> "Andrés Fernández"</string>
+    <string name="nombre_contactoA"> "Andrés Fernández Pereira"</string>
     <string name="email_contactoA">animacion96@gmail.com</string>
-    <string name="nombre_contactoB"> Eduardo Fernández</string>
+    <string name="nombre_contactoB"> Eduardo Perez Garcia</string>
     <string name="email_contactoB">perezgarciaeduardo150@gmail.com</string>
     <string name="equpo_desarollo">Equipo de Desarrollo</string>
     <string name="mensaje_gracias">Muchas gracias por utilizar nuestra aplicación.\nEsperamos que le guste nuestro proyecto</string>
