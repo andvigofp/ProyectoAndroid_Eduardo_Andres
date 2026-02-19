@@ -44,7 +44,45 @@ import com.example.proyecto_eduardo_andres.vista.componente.componenteToolbar.to
 import java.util.Calendar
 import java.util.Date
 
-
+/**
+ * @author Eduardo
+ *
+ * Pantalla encargada de gestionar el proceso
+ * de alquiler y devolución de series.
+ *
+ * Esta pantalla:
+ * - Crea internamente su ViewModel mediante Factory.
+ * - Observa el estado reactivo mediante StateFlow.
+ * - Permite alquilar o devolver una serie.
+ * - Muestra un diálogo informativo tras la acción.
+ * - Gestiona navegación mediante callbacks.
+ *
+ * Arquitectura:
+ * - Sigue patrón MVVM.
+ * - El ViewModel contiene la lógica de negocio.
+ * - La UI es declarativa y reactiva.
+ *
+ * Diseño:
+ * - Utiliza MaterialTheme para colores y tipografía.
+ * - Implementa estructura personalizada con CustomScreenWithoutScaffold.
+ * - Usa gradiente visual coherente con la app.
+ *
+ * @param userId Identificador único del usuario.
+ * @param serieId Identificador único de la serie.
+ * @param repository Repositorio encargado de gestionar
+ * alquileres y devoluciones de series.
+ * @param onBackClick Callback de navegación atrás.
+ * @param onHomeClick Callback hacia Home.
+ * @param onCameraClick Callback hacia Cámara.
+ * @param onProfileClick Callback hacia Perfil.
+ * @param onLogoutClick Callback para cerrar sesión.
+ *
+ * @see AlquilarDevolverSeriesViewModel
+ * @see AlquilarDevolverSeriesViewModelFactory
+ * @see AlquilarDevolverDialog
+ * @see StateFlow
+ * @see collectAsState
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AlquilerDevolverSeriesScreen(

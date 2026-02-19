@@ -51,6 +51,46 @@ import com.example.proyecto_eduardo_andres.vista.componente.componenteToolbar.to
 import com.example.proyecto_eduardo_andres.vista.componente.componenteVideoClubListaPeliculas.PeliculaItem
 import com.example.proyecto_eduardo_andres.vista.componente.componenteVideoClubListaPeliculas.VideoClubCategoriasBotones
 
+/**
+ * @author Andrés
+ *
+ * Pantalla principal del módulo VideoClub (Películas).
+ *
+ * Esta pantalla:
+ * - Crea internamente su ViewModel mediante Factory.
+ * - Observa el estado reactivo con StateFlow.
+ * - Muestra indicador de carga mientras obtiene datos.
+ * - Implementa un Navigation Drawer lateral.
+ * - Permite filtrar películas por categoría.
+ * - Muestra películas agrupadas dinámicamente.
+ * - Utiliza LazyColumn + LazyRow para renderizado eficiente.
+ *
+ * Arquitectura:
+ * - Sigue patrón MVVM.
+ * - El ViewModel gestiona la carga y filtrado de películas.
+ * - La UI es completamente declarativa y reactiva.
+ *
+ * Diseño:
+ * - Utiliza Material3.
+ * - Incluye Toolbar personalizada con degradado.
+ * - Implementa ModalNavigationDrawer.
+ *
+ * @param repository Repositorio encargado de obtener las películas.
+ * @param onHomeClick Callback navegación Home.
+ * @param onSearchClick Callback navegación búsqueda.
+ * @param onCameraClick Callback navegación cámara.
+ * @param onProfileClick Callback navegación perfil.
+ * @param onLogoutClick Callback cerrar sesión.
+ * @param onDrawerInfolick Callback navegación a pantalla Info.
+ * @param onDrawerSeriesClick Callback navegación a módulo Series.
+ * @param onPeliculaClick Callback cuando se selecciona una película.
+ *
+ * @see VideoClubOnlinePeliculasViewModel
+ * @see ModalNavigationDrawer
+ * @see LazyColumn
+ * @see LazyRow
+ * @see StateFlow
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun VideoClubOnlinePeliculasScreen(

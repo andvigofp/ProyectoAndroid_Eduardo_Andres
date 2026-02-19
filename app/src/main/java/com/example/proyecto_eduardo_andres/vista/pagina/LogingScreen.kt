@@ -43,6 +43,39 @@ import com.example.proyecto_eduardo_andres.data.repository.loginRepository.UserR
 import com.example.proyecto_eduardo_andres.data.repository.loginRepository.UserRepositoryInMemory
 import com.example.proyecto_eduardo_andres.remote.RetrofitClient
 
+/**
+ * @author Andrés
+ *
+ * Pantalla de autenticación (Login) de la aplicación.
+ *
+ * Esta pantalla:
+ * - Observa el estado reactivo del LoginViewModel.
+ * - Permite introducir credenciales de acceso.
+ * - Gestiona la opción "Mantener sesión iniciada".
+ * - Muestra diálogos informativos en caso de error o éxito.
+ * - Ejecuta navegación tras autenticación correcta.
+ *
+ * Arquitectura:
+ * - Sigue patrón MVVM.
+ * - El ViewModel contiene la lógica de autenticación.
+ * - La UI es declarativa y basada en estado.
+ *
+ * Diseño:
+ * - Utiliza MaterialTheme (Material3).
+ * - Implementa degradados superior e inferior.
+ * - Usa componentes reutilizables (CamposLogin, LoginButtons).
+ *
+ * @param loginViewModel ViewModel encargado de la lógica de login.
+ * @param onCrearUsuarioClick Callback hacia pantalla de registro.
+ * @param onRecuperarPasswordClick Callback hacia recuperación de contraseña.
+ * @param onLoginSuccess Callback ejecutado tras autenticación exitosa.
+ *
+ * @see LoginViewModel
+ * @see StateFlow
+ * @see collectAsState
+ * @see LaunchedEffect
+ * @see InfoDialog
+ */
 @Composable
 fun LogingScreen(
     loginViewModel: LoginViewModel,
@@ -50,9 +83,6 @@ fun LogingScreen(
     onRecuperarPasswordClick: () -> Unit,
     onLoginSuccess: (String) -> Unit,
     ) {
-
-
-
 
     val uiState by loginViewModel.uiState.collectAsState()
 

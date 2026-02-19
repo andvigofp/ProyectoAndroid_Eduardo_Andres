@@ -156,4 +156,77 @@ _Aquí puedes añadir tus imágenes cuando las exportes desde Android Studio:_
    ├── alquiler_pelicula.png
    └── perfil_usuario.png
 
+## 10. Arquitectura
+
+La aplicación sigue el patrón **MVVM (Model-View-ViewModel)**.
+
+### Capas:
+
+-   **Presentación** → Pantallas Compose.
+-   **Dominio** → ViewModels con StateFlow.
+-   **Datos** → Repositories.
+-   **Red** → Retrofit (API externa).
+-   **Persistencia Local** → Room.
+
+Esto permite una arquitectura limpia, escalable y mantenible.
+
+------------------------------------------------------------------------
+
+## 11. Retrofit (API externa)
+
+La app utiliza Retrofit para consumir servicios REST.
+
+Se emplea para:
+
+-   Login y registro.
+-   Recuperación de contraseña.
+-   Consulta de películas y series.
+-   Gestión de usuario.
+
+### Flujo de datos:
+
+Pantalla → ViewModel → Repository → Retrofit → API
+
+La inicialización de los servicios se realiza en segundo plano en la
+clase `Application` para optimizar el rendimiento.
+
+------------------------------------------------------------------------
+
+## 12. Room (Base de datos local)
+
+Room se utiliza para almacenamiento persistente local.
+
+Ventajas:
+
+-   Abstracción sobre SQLite.
+-   Integración con corrutinas.
+-   Arquitectura más profesional.
+-   Reduce llamadas innecesarias a red.
+
+Permite una arquitectura híbrida: - Datos remotos (API) - Datos locales
+(Base de datos)
+
+------------------------------------------------------------------------
+
+## 13. Tecnologías utilizadas
+
+  Tecnología          Descripción
+  ------------------- ------------------------
+  Kotlin              Lenguaje principal
+  Jetpack Compose     UI declarativa
+  Material Design 3   Sistema de diseño
+  Retrofit            Consumo de API
+  Room                Base de datos local
+  StateFlow           Estado reactivo
+  Coroutines          Programación asíncrona
+
+------------------------------------------------------------------------
+
+## 7. Resumen
+
+VideoClub Online moderniza la experiencia del videoclub tradicional
+integrando arquitectura MVVM, consumo de API externa con Retrofit y
+persistencia local con Room, ofreciendo una aplicación moderna,
+estructurada y escalable.
+
 

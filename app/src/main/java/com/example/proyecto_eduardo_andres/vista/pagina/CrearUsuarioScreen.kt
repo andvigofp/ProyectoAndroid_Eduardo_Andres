@@ -57,6 +57,40 @@ import androidx.compose.runtime.rememberUpdatedState
 import com.example.proyecto_eduardo_andres.data.repository.crearUsuario.ICrearUsuarioRepository
 import com.example.proyecto_eduardo_andres.remote.api.AuthApiService
 
+/**
+ * @author Andrés
+ *
+ * Pantalla encargada de la creación de nuevos usuarios.
+ *
+ * Esta pantalla:
+ * - Crea internamente su ViewModel mediante Factory.
+ * - Observa el estado reactivo del formulario.
+ * - Permite introducir datos de registro.
+ * - Muestra un diálogo de confirmación antes de crear el usuario.
+ * - Muestra un diálogo informativo tras éxito o error.
+ * - Gestiona navegación tras creación exitosa.
+ *
+ * Arquitectura:
+ * - Sigue patrón MVVM.
+ * - El ViewModel contiene la lógica de validación y persistencia.
+ * - La UI es declarativa y reactiva.
+ *
+ * Diseño:
+ * - Utiliza MaterialTheme para consistencia visual.
+ * - Implementa degradados superior e inferior.
+ * - Usa componentes reutilizables (CampoCrearUsuario, AppButton).
+ *
+ * @param repository Repositorio encargado de crear el usuario.
+ * @param onCrearUsuarioSucess Callback ejecutado tras creación exitosa.
+ * @param onCancelarClick Callback ejecutado al cancelar el registro.
+ *
+ * @see CrearUsuarioViewModel
+ * @see CrearUsuarioViewModelFactory
+ * @see ConfirmationDialog
+ * @see InfoDialog
+ * @see StateFlow
+ * @see collectAsState
+ */
 @Composable
 fun CrearUsuarioScreen(
     repository: ICrearUsuarioRepository,

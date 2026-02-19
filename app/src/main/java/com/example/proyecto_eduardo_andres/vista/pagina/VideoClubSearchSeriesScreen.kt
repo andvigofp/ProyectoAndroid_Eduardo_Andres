@@ -40,6 +40,42 @@ import com.example.proyecto_eduardo_andres.vista.componente.componenteSearchSeri
 import com.example.proyecto_eduardo_andres.vista.componente.componenteSearchSeriesPeliculas.MediaItem
 import com.example.proyecto_eduardo_andres.vista.componente.componenteToolbar.toolBar
 
+/**
+ * @author Eduardo
+ *
+ * Pantalla de búsqueda de series dentro del módulo VideoClub.
+ *
+ * Esta pantalla:
+ * - Crea internamente su ViewModel mediante Factory.
+ * - Observa el estado reactivo usando StateFlow.
+ * - Permite búsqueda en tiempo real.
+ * - Filtra dinámicamente las series según el texto introducido.
+ * - Renderiza resultados eficientemente mediante LazyColumn.
+ * - Incluye Toolbar con degradado personalizado.
+ *
+ * Arquitectura:
+ * - Sigue patrón MVVM.
+ * - El ViewModel gestiona estado y lógica de búsqueda.
+ * - La UI es declarativa y reactiva.
+ *
+ * Diseño:
+ * - Basado en Material3.
+ * - Barra de búsqueda reutilizable.
+ * - Renderizado optimizado.
+ *
+ * @param repository Repositorio encargado de obtener las series.
+ * @param onBackClick Callback navegación atrás.
+ * @param onHomeClick Callback navegación Home.
+ * @param onCameraClick Callback navegación cámara.
+ * @param onProfileClick Callback navegación perfil.
+ * @param onLogoutClick Callback cerrar sesión.
+ * @param onSerieClick Callback cuando se selecciona una serie.
+ *
+ * @see VideoClubOnlineSearchSeriesViewModel
+ * @see LazyColumn
+ * @see StateFlow
+ * @see SearchBar
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun VideoClubSearchSeriesScreen(

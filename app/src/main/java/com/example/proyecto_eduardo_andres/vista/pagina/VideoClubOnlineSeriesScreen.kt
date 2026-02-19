@@ -53,6 +53,46 @@ import com.example.proyecto_eduardo_andres.vista.componente.componenteToolbar.to
 import com.example.proyecto_eduardo_andres.vista.componente.componenteVideoClubListaPeliculas.VideoClubCategoriasBotones
 import com.example.proyecto_eduardo_andres.vista.componente.componenteVideoClubOnlieSeries.SerieItem
 
+/**
+ * @author Eduardo
+ *
+ * Pantalla principal del módulo VideoClub (Series).
+ *
+ * Esta pantalla:
+ * - Crea internamente su ViewModel mediante Factory.
+ * - Observa el estado reactivo mediante StateFlow.
+ * - Implementa un Navigation Drawer lateral.
+ * - Permite filtrar series por categoría.
+ * - Muestra las series agrupadas dinámicamente.
+ * - Utiliza LazyColumn + LazyRow para optimizar rendimiento.
+ * - Permite navegar a la pantalla de alquiler/devolución de series.
+ *
+ * Arquitectura:
+ * - Sigue patrón MVVM.
+ * - El ViewModel gestiona carga y filtrado.
+ * - La UI es declarativa y reactiva.
+ *
+ * Diseño:
+ * - Basado en Material3.
+ * - Toolbar con degradado.
+ * - Diseño tipo plataforma streaming.
+ *
+ * @param repository Repositorio encargado de obtener las series.
+ * @param onHomeClick Callback navegación Home.
+ * @param onSearchClick Callback navegación búsqueda.
+ * @param onCameraClick Callback navegación cámara.
+ * @param onProfileClick Callback navegación perfil.
+ * @param onLogoutClick Callback cerrar sesión.
+ * @param onDrawerPeliculasClick Callback navegación al módulo Películas.
+ * @param onDrawerInfolick Callback navegación pantalla Info.
+ * @param onSerieClick Callback cuando se selecciona una serie.
+ *
+ * @see VideoClubOnlineSeriesViewModel
+ * @see ModalNavigationDrawer
+ * @see LazyColumn
+ * @see LazyRow
+ * @see StateFlow
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun VideoClubOnlineSeriesScreen(

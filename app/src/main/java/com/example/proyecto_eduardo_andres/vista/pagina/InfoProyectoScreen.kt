@@ -38,6 +38,44 @@ import com.example.proyecto_eduardo_andres.viewmodel.vm.InfoProyectoViewModel
 import com.example.proyecto_eduardo_andres.viewmodel.vm.InfoProyectoViewModelFactory
 import com.example.proyecto_eduardo_andres.vista.componente.componenteToolbar.toolBar
 
+/**
+ * @author Andrés
+ *
+ * Pantalla encargada de mostrar la información
+ * general del proyecto y el equipo de desarrollo.
+ *
+ * Esta pantalla:
+ * - Crea internamente su ViewModel mediante Factory.
+ * - Observa el estado reactivo con StateFlow.
+ * - Permite desplazamiento vertical mediante scroll.
+ * - Muestra descripción del proyecto.
+ * - Muestra listado dinámico de integrantes.
+ * - Gestiona navegación mediante callbacks.
+ *
+ * Arquitectura:
+ * - Sigue patrón MVVM.
+ * - El ViewModel gestiona la carga de datos.
+ * - La UI es completamente declarativa.
+ *
+ * Diseño:
+ * - Utiliza MaterialTheme (Material3).
+ * - Implementa gradiente personalizado en TopBar.
+ * - Usa Cards para estructurar visualmente la información.
+ *
+ * @param repository Repositorio encargado de obtener
+ * la información del proyecto.
+ * @param onBackClick Callback navegación atrás.
+ * @param onHomeClick Callback navegación Home.
+ * @param onCameraClick Callback navegación Cámara.
+ * @param onProfileClick Callback navegación Perfil.
+ * @param onLogoutClick Callback para cerrar sesión.
+ *
+ * @see InfoProyectoViewModel
+ * @see InfoProyectoViewModelFactory
+ * @see StateFlow
+ * @see collectAsState
+ * @see MaterialTheme
+ */
 @Composable
 fun InfoProyectoScreen(
     repository: IInfoProyectoRepository,
@@ -55,6 +93,7 @@ fun InfoProyectoScreen(
     val uiState by viewModel.uiState.collectAsState()
     val colors = MaterialTheme.colorScheme
     val typography = MaterialTheme.typography
+    val scrollState = rememberScrollState()
 
     val toolbarBackGround = Brush.linearGradient(
         colors = listOf(colorVioleta, colorAzulOscurso),
@@ -90,8 +129,8 @@ fun InfoProyectoScreen(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(top = 120.dp, start = 24.dp, end = 24.dp)
-                .verticalScroll(rememberScrollState()),
+                .padding(top = 120.dp, start = 24.dp, end = 24.dp, bottom = 24.dp)
+                .verticalScroll(scrollState),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
 
@@ -134,7 +173,10 @@ fun InfoProyectoScreen(
                         .fillMaxWidth()
                         .padding(vertical = 8.dp),
                     shape = RoundedCornerShape(20.dp),
-                    elevation = CardDefaults.cardElevation(6.dp)
+                    elevation = CardDefaults.cardElevation(3.dp),
+                    colors = CardDefaults.cardColors(
+                        containerColor = colors.onPrimary
+                    )
                 ) {
                     Column(
                         modifier = Modifier.padding(20.dp)
@@ -150,7 +192,7 @@ fun InfoProyectoScreen(
                         Text(
                             text = stringResource(contacto.email),
                             style = typography.bodyMedium,
-                            color = colors.surface
+                            color = colors.primary
                         )
                     }
                 }

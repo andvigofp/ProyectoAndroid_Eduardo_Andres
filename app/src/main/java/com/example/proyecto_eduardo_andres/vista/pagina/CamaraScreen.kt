@@ -48,6 +48,44 @@ import com.example.proyecto_eduardo_andres.vista.componente.componenteCamara.Cam
 import com.example.proyecto_eduardo_andres.vista.componente.componenteCamara.CamaraComponent
 import com.example.proyecto_eduardo_andres.vista.componente.componenteToolbar.toolBar
 
+/**
+ * @author Andrés
+ *
+ * Pantalla encargada de gestionar la funcionalidad
+ * de cámara dentro de la aplicación.
+ *
+ * Esta pantalla:
+ * - Solicita permisos de cámara en tiempo de ejecución.
+ * - Lanza la cámara del dispositivo mediante Activity Result API.
+ * - Permite mostrar imagen capturada o imagen simulada.
+ * - Gestiona errores mostrando un diálogo informativo.
+ * - Permite navegación hacia QR u otras pantallas.
+ *
+ * Arquitectura:
+ * - Sigue patrón MVVM.
+ * - El ViewModel gestiona el estado reactivo de la imagen.
+ * - La UI gestiona permisos y eventos del sistema.
+ *
+ * Diseño:
+ * - Utiliza MaterialTheme para consistencia visual.
+ * - Implementa TopBar y BottomBar personalizados.
+ * - Usa gradiente para coherencia estética.
+ *
+ * @param repository Repositorio encargado de preparar
+ * la captura de imagen (real o simulada).
+ * @param onBackClick Callback de navegación atrás.
+ * @param onHomeClick Callback hacia pantalla principal.
+ * @param onCameraClick Callback hacia cámara.
+ * @param onProfileClick Callback hacia perfil.
+ * @param onLogoutClick Callback para cerrar sesión.
+ * @param onQrClick Callback hacia pantalla QR.
+ *
+ * @see CamaraViewModel
+ * @see CamaraViewModelFactory
+ * @see rememberLauncherForActivityResult
+ * @see ActivityResultContracts
+ * @see MaterialTheme
+ */
 @Composable
 fun CamaraScreen(
     repository: ICamaraRepository,

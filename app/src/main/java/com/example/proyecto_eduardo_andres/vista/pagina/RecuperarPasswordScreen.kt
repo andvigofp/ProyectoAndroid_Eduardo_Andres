@@ -52,6 +52,40 @@ import com.example.proyecto_eduardo_andres.viewmodel.vm.RecuperarPasswordViewMod
 import com.example.proyecto_eduardo_andres.vista.componente.componenteRecuperarPassword.RecuperarPasswordButton
 import com.example.proyecto_eduardo_andres.vista.componente.componenteRecuperarPassword.RecuperarPasswordFields
 
+/**
+* @author Andrés
+*
+* Pantalla encargada de permitir al usuario
+* recuperar y actualizar su contraseña.
+*
+* Esta pantalla:
+* - Crea internamente su ViewModel mediante Factory.
+* - Observa el estado reactivo del formulario.
+* - Sincroniza estado local con el ViewModel.
+* - Muestra un diálogo de confirmación antes de ejecutar la acción.
+* - Muestra un diálogo informativo tras éxito o error.
+*
+* Arquitectura:
+* - Sigue patrón MVVM.
+* - El ViewModel gestiona la lógica de validación y actualización.
+* - La UI es declarativa y reactiva.
+*
+* Diseño:
+* - Utiliza MaterialTheme (Material3).
+* - Implementa degradados superior e inferior.
+* - Usa componentes reutilizables para campos y botones.
+*
+* @param repository Repositorio encargado de actualizar la contraseña.
+* @param onRecuperarClick Callback ejecutado tras recuperación exitosa.
+* @param onCancelarClick Callback ejecutado al cancelar la operación.
+*
+* @see RecuperarPasswordViewModel
+* @see RecuperarPasswordViewModelFactory
+* @see ConfirmationDialog
+* @see InfoDialog
+* @see StateFlow
+* @see collectAsState
+*/
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RecuperarPasswordScreen(

@@ -179,7 +179,9 @@
     <string name="confirmacion">Confirmación</string>
     <string name="confirmacion_datos_guardados">Los datos del usuario se han modificado correctamente.</string>
     <string name="titulo_info_proyecto">Sobre Nuestro Proyecto</string>
-    <string name="descripcion_info_proyecto">Este proyecto ha sido desarrollado como una aplicación completa Android utilizando Jetpack Compose, Material3, Retrofit y Room.\n\nNuestro objetivo ha sido crear una experiencia moderna, estructurada y profesional.</string>
+    <string name="descripcion_info_proyecto">Esta aplicación ha sido desarrollada para que podáis alquilar vuestras películas y series favoritas de forma cómoda y sencilla.
+        Podréis disfrutarlas durante siete días desde casa, con la mejor calidad y una experiencia pensada para ofrecer comodidad y entretenimiento.
+        Nació como una idea que fue creciendo poco a poco, con el objetivo de evolucionar y competir en el sector del entretenimiento digital. Seguimos trabajando para mejorar y continuar creciendo.</string>
     <string name="nombre_contactoA"> "Andrés Fernández"</string>
     <string name="email_contactoA">animacion96@gmail.com</string>
     <string name="nombre_contactoB"> Eduardo Fernández</string>
