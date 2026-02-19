@@ -16,7 +16,41 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-
+/**
+ * @author Andrés
+ * @see LoginViewModelFactory
+ *
+ * Esta clase:
+ * - Gestiona el estado de la pantalla de Login.
+ * - Controla los campos de email, contraseña y opción "Mantener sesión".
+ * - Ejecuta la autenticación delegando la lógica al repositorio.
+ * - Gestiona estados de carga (loading).
+ * - Controla diálogos de éxito y error.
+ * - Expone el ID del usuario autenticado.
+ *
+ * Sigue la arquitectura MVVM:
+ * - ViewModel → Contiene la lógica de presentación y validación.
+ * - Repository → Encargado de la autenticación y persistencia.
+ *
+ * Utiliza:
+ * - StateFlow para exponer el estado reactivo del formulario.
+ * - MutableStateFlow para modificar el estado interno.
+ * - mutableStateOf para estados simples de UI (diálogos).
+ * - viewModelScope para ejecutar corrutinas seguras.
+ * - Dispatchers.Main para actualizar la UI tras operaciones async.
+ *
+ *
+ * @param userRepository Repositorio encargado de autenticar
+ * y recuperar información del usuario.
+ *
+ * @see LoginUiState
+ * @see IUserRepository
+ * @see ViewModel
+ * @see MutableStateFlow
+ * @see StateFlow
+ * @see mutableStateOf
+ * @see viewModelScope
+ */
 class LoginViewModel(
     private val userRepository: IUserRepository
 ) : ViewModel() {

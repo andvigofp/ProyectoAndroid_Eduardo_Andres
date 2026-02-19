@@ -9,6 +9,44 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 
+/**
+ * @author Andrés
+ * @see QRViewModelFactory
+ *
+ * Esta clase:
+ * - Gestiona el estado de la pantalla de generación/visualización de QR.
+ * - Solicita al repositorio los datos necesarios para construir el QR.
+ * - Controla estados de carga (loading) y error.
+ * - Permite actualizar manualmente el contenido del QR.
+ *
+ * Sigue la arquitectura MVVM:
+ * - ViewModel → Contiene la lógica de presentación.
+ * - Repository → Encargado de obtener los datos del QR.
+ *
+ * Al inicializarse:
+ * - Ejecuta automáticamente la carga del QR.
+ *
+ * Utiliza:
+ * - MutableStateFlow para modificar el estado interno.
+ * - StateFlow para exponer estado inmutable a la UI.
+ * - update {} para mantener inmutabilidad del estado.
+ *
+ * En Jetpack Compose:
+ * - La UI observa uiState.
+ * - Los cambios en qrData, error o isLoading provocan
+ *   recomposición automática.
+ *
+ * @param repository Repositorio encargado de obtener
+ * los datos necesarios para generar el QR.
+ * @param userId Identificador único del usuario
+ * utilizado para generar el contenido del QR.
+ *
+ * @see QRUiState
+ * @see IQRRepository
+ * @see ViewModel
+ * @see MutableStateFlow
+ * @see StateFlow
+ */
 class QRViewModel(
     private val repository: IQRRepository,
     private val userId: String

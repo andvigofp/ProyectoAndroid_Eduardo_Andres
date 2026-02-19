@@ -14,6 +14,43 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 
+/**
+ * @author Andrés
+ * @see RecuperarPasswordViewModelFactory
+ *
+ * Esta clase:
+ * - Gestiona el estado de la pantalla de recuperación de contraseña.
+ * - Controla los campos de email, nueva contraseña y repetición.
+ * - Valida la coincidencia de contraseñas antes de enviar la solicitud.
+ * - Delegada la actualización de contraseña al repositorio.
+ * - Controla diálogos informativos de éxito y error.
+ *
+ * Sigue la arquitectura MVVM:
+ * - ViewModel → Contiene la lógica de presentación y validación.
+ * - Repository → Encargado de actualizar la contraseña en la base de datos.
+ *
+ * Utiliza:
+ * - MutableStateFlow para gestionar el estado interno del formulario.
+ * - StateFlow para exponer estado inmutable a la UI.
+ * - mutableStateOf para gestionar estados simples de UI (diálogos).
+ * - viewModelScope para ejecutar corrutinas seguras.
+ *
+ * En Jetpack Compose:
+ * - La UI observa uiState.
+ * - Los cambios en el estado provocan recomposición automática.
+ * - Los diálogos se muestran cuando cambia showLoginDialog.
+ *
+ * @param repository Repositorio encargado de gestionar
+ * la recuperación y actualización de contraseña.
+ *
+ * @see RecuperarPasswordUiState
+ * @see IRecuperarPasswordRepository
+ * @see ViewModel
+ * @see MutableStateFlow
+ * @see StateFlow
+ * @see mutableStateOf
+ * @see viewModelScope
+ */
 class RecuperarPasswordViewModel(
     private val repository: IRecuperarPasswordRepository
 ) : ViewModel(){

@@ -17,6 +17,15 @@ class CamaraRepositoryInMemory : ICamaraRepository {
         }
     }
 
+    /**
+     * Ejecuta el proceso de lectura de código QR.
+     *
+     * @param onSuccess Callback que devuelve el texto
+     *        decodificado del código QR.
+     *
+     * @param onError Callback que devuelve la excepción
+     *        en caso de error durante la lectura.
+     */
     override fun leerQr(
         onSuccess: (String) -> Unit,
         onError: (Throwable) -> Unit

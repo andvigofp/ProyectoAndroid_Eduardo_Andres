@@ -28,6 +28,40 @@ import com.example.proyecto_eduardo_andres.viewmodel.vm.QRViewModelFactory
 import com.example.proyecto_eduardo_andres.vista.componente.componenteQR.QRView
 import com.example.proyecto_eduardo_andres.vista.componente.componenteToolbar.toolBar
 
+/**
+ * @author Eduardo
+ *
+ * Pantalla encargada de generar y mostrar el código QR
+ * asociado al usuario actual.
+ *
+ * Esta pantalla:
+ * - Crea internamente su ViewModel mediante Factory.
+ * - Observa el estado reactivo con StateFlow.
+ * - Muestra indicador de carga mientras obtiene los datos.
+ * - Muestra mensaje de error si ocurre un fallo.
+ * - Renderiza el código QR cuando los datos están disponibles.
+ * - Incluye Toolbar superior y BottomBar inferior.
+ *
+ * Arquitectura:
+ * - Sigue patrón MVVM.
+ * - El ViewModel gestiona la obtención de los datos QR.
+ * - La UI representa el estado sin contener lógica de negocio.
+ *
+ * @param userId Identificador único del usuario.
+ * @param repository Repositorio encargado de obtener los datos del QR.
+ * @param viewModel ViewModel encargado de gestionar el estado del QR.
+ * @param onBackClick Callback navegación atrás.
+ * @param onHomeClick Callback navegación Home.
+ * @param onCameraClick Callback navegación Cámara.
+ * @param onProfileClick Callback navegación Perfil.
+ * @param onLogoutClick Callback cerrar sesión.
+ *
+ * @see QRViewModel
+ * @see QRViewModelFactory
+ * @see StateFlow
+ * @see collectAsState
+ * @see CircularProgressIndicator
+ */
 @Composable
 fun QRScreen(
     userId: String,

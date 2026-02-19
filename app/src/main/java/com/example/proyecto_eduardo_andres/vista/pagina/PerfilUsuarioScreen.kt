@@ -61,6 +61,51 @@ import com.example.proyecto_eduardo_andres.vista.componente.componentePerfilUsua
 import com.example.proyecto_eduardo_andres.vista.componente.componentePerfilUsuario.PerfilUsuarioButtons
 import com.example.proyecto_eduardo_andres.vista.componente.componenteToolbar.toolBar
 
+/**
+ * @author Andrés
+ *
+ * Pantalla encargada de mostrar y gestionar el perfil del usuario
+ * junto con las películas que tiene actualmente alquiladas.
+ *
+ * Esta pantalla:
+ * - Crea internamente su ViewModel mediante Factory.
+ * - Carga los datos del usuario al iniciarse.
+ * - Permite editar los datos personales.
+ * - Muestra la lista de películas alquiladas.
+ * - Permite navegar a la película seleccionada.
+ * - Muestra diálogos de confirmación e información.
+ *
+ * Arquitectura:
+ * - Sigue patrón MVVM.
+ * - El ViewModel gestiona la lógica de datos.
+ * - La UI es declarativa y reactiva.
+ *
+ * Diseño:
+ * - Utiliza MaterialTheme (Material3).
+ * - Implementa degradados superior e inferior.
+ * - Separa visualmente información en tarjeta central.
+ * - Usa LazyColumn para lista eficiente.
+ *
+ * @param userId Identificador único del usuario.
+ * @param alquilerRepository Repositorio encargado de obtener
+ * las películas alquiladas.
+ * @param repository Repositorio encargado de obtener y actualizar
+ * los datos del perfil del usuario.
+ * @param onBackClick Callback navegación atrás.
+ * @param onHomeClick Callback navegación Home.
+ * @param onCameraClick Callback navegación Cámara.
+ * @param onProfileClick Callback navegación Perfil.
+ * @param onLogoutClick Callback cerrar sesión.
+ * @param onPeliculaClick Callback ejecutado al pulsar una película.
+ *
+ * @see PerfilUsuarioViewModel
+ * @see PerfilUsuarioViewModelFactory
+ * @see StateFlow
+ * @see collectAsState
+ * @see LazyColumn
+ * @see ConfirmationDialog
+ * @see InfoDialog
+ */
 @Composable
 fun PerfilUsuarioScreen(
     userId: String,
@@ -358,4 +403,3 @@ fun PerfilUsuarioScreenPreview() {
         )
     }
 }
-

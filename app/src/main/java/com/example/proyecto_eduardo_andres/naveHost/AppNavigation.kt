@@ -52,6 +52,32 @@ import com.example.proyecto_eduardo_andres.vista.pagina.VideoClubSearchPeliculas
 import com.example.proyecto_eduardo_andres.vista.pagina.VideoClubSearchSeriesScreen
 import kotlinx.coroutines.flow.collectLatest
 
+/**
+ *
+ *
+ * Composable principal encargado de configurar y gestionar
+ * toda la navegación de la aplicación.
+ *
+ * Esta función:
+ * - Inicializa NavController.
+ * - Crea los repositorios necesarios.
+ * - Gestiona la sesión del usuario.
+ * - Escucha eventos globales de navegación (SessionEvents).
+ * - Define el NavHost con todas las rutas disponibles.
+ *
+ * Utiliza:
+ * - Navigation Compose.
+ * - Kotlin Coroutines (Flow).
+ * - Arquitectura basada en Repository + ViewModel.
+ * - Navegación tipada mediante RouteNavigation.
+ *
+ * evitando el uso de Strings manuales como rutas.
+ *
+ * @author Andrés
+ *
+ * @param Navegacion entre pantallas.
+ *
+ */
 @Composable
 fun AppNavigation() {
 

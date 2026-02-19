@@ -7,10 +7,26 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
+/**
+ *
+ * Implementación que obtiene los datos del usuario desde una API remota
+ * pero no persiste cambios. Ideal para testing o entornos simples.
+ *
+ * @author Eduardo
+ * @see Implementación en memoria del repositorio de perfil de usuario
+ * @param apiService Servicio Retrofit encargado de obtener los usuarios desde la API.
+ */
 class PerfilUsuarioRepositoryInMemory(
     private val apiService: UsuarioApiService
 ) : IPerfilUsuarioRepository {
 
+    /**
+     * Obtiene un usuario por su identificador único.
+     *
+     * @param id Identificador único del usuario.
+     * @param onError Callback que se ejecuta si ocurre un error durante la petición.
+     * @param onSuccess Callback que devuelve el usuario encontrado como UserDTO.
+     */
     override fun getUsuarioPorId(
         id: String,
         onError: (Throwable) -> Unit,
@@ -46,6 +62,16 @@ class PerfilUsuarioRepositoryInMemory(
         }
     }
 
+    /**
+     * Actualiza la información del usuario.
+     *
+     * Nota: En esta implementación en memoria no está soportada
+     * la actualización remota del usuario.
+     *
+     * @param usuario Objeto UserDTO con los datos actualizados del usuario.
+     * @param onError Callback que se ejecuta indicando que la operación no está implementada.
+     * @param onSuccess Callback que se ejecutaría si la actualización fuese exitosa.
+     */
     override fun actualizarUsuario(
         usuario: UserDTO,
         onError: (Throwable) -> Unit,

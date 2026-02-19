@@ -10,12 +10,43 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
+/**
+ *
+ * Repositorio encargado de obtener las películas desde el servicio remoto.
+ * Si la llamada a la API falla, utiliza los datos almacenados localmente
+ * en Room como mecanismo de respaldo (offline-first).
+ *
+ * Flujo de trabajo:
+ * 1. Intenta obtener datos desde la API.
+ * 2. Si tiene éxito → guarda en Room y devuelve datos actualizados.
+ * 3. Si falla → obtiene datos almacenados en Room.
+ *
+ * @author Andrés
+ * @see Implementación híbrida Retrofit + Room para búsqueda de películas
+ * @param context Contexto necesario para transformar las entidades
+ * de base de datos en modelos de UI mediante la función `toUiModel`.
+ *
+ * @param api Servicio Retrofit que realiza la llamada remota
+ * para obtener las películas desde el servidor.
+ *
+ * @param searchDao DAO de Room encargado de acceder y persistir
+ * las películas de búsqueda en la base de datos local.
+ */
 class AlquilerSearchPeliculasRepositoryRoom(
     private val context: Context,
     private val api: AlquilerSearchPeliculasApiService,
     private val searchDao: SearchPeliculaDao
 ) : IAlquilerSearchPeliculasRepository {
 
+    /**
+     * Obtiene las películas desde la API o desde Room si falla la red.
+     *
+     * @param onError Callback que se ejecuta si ocurre un error y
+     * no existen datos disponibles en la base de datos local.
+     *
+     * @param onSuccess Callback que devuelve la lista de películas
+     * transformadas a `VideoClubOnlinePeliculasData`.
+     */
     override fun obtenerPeliculasSearch(
         onError: (Throwable) -> Unit,
         onSuccess: (List<VideoClubOnlinePeliculasData>) -> Unit
@@ -52,7 +83,7 @@ class AlquilerSearchPeliculasRepositoryRoom(
                 // Si falla red → seguimos offline
             }
 
-            // Fallback Room
+            // Fallback Room (modo offline)
             val local = searchDao.getAll()
 
             withContext(Dispatchers.Main) {

@@ -8,10 +8,32 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
+/**
+ *
+ * Esta clase gestiona la recuperación de contraseña utilizando
+ * una API remota mediante Retrofit.
+ *
+ * Flujo:
+ * 1. Obtiene la lista de usuarios desde la API.
+ * 2. Busca el usuario por email.
+ * 3. Actualiza su contraseña mediante una llamada POST.
+ *
+ * @author Andrés
+ * @see Implementación Retrofit para recuperación de contraseña
+ */
 class RecuperarPasswordRepositoryRetrofit : IRecuperarPasswordRepository {
     private val api = RetrofitClient.recuperarPasswordApiExterna
     private val TAG = "RecuperarPasswordRepo"
 
+    /**
+     * Recupera la contraseña de un usuario realizando una actualización remota.
+     *
+     * @param email Email del usuario que desea recuperar la contraseña.
+     * @param newPassword Nueva contraseña que se asignará al usuario.
+     * @param onError Callback que se ejecuta si ocurre un error en la operación
+     * (error de red, usuario no encontrado o error HTTP).
+     * @param onSuccess Callback que se ejecuta cuando la contraseña se actualiza correctamente.
+     */
     override fun recuperarPassword(
         email: String,
         newPassword: String,

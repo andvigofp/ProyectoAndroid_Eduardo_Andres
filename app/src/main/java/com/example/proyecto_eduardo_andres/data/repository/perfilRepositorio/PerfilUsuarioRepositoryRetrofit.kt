@@ -10,12 +10,32 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
+/**
+ *
+ * Esta clase se encarga de gestionar las operaciones relacionadas
+ * con el perfil del usuario mediante llamadas HTTP usando Retrofit.
+ *
+ * @author Andrés
+ * @see Implementación Retrofit del repositorio de Perfil de Usuario
+ * @param api Servicio Retrofit que expone los endpoints del perfil de usuario.
+ *
+ */
 class PerfilUsuarioRepositoryRetrofit(
     private val api: PerfilUsuarioApiService = RetrofitClient.perfilUsuario
 ) : IPerfilUsuarioRepository {
 
     private val TAG = "PerfilUsuarioRepo"
 
+    /**
+     * Obtiene un usuario desde la API por su identificador único.
+     *
+     * Realiza una llamada GET al endpoint remoto y busca el usuario
+     * correspondiente dentro del listado recibido.
+     *
+     * @param id Identificador único del usuario.
+     * @param onError Callback que se ejecuta si ocurre un error en la petición.
+     * @param onSuccess Callback que devuelve el usuario encontrado como UserDTO.
+     */
     override fun getUsuarioPorId(
         id: String,
         onError: (Throwable) -> Unit,
@@ -60,6 +80,16 @@ class PerfilUsuarioRepositoryRetrofit(
         }
     }
 
+    /**
+     * Actualiza los datos de un usuario en el servidor remoto.
+     *
+     * Realiza una llamada POST o PUT al endpoint correspondiente
+     * enviando los nuevos datos del usuario.
+     *
+     * @param usuario Objeto UserDTO con la información actualizada.
+     * @param onError Callback que se ejecuta si ocurre un error en la actualización.
+     * @param onSuccess Callback que se ejecuta cuando la actualización es exitosa.
+     */
     override fun actualizarUsuario(
         usuario: UserDTO,
         onError: (Throwable) -> Unit,

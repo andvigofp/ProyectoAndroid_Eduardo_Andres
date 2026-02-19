@@ -5,6 +5,28 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
+/**
+ * Clase Application personalizada del proyecto.
+ *
+ * Esta clase:
+ * - Se ejecuta antes que cualquier Activity.
+ * - Permite inicializar componentes globales.
+ * - Preinicializa clientes Retrofit en segundo plano.
+ * - Evita trabajo pesado en el hilo principal.
+ *
+ * Optimización:
+ * - Fuerza la inicialización lazy de los servicios Retrofit.
+ * - Utiliza corrutinas en Dispatchers.IO.
+ * - Mejora el rendimiento percibido en el primer uso de red.
+ *
+ * Arquitectura:
+ * - Centraliza configuración global de la aplicación.
+ *
+ * @see Application
+ * @see RetrofitClient
+ * @see CoroutineScope
+ * @see Dispatchers
+ */
 class App : Application() {
     override fun onCreate() {
         super.onCreate()

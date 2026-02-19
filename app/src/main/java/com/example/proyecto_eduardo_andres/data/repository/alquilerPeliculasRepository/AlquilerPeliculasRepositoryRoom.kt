@@ -11,14 +11,42 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.util.Date
 
+/**
+ * Repositorio híbrido Room para alquiler de películas
+ *
+ * Implementación local del repositorio de alquiler que trabaja
+ * principalmente con Room (persistencia offline).
+ *
+ * Permite:
+ * - Alquilar películas
+ * - Devolver películas
+ * - Consultar estado de alquiler
+ * - Obtener películas alquiladas
+ * - Obtener catálogo completo
+ *
+ * Utiliza un DAO para la persistencia y el repositorio de películas
+ * para obtener el catálogo completo.
+ *
+ * @param alquilerDao DAO encargado de la persistencia de alquileres en Room.
+ * @param peliculasRepository Repositorio de películas para obtener el catálogo completo.
+ *
+ * @author Andrés
+ */
 class AlquilerPeliculasRepositoryRoom(
     private val alquilerDao: AlquilerPeliculaDao,
     private val peliculasRepository: IPeliculasRepository
 ) : IAlquilerPeliculasRepository {
 
-    // ----------------------------------------------------
-    // ALQUILAR
-    // ----------------------------------------------------
+    /**
+     * Registra el alquiler de una película para un usuario.
+     *
+     * Guarda la información en Room con una duración de 7 días.
+     *
+     * @param userId Identificador único del usuario.
+     * @param pelicula Película que se desea alquilar.
+     * @param onError Callback ejecutado si ocurre un error.
+     * @param onSuccess Callback ejecutado cuando el alquiler se registra correctamente.
+     */
     override fun alquilarPelicula(
         userId: String,
         pelicula: VideoClubOnlinePeliculasData,
@@ -52,9 +80,17 @@ class AlquilerPeliculasRepositoryRoom(
         }
     }
 
-    // ----------------------------------------------------
-    // DEVOLVER
-    // ----------------------------------------------------
+    /**
+     * Registra la devolución de una película.
+     *
+     * Actualiza el estado en la base de datos marcando
+     * la película como no alquilada.
+     *
+     * @param userId Identificador único del usuario.
+     * @param pelicula Película que se desea devolver.
+     * @param onError Callback ejecutado si ocurre un error.
+     * @param onSuccess Callback ejecutado cuando la devolución se realiza correctamente.
+     */
     override fun devolverPelicula(
         userId: String,
         pelicula: VideoClubOnlinePeliculasData,
@@ -78,9 +114,14 @@ class AlquilerPeliculasRepositoryRoom(
         }
     }
 
-    // ----------------------------------------------------
-    // ESTADO ALQUILER
-    // ----------------------------------------------------
+    /**
+     * Obtiene el estado actual de alquiler de una película.
+     *
+     * @param userId Identificador único del usuario.
+     * @param pelicula Película a consultar.
+     * @param onError Callback ejecutado si ocurre un error.
+     * @param onSuccess Devuelve un DTO con el estado del alquiler.
+     */
     override fun obtenerEstadoAlquiler(
         userId: String,
         pelicula: VideoClubOnlinePeliculasData,
@@ -103,9 +144,16 @@ class AlquilerPeliculasRepositoryRoom(
         }
     }
 
-    // ----------------------------------------------------
-    // PELÍCULAS ALQUILADAS
-    // ----------------------------------------------------
+    /**
+     * Obtiene todas las películas actualmente alquiladas por un usuario.
+     *
+     * Cruza los datos almacenados en Room con el catálogo completo
+     * proveniente del repositorio de películas.
+     *
+     * @param userId Identificador único del usuario.
+     * @param onError Callback ejecutado si ocurre un error.
+     * @param onSuccess Devuelve la lista de películas alquiladas.
+     */
     override fun obtenerPeliculasAlquiladas(
         userId: String,
         onError: (Throwable) -> Unit,
@@ -132,9 +180,14 @@ class AlquilerPeliculasRepositoryRoom(
         }
     }
 
-    // ----------------------------------------------------
-    // CATÁLOGO (IMPORTANTE - YA NO DEVUELVE EMPTY LIST)
-    // ----------------------------------------------------
+    /**
+     * Devuelve el catálogo completo de películas.
+     *
+     * Delegado directamente al repositorio de películas.
+     *
+     * @param onError Callback ejecutado si ocurre un error.
+     * @param onSuccess Devuelve la lista completa de películas.
+     */
     override fun obtenerPeliculas(
         onError: (Throwable) -> Unit,
         onSuccess: (List<VideoClubOnlinePeliculasData>) -> Unit

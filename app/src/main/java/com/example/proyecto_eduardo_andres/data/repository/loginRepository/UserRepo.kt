@@ -10,6 +10,26 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
+/**
+ * Implementación principal de [IUserRepository].
+ *
+ * Esta clase actúa como repositorio híbrido de autenticación:
+ * - Utiliza Retrofit para login remoto.
+ * - Utiliza Room para persistencia local de sesión.
+ *
+ * Se encarga de:
+ * - Autenticación de usuario.
+ * - Gestión de sesión.
+ * - Persistencia offline.
+ *
+ * @property context Contexto de la aplicación necesario para
+ * inicializar la base de datos Room.
+ *
+ * @author Andrés
+ * @see IUserRepository
+ * @see UserRepositoryHibridoLogin
+ * @see AppDatabase
+ */
 class UserRepo(
     context: Context
 ) : IUserRepository {
@@ -23,8 +43,20 @@ class UserRepo(
         userDao = userDao
     )
 
-    // ================= LOGIN =================
-
+    /**
+     * Realiza login híbrido (Retrofit + Room).
+     *
+     * Flujo:
+     * 1. Intenta autenticación remota.
+     * 2. Si es válida, elimina sesión previa.
+     * 3. Guarda nueva sesión en Room.
+     *
+     * @param email Correo electrónico del usuario.
+     * @param password Contraseña introducida.
+     * @param keepLogged Indica si el usuario desea mantener sesión activa.
+     * @param onError Callback ejecutado si la autenticación falla.
+     * @param onSuccess Callback que devuelve el [UserDTO] autenticado.
+     */
     override fun login(
         email: String,
         password: String,
@@ -60,8 +92,13 @@ class UserRepo(
         }
     }
 
-    // ================= GUARDAR SESIÓN =================
-
+    /**
+     * Guarda manualmente una sesión en Room.
+     *
+     * @param user Configuración del usuario autenticado.
+     * @param onSuccess Callback ejecutado cuando la sesión se guarda correctamente.
+     * @param onError Callback ejecutado si ocurre un error durante el guardado.
+     */
     override fun loginUser(
         user: UserConfig,
         onSuccess: (UserConfig) -> Unit,
@@ -93,8 +130,11 @@ class UserRepo(
         }
     }
 
-    // ================= OBTENER SESIÓN =================
-
+    /**
+     * Recupera el usuario actualmente autenticado desde Room.
+     *
+     * @return [UserConfig] si existe sesión activa, null en caso contrario.
+     */
     override fun getCurrentUser(): UserConfig? {
 
         val user = userDao.getLoggedUser()
@@ -110,8 +150,12 @@ class UserRepo(
         }
     }
 
-    // ================= LOGOUT =================
-
+    /**
+     * Cierra sesión eliminando todos los registros de usuario en Room.
+     *
+     * @param onSuccess Callback ejecutado cuando el logout es exitoso.
+     * @param onError Callback ejecutado si ocurre un error.
+     */
     override fun loggoutUser(
         onSuccess: () -> Unit,
         onError: () -> Unit
@@ -132,8 +176,13 @@ class UserRepo(
         }
     }
 
-    // ================= GET USER =================
-
+    /**
+     * Obtiene un usuario específico utilizando el repositorio híbrido.
+     *
+     * @param id Identificador único del usuario.
+     * @param onError Callback ejecutado si el usuario no existe.
+     * @param onSuccess Callback que devuelve el [UserDTO] encontrado.
+     */
     override fun getUser(
         id: String,
         onError: (Throwable) -> Unit,
@@ -150,6 +199,15 @@ class UserRepo(
         }
     }
 
+    /**
+     * Configuración interna utilizada para manejar sesión de usuario.
+     *
+     * @property id Identificador único del usuario.
+     * @property name Nombre del usuario.
+     * @property email Correo electrónico.
+     * @property password Contraseña (no persistida en Room).
+     * @property keepLogged Indica si la sesión debe mantenerse activa.
+     */
     data class UserConfig(
         val id: String,
         val name: String,

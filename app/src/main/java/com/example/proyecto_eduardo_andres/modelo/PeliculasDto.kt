@@ -2,6 +2,15 @@ package com.example.proyecto_eduardo_andres.modelo
 
 import com.example.proyecto_eduardo_andres.R
 
+/**
+ * @author Andrés
+ * @param representa una lista de películas.
+ * @param id Identificador único de la película.
+ * @param categoria Categoría a la que pertenece la película.
+ * @param imagen Recurso drawable que representa la imagen de la película.
+ * @param nombre Recurso string que describe el nombre de la película.
+ * @param descripcion Recurso string que describe la descripción de la película.
+ */
 data class PeliculasDto(
     val peliculas: List<VideoClubOnlinePeliculasData> = listOf(
         // --- DRAMA ---

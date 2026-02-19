@@ -40,6 +40,42 @@ import com.example.proyecto_eduardo_andres.vista.componente.componenteSearchPeli
 import com.example.proyecto_eduardo_andres.vista.componente.componenteSearchSeriesPeliculas.MediaItem
 import com.example.proyecto_eduardo_andres.vista.componente.componenteToolbar.toolBar
 
+/**
+ * @author Andrés
+ *
+ * Pantalla de búsqueda de películas dentro del módulo VideoClub.
+ *
+ * Esta pantalla:
+ * - Crea internamente su ViewModel mediante Factory.
+ * - Observa el estado reactivo con StateFlow.
+ * - Permite búsqueda en tiempo real.
+ * - Filtra dinámicamente las películas según el texto introducido.
+ * - Muestra resultados usando LazyColumn.
+ * - Incluye Toolbar con degradado personalizado.
+ *
+ * Arquitectura:
+ * - Sigue patrón MVVM.
+ * - El ViewModel gestiona el estado de búsqueda.
+ * - La UI es declarativa y reactiva.
+ *
+ * Diseño:
+ * - Basado en Material3.
+ * - Barra de búsqueda personalizada.
+ * - Renderizado eficiente con LazyColumn.
+ *
+ * @param repository Repositorio encargado de obtener películas para búsqueda.
+ * @param onBackClick Callback navegación atrás.
+ * @param onHomeClick Callback navegación Home.
+ * @param onCameraClick Callback navegación cámara.
+ * @param onProfileClick Callback navegación perfil.
+ * @param onLogoutClick Callback cerrar sesión.
+ * @param onPeliculaClick Callback cuando se selecciona una película.
+ *
+ * @see VideoClubOnlineSearchPeliculasViewModel
+ * @see LazyColumn
+ * @see StateFlow
+ * @see SearchBar
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun VideoClubSearchPeliculasScreen(

@@ -43,6 +43,46 @@ import com.example.proyecto_eduardo_andres.vista.componente.componenteToolbar.to
 import java.util.Calendar
 import java.util.Date
 
+/**
+ * @author Andrés
+ *
+ * Pantalla encargada de gestionar el proceso de
+ * alquiler y devolución de películas.
+ *
+ * Esta pantalla:
+ * - Crea internamente su ViewModel mediante Factory.
+ * - Observa el estado reactivo mediante StateFlow.
+ * - Permite alquilar o devolver una película.
+ * - Muestra un diálogo informativo tras la acción.
+ * - Gestiona navegación mediante callbacks.
+ *
+ * Arquitectura:
+ * - Sigue patrón MVVM.
+ * - El ViewModel contiene la lógica de negocio.
+ * - La UI es declarativa y reactiva.
+ *
+ * Diseño:
+ * - Usa MaterialTheme para tipografías y colores.
+ * - Implementa layout personalizado con CustomScreenWithoutScaffold.
+ * - Utiliza gradiente en TopBar y BottomBar.
+ *
+ * @param userId Identificador único del usuario.
+ * @param peliculaId Identificador único de la película.
+ * @param repository Repositorio encargado de gestionar
+ * alquileres y devoluciones.
+ * @param onBackClick Callback de navegación hacia atrás.
+ * @param onHomeClick Callback de navegación hacia Home.
+ * @param onCameraClick Callback de navegación hacia Cámara.
+ * @param onProfileClick Callback de navegación hacia Perfil.
+ * @param onLogoutClick Callback para cerrar sesión.
+ *
+ * @see AlquilarDevolverPeliculasViewModel
+ * @see AlquilarDevolverPeliculasViewModelFactory
+ * @see AlquilarDevolverDialog
+ * @see MaterialTheme
+ * @see StateFlow
+ * @see collectAsState
+ */
 @Composable
 fun AlquilarDevolverPeliculasScreen(
     userId: String,

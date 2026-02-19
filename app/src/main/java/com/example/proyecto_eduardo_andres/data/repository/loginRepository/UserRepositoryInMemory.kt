@@ -10,18 +10,39 @@ import kotlinx.coroutines.withContext
 
 
 /**
- * Implementacion en memoria de un repositorio de usuarios. Usar solo para ejemplos o pruebas.
+ * Implementación en memoria de [IUserRepository].
+ *
+ * Esta clase simula el almacenamiento de sesión únicamente en RAM.
+ * Se utiliza principalmente para:
+ * - Testing
+ * - Previews
+ * - Modo desarrollo sin persistencia real
+ *
+ * Internamente mantiene un usuario actual en memoria.
+ *
+ * @property authApi Servicio Retrofit utilizado para realizar login remoto.
+ *
+ * @author Eduardo
+ * @see IUserRepository
+ * @see UserRepo.UserConfig
  */
 class UserRepositoryInMemory(
 private val authApi: AuthApiService
 ) : IUserRepository {
 
-    // Guardamos el usuario actual en memoria
+    /**
+     * Usuario actualmente autenticado en memoria.
+     */
     private var currentUser: UserRepo.UserConfig? = null
-    // --------------------
-    // getUser por ID (no implementado con memoria real, puedes simular)
-    // --------------------
 
+    /**
+     * Obtiene el usuario actual almacenado en memoria por su ID.
+     *
+     * @param id Identificador único del usuario.
+     * @param onError Callback ejecutado si no existe usuario en memoria
+     * o el ID no coincide.
+     * @param onSuccess Callback que devuelve el [UserDTO] correspondiente.
+     */
     override fun getUser(
         id: String,
         onError: (Throwable) -> Unit,
@@ -38,9 +59,16 @@ private val authApi: AuthApiService
 
 
 
-    // --------------------
-    // login con API y guardamos en memoria
-    // --------------------
+    /**
+     * Realiza autenticación contra la API mediante Retrofit.
+     * Si es exitosa, guarda el usuario en memoria.
+     *
+     * @param email Correo electrónico del usuario.
+     * @param password Contraseña del usuario.
+     * @param keepLogged Indica si la sesión debe mantenerse activa.
+     * @param onError Callback ejecutado si el login falla.
+     * @param onSuccess Callback que devuelve el [UserDTO] autenticado.
+     */
     override fun login(
         email: String,
         password: String,
@@ -84,9 +112,13 @@ private val authApi: AuthApiService
         }
     }
 
-    // --------------------
-    // Guardar sesión en memoria
-    // --------------------
+    /**
+     * Guarda manualmente un usuario como sesión activa en memoria.
+     *
+     * @param user Configuración del usuario autenticado.
+     * @param onSuccess Callback ejecutado cuando la sesión se guarda correctamente.
+     * @param onError Callback ejecutado si ocurre algún error (no usado en memoria).
+     */
     override fun loginUser(
         user: UserRepo.UserConfig,
         onSuccess: (UserRepo.UserConfig) -> Unit,
@@ -96,17 +128,22 @@ private val authApi: AuthApiService
         onSuccess(user)
     }
 
-    // --------------------
-    // Cerrar sesión
-    // --------------------
+    /**
+     * Elimina la sesión actual almacenada en memoria.
+     *
+     * @param onSuccess Callback ejecutado cuando el logout se realiza correctamente.
+     * @param onError Callback ejecutado si ocurre un error (no usado en memoria).
+     */
     override fun loggoutUser(onSuccess: () -> Unit, onError: () -> Unit) {
         currentUser = null
         onSuccess()
     }
 
-    // --------------------
-    // Obtener usuario actual
-    // --------------------
+    /**
+     * Devuelve el usuario actualmente almacenado en memoria.
+     *
+     * @return [UserRepo.UserConfig] o null si no hay sesión activa.
+     */
     override fun getCurrentUser(): UserRepo.UserConfig? {
         return currentUser
     }

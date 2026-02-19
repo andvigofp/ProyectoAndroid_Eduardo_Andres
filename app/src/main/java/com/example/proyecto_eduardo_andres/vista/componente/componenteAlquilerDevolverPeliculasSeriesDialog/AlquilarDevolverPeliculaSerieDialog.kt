@@ -19,6 +19,43 @@ import java.util.Calendar
 import java.util.Date
 import java.util.Locale
 
+/**
+ * @author Andrés
+ *
+ * Composable que muestra un diálogo informativo
+ * para indicar el resultado de una acción de alquiler
+ * o devolución de película/serie.
+ *
+ * Este componente:
+ * - Muestra el estado de la operación (Alquilada / Devuelta).
+ * - Formatea fechas según configuración regional.
+ * - Indica si existe multa por devolución tardía.
+ * - Utiliza Material3 AlertDialog.
+ *
+ * Sigue el patrón declarativo de Jetpack Compose:
+ * - La UI depende únicamente de los parámetros recibidos.
+ * - No contiene lógica de negocio.
+ * - Se recompone automáticamente cuando cambian los valores.
+ *
+ * Diseño:
+ * - Usa MaterialTheme para tipografías y colores.
+ * - Personaliza el fondo del diálogo.
+ * - Usa colores adaptados al estado (error si hay multa).
+ *
+ * @param isAlquiler Indica si la acción es alquiler (true)
+ * o devolución (false).
+ * @param fechaAlquiler Fecha en la que se realizó el alquiler.
+ * @param fechaDevolucion Fecha en la que se devolvió el contenido.
+ * @param fechaLimiteDevolucion Fecha límite para devolver sin multa.
+ * @param esMulta Indica si la devolución genera multa.
+ * @param onConfirmClick Callback ejecutado al cerrar el diálogo.
+ *
+ * @see AlertDialog
+ * @see MaterialTheme
+ * @see stringResource
+ * @see Date
+ * @see SimpleDateFormat
+ */
 @Composable
 fun AlquilarDevolverDialog(
     isAlquiler: Boolean,

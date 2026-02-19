@@ -10,14 +10,29 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
+/**
+ *
+ * Repositorio que conecta con la API remota mediante Retrofit
+ * para gestionar el catálogo y el estado de alquiler de series.
+ *
+ *  @author Eduardo
+ *  @see Implementación Retrofit para el alquiler de series
+ * @property context Contexto de la aplicación utilizado para resolver
+ * recursos dinámicos (strings y drawables).
+ */
 class AlquilerSerieRepositoryRetrofit(private val context: Context) :
     IAlquilerSeriesRepository {
 
     private val api = RetrofitClient.aquilerSerieApiService
 
-    // ----------------------------------------------------
-    // Obtener todas las series disponibles
-    // ----------------------------------------------------
+    /**
+     * Obtiene todas las series disponibles desde la API remota.
+     *
+     * @param onError Callback que se ejecuta si ocurre un error
+     * durante la llamada a la API.
+     * @param onSuccess Callback que devuelve la lista de series
+     * mapeadas al modelo de UI.
+     */
     override fun obtenerSeries(
         onError: (Throwable) -> Unit,
         onSuccess: (List<VideoClubOnlineSeriesData>) -> Unit
@@ -51,9 +66,16 @@ class AlquilerSerieRepositoryRetrofit(private val context: Context) :
     }
 
 
-    // ----------------------------------------------------
-    // Implementación de IAlquilerPeliculasRepository
-    // ----------------------------------------------------
+    /**
+     * Realiza el alquiler de una serie mediante llamada a la API.
+     *
+     * @param userId Identificador del usuario que realiza el alquiler.
+     * @param serie Serie que se desea alquilar.
+     * @param onError Callback que se ejecuta si ocurre un error
+     * durante la operación.
+     * @param onSuccess Callback que se ejecuta cuando el alquiler
+     * se completa correctamente.
+     */
     override fun alquilarSerie(
         userId: String,
         serie: VideoClubOnlineSeriesData,
@@ -71,6 +93,15 @@ class AlquilerSerieRepositoryRetrofit(private val context: Context) :
         }
     }
 
+    /**
+     * Devuelve una serie previamente alquilada.
+     *
+     * @param userId Identificador del usuario.
+     * @param serie Serie que se desea devolver.
+     * @param onError Callback que se ejecuta si ocurre un error.
+     * @param onSuccess Callback que se ejecuta cuando la devolución
+     * se realiza correctamente.
+     */
     override fun devolverSerie(
         userId: String,
         serie: VideoClubOnlineSeriesData,
@@ -88,6 +119,15 @@ class AlquilerSerieRepositoryRetrofit(private val context: Context) :
         }
     }
 
+    /**
+     * Obtiene el estado de alquiler de una serie para un usuario.
+     *
+     * @param userId Identificador del usuario.
+     * @param serie Serie cuya información de alquiler se desea consultar.
+     * @param onError Callback que se ejecuta si ocurre un error.
+     * @param onSuccess Callback que devuelve un EstadoAlquilerDto
+     * con el estado actual.
+     */
     override fun obtenerEstadoAlquiler(
         userId: String,
         serie: VideoClubOnlineSeriesData,
@@ -106,6 +146,13 @@ class AlquilerSerieRepositoryRetrofit(private val context: Context) :
         }
     }
 
+    /**
+     * Obtiene la lista de series alquiladas por un usuario.
+     *
+     * @param userId Identificador del usuario.
+     * @param onError Callback que se ejecuta si ocurre un error.
+     * @param onSuccess Callback que devuelve la lista de series alquiladas.
+     */
     override fun obtenerSeriesAlquiladas(
         userId: String,
         onError: (Throwable) -> Unit,
@@ -122,9 +169,13 @@ class AlquilerSerieRepositoryRetrofit(private val context: Context) :
         }
     }
 
-    // ----------------------------------------------------
-    // Helpers para recursos
-    // ----------------------------------------------------
+    /**
+     * Resuelve dinámicamente un String Resource a partir
+     * del nombre recibido desde la API.
+     *
+     * @param value Nombre del recurso en formato "R.string.nombre".
+     * @return Identificador del recurso String.
+     */
     private fun resolveStringResource(value: String): Int {
         if (value.isBlank()) return R.string.app_name
         val name = value.substringAfter("R.string.").substringAfterLast('.')
@@ -132,6 +183,13 @@ class AlquilerSerieRepositoryRetrofit(private val context: Context) :
         return if (resId != 0) resId else R.string.app_name
     }
 
+    /**
+     * Resuelve dinámicamente un Drawable Resource a partir
+     * del nombre recibido desde la API.
+     *
+     * @param value Nombre del recurso en formato "R.drawable.nombre".
+     * @return Identificador del recurso Drawable o null si no existe.
+     */
     private fun resolveDrawableResource(value: String): Int? {
         if (value.isBlank()) return null
         val name = value.substringAfter("R.drawable.").substringAfterLast('.')

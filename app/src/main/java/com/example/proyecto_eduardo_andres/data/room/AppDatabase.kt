@@ -19,6 +19,25 @@ import com.example.proyecto_eduardo_andres.data.room.entity.SearchPelicula
 import com.example.proyecto_eduardo_andres.data.room.entity.SearchSerie
 import com.example.proyecto_eduardo_andres.data.room.entity.Serie
 
+/**
+ * @author Andrés
+ *
+ * Clase principal que define la base de datos de la aplicación
+ * utilizando Room como sistema de persistencia local.
+ *
+ * Esta clase centraliza todas las entidades y DAO del proyecto,
+ * formando la capa de almacenamiento dentro de una arquitectura
+ * moderna Android:
+ *
+ * Room (Base de datos) +
+ * Repository +
+ * ViewModel +
+ * Jetpack Compose (Material 3).
+ *
+ * Configuración:
+ * - version = 1 → Versión actual de la base de datos.
+ * - exportSchema = false → No exporta el esquema a un archivo.
+ */
 @Database(
     entities = [
         User::class,
@@ -43,12 +62,27 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun alquilerPeliculaDao(): AlquilerPeliculaDao
     abstract fun alquilerSerieDao(): AlquilerSerieDao
 
-
+    /**
+    * Instancia única de la base de datos.
+    *
+    * Se marca como @Volatile para garantizar que los cambios
+    * sean visibles inmediatamente entre hilos.
+    */
     companion object {
 
         @Volatile
         private var INSTANCE: AppDatabase? = null
 
+        /**
+         * Devuelve la instancia única de la base de datos.
+         *
+         * Implementa el patrón Singleton para evitar
+         * múltiples instancias de RoomDatabase.
+         *
+         * @param context Contexto de la aplicación.
+         *
+         * @return Instancia única de AppDatabase.
+         */
         fun getDatabase(context: Context): AppDatabase {
             return INSTANCE ?: synchronized(this) {
 

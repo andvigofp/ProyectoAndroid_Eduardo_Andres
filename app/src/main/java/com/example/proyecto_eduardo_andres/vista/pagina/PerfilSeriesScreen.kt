@@ -22,10 +22,8 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -38,7 +36,6 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -64,6 +61,51 @@ import com.example.proyecto_eduardo_andres.vista.componente.componentePerfilUsua
 import com.example.proyecto_eduardo_andres.vista.componente.componentePerfilUsuario.PerfilUsuarioButtons
 import com.example.proyecto_eduardo_andres.vista.componente.componenteToolbar.toolBar
 
+/**
+ * @author Eduardo
+ *
+ * Pantalla encargada de mostrar y gestionar el perfil del usuario
+ * junto con las series que tiene actualmente alquiladas.
+ *
+ * Esta pantalla:
+ * - Crea internamente su ViewModel mediante Factory.
+ * - Carga los datos del usuario al iniciarse.
+ * - Permite editar los datos personales.
+ * - Muestra la lista de series alquiladas.
+ * - Permite navegar a la serie seleccionada.
+ * - Muestra diálogos de confirmación e información.
+ *
+ * Arquitectura:
+ * - Sigue patrón MVVM.
+ * - El ViewModel gestiona la lógica de datos.
+ * - La UI es declarativa y reactiva.
+ *
+ * Diseño:
+ * - Utiliza MaterialTheme (Material3).
+ * - Implementa degradados superior e inferior.
+ * - Separa visualmente información en tarjeta central.
+ * - Usa LazyColumn para lista eficiente.
+ *
+ * @param userId Identificador único del usuario.
+ * @param alquilerRepository Repositorio encargado de obtener
+ * las series alquiladas.
+ * @param repository Repositorio encargado de obtener y actualizar
+ * los datos del perfil del usuario.
+ * @param onBackClick Callback navegación atrás.
+ * @param onHomeClick Callback navegación Home.
+ * @param onCameraClick Callback navegación Cámara.
+ * @param onProfileClick Callback navegación Perfil.
+ * @param onLogoutClick Callback cerrar sesión.
+ * @param onSerieClieck Callback ejecutado al pulsar una serie.
+ *
+ * @see PerfilSeriesViewModel
+ * @see PerfilSeriesViewModelFactory
+ * @see StateFlow
+ * @see collectAsState
+ * @see LazyColumn
+ * @see ConfirmationDialog
+ * @see InfoDialog
+ */
 @Composable
 fun PerfilSeriesScreen(
     userId: String,

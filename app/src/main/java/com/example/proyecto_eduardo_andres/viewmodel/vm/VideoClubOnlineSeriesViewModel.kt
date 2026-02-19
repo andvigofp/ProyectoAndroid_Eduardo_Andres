@@ -14,6 +14,49 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
+/**
+ * @author Eduardo
+ * @see VideoClubOnlineSeriesViewModelFactory
+ *
+ * Esta clase:
+ * - Gestiona el estado de la pantalla principal de series.
+ * - Carga el catálogo completo desde el repositorio.
+ * - Agrupa las series por categoría.
+ * - Permite filtrar series por categoría.
+ * - Gestiona eventos de navegación al seleccionar una serie.
+ *
+ * Sigue la arquitectura MVVM:
+ * - ViewModel → Contiene la lógica de presentación.
+ * - Repository → Encargado de obtener las series.
+ * - SessionEvents → Gestiona eventos globales como navegación.
+ *
+ * Al inicializarse:
+ * - Ejecuta automáticamente la carga del catálogo.
+ *
+ * Utiliza:
+ * - MutableStateFlow para modificar el estado interno.
+ * - StateFlow para exponer estado inmutable a la UI.
+ * - viewModelScope para emitir eventos asíncronos.
+ *
+ * En Jetpack Compose:
+ * - La UI observa uiState.
+ * - Cuando cambian las series o el estado de carga,
+ *   la pantalla se recompone automáticamente.
+ * - Los eventos de navegación se emiten mediante SessionEvents.
+ *
+ * @param repository Repositorio encargado de obtener
+ * el catálogo de series.
+ * @param sessionEvents Objeto global para emitir
+ * eventos de navegación (inyectable para testing).
+ *
+ * @see VideoClubOnlineSeriesUiState
+ * @see ISeriesRepository
+ * @see SessionEvents
+ * @see RouteNavigation
+ * @see ViewModel
+ * @see MutableStateFlow
+ * @see StateFlow
+ */
 class VideoClubOnlineSeriesViewModel(
     private val repository: ISeriesRepository,
     private val sessionEvents: SessionEvents = SessionEvents // Inyectable para testing
@@ -55,9 +98,9 @@ class VideoClubOnlineSeriesViewModel(
         }
     }
 
-    // =========================
-    // NUEVA FUNCIÓN: cuando el usuario toca una serie
-    // =========================
+
+    // FUNCIÓN: cuando el usuario toca una serie
+
     fun onSerieClick(userId: String, serie: VideoClubOnlineSeriesData) {
         // Emitimos la navegación usando SessionEvents
         viewModelScope.launch {

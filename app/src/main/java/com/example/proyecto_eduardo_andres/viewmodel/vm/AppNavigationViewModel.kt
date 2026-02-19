@@ -18,6 +18,40 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
+/**
+ * @author Andrés
+ * @see AppNavigationViewModel
+ *
+ * Esta clase:
+ * - Verifica si existe una sesión activa al iniciar la app.
+ * - Define la ruta inicial de navegación.
+ * - Mantiene el estado global de navegación.
+ * - Permite cerrar sesión limpiando datos persistentes.
+ *
+ * Extiende AndroidViewModel porque necesita acceso
+ * al contexto de aplicación (Application) para
+ * trabajar con SharedPreferences.
+ *
+ * Utiliza:
+ * - StateFlow para exponer estado reactivo.
+ * - viewModelScope para corrutinas seguras.
+ *
+ * @param application Contexto global de la aplicación.
+ * @param userRepository Repositorio encargado de obtener
+ * información del usuario actual desde base de datos.
+ *
+ * @see AppNavigationUiState
+ * @see IUserRepository
+ * @see RouteNavigation
+ * @see AndroidViewModel
+ * @see ViewModel
+ * @see Application
+ * @see Context
+ * @see MutableStateFlow
+ * @see StateFlow
+ * @see asStateFlow
+ * @see viewModelScope
+ */
 class AppNavigationViewModel(
     application: Application,
     private val userRepository: IUserRepository

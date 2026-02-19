@@ -9,9 +9,32 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
+/**
+ * Implementación del repositorio de películas utilizando Retrofit.
+ *
+ * Esta clase obtiene el catálogo de películas desde un servicio remoto
+ * mediante llamadas HTTP. Los datos recibidos se transforman a
+ * {VideoClubOnlinePeliculasData} resolviendo los recursos
+ * de tipo String y Drawable dinámicamente.
+ *
+ * @property context Contexto de la aplicación necesario para resolver
+ * recursos dinámicamente.
+ *
+ * @author Andrés
+ * @see IPeliculasRepository
+ */
 class PeliculasRepositoryRetrofit(private val context: Context) : IPeliculasRepository {
     private val api = RetrofitClient.peliApiService
 
+    /**
+     * Obtiene la lista completa de películas desde el servidor remoto.
+     *
+     * @param onError Callback que se ejecuta si ocurre un error de red,
+     * excepción o respuesta HTTP no exitosa.
+     * @param onSuccess Callback que devuelve la lista de
+     * {VideoClubOnlinePeliculasData} cuando la operación finaliza correctamente.
+     *
+     */
     override fun obtenerPeliculas(
         onError: (Throwable) -> Unit,
         onSuccess: (List<VideoClubOnlinePeliculasData>) -> Unit
@@ -47,6 +70,12 @@ class PeliculasRepositoryRetrofit(private val context: Context) : IPeliculasRepo
         }
     }
 
+    /**
+     * Resuelve dinámicamente un recurso String a partir de su nombre.
+     *
+     * @param value Nombre completo del recurso (ej. "R.string.nombre").
+     * @return ID del recurso String correspondiente.
+     */
     private fun resolveStringResource(value: String): Int {
         if (value.isBlank()) return R.string.app_name
         val name = value.substringAfter("R.string.").substringAfterLast('.')
@@ -54,6 +83,12 @@ class PeliculasRepositoryRetrofit(private val context: Context) : IPeliculasRepo
         return if (resId != 0) resId else R.string.app_name
     }
 
+    /**
+     * Resuelve dinámicamente un recurso Drawable a partir de su nombre.
+     *
+     * @param value Nombre completo del recurso (ej. "R.drawable.imagen").
+     * @return ID del recurso Drawable correspondiente o null si no existe.
+     */
     private fun resolveDrawableResource(value: String): Int? {
         if (value.isBlank()) return null
         val name = value.substringAfter("R.drawable.").substringAfterLast('.')

@@ -10,13 +10,37 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
+/**
+ * @author Andrés
+ * @see AlquilerPeliculaRepositoryRetrofit
+ * @param Interfaz que define el repositorio de alquiler de películas.
+ *
+ * Implementación Retrofit del repositorio de alquiler de películas
+ *
+ * Esta clase gestiona la comunicación con el servidor remoto
+ * utilizando Retrofit para:
+ * - Obtener películas
+ * - Alquilar películas
+ * - Devolver películas
+ * - Consultar estado de alquiler
+ *
+ * Convierte los DTO recibidos desde la API en modelos de la capa UI.
+ *
+ * @param context Contexto de la aplicación necesario para resolver
+ * recursos dinámicos (R.string / R.drawable).
+ *
+ * @author Andrés
+ */
 class AlquilerPeliculaRepositoryRetrofit(private val context: Context) : IAlquilerPeliculasRepository {
 
     private val api = RetrofitClient.alquilerPeliculaApiService
 
-    // ----------------------------------------------------
-    // Obtener todas las películas disponibles
-    // ----------------------------------------------------
+    /**
+     * Obtiene todas las películas disponibles desde el servidor.
+     *
+     * @param onError Callback ejecutado si ocurre un error HTTP o de red.
+     * @param onSuccess Devuelve la lista de películas mapeadas al modelo UI.
+     */
     override fun obtenerPeliculas(
         onError: (Throwable) -> Unit,
         onSuccess: (List<VideoClubOnlinePeliculasData>) -> Unit
@@ -50,9 +74,14 @@ class AlquilerPeliculaRepositoryRetrofit(private val context: Context) : IAlquil
     }
 
 
-    // ----------------------------------------------------
-    // Implementación de IAlquilerPeliculasRepository
-    // ----------------------------------------------------
+    /**
+     * Envía al servidor la solicitud para alquilar una película.
+     *
+     * @param userId Identificador único del usuario.
+     * @param pelicula Película que se desea alquilar.
+     * @param onError Callback ejecutado si ocurre un error en la petición.
+     * @param onSuccess Callback ejecutado si el alquiler se realiza correctamente.
+     */
     override fun alquilarPelicula(
         userId: String,
         pelicula: VideoClubOnlinePeliculasData,
@@ -70,6 +99,14 @@ class AlquilerPeliculaRepositoryRetrofit(private val context: Context) : IAlquil
         }
     }
 
+    /**
+     * Envía al servidor la solicitud para devolver una película.
+     *
+     * @param userId Identificador único del usuario.
+     * @param pelicula Película que se desea devolver.
+     * @param onError Callback ejecutado si ocurre un error en la petición.
+     * @param onSuccess Callback ejecutado si la devolución se realiza correctamente.
+     */
     override fun devolverPelicula(
         userId: String,
         pelicula: VideoClubOnlinePeliculasData,
@@ -87,6 +124,14 @@ class AlquilerPeliculaRepositoryRetrofit(private val context: Context) : IAlquil
         }
     }
 
+    /**
+     * Obtiene el estado actual de alquiler de una película.
+     *
+     * @param userId Identificador único del usuario.
+     * @param pelicula Película a consultar.
+     * @param onError Callback ejecutado si ocurre un error.
+     * @param onSuccess Devuelve el estado actual del alquiler.
+     */
     override fun obtenerEstadoAlquiler(
         userId: String,
         pelicula: VideoClubOnlinePeliculasData,
@@ -105,6 +150,13 @@ class AlquilerPeliculaRepositoryRetrofit(private val context: Context) : IAlquil
         }
     }
 
+    /**
+     * Obtiene desde el servidor las películas alquiladas por un usuario.
+     *
+     * @param userId Identificador único del usuario.
+     * @param onError Callback ejecutado si ocurre un error.
+     * @param onSuccess Devuelve la lista de películas alquiladas.
+     */
     override fun obtenerPeliculasAlquiladas(
         userId: String,
         onError: (Throwable) -> Unit,
@@ -121,9 +173,12 @@ class AlquilerPeliculaRepositoryRetrofit(private val context: Context) : IAlquil
         }
     }
 
-    // ----------------------------------------------------
-    // Helpers para recursos
-    // ----------------------------------------------------
+    /**
+     * Resuelve dinámicamente un recurso String a partir de su nombre.
+     *
+     * @param Nombre del recurso en formato "R.string.nombre".
+     * @return ID del recurso String correspondiente.
+     */
     private fun resolveStringResource(value: String): Int {
         if (value.isBlank()) return R.string.app_name
         val name = value.substringAfter("R.string.").substringAfterLast('.')
@@ -131,6 +186,13 @@ class AlquilerPeliculaRepositoryRetrofit(private val context: Context) : IAlquil
         return if (resId != 0) resId else R.string.app_name
     }
 
+
+    /**
+     * Resuelve dinámicamente un recurso Drawable a partir de su nombre.
+     *
+     * @param Nombre del recurso en formato "R.drawable.nombre".
+     * @return ID del recurso Drawable o null si no existe.
+     */
     private fun resolveDrawableResource(value: String): Int? {
         if (value.isBlank()) return null
         val name = value.substringAfter("R.drawable.").substringAfterLast('.')
