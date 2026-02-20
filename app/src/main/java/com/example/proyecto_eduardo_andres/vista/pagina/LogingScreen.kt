@@ -153,9 +153,10 @@ fun LogingScreen(
             // INDICADOR DE MODO (REACTIVO)
             Text(
                 text = if (uiState.loginMode == LoginMode.ROOM)
-                    "Modo sin conexión (Invitado)"
+                    stringResource(R.string.modo_invitado)
                 else
-                    "Modo online",
+                    stringResource(R.string.modo_online),
+
                 color = if (uiState.loginMode == LoginMode.ROOM)
                     Color.Yellow
                 else
@@ -292,7 +293,7 @@ fun LogingScreen(
                             .fillMaxWidth()
                             .height(60.dp)
                     ) {
-                        Text("Entrar como invitado")
+                        Text(stringResource(R.string.button_modo_invitado))
                     }
                 }
             }
