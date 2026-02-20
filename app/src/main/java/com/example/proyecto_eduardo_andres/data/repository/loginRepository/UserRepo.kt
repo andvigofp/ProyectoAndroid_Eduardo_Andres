@@ -3,7 +3,6 @@ package com.example.proyecto_eduardo_andres.data.repository.loginRepository
 import android.content.Context
 import com.example.proyecto_eduardo_andres.data.room.AppDatabase
 import com.example.proyecto_eduardo_andres.modelo.UserDTO
-import com.example.proyecto_eduardo_andres.remote.RetrofitClient
 import com.example.proyecto_eduardo_andres.remote.api.AuthApiService
 import com.example.proyecto_eduardo_andres.remote.api.UsuarioApiService
 import com.example.proyecto_eduardo_andres.remote.dto.LoginDto

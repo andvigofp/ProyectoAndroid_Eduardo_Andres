@@ -9,7 +9,7 @@ package com.example.proyecto_eduardo_andres.modelo
  * @param keepLogged Indica si el usuario desea mantener la sesión iniciada.
  */
 data class UserDTO(
-    val id: String?,
+    val id: String,
     val name: String,
     val email: String,
     val password: String,

@@ -29,7 +29,8 @@ data class PerfilSeriesUiState(
     val showConfirmacionDialog: Boolean = false,
     val showInfoDialog: Boolean = false,
     val infoDialogTitle: String = "",
-    val infoDialogMessage: String = ""
+    val infoDialogMessage: String = "",
+    val isOnline: Boolean = true
 ) {
     /**
      * Indica si el botón de modificar está habilitado.
