@@ -1,7 +1,5 @@
 package com.example.proyecto_eduardo_andres.modelo
 
-import com.example.proyecto_eduardo_andres.data.room.entity.User
-
 /**
  * @autor Andrés
  * @param id Identificador único del usuario.
@@ -29,13 +27,4 @@ data class UserDTO(
      * - Conversión de password → passwd
      * - Asignación de id vacío si es null
      */
-    fun toUser(): User {
-        return User(
-            id = id ?: "",
-            name = name,
-            email = email,
-            passwd = password,
-            keepLogged = keepLogged
-        )
-    }
 }

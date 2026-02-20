@@ -3,7 +3,6 @@ package com.example.proyecto_eduardo_andres.data.room
 import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
-import com.example.proyecto_eduardo_andres.data.room.entity.User
 import androidx.room.RoomDatabase
 import com.example.proyecto_eduardo_andres.data.room.dao.AlquilerPeliculaDao
 import com.example.proyecto_eduardo_andres.data.room.dao.AlquilerSerieDao
@@ -11,7 +10,6 @@ import com.example.proyecto_eduardo_andres.data.room.dao.PeliculaDao
 import com.example.proyecto_eduardo_andres.data.room.dao.SearchPeliculaDao
 import com.example.proyecto_eduardo_andres.data.room.dao.SearchSerieDao
 import com.example.proyecto_eduardo_andres.data.room.dao.SerieDao
-import com.example.proyecto_eduardo_andres.data.room.dao.UserDao
 import com.example.proyecto_eduardo_andres.data.room.entity.AlquilerPelicula
 import com.example.proyecto_eduardo_andres.data.room.entity.AlquilerSerie
 import com.example.proyecto_eduardo_andres.data.room.entity.Pelicula
@@ -40,7 +38,6 @@ import com.example.proyecto_eduardo_andres.data.room.entity.Serie
  */
 @Database(
     entities = [
-        User::class,
         Pelicula::class,
         Serie::class,
         SearchPelicula::class,
@@ -53,8 +50,6 @@ import com.example.proyecto_eduardo_andres.data.room.entity.Serie
 )
 
 abstract class AppDatabase : RoomDatabase() {
-
-    abstract fun userDao(): UserDao
     abstract fun peliculaDao(): PeliculaDao
     abstract fun serieDao(): SerieDao
     abstract fun searchPeliculaDao(): SearchPeliculaDao

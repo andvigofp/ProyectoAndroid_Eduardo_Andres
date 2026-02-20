@@ -1,6 +1,5 @@
 package com.example.proyecto_eduardo_andres.remote.dto
 
-import com.example.proyecto_eduardo_andres.data.room.entity.User
 import com.google.gson.annotations.SerializedName
 
 /**
@@ -29,14 +28,4 @@ data class UsuarioDto(
 
     @SerializedName("keepLogged")
     val keepLogged: Boolean
-) {
-    fun toUser(): User {
-        return User(
-            id = id,
-            name = name,
-            email = email,
-            passwd = passwd,
-            keepLogged = keepLogged
-        )
-    }
-}
+)

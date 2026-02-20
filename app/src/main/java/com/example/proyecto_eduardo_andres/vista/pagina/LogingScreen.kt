@@ -13,35 +13,29 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.compose.colorAzulOscurso
 import com.example.compose.colorVioleta
 import com.example.proyecto_eduardo_andres.R
 import com.example.proyecto_eduardo_andres.modelo.ButtonData
 import com.example.proyecto_eduardo_andres.modelo.ButtonType
 import com.example.proyecto_eduardo_andres.viewmodel.vm.LoginViewModel
-import com.example.proyecto_eduardo_andres.viewmodel.vm.LoginViewModelFactory
-import com.example.proyecto_eduardo_andres.vista.componente.componenteLogin.CamposLogin
 import com.example.proyecto_eduardo_andres.vista.componente.componenteLogin.LoginButtons
 import androidx.compose.material3.MaterialTheme
 import com.example.proyecto_eduardo_andres.vista.componente.componenteAlertDialog.InfoDialog
-import com.example.proyecto_eduardo_andres.data.room.AppDatabase
-import androidx.compose.ui.platform.LocalContext
-import com.example.proyecto_eduardo_andres.data.repository.loginRepository.IUserRepository
-import com.example.proyecto_eduardo_andres.data.repository.loginRepository.UserRepositoryHibridoLogin
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import com.example.proyecto_eduardo_andres.data.repository.loginRepository.UserRepositoryInMemory
 import com.example.proyecto_eduardo_andres.remote.RetrofitClient
+import com.example.proyecto_eduardo_andres.vista.componente.componenteLogin.LoginMode
 
 /**
  * @author Andrés
@@ -82,11 +76,21 @@ fun LogingScreen(
     onCrearUsuarioClick: () -> Unit,
     onRecuperarPasswordClick: () -> Unit,
     onLoginSuccess: (String) -> Unit,
-    ) {
+) {
 
     val uiState by loginViewModel.uiState.collectAsState()
 
-//    // --- Navegación después de login exitoso ---
+    LaunchedEffect(Unit) {
+        loginViewModel.startServerMonitoring()
+    }
+
+    DisposableEffect(Unit) {
+        onDispose {
+            loginViewModel.stopServerMonitoring()
+        }
+    }
+
+    // Navegación cuando login es exitoso
     LaunchedEffect(uiState.isLoginSuccessful) {
         if (uiState.isLoginSuccessful) {
             loginViewModel.loggedInUserId?.let {
@@ -95,9 +99,6 @@ fun LogingScreen(
         }
     }
 
-
-
-
     val scrollState = rememberScrollState()
 
     Box(
@@ -105,123 +106,209 @@ fun LogingScreen(
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.surfaceBright)
     ) {
-        // --- Degradados superior e inferior ---
+
+        // ------------------------
+        // DEGRADADOS
+        // ------------------------
+
         Box(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(220.dp)
-                .background(Brush.verticalGradient(listOf(colorVioleta, colorAzulOscurso)))
+                .background(
+                    Brush.verticalGradient(
+                        listOf(colorVioleta, colorAzulOscurso)
+                    )
+                )
         )
+
         Box(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(180.dp)
                 .align(Alignment.BottomCenter)
-                .background(Brush.verticalGradient(listOf(colorVioleta, colorAzulOscurso)))
+                .background(
+                    Brush.verticalGradient(
+                        listOf(colorVioleta, colorAzulOscurso)
+                    )
+                )
         )
 
-        // --- Contenido principal ---
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(top = 95.dp, bottom = 32.dp)
                 .verticalScroll(scrollState),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Top
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            // Título LOGIN
+
+
+            // TÍTULO
             Text(
                 text = stringResource(R.string.loging),
                 fontSize = 32.sp,
                 fontWeight = FontWeight.Bold,
                 color = Color.White,
-                modifier = Modifier.padding(bottom = 16.dp)
+                modifier = Modifier.padding(bottom = 8.dp)
             )
 
-            // Tarjeta blanca
+
+            // INDICADOR DE MODO (REACTIVO)
+            Text(
+                text = if (uiState.loginMode == LoginMode.ROOM)
+                    "Modo sin conexión (Invitado)"
+                else
+                    "Modo online",
+                color = if (uiState.loginMode == LoginMode.ROOM)
+                    Color.Yellow
+                else
+                    Color.Green,
+                fontWeight = FontWeight.SemiBold
+            )
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+
+            // TARJETA
             Column(
                 modifier = Modifier
                     .fillMaxWidth(0.9f)
                     .shadow(12.dp, RoundedCornerShape(24.dp))
-                    .background(MaterialTheme.colorScheme.surface, RoundedCornerShape(24.dp))
+                    .background(
+                        MaterialTheme.colorScheme.surface,
+                        RoundedCornerShape(24.dp)
+                    )
                     .padding(horizontal = 24.dp, vertical = 32.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.spacedBy(40.dp)
+                verticalArrangement = Arrangement.spacedBy(24.dp)
             ) {
-                // Logo circular
+
+
+                // LOGO
                 Box(
                     modifier = Modifier
                         .size(120.dp)
                         .shadow(8.dp, CircleShape)
-                        .background(MaterialTheme.colorScheme.primary, CircleShape)
-                        .clip(CircleShape),
+                        .background(
+                            MaterialTheme.colorScheme.primary,
+                            CircleShape
+                        ),
                     contentAlignment = Alignment.Center
                 ) {
                     Image(
                         painter = painterResource(id = R.drawable.ic_logotipo_team),
                         contentDescription = stringResource(R.string.logo),
-                        contentScale = ContentScale.Crop,
-                        modifier = Modifier.size(80.dp).clip(CircleShape)
+                        modifier = Modifier.size(80.dp)
                     )
                 }
 
-                Spacer(modifier = Modifier.height(16.dp))
 
-                // Campos de login
-                CamposLogin(
-                    loginData = uiState,
-                    onLoginDataChange = {
-                        loginViewModel.onEmailChange(it.email)
-                        loginViewModel.onPasswordChange(it.password)
-                    },
-                    onTogglePasswordVisibility = { loginViewModel.togglePasswordVisibility() }
-                )
+                // CAMPOS (SOLO ONLINE)
+                if (uiState.loginMode == LoginMode.RETROFIT) {
 
-                // CheckBox mantener sesión iniciada
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(top = 8.dp),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Checkbox(
-                        checked = uiState.keepLogged,
-                        onCheckedChange = { loginViewModel.onKeepLoggedChange(it) },
-                        enabled = !uiState.isLoading
+                    OutlinedTextField(
+                        value = uiState.email,
+                        onValueChange = { loginViewModel.onEmailChange(it) },
+                        label = { Text("Email") },
+                        enabled = !uiState.isLoading,
+                        singleLine = true,
+                        modifier = Modifier.fillMaxWidth()
                     )
-                    Text(
-                        text = "Mantener sesión iniciada",
-                        style = MaterialTheme.typography.bodyMedium
+
+                    OutlinedTextField(
+                        value = uiState.password,
+                        onValueChange = { loginViewModel.onPasswordChange(it) },
+                        label = { Text("Password") },
+                        singleLine = true,
+                        enabled = !uiState.isLoading,
+                        visualTransformation =
+                            if (uiState.passwordVisible)
+                                VisualTransformation.None
+                            else
+                                PasswordVisualTransformation(),
+                        trailingIcon = {
+                            TextButton(
+                                onClick = {
+                                    loginViewModel.togglePasswordVisibility()
+                                }
+                            ) {
+                                Text(
+                                    if (uiState.passwordVisible)
+                                        "Hide"
+                                    else
+                                        "Show"
+                                )
+                            }
+                        },
+                        modifier = Modifier.fillMaxWidth()
                     )
+
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Checkbox(
+                            checked = uiState.keepLogged,
+                            onCheckedChange = {
+                                loginViewModel.onKeepLoggedChange(it)
+                            },
+                            enabled = !uiState.isLoading
+                        )
+                        Text("Mantener sesión iniciada")
+                    }
                 }
 
-                // --- Botones ---
-                LoginButtons(
-                    accederButton = ButtonData(nombre = R.string.acceder, type = ButtonType.PRIMARY),
-                    crearUsuarioButton = ButtonData(nombre = R.string.crear_usuario, type = ButtonType.SECONDARY),
-                    recuperarButton = ButtonData(nombre = R.string.recuperar_contrasenha, type = ButtonType.DANGER),
-                    enabledAcceder = uiState.isLoginButtonEnabled && !uiState.isLoading,
-                    onAccederClick = {
-                        // Solo ejecuta login, no navegación directa
-                        loginViewModel.logging {
-                            onLoginSuccess(it)
-                        }
 
-                    },
-                    onCrearUsuarioClick = onCrearUsuarioClick,
-                    onRecuperarPasswordClick = onRecuperarPasswordClick
-                )
+                // BOTONES
+                if (uiState.loginMode == LoginMode.RETROFIT) {
+
+                    LoginButtons(
+                        accederButton = ButtonData(
+                            nombre = R.string.acceder,
+                            type = ButtonType.PRIMARY
+                        ),
+                        crearUsuarioButton = ButtonData(
+                            nombre = R.string.crear_usuario,
+                            type = ButtonType.SECONDARY
+                        ),
+                        recuperarButton = ButtonData(
+                            nombre = R.string.recuperar_contrasenha,
+                            type = ButtonType.DANGER
+                        ),
+                        enabledAcceder =
+                            uiState.isLoginButtonEnabled &&
+                                    !uiState.isLoading,
+                        showAccederButton = true,
+                        onAccederClick = {
+                            loginViewModel.onLoginClicked()
+                        },
+                        onCrearUsuarioClick = onCrearUsuarioClick,
+                        onRecuperarPasswordClick = onRecuperarPasswordClick
+                    )
+
+                } else {
+                    //MODO OFFLINE (ROOM)
+
+                    Button(
+                        onClick = { loginViewModel.onLoginClicked() },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(60.dp)
+                    ) {
+                        Text("Entrar como invitado")
+                    }
+                }
             }
+
+
+            // DIÁLOGO INFO / ERROR
+            InfoDialog(
+                showDialog = loginViewModel.showLoginDialog,
+                onDismissRequest = { loginViewModel.dismissDialog() },
+                title = loginViewModel.dialogTitle,
+                message = loginViewModel.loginMessage
+            )
         }
     }
-
-    // Diálogo de información general
-    InfoDialog(
-        showDialog = loginViewModel.showLoginDialog,
-        onDismissRequest = { loginViewModel.dismissDialog() },
-        title = loginViewModel.dialogTitle,
-        message = loginViewModel.loginMessage
-    )
 }
 
 
@@ -230,19 +317,22 @@ fun LogingScreen(
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun LoginScreenPreview() {
+
     val fakeRepository = UserRepositoryInMemory(
         authApi = RetrofitClient.authApiService
     )
 
-    val previewViewModel = LoginViewModel(fakeRepository)
+
+    val previewViewModel = LoginViewModel(
+        userRepository = fakeRepository,
+    )
 
     MaterialTheme {
         LogingScreen(
-           loginViewModel = previewViewModel,
-            onLoginSuccess = { println("Acceder clic - login con usuario de ejemplo") },
+            loginViewModel = previewViewModel,
+            onLoginSuccess = {},
             onCrearUsuarioClick = {},
-            onRecuperarPasswordClick = {},
-
+            onRecuperarPasswordClick = {}
         )
     }
 }
