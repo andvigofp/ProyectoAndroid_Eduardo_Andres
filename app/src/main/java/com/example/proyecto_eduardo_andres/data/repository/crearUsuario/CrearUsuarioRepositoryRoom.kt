@@ -1,7 +1,5 @@
 package com.example.proyecto_eduardo_andres.data.repository.crearUsuario
 
-import com.example.proyecto_eduardo_andres.data.room.dao.UserDao
-import com.example.proyecto_eduardo_andres.data.room.entity.User
 import com.example.proyecto_eduardo_andres.modelo.UserDTO
 import com.example.proyecto_eduardo_andres.remote.api.AuthApiService
 import com.example.proyecto_eduardo_andres.remote.dto.RegisterDto
@@ -33,7 +31,6 @@ import java.util.UUID
  */
 class CrearUsuarioRepositoryRoom(
     private val authApi: AuthApiService,
-    private val userDao: UserDao
 ) : ICrearUsuarioRepository {
 
     /**
@@ -74,16 +71,6 @@ class CrearUsuarioRepositoryRoom(
 
                     val body = response.body()!!
 
-                    val entity = User(
-                        id = body.id,
-                        name = body.name,
-                        email = body.email,
-                        passwd = password,
-                        keepLogged = false
-                    )
-
-                    // Guardamos en Room
-                    userDao.insert(entity)
 
                     val dto = UserDTO(
                         id = body.id,
@@ -105,15 +92,6 @@ class CrearUsuarioRepositoryRoom(
 
             val offlineId = UUID.randomUUID().toString()
 
-            val entity = User(
-                id = offlineId,
-                name = nombre,
-                email = email,
-                passwd = password,
-                keepLogged = false
-            )
-
-            userDao.insert(entity)
 
             val dto = UserDTO(
                 id = offlineId,

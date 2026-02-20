@@ -65,6 +65,7 @@ class AppNavigationViewModel(
     }
 
     fun checkUserSession() {
+
         _uiState.value = _uiState.value.copy(isCheckingSession = true)
 
         viewModelScope.launch(Dispatchers.IO) {
@@ -72,19 +73,23 @@ class AppNavigationViewModel(
             val currentUser = userRepository.getCurrentUser()
 
             withContext(Dispatchers.Main) {
+
                 if (currentUser != null && currentUser.keepLogged) {
+
                     _uiState.value = AppNavigationUiState(
                         isCheckingSession = false,
                         currentUser = UserDTO(
-                            currentUser.id,
-                            currentUser.name,
-                            currentUser.email,
-                            currentUser.password,
-                            currentUser.keepLogged
+                            id = currentUser.id,
+                            name = currentUser.name,
+                            email = currentUser.email,
+                            password = "",
+                            keepLogged = currentUser.keepLogged
                         ),
                         initialRoute = RouteNavigation.VideoClubPeliculas(currentUser.id)
                     )
+
                 } else {
+
                     _uiState.value = AppNavigationUiState(
                         isCheckingSession = false,
                         currentUser = null,
@@ -95,18 +100,23 @@ class AppNavigationViewModel(
         }
     }
 
-
-
     fun logout() {
-        // Limpiar SharedPreferences
-        val sharedPref = getApplication<Application>()
-            .getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
-        sharedPref.edit().clear().apply()
 
-        _uiState.value = AppNavigationUiState(
-            isCheckingSession = false,
-            currentUser = null,
-            initialRoute = RouteNavigation.Login
+        userRepository.loggoutUser(
+            onSuccess = {
+                _uiState.value = AppNavigationUiState(
+                    isCheckingSession = false,
+                    currentUser = null,
+                    initialRoute = RouteNavigation.Login
+                )
+            },
+            onError = {
+                _uiState.value = AppNavigationUiState(
+                    isCheckingSession = false,
+                    currentUser = null,
+                    initialRoute = RouteNavigation.Login
+                )
+            }
         )
     }
 }
@@ -115,10 +125,14 @@ class AppNavigationViewModelFactory(
     private val application: Application,
     private val userRepository: IUserRepository
 ) : ViewModelProvider.Factory {
+
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(AppNavigationViewModel::class.java)) {
             @Suppress("UNCHECKED_CAST")
-            return AppNavigationViewModel(application, userRepository) as T
+            return AppNavigationViewModel(
+                application,
+                userRepository
+            ) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")
     }

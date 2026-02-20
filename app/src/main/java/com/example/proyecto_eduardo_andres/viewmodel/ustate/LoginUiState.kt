@@ -1,5 +1,7 @@
 package com.example.proyecto_eduardo_andres.viewmodel.ustate
 
+import com.example.proyecto_eduardo_andres.vista.componente.componenteLogin.LoginMode
+
 /**
  * @author Andrés
  * @see LoginUiState
@@ -12,6 +14,7 @@ package com.example.proyecto_eduardo_andres.viewmodel.ustate
  * @param isLoading Indica si la operación de inicio de sesión está en proceso.
  */
 data class LoginUiState(
+    val loginMode: LoginMode = LoginMode.RETROFIT,
     val email: String = "",
     val password: String = "",
     val passwordVisible: Boolean = false,
@@ -21,5 +24,11 @@ data class LoginUiState(
     val isLoginSuccessful: Boolean = false
 ) {
     val isLoginButtonEnabled: Boolean
-        get() = email.isNotBlank() && password.isNotBlank()
+        get() = when (loginMode) {
+            LoginMode.RETROFIT ->
+                email.isNotBlank() && password.isNotBlank() && !isLoading
+
+            LoginMode.ROOM ->
+                !isLoading
+        }
 }

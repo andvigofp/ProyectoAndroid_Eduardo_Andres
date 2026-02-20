@@ -8,13 +8,16 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.example.proyecto_eduardo_andres.data.repository.loginRepository.IUserRepository
 import com.example.proyecto_eduardo_andres.viewmodel.ustate.LoginUiState
-import kotlinx.coroutines.Dispatchers
+import com.example.proyecto_eduardo_andres.vista.componente.componenteLogin.LoginMode
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
+import java.io.IOException
 
 /**
  * @author Andrés
@@ -58,7 +61,9 @@ class LoginViewModel(
     private val _uiState = MutableStateFlow(LoginUiState())
     val uiState: StateFlow<LoginUiState> = _uiState.asStateFlow()
 
-    // Variables para el diálogo
+    var loggedInUserId: String? by mutableStateOf(null)
+        private set
+
     var loginMessage by mutableStateOf("")
         private set
 
@@ -68,10 +73,41 @@ class LoginViewModel(
     var dialogTitle by mutableStateOf("Login")
         private set
 
-    var loggedInUserId: String? by mutableStateOf(null)
-        private set
+    private var serverMonitorJob: Job? = null
 
-    // Cambios en los campos
+
+    // MONITOR AUTOMÁTICO DEL SERVIDOR
+    fun startServerMonitoring() {
+
+        serverMonitorJob?.cancel()
+
+        serverMonitorJob = viewModelScope.launch {
+
+            while (isActive) {
+
+                val available = userRepository.isServerAvailable()
+
+                val newMode =
+                    if (available) LoginMode.RETROFIT
+                    else LoginMode.ROOM
+
+                if (_uiState.value.loginMode != newMode) {
+                    _uiState.update {
+                        it.copy(loginMode = newMode)
+                    }
+                }
+
+                delay(3000) // revisa cada 3 segundos
+            }
+        }
+    }
+
+    fun stopServerMonitoring() {
+        serverMonitorJob?.cancel()
+    }
+
+
+    // CAMBIOS DE CAMPOS
     fun onEmailChange(newEmail: String) {
         _uiState.update { it.copy(email = newEmail) }
     }
@@ -81,118 +117,159 @@ class LoginViewModel(
     }
 
     fun onKeepLoggedChange(keepLogged: Boolean) {
-        _uiState.value = _uiState.value.copy(keepLogged = keepLogged)
+        _uiState.update { it.copy(keepLogged = keepLogged) }
     }
 
     fun togglePasswordVisibility() {
         _uiState.update { it.copy(passwordVisible = !it.passwordVisible) }
     }
 
-    // Función de login
-    fun logging(onSuccess: (String) -> Unit = {}) {
-        val email = _uiState.value.email.trim()
-        val password = _uiState.value.password
-        val keepLogged = _uiState.value.keepLogged
 
-        if (email.isEmpty()) {
-            _uiState.value = _uiState.value.copy(
-                errorMessage = "El email no puede estar vacío",
-                isLoading = false
-            )
-            showErrorDialog("Error", "El email no puede estar vacío")
-            return
+    // BOTÓN ACCEDER
+    fun onLoginClicked() {
+
+        viewModelScope.launch {
+
+            val available = userRepository.isServerAvailable()
+
+            if (!available) {
+                _uiState.update { it.copy(loginMode = LoginMode.ROOM) }
+                loginAsGuest()
+                return@launch
+            }
+
+            _uiState.update { it.copy(loginMode = LoginMode.RETROFIT) }
+
+            val email = _uiState.value.email.trim()
+            val password = _uiState.value.password
+
+            if (email.isEmpty()) {
+                showDialog("Error", "El email no puede estar vacío")
+                return@launch
+            }
+
+            if (password.isEmpty()) {
+                showDialog("Error", "La contraseña no puede estar vacía")
+                return@launch
+            }
+
+            loginOnline(email, password)
         }
+    }
 
-        if (password.isEmpty()) {
-            _uiState.value = _uiState.value.copy(
-                errorMessage = "La contraseña no puede estar vacía",
-                isLoading = false
-            )
-            showErrorDialog("Error", "La contraseña no puede estar vacía")
-            return
-        }
 
-        // Activar loading
-        _uiState.value = _uiState.value.copy(
-            isLoading = true,
-            errorMessage = null
-        )
+    // LOGIN ONLINE
+    private fun loginOnline(email: String, password: String) {
+
+        _uiState.update { it.copy(isLoading = true) }
 
         userRepository.login(
             email = email,
             password = password,
-            keepLogged = keepLogged,
+            keepLogged = _uiState.value.keepLogged,
+
             onError = { throwable ->
-                viewModelScope.launch(Dispatchers.Main) {
-                    _uiState.value = _uiState.value.copy(
-                        isLoading = false,
-                        errorMessage = throwable.message
-                    )
-                    showErrorDialog(
+
+                val isServerDown =
+                    throwable is IOException ||
+                            throwable.cause is IOException
+
+                if (isServerDown) {
+
+                    _uiState.update {
+                        it.copy(
+                            loginMode = LoginMode.ROOM,
+                            isLoading = false
+                        )
+                    }
+
+                    loginAsGuest()
+
+                } else {
+
+                    _uiState.update { it.copy(isLoading = false) }
+
+                    showDialog(
                         "Login fallido",
-                        "Error: ${throwable.message ?: "Credenciales incorrectas"}"
+                        throwable.message ?: "Error desconocido"
                     )
-                }
-            },
-            onSuccess = { user ->
-                viewModelScope.launch(Dispatchers.Main) {
-                    loggedInUserId = user.id
-                    _uiState.value = _uiState.value.copy(
-                        isLoading = false,
-                        isLoginSuccessful = true,
-                        errorMessage = null
-                    )
-                    showSuccessDialog(
-                        "¡Bienvenido!",
-                        "¡Bienvenido ${user.name}!"
-                    )
-                    delay(1000)
-                    onSuccess(user.id!!)
                 }
             },
 
+            onSuccess = { user ->
+
+                loggedInUserId = user.id
+
+                _uiState.update {
+                    it.copy(
+                        isLoading = false,
+                        isLoginSuccessful = true
+                    )
+                }
+
+                showDialog(
+                    "¡Bienvenido!",
+                    "Hola ${user.name}"
+                )
+            }
+        )
+    }
+
+    // -------------------------------------------------
+    // LOGIN INVITADO
+    // -------------------------------------------------
+
+    private fun loginAsGuest() {
+
+        loggedInUserId = "GUEST"
+
+        _uiState.update {
+            it.copy(
+                isLoginSuccessful = true,
+                isLoading = false
+            )
+        }
+
+        showDialog(
+            "Modo Invitado",
+            "Has iniciado sesión sin conexión"
         )
     }
 
 
-
-
-    // Funciones auxiliares para mostrar diálogos
-    private fun showErrorDialog(title: String, message: String) {
+    // DIÁLOGOS
+    private fun showDialog(title: String, message: String) {
         dialogTitle = title
         loginMessage = message
         showLoginDialog = true
     }
 
-    private fun showSuccessDialog(title: String, message: String) {
-        dialogTitle = title
-        loginMessage = message
-        showLoginDialog = true
-    }
-
-    // Cerrar diálogo
     fun dismissDialog() {
         showLoginDialog = false
-        // Opcional: limpiar mensaje después de cerrar
         loginMessage = ""
     }
 
-    // Resetear estado (para logout o limpiar)
     fun resetState() {
         _uiState.value = LoginUiState()
+        loggedInUserId = null
         loginMessage = ""
         showLoginDialog = false
-        loggedInUserId = null
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        serverMonitorJob?.cancel()
     }
 }
 
 class LoginViewModelFactory(
-    private val repository: IUserRepository
+    private val userRepository: IUserRepository,
 ) : ViewModelProvider.Factory {
+
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(LoginViewModel::class.java)) {
             @Suppress("UNCHECKED_CAST")
-            return LoginViewModel(repository) as T
+            return LoginViewModel(userRepository) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")
     }

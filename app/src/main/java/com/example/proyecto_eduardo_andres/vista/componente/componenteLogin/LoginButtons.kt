@@ -32,6 +32,7 @@ fun LoginButtons(
     crearUsuarioButton: ButtonData,
     recuperarButton: ButtonData,
     enabledAcceder: Boolean,
+    showAccederButton: Boolean,
     onAccederClick: () -> Unit,
     onCrearUsuarioClick: () -> Unit,
     onRecuperarPasswordClick: () -> Unit
@@ -40,11 +41,15 @@ fun LoginButtons(
         modifier = Modifier.fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        AppButton(
-            data = accederButton.copy(enabled = enabledAcceder),
-            onClick = onAccederClick,
-            modifier = Modifier.fillMaxWidth().height(60.dp)
-        )
+        if (showAccederButton) {
+            AppButton(
+                data = accederButton.copy(enabled = enabledAcceder),
+                onClick = onAccederClick,
+                modifier = Modifier.fillMaxWidth().height(60.dp)
+            )
+
+            Spacer(modifier = Modifier.height(16.dp))
+        }
 
         Spacer(modifier = Modifier.height(16.dp))
 
@@ -86,13 +91,23 @@ fun LoginButtonPreview() {
                     var enabledAcceder by remember { mutableStateOf(false) }
 
                     LoginButtons(
-                        accederButton = ButtonData(nombre = R.string.acceder, type = ButtonType.PRIMARY),
-                        crearUsuarioButton = ButtonData(nombre = R.string.crear_usuario, type = ButtonType.SECONDARY),
-                        recuperarButton = ButtonData(nombre = R.string.recuperar_contrasenha, type = ButtonType.DANGER),
+                        accederButton = ButtonData(
+                            nombre = R.string.acceder,
+                            type = ButtonType.PRIMARY
+                        ),
+                        crearUsuarioButton = ButtonData(
+                            nombre = R.string.crear_usuario,
+                            type = ButtonType.SECONDARY
+                        ),
+                        recuperarButton = ButtonData(
+                            nombre = R.string.recuperar_contrasenha,
+                            type = ButtonType.DANGER
+                        ),
                         enabledAcceder = enabledAcceder,   // <-- ahora sí lo pasamos
                         onAccederClick = {},
                         onCrearUsuarioClick = {},
-                        onRecuperarPasswordClick = {}
+                        onRecuperarPasswordClick = {},
+                        showAccederButton = false
                     )
 
                     Spacer(modifier = Modifier.height(16.dp))

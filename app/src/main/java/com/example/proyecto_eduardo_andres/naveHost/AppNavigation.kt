@@ -36,6 +36,7 @@ import com.example.proyecto_eduardo_andres.viewmodel.vm.AppNavigationViewModel
 import com.example.proyecto_eduardo_andres.viewmodel.vm.AppNavigationViewModelFactory
 import com.example.proyecto_eduardo_andres.viewmodel.vm.LoginViewModel
 import com.example.proyecto_eduardo_andres.viewmodel.vm.LoginViewModelFactory
+import com.example.proyecto_eduardo_andres.vista.componente.componenteLogin.LoginMode
 import com.example.proyecto_eduardo_andres.vista.pagina.AlquilarDevolverPeliculasScreen
 import com.example.proyecto_eduardo_andres.vista.pagina.AlquilerDevolverSeriesScreen
 import com.example.proyecto_eduardo_andres.vista.pagina.CamaraScreen
@@ -91,7 +92,6 @@ fun AppNavigation() {
     val repositoryRecuperarPassword = remember {
         RecuperarPasswordRepositoryRoom(
             api = RetrofitClient.recuperarPasswordApiExterna,
-            userDao = AppDatabase.getDatabase(context).userDao()
         )
     }
 
@@ -116,7 +116,6 @@ fun AppNavigation() {
     val repositoryPerfilUsuario = remember {
         PerfilUsuarioRepositoryRoom(
             api = RetrofitClient.perfilUsuario,
-            userDao = AppDatabase.getDatabase(context).userDao()
         )
     }
 
@@ -153,7 +152,6 @@ fun AppNavigation() {
     val repositoryCrearUsuario = remember {
         CrearUsuarioRepositoryRoom(
             authApi = RetrofitClient.authApiService,
-            userDao = AppDatabase.getDatabase(context).userDao()
         )
     }
 
@@ -162,7 +160,11 @@ fun AppNavigation() {
     val application = context.applicationContext as Application
 
     val userRepository = remember {
-        UserRepo(application)
+        UserRepo(
+            authApi = RetrofitClient.authApiService,
+            usuarioApi = RetrofitClient.usuarioApiService,
+            context = context,
+        )
     }
 
     val appNavigationViewModel: AppNavigationViewModel = viewModel(
@@ -186,8 +188,11 @@ fun AppNavigation() {
         return
     }
 
+
     val loginViewModel: LoginViewModel = viewModel(
-        factory = LoginViewModelFactory(userRepository)
+        factory = LoginViewModelFactory(
+            userRepository = userRepository,
+        )
     )
 
 
@@ -246,7 +251,7 @@ fun AppNavigation() {
                 },
                 onCrearUsuarioClick = { navigate(RouteNavigation.CrearUsuario) },
                 onRecuperarPasswordClick = { navigate(RouteNavigation.RecuperarPassword) },
-                loginViewModel = loginViewModel
+                loginViewModel = loginViewModel,
             )
         }
 

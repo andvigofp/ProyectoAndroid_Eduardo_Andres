@@ -2,9 +2,11 @@ package com.example.proyecto_eduardo_andres.data.repository.loginRepository
 
 import android.content.Context
 import com.example.proyecto_eduardo_andres.data.room.AppDatabase
-import com.example.proyecto_eduardo_andres.data.room.entity.User
 import com.example.proyecto_eduardo_andres.modelo.UserDTO
 import com.example.proyecto_eduardo_andres.remote.RetrofitClient
+import com.example.proyecto_eduardo_andres.remote.api.AuthApiService
+import com.example.proyecto_eduardo_andres.remote.api.UsuarioApiService
+import com.example.proyecto_eduardo_andres.remote.dto.LoginDto
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -31,32 +33,16 @@ import kotlinx.coroutines.withContext
  * @see AppDatabase
  */
 class UserRepo(
-    context: Context
+    private val authApi: AuthApiService,
+    private val usuarioApi: UsuarioApiService,
+    private val context: Context
 ) : IUserRepository {
 
-    private val userDao = AppDatabase
-        .getDatabase(context)
-        .userDao()
+    private val prefs =
+        context.getSharedPreferences("session_prefs", Context.MODE_PRIVATE)
 
-    private val repositorioHibrido = UserRepositoryHibridoLogin(
-        usuarioApi = RetrofitClient.usuarioApiService,
-        userDao = userDao
-    )
+    private var currentUser: UserConfig? = null
 
-    /**
-     * Realiza login híbrido (Retrofit + Room).
-     *
-     * Flujo:
-     * 1. Intenta autenticación remota.
-     * 2. Si es válida, elimina sesión previa.
-     * 3. Guarda nueva sesión en Room.
-     *
-     * @param email Correo electrónico del usuario.
-     * @param password Contraseña introducida.
-     * @param keepLogged Indica si el usuario desea mantener sesión activa.
-     * @param onError Callback ejecutado si la autenticación falla.
-     * @param onSuccess Callback que devuelve el [UserDTO] autenticado.
-     */
     override fun login(
         email: String,
         password: String,
@@ -65,149 +51,136 @@ class UserRepo(
         onSuccess: (UserDTO) -> Unit
     ) {
         CoroutineScope(Dispatchers.IO).launch {
+            try {
 
-            val userDto = repositorioHibrido.login(email, password, keepLogged)
+                val request = LoginDto(email = email, passwd = password)
+                val response = authApi.login(request)
 
-            if (userDto != null) {
+                if (response.isSuccessful) {
 
-                // Eliminamos sesión anterior
-                userDao.deleteAll()
+                    val body = response.body()
 
-                // Guardamos usuario como sesión activa
-                val userEntity = userDto.toUser().copy(
-                    keepLogged = keepLogged
-                )
+                    if (body != null) {
 
-                userDao.insert(userEntity)
+                        val user = UserDTO(
+                            id = body.id,
+                            name = body.name,
+                            email = body.email,
+                            password = "",
+                            keepLogged = keepLogged
+                        )
 
-                withContext(Dispatchers.Main) {
-                    onSuccess(userDto)
+                        currentUser = UserConfig(
+                            id = body.id,
+                            name = body.name,
+                            email = body.email,
+                            password = "",
+                            keepLogged = keepLogged
+                        )
+
+                        // Guardamos SOLO si quiere mantener sesión
+                        if (keepLogged) {
+                            prefs.edit()
+                                .putString("user_id", body.id)
+                                .putBoolean("keep_logged", true)
+                                .apply()
+                        } else {
+                            prefs.edit().clear().apply()
+                        }
+
+                        withContext(Dispatchers.Main) {
+                            onSuccess(user)
+                        }
+
+                    } else {
+                        withContext(Dispatchers.Main) {
+                            onError(Throwable("Respuesta vacía"))
+                        }
+                    }
+
+                } else {
+                    withContext(Dispatchers.Main) {
+                        onError(Throwable("Credenciales incorrectas"))
+                    }
                 }
 
-            } else {
+            } catch (e: Exception) {
                 withContext(Dispatchers.Main) {
-                    onError(Throwable("Usuario no encontrado"))
+                    onError(e)
                 }
             }
         }
     }
 
-    /**
-     * Guarda manualmente una sesión en Room.
-     *
-     * @param user Configuración del usuario autenticado.
-     * @param onSuccess Callback ejecutado cuando la sesión se guarda correctamente.
-     * @param onError Callback ejecutado si ocurre un error durante el guardado.
-     */
+    override fun getCurrentUser(): UserConfig? {
+
+        // Primero intentamos sesión en memoria
+        if (currentUser != null) return currentUser
+
+        // Luego intentamos sesión persistida
+        val keepLogged = prefs.getBoolean("keep_logged", false)
+        if (!keepLogged) return null
+
+        val userId = prefs.getString("user_id", null) ?: return null
+
+        return UserConfig(
+            id = userId,
+            name = "",
+            email = "",
+            password = "",
+            keepLogged = true
+        )
+    }
+
+    override fun loggoutUser(
+        onSuccess: () -> Unit,
+        onError: () -> Unit
+    ) {
+        prefs.edit().clear().apply()
+        currentUser = null
+        onSuccess()
+    }
+
+    override suspend fun isServerAvailable(): Boolean {
+        return try {
+            val response = usuarioApi.obtenerUsuarios()
+            response.isSuccessful
+        } catch (e: Exception) {
+            false
+        }
+    }
+
     override fun loginUser(
         user: UserConfig,
         onSuccess: (UserConfig) -> Unit,
         onError: () -> Unit
     ) {
-        CoroutineScope(Dispatchers.IO).launch {
-            try {
-                userDao.deleteAll()
-
-                userDao.insert(
-                    User(
-                        id = user.id,
-                        name = user.name,
-                        email = user.email,
-                        passwd = "", // no guardamos password
-                        keepLogged = user.keepLogged
-                    )
-                )
-
-                withContext(Dispatchers.Main) {
-                    onSuccess(user)
-                }
-
-            } catch (e: Exception) {
-                withContext(Dispatchers.Main) {
-                    onError()
-                }
-            }
-        }
+        currentUser = user
+        onSuccess(user)
     }
 
-    /**
-     * Recupera el usuario actualmente autenticado desde Room.
-     *
-     * @return [UserConfig] si existe sesión activa, null en caso contrario.
-     */
-    override fun getCurrentUser(): UserConfig? {
-
-        val user = userDao.getLoggedUser()
-
-        return user?.let {
-            UserConfig(
-                id = it.id,
-                name = it.name,
-                email = it.email,
-                password = "",
-                keepLogged = it.keepLogged
-            )
-        }
-    }
-
-    /**
-     * Cierra sesión eliminando todos los registros de usuario en Room.
-     *
-     * @param onSuccess Callback ejecutado cuando el logout es exitoso.
-     * @param onError Callback ejecutado si ocurre un error.
-     */
-    override fun loggoutUser(
-        onSuccess: () -> Unit,
-        onError: () -> Unit
-    ) {
-        CoroutineScope(Dispatchers.IO).launch {
-            try {
-                userDao.deleteAll()
-
-                withContext(Dispatchers.Main) {
-                    onSuccess()
-                }
-
-            } catch (e: Exception) {
-                withContext(Dispatchers.Main) {
-                    onError()
-                }
-            }
-        }
-    }
-
-    /**
-     * Obtiene un usuario específico utilizando el repositorio híbrido.
-     *
-     * @param id Identificador único del usuario.
-     * @param onError Callback ejecutado si el usuario no existe.
-     * @param onSuccess Callback que devuelve el [UserDTO] encontrado.
-     */
     override fun getUser(
         id: String,
         onError: (Throwable) -> Unit,
         onSuccess: (UserDTO) -> Unit
     ) {
-        CoroutineScope(Dispatchers.IO).launch {
-
-            val user = repositorioHibrido.getUser(id)
-
-            withContext(Dispatchers.Main) {
-                if (user != null) onSuccess(user)
-                else onError(Throwable("Usuario no encontrado"))
+        currentUser?.let {
+            if (it.id == id) {
+                onSuccess(
+                    UserDTO(
+                        it.id,
+                        it.name,
+                        it.email,
+                        "",
+                        it.keepLogged
+                    )
+                )
+            } else {
+                onError(Throwable("Usuario no encontrado"))
             }
-        }
+        } ?: onError(Throwable("No hay sesión activa"))
     }
 
-    /**
-     * Configuración interna utilizada para manejar sesión de usuario.
-     *
-     * @property id Identificador único del usuario.
-     * @property name Nombre del usuario.
-     * @property email Correo electrónico.
-     * @property password Contraseña (no persistida en Room).
-     * @property keepLogged Indica si la sesión debe mantenerse activa.
-     */
     data class UserConfig(
         val id: String,
         val name: String,

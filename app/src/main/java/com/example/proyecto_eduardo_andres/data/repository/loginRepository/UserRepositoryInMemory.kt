@@ -139,6 +139,11 @@ private val authApi: AuthApiService
         onSuccess()
     }
 
+    override suspend fun isServerAvailable(): Boolean {
+        return true
+    }
+
+
     /**
      * Devuelve el usuario actualmente almacenado en memoria.
      *

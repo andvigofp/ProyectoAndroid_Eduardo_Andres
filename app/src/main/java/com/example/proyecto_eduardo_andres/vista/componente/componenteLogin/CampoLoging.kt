@@ -38,6 +38,7 @@ import com.example.proyecto_eduardo_andres.viewmodel.ustate.LoginUiState
 @Composable
 fun CamposLogin(
     loginData: LoginUiState,
+    loginMode: LoginMode,
     onLoginDataChange: (LoginUiState) -> Unit,
     onTogglePasswordVisibility: () -> Unit,
 ) {
@@ -60,6 +61,7 @@ fun CamposLogin(
             TextField(
                 value = loginData.email,
                 onValueChange = { onLoginDataChange(loginData.copy(email = it)) },
+                enabled = loginMode == LoginMode.RETROFIT,
                 singleLine = true,
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
                 modifier = Modifier.weight(2f).alignByBaseline(),
@@ -114,7 +116,7 @@ fun CamposLoginPreview() {
         onLoginDataChange = { loginData = it },       // Actualiza todo el state
         onTogglePasswordVisibility = {
             loginData = loginData.copy(passwordVisible = !loginData.passwordVisible)
-        } // Toggle para mostrar/ocultar contraseña
+        },
+        loginMode = LoginMode.RETROFIT // Toggle para mostrar/ocultar contraseña
     )
 }
-
