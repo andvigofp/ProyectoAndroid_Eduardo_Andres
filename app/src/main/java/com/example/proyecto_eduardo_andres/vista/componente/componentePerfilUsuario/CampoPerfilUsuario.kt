@@ -70,7 +70,8 @@ fun CampoPerfilUsuario(
             )
         }
 
-        // EMAIL
+      
+        // EMAIL (SIEMPRE BLOQUEADO POR SEGURIDAD)
         Row(
             modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically
@@ -82,13 +83,14 @@ fun CampoPerfilUsuario(
             )
             TextField(
                 value = perfilUsarioData.email,
-                onValueChange = { onPerfilUsuarioData(perfilUsarioData.copy(email = it)) },
+                onValueChange = {},
                 singleLine = true,
-                enabled = isEditing, // <- controla edición
+                enabled = false,
+                readOnly = true,
                 modifier = Modifier.weight(2f),
                 colors = OutlinedTextFieldDefaults.colors(
-                    focusedContainerColor = MaterialTheme.colorScheme.surfaceVariant,
-                    unfocusedContainerColor = MaterialTheme.colorScheme.surfaceVariant
+                    disabledContainerColor = MaterialTheme.colorScheme.surfaceVariant,
+                    disabledTextColor = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             )
         }

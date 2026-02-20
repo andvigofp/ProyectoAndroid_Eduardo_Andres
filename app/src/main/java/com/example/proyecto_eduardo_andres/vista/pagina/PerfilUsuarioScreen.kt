@@ -48,6 +48,8 @@ import com.example.compose.colorVioleta
 import com.example.proyecto_eduardo_andres.R
 import com.example.proyecto_eduardo_andres.data.repository.alquilerPeliculasRepository.AlquilerPeliculasRepositoryInMemory
 import com.example.proyecto_eduardo_andres.data.repository.alquilerPeliculasRepository.IAlquilerPeliculasRepository
+import com.example.proyecto_eduardo_andres.data.repository.loginRepository.IUserRepository
+import com.example.proyecto_eduardo_andres.data.repository.loginRepository.UserRepositoryInMemory
 import com.example.proyecto_eduardo_andres.data.repository.perfilRepositorio.IPerfilUsuarioRepository
 import com.example.proyecto_eduardo_andres.data.repository.perfilRepositorio.PerfilUsuarioRepositoryInMemory
 import com.example.proyecto_eduardo_andres.modelo.PerfilUsuarioButtonTextsDto
@@ -111,6 +113,7 @@ fun PerfilUsuarioScreen(
     userId: String,
     alquilerRepository: IAlquilerPeliculasRepository,
     repository: IPerfilUsuarioRepository,
+    userRepository: IUserRepository,
     onBackClick: () -> Unit,
     onHomeClick: () -> Unit,
     onCameraClick: () -> Unit,
@@ -119,18 +122,24 @@ fun PerfilUsuarioScreen(
     onPeliculaClick: (String) -> Unit
 ) {
 
+    
 
     val viewModel: PerfilUsuarioViewModel = viewModel(
         factory = PerfilUsuarioViewModelFactory(
             userId = userId,
             repository = repository,
-            alquilerRepository = alquilerRepository
+            alquilerRepository = alquilerRepository,
+            userRepository =  userRepository
         )
     )
 
 
     val uiState by viewModel.uiState.collectAsState()
 
+    LaunchedEffect(Unit) {
+        viewModel.startServerMonitoring()
+    }
+    
     // Llamamos a cargar los datos del usuario cuando se inicia el Composable
     LaunchedEffect(userId) {
         viewModel.cargarUsuario(userId)
@@ -389,6 +398,10 @@ fun PerfilUsuarioScreenPreview() {
         apiService = RetrofitClient.usuarioApiService
     )
 
+    val fakeUserRepository = UserRepositoryInMemory(
+        authApi = RetrofitClient.authApiService
+    )
+
     MaterialTheme {
         PerfilUsuarioScreen(
             userId = "1",
@@ -399,7 +412,8 @@ fun PerfilUsuarioScreenPreview() {
             onCameraClick = {},
             onProfileClick = {},
             onLogoutClick = {},
-            onPeliculaClick = {}
+            onPeliculaClick = {},
+            userRepository = fakeUserRepository
         )
     }
 }

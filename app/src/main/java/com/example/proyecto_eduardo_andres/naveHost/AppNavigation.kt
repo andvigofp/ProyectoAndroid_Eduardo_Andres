@@ -415,6 +415,7 @@ fun AppNavigation() {
                     navigate(RouteNavigation.AlquilerDevolverPeliculas(route.userId, pelicula))
                 },
                 repository = repositoryPerfilUsuario,
+                userRepository = userRepository,
             )
         }
 
