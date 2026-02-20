@@ -438,6 +438,7 @@ fun AppNavigation() {
                     navigate(RouteNavigation.AlquilerDevolverSeries(route.userId, serie))
                 },
                 repository = repositoryPerfilUsuario,
+                userRepository = userRepository,
             )
         }
 

@@ -70,7 +70,7 @@ fun CampoPerfilUsuario(
             )
         }
 
-      
+
         // EMAIL (SIEMPRE BLOQUEADO POR SEGURIDAD)
         Row(
             modifier = Modifier.fillMaxWidth(),

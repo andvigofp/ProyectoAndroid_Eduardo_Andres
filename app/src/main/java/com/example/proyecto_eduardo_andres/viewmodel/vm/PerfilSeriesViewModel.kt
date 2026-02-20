@@ -3,14 +3,21 @@ package com.example.proyecto_eduardo_andres.viewmodel.vm
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewModelScope
 import com.example.proyecto_eduardo_andres.modelo.UserDTO
 import com.example.proyecto_eduardo_andres.data.repository.alquilerSeriesRepository.IAlquilerSeriesRepository
+import com.example.proyecto_eduardo_andres.data.repository.loginRepository.IUserRepository
 import com.example.proyecto_eduardo_andres.data.repository.perfilRepositorio.IPerfilUsuarioRepository
 import com.example.proyecto_eduardo_andres.viewmodel.ustate.PerfilSeriesUiState
+import com.example.proyecto_eduardo_andres.vista.componente.componenteLogin.LoginMode
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.isActive
+import kotlinx.coroutines.launch
 
 /**
  * @author Eduardo
@@ -49,40 +56,106 @@ import kotlinx.coroutines.flow.update
  */
 class PerfilSeriesViewModel(
     private val repository: IPerfilUsuarioRepository,
-    private val alquilerRepository: IAlquilerSeriesRepository? = null
+    private val alquilerRepository: IAlquilerSeriesRepository? = null,
+    private val userRepository: IUserRepository
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(PerfilSeriesUiState())
     val uiState: StateFlow<PerfilSeriesUiState> = _uiState.asStateFlow()
 
-    // Cargar usuario por ID (UUID)
+    private var serverMonitorJob: Job? = null
+
+    // -------------------------------------------------
+    // MONITOR AUTOMÁTICO DEL SERVIDOR
+    // -------------------------------------------------
+
+    fun startServerMonitoring() {
+
+        serverMonitorJob?.cancel()
+
+        serverMonitorJob = viewModelScope.launch {
+
+            while (isActive) {
+
+                val available = userRepository.isServerAvailable()
+
+                if (_uiState.value.isOnline != available) {
+
+                    _uiState.update {
+                        it.copy(isOnline = available)
+                    }
+
+                    // Si cae mientras edita → salir del modo edición
+                    if (!available) {
+                        _uiState.update {
+                            it.copy(isEditing = false)
+                        }
+                    }
+                }
+
+                delay(3000)
+            }
+        }
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        serverMonitorJob?.cancel()
+    }
+
+    // -------------------------------------------------
+    // CARGAR USUARIO
+    // -------------------------------------------------
+
     fun cargarUsuario(id: String) {
+
         repository.getUsuarioPorId(
             id = id,
+
             onError = { error ->
                 Log.e("PerfilSeriesViewModel", "Error al cargar usuario", error)
+
+                _uiState.update {
+                    it.copy(
+                        showInfoDialog = true,
+                        infoDialogTitle = "Error",
+                        infoDialogMessage = error.message ?: "No se pudo cargar el perfil"
+                    )
+                }
             },
+
             onSuccess = { usuario ->
-                _uiState.value = PerfilSeriesUiState(
-                    nombreUsuario = usuario.name,
-                    email = usuario.email,
-                    password = usuario.password,
-                    isEditing = false,
-                    userId = usuario.id.toString() // UUID como String
-                )
-                // Ahora cargamos las series alquiladas
-                cargarSeriesAlquiladas(usuario.id.toString())
+
+                _uiState.update { state ->
+                    state.copy(
+                        nombreUsuario = usuario.name,
+                        email = usuario.email,
+                        password = usuario.password,
+                        userId = usuario.id,
+                        isEditing = false
+                    )
+                }
+
+                cargarSeriesAlquiladas(usuario.id)
             }
         )
     }
 
-    // Cargar series alquiladas usando String UUID
+    // -------------------------------------------------
+    // CARGAR SERIES
+    // -------------------------------------------------
+
     private fun cargarSeriesAlquiladas(userId: String) {
+
         alquilerRepository?.obtenerSeriesAlquiladas(
             userId = userId,
-            onError = { error -> Log.e("PerfilSeriesViewModel", "Error al cargar series", error) },
+            onError = { error ->
+                Log.e("PerfilSeriesViewModel", "Error al cargar series", error)
+            },
             onSuccess = { series ->
-                _uiState.update { it.copy(seriesAlquiladas = series) }
+                _uiState.update {
+                    it.copy(seriesAlquiladas = series)
+                }
             }
         )
     }
@@ -91,7 +164,10 @@ class PerfilSeriesViewModel(
         cargarSeriesAlquiladas(userId)
     }
 
-    // Cambios de campos
+    // -------------------------------------------------
+    // CAMBIOS DE CAMPOS
+    // -------------------------------------------------
+
     fun onNombreUsuarioChange(nombre: String) {
         _uiState.update { it.copy(nombreUsuario = nombre) }
     }
@@ -104,18 +180,46 @@ class PerfilSeriesViewModel(
         _uiState.update { it.copy(password = password) }
     }
 
-    // Edit mode
+    // -------------------------------------------------
+    // MODO EDICIÓN
+    // -------------------------------------------------
+
     fun toggleEditing() {
-        _uiState.update { it.copy(isEditing = !it.isEditing) }
+
+        if (!_uiState.value.isOnline) {
+
+            _uiState.update {
+                it.copy(
+                    showInfoDialog = true,
+                    infoDialogTitle = "Modo Invitado",
+                    infoDialogMessage = "No puedes modificar el perfil en modo sin conexión."
+                )
+            }
+
+            return
+        }
+
+        _uiState.update {
+            it.copy(isEditing = !it.isEditing)
+        }
     }
 
-    fun cerrarInfoDialog() {
-        _uiState.update { it.copy(showInfoDialog = false) }
-    }
+    // -------------------------------------------------
+    // GUARDAR CAMBIOS
+    // -------------------------------------------------
 
-    // Guardar cambios
     fun guardarCambios() {
+
+        if (!_uiState.value.isOnline) {
+            mostrarInfoDialog(
+                "Modo Offline",
+                "No se puede guardar cambios sin conexión."
+            )
+            return
+        }
+
         val state = _uiState.value
+
         if (!state.isModificarButtonEnabled) return
 
         val usuario = UserDTO(
@@ -128,7 +232,17 @@ class PerfilSeriesViewModel(
 
         repository.actualizarUsuario(
             usuario = usuario,
-            onError = { error -> Log.e("PerfilViewModel", "Error al actualizar", error) },
+
+            onError = { error ->
+                _uiState.update {
+                    it.copy(
+                        showInfoDialog = true,
+                        infoDialogTitle = "Error",
+                        infoDialogMessage = error.message ?: "Error desconocido"
+                    )
+                }
+            },
+
             onSuccess = {
                 _uiState.update {
                     it.copy(
@@ -140,21 +254,39 @@ class PerfilSeriesViewModel(
         )
     }
 
+    // -------------------------------------------------
+    // DIÁLOGOS
+    // -------------------------------------------------
+
+    fun mostrarInfoDialog(title: String, message: String) {
+        _uiState.update {
+            it.copy(
+                showInfoDialog = true,
+                infoDialogTitle = title,
+                infoDialogMessage = message
+            )
+        }
+    }
+
+    fun cerrarInfoDialog() {
+        _uiState.update { it.copy(showInfoDialog = false) }
+    }
+
     fun cerrarConfirmacionDialog() {
         _uiState.update { it.copy(showConfirmacionDialog = false) }
     }
 }
 
-
 class PerfilSeriesViewModelFactory(
     private val userId: String, // UUID como String
     private val repository: IPerfilUsuarioRepository,
-    private val alquilerRepository: IAlquilerSeriesRepository? = null
+    private val alquilerRepository: IAlquilerSeriesRepository? = null,
+    private val userRepository: IUserRepository
 ) : ViewModelProvider.Factory {
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(PerfilSeriesViewModel::class.java)) {
-            val viewModel = PerfilSeriesViewModel(repository, alquilerRepository)
+            val viewModel = PerfilSeriesViewModel(repository, alquilerRepository, userRepository)
             viewModel.cargarUsuario(userId) // pasamos UUID directamente
             return viewModel as T
         }

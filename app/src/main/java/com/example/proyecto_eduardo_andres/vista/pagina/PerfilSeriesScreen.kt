@@ -48,6 +48,8 @@ import com.example.compose.colorVioleta
 import com.example.proyecto_eduardo_andres.R
 import com.example.proyecto_eduardo_andres.data.repository.alquilerSeriesRepository.AlquilerSeriesRepositoryInMemory
 import com.example.proyecto_eduardo_andres.data.repository.alquilerSeriesRepository.IAlquilerSeriesRepository
+import com.example.proyecto_eduardo_andres.data.repository.loginRepository.IUserRepository
+import com.example.proyecto_eduardo_andres.data.repository.loginRepository.UserRepositoryInMemory
 import com.example.proyecto_eduardo_andres.data.repository.perfilRepositorio.IPerfilUsuarioRepository
 import com.example.proyecto_eduardo_andres.data.repository.perfilRepositorio.PerfilUsuarioRepositoryInMemory
 import com.example.proyecto_eduardo_andres.modelo.PerfilUsuarioButtonTextsDto
@@ -111,6 +113,7 @@ fun PerfilSeriesScreen(
     userId: String,
     alquilerRepository: IAlquilerSeriesRepository,
     repository: IPerfilUsuarioRepository,
+    userRepository: IUserRepository,
     onBackClick: () -> Unit,
     onHomeClick: () -> Unit,
     onCameraClick: () -> Unit,
@@ -122,10 +125,15 @@ fun PerfilSeriesScreen(
     val viewModel: PerfilSeriesViewModel = viewModel(factory = PerfilSeriesViewModelFactory(
         userId,
         repository = repository,
-        alquilerRepository = alquilerRepository
+        alquilerRepository = alquilerRepository,
+        userRepository = userRepository
     ))
 
     val uiState by viewModel.uiState.collectAsState()
+
+    LaunchedEffect(Unit) {
+        viewModel.startServerMonitoring()
+    }
 
     // Llamamos a cargar los datos del usuario cuando se inicia el Composable
     LaunchedEffect(userId) {
@@ -380,9 +388,15 @@ fun PerfilSeriesScreen(
 @Composable
 fun PerfilSeriesScreenPreview() {
     val alquilerRepository = AlquilerSeriesRepositoryInMemory()
+
     val repository = PerfilUsuarioRepositoryInMemory(
         apiService = RetrofitClient.usuarioApiService
     )
+
+    val fakeUserRepository = UserRepositoryInMemory(
+        authApi = RetrofitClient.authApiService
+    )
+
     MaterialTheme {
         PerfilSeriesScreen(
             userId = "1",
@@ -393,7 +407,8 @@ fun PerfilSeriesScreenPreview() {
             onCameraClick = {},
             onProfileClick = {},
             onLogoutClick = {},
-            onSerieClieck = {}
+            onSerieClieck = {},
+            userRepository = fakeUserRepository
         )
     }
 }
