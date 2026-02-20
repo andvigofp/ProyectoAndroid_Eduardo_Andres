@@ -107,9 +107,6 @@ fun LogingScreen(
             .background(MaterialTheme.colorScheme.surfaceBright)
     ) {
 
-        // ------------------------
-        // DEGRADADOS
-        // ------------------------
 
         Box(
             modifier = Modifier
@@ -286,6 +283,7 @@ fun LogingScreen(
                     )
 
                 } else {
+                    Spacer(modifier = Modifier.height(16.dp))
                     //MODO OFFLINE (ROOM)
 
                     Button(

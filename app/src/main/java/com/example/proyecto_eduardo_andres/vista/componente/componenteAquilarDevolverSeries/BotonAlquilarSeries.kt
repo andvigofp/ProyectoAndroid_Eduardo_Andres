@@ -71,12 +71,14 @@ fun BotonAlquilarSeries(
         AppButton(
             data = botonDevolver,
             onClick = {
-                onDevolverClick()
-                showDialog = true
+                if (isDevolverButtonEnabled) {
+                    onDevolverClick()
+                    showDialog = true
+                }
             },
             modifier = Modifier
                 .weight(1f)
-                .then(Modifier.alpha(if (isDevolverButtonEnabled) 1f else 0.5f)) // Hacer que se vea deshabilitado
+                .alpha(if (isDevolverButtonEnabled) 1f else 0.5f)
         )
     }
 
