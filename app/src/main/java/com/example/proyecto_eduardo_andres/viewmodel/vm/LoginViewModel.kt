@@ -31,6 +31,14 @@ import java.io.IOException
  * - Controla diálogos de éxito y error.
  * - Expone el ID del usuario autenticado.
  *
+ * - Controlar el estado de la UI mediante StateFlow.
+ * - Monitorizar automáticamente si el servidor está disponible.
+ * - Cambiar dinámicamente entre modo ONLINE (Retrofit) y OFFLINE (Room).
+ * - Ejecutar el login remoto cuando hay conexión.
+ * - Activar login como invitado cuando no hay conexión.
+ * - Gestionar diálogos informativos y de error.
+ * - Exponer el userId del usuario autenticado para navegación.
+ *
  * Sigue la arquitectura MVVM:
  * - ViewModel → Contiene la lógica de presentación y validación.
  * - Repository → Encargado de la autenticación y persistencia.
@@ -42,9 +50,39 @@ import java.io.IOException
  * - viewModelScope para ejecutar corrutinas seguras.
  * - Dispatchers.Main para actualizar la UI tras operaciones async.
  *
+ * Flujo general:
+ *  1. La pantalla inicia el monitor del servidor.
+ *  2. Cada 3 segundos se comprueba disponibilidad.
+ *  3. Si el servidor cae → cambia automáticamente a modo invitado.
+ *  4. Si el servidor vuelve → cambia automáticamente a modo online.
+ *  5. Cuando el login es exitoso → se actualiza el estado para navegación.
  *
  * @param userRepository Repositorio encargado de autenticar
  * y recuperar información del usuario.
+ * @param userRepository Repositorio encargado de:
+ * - Realizar login remoto.
+ * - Comprobar disponibilidad del servidor.
+ * - Gestionar la fuente de datos (Retrofit / Room).
+ *
+ * @property _uiState Estado interno del ViewModel.
+ * @property uiState Estado reactivo del ViewModel.
+ * @property loggedInUserId ID del usuario autenticado.
+ * @property loginMessage Mensaje de error o éxito.
+ * @property showLoginDialog Estado de visibilidad del diálogo.
+ * @property dialogTitle Título del diálogo.
+ * @property serverMonitorJob Job del monitor del servidor.
+ * @property startServerMonitoring Inicia el monitor del servidor.
+ * @property stopServerMonitoring Detiene el monitor del servidor.
+ * @property onEmailChange Callback para cambiar el email.
+ * @property onPasswordChange Callback para cambiar la contraseña.
+ * @property onKeepLoggedChange Callback para cambiar el estado de "Mantener sesión iniciada".
+ * @property togglePasswordVisibility Callback para cambiar el estado de visibilidad de la contraseña.
+ * @property onLoginClicked Callback para autenticar.
+ * @property showDialog Muestra un diálogo con título y mensaje.
+ * @property dismissDialog Cierra el diálogo actual.
+ * @property resetState Restablece el estado del ViewModel.
+ * @property onCleared Limpia recursos al cerrar el ViewModel.
+ * @property LoginViewModelFactory Factory para crear instancias de LoginViewModel.
  *
  * @see LoginUiState
  * @see IUserRepository
@@ -215,10 +253,8 @@ class LoginViewModel(
         )
     }
 
-    // -------------------------------------------------
-    // LOGIN INVITADO
-    // -------------------------------------------------
 
+    // LOGIN INVITADO
     private fun loginAsGuest() {
 
         loggedInUserId = "GUEST"

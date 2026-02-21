@@ -49,21 +49,33 @@ import com.example.proyecto_eduardo_andres.vista.componente.componenteLogin.Logi
  * - Muestra diálogos informativos en caso de error o éxito.
  * - Ejecuta navegación tras autenticación correcta.
  *
- * Arquitectura:
- * - Sigue patrón MVVM.
- * - El ViewModel contiene la lógica de autenticación.
- * - La UI es declarativa y basada en estado.
+ * Se encarga de:
+ *  * - Mostrar el estado online/offline dinámicamente.
+ *  * - Permitir login con Retrofit cuando hay conexión.
+ *  * - Permitir acceso como invitado cuando no hay conexión.
+ *  * - Navegar automáticamente cuando el login es exitoso..
  *
  * Diseño:
  * - Utiliza MaterialTheme (Material3).
  * - Implementa degradados superior e inferior.
  * - Usa componentes reutilizables (CamposLogin, LoginButtons).
  *
- * @param loginViewModel ViewModel encargado de la lógica de login.
- * @param onCrearUsuarioClick Callback hacia pantalla de registro.
- * @param onRecuperarPasswordClick Callback hacia recuperación de contraseña.
- * @param onLoginSuccess Callback ejecutado tras autenticación exitosa.
+ * @param loginViewModel ViewModel que gestiona la lógica de login,
+   control de estado online/offline y validaciones.
+ * @param onCrearUsuarioClick Callback que navega a la pantalla de creación de usuario.
+ *  @param onRecuperarPasswordClick Callback que navega a recuperación de contraseña.
+ *  @param onLoginSuccess Callback ejecutado cuando el login es exitoso.
+ * Recibe el userId del usuario autenticado.
+ * @param onDismissRequest Callback para cerrar el diálogo.
+ * @param onAccederClick Callback para autenticar.
+ * @param onCrearUsuarioClick Callback para navegar a la pantalla de registro.
+ * @param onRecuperarPasswordClick Callback para navegar a la pantalla de recuperación de contraseña.
+ * @param onKeepLoggedChange Callback para cambiar el estado de "Mantener sesión iniciada".
+ * @param onPasswordChange Callback para cambiar la contraseña.
+ * @param onEmailChange Callback para cambiar el email.
+ * @param togglePasswordVisibility Callback para cambiar el estado de visibilidad de la contraseña.
  *
+ * @see UserRepositoryInMemory
  * @see LoginViewModel
  * @see StateFlow
  * @see collectAsState
@@ -232,9 +244,9 @@ fun LogingScreen(
                             ) {
                                 Text(
                                     if (uiState.passwordVisible)
-                                        "Hide"
+                                        stringResource(R.string.hide)
                                     else
-                                        "Show"
+                                        stringResource(R.string.show)
                                 )
                             }
                         },
@@ -251,7 +263,7 @@ fun LogingScreen(
                             },
                             enabled = !uiState.isLoading
                         )
-                        Text("Mantener sesión iniciada")
+                        Text(stringResource(R.string.mantener_session_iniciada))
                     }
                 }
 
