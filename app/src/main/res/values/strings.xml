@@ -123,7 +123,7 @@
     <string name="recuperar_contrasenha">RECUPERAR CONTRASEÑA</string>
     <string name="peliculas">Películas</string>
     <string name="series">Series</string>
-    <string name="info">InfoProyecto</string>
+    <string name="info">InfoContacto</string>
     <string name="videoclub_online">VIDEOCLUB ONLINE</string>
     <string name="videoClub">VideoClub</string>
     <string name="menu">Menú</string>
@@ -191,5 +191,7 @@
     <string name="modo_invitado">"Modo sin conexión (Invitado)</string>
     <string name="modo_online">Modo online</string>
     <string name="button_modo_invitado">Entrar como invitado</string>
-
+    <string name="hide">Hide</string>
+    <string name="show">Show</string>
+    <string name="mantener_session_iniciada">Mantener sesión iniciada</string>
 </resources>

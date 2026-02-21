@@ -25,6 +25,11 @@ import kotlinx.coroutines.withContext
  *
  * @property context Contexto de la aplicación necesario para
  * inicializar la base de datos Room.
+ * @param authApi Servicio de autenticación remoto.
+ * @param usuarioApi Servicio de usuario remoto.
+ * @param context Contexto de la aplicación necesario para
+ * inicializar la base de datos Room.
+ *
  *
  * @author Andrés
  * @see IUserRepository
