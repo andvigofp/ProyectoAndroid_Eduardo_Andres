@@ -208,7 +208,7 @@ fun CrearUsuarioScreen(
                 )
 
 
-                Spacer(modifier = Modifier.height(10.dp))
+                Spacer(modifier = Modifier.height(4.dp))
 
                 // --- Botones (MISMO layout) ---
                 Row(
